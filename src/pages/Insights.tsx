@@ -47,17 +47,17 @@ const Insights = () => {
       <div className="space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Insights & Analytics</h1>
-            <p className="text-gray-500">Visualize your journey and track your growth.</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Insights & Analytics</h1>
+            <p className="text-gray-500 dark:text-gray-400">Visualize your journey and track your growth.</p>
           </div>
-          <div className="flex items-center gap-2 bg-white p-1 rounded-xl border border-gray-100 shadow-sm">
+          <div className="flex items-center gap-2 bg-white dark:bg-gray-800 p-1 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
             {["7 Days", "30 Days", "All Time"].map((t) => (
               <Button 
                 key={t}
                 variant="ghost" 
                 size="sm" 
                 onClick={() => setTimeframe(t)}
-                className={`rounded-lg transition-all ${timeframe === t ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`}
+                className={`rounded-lg transition-all ${timeframe === t ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-gray-500'}`}
               >
                 {t}
               </Button>
@@ -73,11 +73,11 @@ const Insights = () => {
             { label: "Focus Score", value: "92/100", trend: "-2%", up: false },
             { label: "Longest Streak", value: "14 days", trend: "New Record!", up: true },
           ].map((metric, i) => (
-            <Card key={i} className="border-none shadow-sm rounded-2xl">
+            <Card key={i} className="border-none shadow-sm rounded-2xl dark:bg-gray-800">
               <CardContent className="p-6">
                 <p className="text-sm font-medium text-gray-500 mb-1">{metric.label}</p>
                 <div className="flex items-end justify-between">
-                  <h3 className="text-2xl font-bold text-gray-900">{metric.value}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{metric.value}</h3>
                   <div className={`flex items-center text-xs font-bold ${metric.up ? 'text-emerald-600' : 'text-rose-600'}`}>
                     {metric.up ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
                     {metric.trend}
@@ -90,9 +90,9 @@ const Insights = () => {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Task Activity Chart */}
-          <Card className="border-none shadow-sm rounded-[2rem]">
+          <Card className="border-none shadow-sm rounded-[2rem] dark:bg-gray-800">
             <CardHeader>
-              <CardTitle className="text-xl font-bold flex items-center gap-2">
+              <CardTitle className="text-xl font-bold flex items-center gap-2 dark:text-white">
                 <Calendar className="w-5 h-5 text-blue-600" />
                 Weekly Task Activity
               </CardTitle>
@@ -114,9 +114,9 @@ const Insights = () => {
           </Card>
 
           {/* Goal Progress Chart */}
-          <Card className="border-none shadow-sm rounded-[2rem]">
+          <Card className="border-none shadow-sm rounded-[2rem] dark:bg-gray-800">
             <CardHeader>
-              <CardTitle className="text-xl font-bold flex items-center gap-2">
+              <CardTitle className="text-xl font-bold flex items-center gap-2 dark:text-white">
                 <Target className="w-5 h-5 text-purple-600" />
                 Overall Goal Progress
               </CardTitle>
