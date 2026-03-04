@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom"; // Fixed missing Link import
-import { PremiumGate } from "@/components/PremiumGate"; // Ensure PremiumGate is exported in its file
+const Dashboard = () => {
+  // Add your component logic here
+  return <div>Dashboard content</div>;
+};
 
-// ... rest of the component code ...
+export default Dashboard;
