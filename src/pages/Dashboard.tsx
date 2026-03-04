@@ -3,11 +3,10 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Target, Calendar, TrendingUp, CheckCircle2, Award, Zap, ArrowUpRight, ArrowDownRight, ArrowUpLeft, ArrowDownLeft, ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Loader2 } from "lucide-react";
+import { Target, Calendar, TrendingUp, CheckCircle2, Award, Zap, ArrowUpRight, ArrowDownRight, ArrowUpLeft, ArrowDownLeft, ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess } from "@/utils/toast";
-import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { isPremium } = useUser();
