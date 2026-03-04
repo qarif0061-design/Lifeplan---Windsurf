@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Zap, Star, Droplets, Check, MessageSquare } from "lucide-react";
+import { Zap, Star, Droplets, Check, MessageSquare, Calendar, TrendingUp, Award } from "lucide-react";
 import { showSuccess } from "@/utils/toast";
 import confetti from "canvas-confetti";
 
@@ -12,6 +12,10 @@ const CheckIn = () => {
     eating: false,
     hydration: false,
   });
+
+  const [dailyNote, setDailyNote] = useState("");
+  const [streakCount, setStreakCount] = useState(5);
+  const [lastCheckIn, setLastCheckIn] = useState(new Date().toISOString().split('T')[0]);
 
   const toggleHabit = (key: keyof typeof habits) => {
     const newHabits = { ...habits, [key]: !habits[key] };
@@ -35,10 +39,27 @@ const CheckIn = () => {
 
   const handleSave = () => {
     showSuccess("Daily check-in saved! Great job staying consistent.");
+    // Update streak if this is a new day
+    const today = new Date().toISOString().split('T')[0];
+    if (lastCheckIn !== today) {
+      setStreakCount(streakCount + 1);
+      setLastCheckIn(today);
+    }
   };
 
   const completedCount = Object.values(habits).filter(Boolean).length;
   const progress = (completedCount / 3) * 100;
+
+  // Mock habit data for the week
+  const weekHabits = [
+    { day: 'Mon', exercise: true, eating: true, hydration: true },
+    { day: 'Tue', exercise: true, eating: true, hydration: false },
+    { day: 'Wed', exercise: false, eating: true, hydration: true },
+    { day: 'Thu', exercise: true, eating: false, hydration: true },
+    { day: 'Fri', exercise: true, eating: true, hydration: true },
+    { day: 'Sat', exercise: false, eating: false, hydration: false },
+    { day: 'Sun', exercise: false, eating: true, hydration: false },
+  ];
 
   return (
     <Layout>
@@ -86,7 +107,48 @@ const CheckIn = () => {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {progress === 100 ? "Perfect Day! 🎉" : "Keep it going!"}
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">You're on a 5-day streak</p>
+                <div className="flex items-center justify-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-amber-500" />
+                  <p className="text-sm text-gray-500 dark:text-gray-400">You're on a {streakCount}-day streak</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Weekly Overview */}
+        <Card className="border-none shadow-sm rounded-[2rem] dark:bg-gray-800">
+          <CardHeader>
+            <CardTitle className="text-lg font-bold flex items-center gap-2 dark:text-white">
+              <Calendar className="w-5 h-5 text-blue-600" />
+              This Week's Progress
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-7 gap-2">
+              {weekHabits.map((day, index) => (
+                <div key={index} className="flex flex-col items-center gap-1">
+                  <span className="text-xs font-bold text-gray-400">{day.day}</span>
+                  <div className="grid grid-cols-3 gap-1">
+                    <div className={`w-3 h-3 rounded-full ${day.exercise ? 'bg-amber-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                    <div className={`w-3 h-3 rounded-full ${day.eating ? 'bg-emerald-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                    <div className={`w-3 h-3 rounded-full ${day.hydration ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex items-center justify-center gap-4 text-xs">
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded-full bg-amber-500" />
+                <span>Exercise</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                <span>Eating</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded-full bg-blue-500" />
+                <span>Hydration</span>
               </div>
             </div>
           </CardContent>
@@ -135,6 +197,8 @@ const CheckIn = () => {
           </CardHeader>
           <CardContent>
             <textarea 
+              value={dailyNote}
+              onChange={(e) => setDailyNote(e.target.value)}
               className="w-full min-h-[120px] rounded-2xl border-gray-100 dark:border-gray-700 p-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50/50 dark:bg-gray-900/50 dark:text-white" 
               placeholder="How was your day? Any reflections or gratitude?"
             />
@@ -143,6 +207,17 @@ const CheckIn = () => {
             </Button>
           </CardContent>
         </Card>
+
+        {/* Streak Achievement */}
+        {streakCount >= 7 && (
+          <Card className="border-none shadow-sm rounded-[2rem] bg-gradient-to-br from-amber-500 to-orange-500 text-white">
+            <CardContent className="p-6 text-center">
+              <Award className="w-12 h-12 mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Amazing Streak!</h3>
+              <p className="text-amber-100">You've maintained your habits for {streakCount} days straight!</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </Layout>
   );

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Shield, Target, Users, Ban, Save, Sparkles, Loader2 } from "lucide-react";
+import { Shield, Target, Users, Ban, Save, Sparkles, Loader2, Brain, Lightbulb } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess } from "@/utils/toast";
@@ -12,6 +12,11 @@ const Strategy = () => {
   const { isPremium } = useUser();
   const [isGenerating, setIsGenerating] = useState(false);
   const [summary, setSummary] = useState("");
+  const [strategyData, setStrategyData] = useState({
+    whyMatters: "",
+    whoBenefits: "",
+    sayNoTo: ""
+  });
 
   const handleGenerate = () => {
     setIsGenerating(true);
@@ -25,6 +30,10 @@ const Strategy = () => {
 
   const handleSave = () => {
     showSuccess("Strategy saved successfully!");
+  };
+
+  const updateStrategyData = (field: string, value: string) => {
+    setStrategyData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -60,6 +69,8 @@ const Strategy = () => {
               </CardHeader>
               <CardContent className="pb-8">
                 <textarea 
+                  value={strategyData.whyMatters}
+                  onChange={(e) => updateStrategyData("whyMatters", e.target.value)}
                   className="w-full min-h-[150px] rounded-2xl border-gray-100 p-4 text-base focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50/50" 
                   placeholder="If I achieve this goal, my life will change because..."
                 />
@@ -80,6 +91,8 @@ const Strategy = () => {
               </CardHeader>
               <CardContent className="pb-8">
                 <textarea 
+                  value={strategyData.whoBenefits}
+                  onChange={(e) => updateStrategyData("whoBenefits", e.target.value)}
                   className="w-full min-h-[150px] rounded-2xl border-gray-100 p-4 text-base focus:ring-2 focus:ring-purple-500 outline-none bg-gray-50/50" 
                   placeholder="The people who will be proud of me or benefit from this are..."
                 />
@@ -100,6 +113,8 @@ const Strategy = () => {
               </CardHeader>
               <CardContent className="pb-8">
                 <textarea 
+                  value={strategyData.sayNoTo}
+                  onChange={(e) => updateStrategyData("sayNoTo", e.target.value)}
                   className="w-full min-h-[150px] rounded-2xl border-gray-100 p-4 text-base focus:ring-2 focus:ring-rose-500 outline-none bg-gray-50/50" 
                   placeholder="To achieve this, I must stop doing..."
                 />
@@ -137,6 +152,38 @@ const Strategy = () => {
               </div>
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
             </div>
+
+            {/* Strategy Tips */}
+            <Card className="border-none shadow-sm rounded-[2.5rem] bg-amber-50 border border-amber-100">
+              <CardHeader className="flex flex-row items-center gap-4 pt-8">
+                <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center">
+                  <Lightbulb className="w-6 h-6" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl font-bold text-amber-900">Pro Tips</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="pb-8">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-amber-800">Be Specific</h4>
+                    <p className="text-sm text-amber-700">Instead of "help people," say "help 1000 professionals achieve their career goals."</p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-amber-800">Focus on Impact</h4>
+                    <p className="text-sm text-amber-700">Think about the transformation, not just the outcome. What will change?</p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-amber-800">Be Honest</h4>
+                    <p className="text-sm text-amber-700">Identify real distractions. What actually pulls you away from your goals?</p>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-bold text-amber-800">Think Long-term</h4>
+                    <p className="text-sm text-amber-700">Consider how this affects your future self and legacy, not just immediate results.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </PremiumGate>
       </div>
