@@ -6,17 +6,25 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Target, Github, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "@/contexts/UserContext";
+import { showSuccess, showError } from "@/utils/toast";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const navigate = useNavigate();
+  const { login } = useUser();
 
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    
     // Simulate auth delay
     setTimeout(() => {
       setIsLoading(false);
+      login(name || email.split('@')[0] || "User");
+      showSuccess("Welcome to LifePlan!");
       navigate("/dashboard");
     }, 1000);
   };
@@ -53,7 +61,15 @@ const Auth = () => {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="name@example.com" required className="rounded-xl" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      required 
+                      className="rounded-xl"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
@@ -90,7 +106,14 @@ const Auth = () => {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" placeholder="John Doe" required className="rounded-xl" />
+                    <Input 
+                      id="name" 
+                      placeholder="John Doe" 
+                      required 
+                      className="rounded-xl"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>

@@ -2,20 +2,14 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Target, Zap, CheckCircle2, TrendingUp, Star, Plus, ArrowRight, Crown } from "lucide-react";
+import { Target, Zap, CheckCircle2, TrendingUp, Star, Plus, ArrowRight, Crown, Shield, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useUser } from "@/contexts/UserContext";
 
 const Dashboard = () => {
-  // Mock data for demonstration
-  const user = {
-    displayName: "Arif",
-    isPremium: false,
-    stats: {
-      totalGoals: 3,
-      completedGoals: 12,
-      currentStreak: 5,
-    }
-  };
+  const { user, isPremium } = useUser();
+
+  if (!user) return null;
 
   const featuredGoal = {
     name: "Launch LifePlan Web",
@@ -40,13 +34,13 @@ const Dashboard = () => {
             <p className="text-gray-500">Here's what's happening with your goals today.</p>
           </div>
           <div className="flex items-center gap-3">
-            {!user.isPremium && (
-              <Button variant="outline" className="rounded-full border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100">
-                <Crown className="w-4 h-4 mr-2" /> Upgrade to Premium
+            {!isPremium && (
+              <Button asChild variant="outline" className="rounded-full border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100">
+                <Link to="/pricing"><Crown className="w-4 h-4 mr-2" /> Upgrade to Premium</Link>
               </Button>
             )}
-            <Button className="bg-blue-600 hover:bg-blue-700 rounded-full">
-              <Plus className="w-4 h-4 mr-2" /> New Goal
+            <Button asChild className="bg-blue-600 hover:bg-blue-700 rounded-full">
+              <Link to="/goals"><Plus className="w-4 h-4 mr-2" /> New Goal</Link>
             </Button>
           </div>
         </div>
@@ -99,8 +93,8 @@ const Dashboard = () => {
                   <Progress value={featuredGoal.progress} className="h-2 bg-white/20" />
                   <div className="flex justify-between items-center pt-4">
                     <p className="text-sm text-blue-100">Target: 3 {featuredGoal.timeframe}</p>
-                    <Button variant="secondary" size="sm" className="rounded-full bg-white text-blue-600 hover:bg-blue-50">
-                      Update Progress
+                    <Button asChild variant="secondary" size="sm" className="rounded-full bg-white text-blue-600 hover:bg-blue-50">
+                      <Link to="/goals/1">Update Progress</Link>
                     </Button>
                   </div>
                 </div>
@@ -111,8 +105,8 @@ const Dashboard = () => {
             <Card className="border-none shadow-sm rounded-[2rem]">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-xl font-bold">Today's Focus</CardTitle>
-                <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
-                  View Plan <ArrowRight className="ml-2 w-4 h-4" />
+                <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                  <Link to="/planning">View Plan <ArrowRight className="ml-2 w-4 h-4" /></Link>
                 </Button>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -126,8 +120,8 @@ const Dashboard = () => {
                     </span>
                   </div>
                 ))}
-                <Button variant="outline" className="w-full rounded-xl border-dashed border-2 h-12 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50">
-                  <Plus className="w-4 h-4 mr-2" /> Add Task
+                <Button asChild variant="outline" className="w-full rounded-xl border-dashed border-2 h-12 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50">
+                  <Link to="/planning"><Plus className="w-4 h-4 mr-2" /> Add Task</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -153,7 +147,9 @@ const Dashboard = () => {
                       </div>
                       <span className="font-medium text-gray-700">{item.label}</span>
                     </div>
-                    <Button size="sm" variant="outline" className="rounded-full px-4">Log</Button>
+                    <Button asChild size="sm" variant="outline" className="rounded-full px-4">
+                      <Link to="/check-in">Log</Link>
+                    </Button>
                   </div>
                 ))}
               </CardContent>
@@ -165,13 +161,17 @@ const Dashboard = () => {
                 <CardTitle className="text-lg font-bold">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-3">
-                <Button variant="secondary" className="flex flex-col h-24 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all gap-2">
-                  <Shield className="w-6 h-6 text-purple-600" />
-                  <span className="text-xs font-bold">Strategy</span>
+                <Button asChild variant="secondary" className="flex flex-col h-24 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all gap-2">
+                  <Link to="/strategy" className="flex flex-col items-center justify-center w-full h-full">
+                    <Shield className="w-6 h-6 text-purple-600" />
+                    <span className="text-xs font-bold">Strategy</span>
+                  </Link>
                 </Button>
-                <Button variant="secondary" className="flex flex-col h-24 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all gap-2">
-                  <BarChart3 className="w-6 h-6 text-blue-600" />
-                  <span className="text-xs font-bold">Insights</span>
+                <Button asChild variant="secondary" className="flex flex-col h-24 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all gap-2">
+                  <Link to="/insights" className="flex flex-col items-center justify-center w-full h-full">
+                    <BarChart3 className="w-6 h-6 text-blue-600" />
+                    <span className="text-xs font-bold">Insights</span>
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
