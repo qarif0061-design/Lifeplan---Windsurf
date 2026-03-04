@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -14,7 +15,8 @@ import {
   Star, 
   Clock, 
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Crown
 } from "lucide-react";
 import {
   Dialog,
@@ -33,9 +35,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Goal } from "@/types";
+import { useUser } from "@/contexts/UserContext";
 
 const Goals = () => {
-  const [isPremium] = useState(false);
+  const { isPremium } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
 
   // Mock goals data
@@ -237,8 +240,8 @@ const Goals = () => {
                       </div>
                     )}
                   </div>
-                  <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
-                    View Details
+                  <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
+                    <Link to={`/goals/${goal.id}`}>View Details</Link>
                   </Button>
                 </div>
               </CardContent>
@@ -266,7 +269,9 @@ const Goals = () => {
             <div>
               <h4 className="font-bold text-amber-900">Goal Limit Reached</h4>
               <p className="text-sm text-amber-700">Free users can have up to 3 active goals. Upgrade to Premium for unlimited goals and advanced planning tools.</p>
-              <Button variant="link" className="text-amber-700 p-0 h-auto font-bold mt-1">Upgrade Now →</Button>
+              <Button asChild variant="link" className="text-amber-700 p-0 h-auto font-bold mt-1">
+                <Link to="/pricing">Upgrade Now →</Link>
+              </Button>
             </div>
           </div>
         )}
