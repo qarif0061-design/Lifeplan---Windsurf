@@ -2,8 +2,8 @@ import Layout from "@/components/Layout";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Zap, Star, Droplets, Check, MessageSquare, Calendar as CalendarIcon } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Zap, Star, Droplets, Check, MessageSquare } from "lucide-react";
+import { showSuccess } from "@/utils/toast";
 
 const CheckIn = () => {
   const [habits, setHabits] = useState({
@@ -14,6 +14,10 @@ const CheckIn = () => {
 
   const toggleHabit = (key: keyof typeof habits) => {
     setHabits(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleSave = () => {
+    showSuccess("Daily check-in saved! Great job staying consistent.");
   };
 
   const completedCount = Object.values(habits).filter(Boolean).length;
@@ -117,7 +121,7 @@ const CheckIn = () => {
               className="w-full min-h-[120px] rounded-2xl border-gray-100 p-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50/50" 
               placeholder="How was your day? Any reflections or gratitude?"
             />
-            <Button className="w-full mt-4 bg-gray-900 hover:bg-black text-white rounded-xl h-12">
+            <Button onClick={handleSave} className="w-full mt-4 bg-gray-900 hover:bg-black text-white rounded-xl h-12">
               Save Check-in
             </Button>
           </CardContent>

@@ -6,8 +6,26 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Bell, Shield, CreditCard, Palette, LogOut } from "lucide-react";
+import { useUser } from "@/contexts/UserContext";
+import { showSuccess } from "@/utils/toast";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
+  const { user, logout } = useUser();
+  const navigate = useNavigate();
+
+  const handleSave = () => {
+    showSuccess("Profile settings updated successfully!");
+  };
+
+  const handleLogout = () => {
+    logout();
+    showSuccess("Logged out successfully");
+    navigate("/");
+  };
+
+  if (!user) return null;
+
   return (
     <Layout>
       <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -37,7 +55,10 @@ const Settings = () => {
               </button>
             ))}
             <div className="pt-4">
-              <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors"
+              >
                 <LogOut className="w-4 h-4" />
                 Sign Out
               </button>
@@ -54,8 +75,10 @@ const Settings = () => {
               <CardContent className="space-y-6">
                 <div className="flex items-center gap-6">
                   <Avatar className="w-20 h-20 border-4 border-white shadow-lg">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>AR</AvatarFallback>
+                    <AvatarImage src={user.avatar} />
+                    <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xl">
+                      {user.displayName.charAt(0)}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="space-y-2">
                     <Button variant="outline" size="sm" className="rounded-full">Change Avatar</Button>
@@ -66,11 +89,11 @@ const Settings = () => {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="display-name">Display Name</Label>
-                    <Input id="display-name" defaultValue="Arif" className="rounded-xl" />
+                    <Input id="display-name" defaultValue={user.displayName} className="rounded-xl" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" defaultValue="arif@example.com" className="rounded-xl" />
+                    <Input id="email" defaultValue={user.email} className="rounded-xl" />
                   </div>
                 </div>
 
@@ -83,7 +106,7 @@ const Settings = () => {
                   />
                 </div>
 
-                <Button className="bg-blue-600 hover:bg-blue-700 rounded-xl px-8">Save Changes</Button>
+                <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 rounded-xl px-8">Save Changes</Button>
               </CardContent>
             </Card>
 
@@ -98,7 +121,7 @@ const Settings = () => {
                     <Label className="text-base font-bold">Email Notifications</Label>
                     <p className="text-sm text-gray-500">Receive weekly progress reports and reminders.</p>
                   </div>
-                  <Switch defaultChecked />
+                  <Switch defaultChecked={user.preferences.notifications} />
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
@@ -112,7 +135,7 @@ const Settings = () => {
                     <Label className="text-base font-bold">Dark Mode</Label>
                     <p className="text-sm text-gray-500">Switch between light and dark theme.</p>
                   </div>
-                  <Switch />
+                  <Switch defaultChecked={user.preferences.theme === 'dark'} />
                 </div>
               </CardContent>
             </Card>

@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Calendar as CalendarIcon, Plus, Trash2, AlertCircle, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, AlertCircle, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
+import { useUser } from "@/contexts/UserContext";
+import { showSuccess } from "@/utils/toast";
 
 const Planning = () => {
-  const [isPremium] = useState(false);
+  const { isPremium } = useUser();
+  const [newTaskTitle, setNewTaskTitle] = useState("");
   const [tasks, setTasks] = useState([
     { id: "1", title: "Draft project proposal", completed: false, isDistraction: false },
     { id: "2", title: "Morning run 5km", completed: true, isDistraction: false },
@@ -18,6 +21,23 @@ const Planning = () => {
 
   const toggleTask = (id: string) => {
     setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  };
+
+  const addTask = () => {
+    if (!newTaskTitle.trim()) return;
+    const newTask = {
+      id: Math.random().toString(36).substr(2, 9),
+      title: newTaskTitle,
+      completed: false,
+      isDistraction: false
+    };
+    setTasks([...tasks, newTask]);
+    setNewTaskTitle("");
+    showSuccess("Task added to your weekly plan");
+  };
+
+  const deleteTask = (id: string) => {
+    setTasks(tasks.filter(t => t.id !== id));
   };
 
   return (
@@ -37,7 +57,6 @@ const Planning = () => {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column: Priorities & Tasks */}
           <div className="lg:col-span-2 space-y-8">
             {/* Top 3 Priorities */}
             <Card className="border-none shadow-sm rounded-[2rem]">
@@ -63,9 +82,18 @@ const Planning = () => {
             <Card className="border-none shadow-sm rounded-[2rem]">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-xl font-bold">Weekly Tasks</CardTitle>
-                <Button size="sm" variant="outline" className="rounded-full">
-                  <Plus className="w-4 h-4 mr-2" /> Add Task
-                </Button>
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Add a task..." 
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && addTask()}
+                    className="rounded-full w-48 sm:w-64"
+                  />
+                  <Button onClick={addTask} size="sm" className="rounded-full bg-blue-600 hover:bg-blue-700">
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 {tasks.map((task) => (
@@ -88,7 +116,7 @@ const Planning = () => {
                         Distraction
                       </span>
                     )}
-                    <Button variant="ghost" size="icon" className="text-gray-400 hover:text-rose-600">
+                    <Button onClick={() => deleteTask(task.id)} variant="ghost" size="icon" className="text-gray-400 hover:text-rose-600">
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -97,7 +125,6 @@ const Planning = () => {
             </Card>
           </div>
 
-          {/* Right Column: PDCA Review */}
           <div className="space-y-8">
             <PremiumGate 
               isPremium={isPremium} 
@@ -121,7 +148,7 @@ const Planning = () => {
                     <Label className="text-xs font-bold uppercase text-gray-500">What should change?</Label>
                     <textarea className="w-full min-h-[80px] rounded-2xl border-gray-100 p-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Plan for next week..." />
                   </div>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl">Complete Review</Button>
+                  <Button onClick={() => showSuccess("Weekly review completed!")} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl">Complete Review</Button>
                 </CardContent>
               </Card>
             </PremiumGate>
@@ -133,11 +160,16 @@ const Planning = () => {
                 </div>
                 <div>
                   <p className="text-xs text-blue-100 font-medium">Weekly Progress</p>
-                  <p className="text-xl font-bold">4/12 Tasks Done</p>
+                  <p className="text-xl font-bold">
+                    {tasks.filter(t => t.completed).length}/{tasks.length} Tasks Done
+                  </p>
                 </div>
               </div>
               <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden">
-                <div className="bg-white h-full w-[33%]" />
+                <div 
+                  className="bg-white h-full transition-all duration-500" 
+                  style={{ width: `${(tasks.filter(t => t.completed).length / tasks.length) * 100}%` }} 
+                />
               </div>
             </Card>
           </div>
