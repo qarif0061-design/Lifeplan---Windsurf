@@ -3,11 +3,10 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Target, Calendar, TrendingUp, CheckCircle2, Award, Zap, ArrowUpRight, ArrowDownRight, ArrowUpLeft, ArrowDownLeft, ArrowLeft, ArrowRight, ArrowUp, ArrowDown, Loader2 } from "lucide-react";
+import { Target, Calendar, TrendingUp, CheckCircle2, Award, Zap, ArrowUpRight, ArrowDownRight, ArrowUpLeft, ArrowDownLeft, ArrowLeft, ArrowRight, ArrowUp, ArrowDown } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess } from "@/utils/toast";
-import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { isPremium } = useUser();
@@ -91,7 +90,7 @@ const Dashboard = () => {
                   </div>
                   <div className="mt-6">
                     <Button 
-                      asChild
+                      onClick={() => showSuccess("Premium features unlocked!")}
                       variant="secondary" 
                       className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12"
                     >
@@ -159,7 +158,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent className="p-6">
               <p className="text-sm text-gray-400">Unlock advanced analytics and AI-driven insights to optimize your goal-setting process.</p>
-              <Button asChild variant="secondary" className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12">
+              <Button onClick={() => showSuccess("Strategy feature unlocked!")} variant="secondary" className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12">
                 <Link to="/strategy">Explore Strategy System</Link>
               </Button>
             </CardContent>
@@ -180,7 +179,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent className="p-6">
               <p className="text-sm text-gray-400">Unlock advanced review capabilities with AI-powered insights and recommendations.</p>
-              <Button asChild variant="secondary" className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12">
+              <Button onClick={() => showSuccess("PDCA Review feature unlocked!")} variant="secondary" className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12">
                 <Link to="/strategy">Explore PDCA System</Link>
               </Button>
             </CardContent>
@@ -201,7 +200,7 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent className="p-6">
               <p className="text-sm text-gray-400">Unlock advanced behavioral insights with AI-powered analysis of your goal-setting patterns.</p>
-              <Button asChild variant="secondary" className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12">
+              <Button onClick={() => showSuccess("Behavioral Analysis feature unlocked!")} variant="secondary" className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12">
                 <Link to="/strategy">Explore Behavioral Insights</Link>
               </Button>
             </CardContent>
