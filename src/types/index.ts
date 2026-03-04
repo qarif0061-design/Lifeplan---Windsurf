@@ -47,6 +47,15 @@ export interface Goal {
   updatedAt: string;
 }
 
+export interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  read: boolean;
+  type: 'info' | 'success' | 'warning';
+}
+
 export interface Strategy {
   id: string;
   userId: string;

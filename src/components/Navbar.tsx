@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Target, LayoutDashboard, Calendar, CheckCircle2, Settings, Menu, X, LogOut, Crown } from "lucide-react";
+import { Target, LayoutDashboard, Calendar, CheckCircle2, Settings, Menu, X, LogOut, Crown, Bell } from "lucide-react";
 import { useState } from "react";
 import { useUser } from "@/contexts/UserContext";
 import {
@@ -13,11 +13,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { showSuccess } from "@/utils/toast";
+import { Notification } from "@/types";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout, isPremium } = useUser();
   const navigate = useNavigate();
+
+  const [notifications, setNotifications] = useState<Notification[]>([
+    { id: "1", title: "Goal Milestone!", description: "You've reached 50% of your 'Run a Half Marathon' goal.", time: "2h ago", read: false, type: "success" },
+    { id: "2", title: "Weekly Review", description: "Don't forget to complete your PDCA review for this week.", time: "5h ago", read: false, type: "info" },
+  ]);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const navItems = [
     { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
@@ -30,6 +38,10 @@ const Navbar = () => {
     logout();
     showSuccess("Logged out successfully");
     navigate("/");
+  };
+
+  const markAllRead = () => {
+    setNotifications(notifications.map(n => ({ ...n, read: true })));
   };
 
   return (
@@ -66,6 +78,41 @@ const Navbar = () => {
                     <span>PREMIUM</span>
                   </div>
                 )}
+
+                {/* Notifications Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="relative rounded-full">
+                      <Bell className="w-5 h-5 text-gray-600" />
+                      {unreadCount > 0 && (
+                        <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-80 rounded-2xl p-2" align="end">
+                    <div className="flex items-center justify-between px-4 py-2">
+                      <DropdownMenuLabel className="p-0">Notifications</DropdownMenuLabel>
+                      <button onClick={markAllRead} className="text-xs text-blue-600 hover:underline">Mark all as read</button>
+                    </div>
+                    <DropdownMenuSeparator />
+                    <div className="max-h-[300px] overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map((n) => (
+                          <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-1 p-4 rounded-xl cursor-pointer focus:bg-gray-50">
+                            <div className="flex items-center justify-between w-full">
+                              <span className={`font-bold text-sm ${n.read ? 'text-gray-500' : 'text-gray-900'}`}>{n.title}</span>
+                              <span className="text-[10px] text-gray-400">{n.time}</span>
+                            </div>
+                            <p className="text-xs text-gray-500 leading-relaxed">{n.description}</p>
+                          </DropdownMenuItem>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center text-gray-400 text-sm">No new notifications</div>
+                      )}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">

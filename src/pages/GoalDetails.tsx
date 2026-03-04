@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -20,6 +20,7 @@ import {
   Trash2
 } from "lucide-react";
 import { showSuccess } from "@/utils/toast";
+import confetti from "canvas-confetti";
 
 const GoalDetails = () => {
   const { id } = useParams();
@@ -47,17 +48,42 @@ const GoalDetails = () => {
     ]
   });
 
+  const triggerCelebration = () => {
+    const duration = 3 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval: any = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+    }, 250);
+  };
+
   const toggleMilestone = (milestoneId: string) => {
     const updatedMilestones = goal.milestones.map(m => 
       m.id === milestoneId ? { ...m, completed: !m.completed } : m
     );
     
-    // Calculate new progress based on milestones
     const completedCount = updatedMilestones.filter(m => m.completed).length;
     const newProgress = Math.round((completedCount / updatedMilestones.length) * 100);
     
+    if (newProgress === 100 && goal.progress < 100) {
+      triggerCelebration();
+      showSuccess("Congratulations! Goal completed! 🎉");
+    } else {
+      showSuccess("Milestone updated!");
+    }
+    
     setGoal({ ...goal, milestones: updatedMilestones, progress: newProgress });
-    showSuccess("Milestone updated!");
   };
 
   const addMilestone = () => {
@@ -99,8 +125,10 @@ const GoalDetails = () => {
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <h1 className="text-4xl font-bold text-gray-900">{goal.name}</h1>
-              <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-wider">
-                {goal.status}
+              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                goal.progress === 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+              }`}>
+                {goal.progress === 100 ? 'Completed' : goal.status}
               </span>
             </div>
             <p className="text-gray-500 max-w-2xl">{goal.description}</p>
@@ -128,10 +156,12 @@ const GoalDetails = () => {
               </CardHeader>
               <CardContent className="p-8 space-y-6">
                 <div className="flex justify-between items-end">
-                  <span className="text-5xl font-black text-gray-900">{goal.progress}%</span>
+                  <span className={`text-5xl font-black ${goal.progress === 100 ? 'text-emerald-600' : 'text-gray-900'}`}>
+                    {goal.progress}%
+                  </span>
                   <span className="text-sm font-medium text-gray-500">Target: 100%</span>
                 </div>
-                <Progress value={goal.progress} className="h-4 bg-gray-100" />
+                <Progress value={goal.progress} className={`h-4 bg-gray-100 ${goal.progress === 100 ? '[&>div]:bg-emerald-500' : ''}`} />
                 <div className="grid grid-cols-3 gap-4 pt-4">
                   <div className="text-center p-4 bg-gray-50 rounded-2xl">
                     <p className="text-xs font-bold text-gray-400 uppercase mb-1">Started</p>
@@ -190,7 +220,7 @@ const GoalDetails = () => {
           {/* Right Column: Strategy & Success Metric */}
           <div className="space-y-8">
             {/* Success Metric */}
-            <Card className="border-none shadow-sm rounded-[2.5rem] bg-blue-600 text-white">
+            <Card className={`border-none shadow-sm rounded-[2.5rem] text-white transition-colors ${goal.progress === 100 ? 'bg-emerald-600' : 'bg-blue-600'}`}>
               <CardHeader>
                 <CardTitle className="text-lg font-bold flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-blue-200" />
@@ -231,10 +261,18 @@ const GoalDetails = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center py-6">
-                <div className="text-4xl font-black text-gray-900 mb-1">42</div>
+                <div className="text-4xl font-black text-gray-900 mb-1">
+                  {goal.progress === 100 ? '0' : '42'}
+                </div>
                 <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Days Left</p>
-                <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium text-amber-600 bg-amber-50 py-2 rounded-full">
-                  <AlertCircle className="w-3 h-3" /> On track to finish by Nov 15
+                <div className={`mt-6 flex items-center justify-center gap-2 text-xs font-medium py-2 rounded-full ${
+                  goal.progress === 100 ? 'text-emerald-600 bg-emerald-50' : 'text-amber-600 bg-amber-50'
+                }`}>
+                  {goal.progress === 100 ? (
+                    <><CheckCircle2 className="w-3 h-3" /> Goal achieved ahead of schedule!</>
+                  ) : (
+                    <><AlertCircle className="w-3 h-3" /> On track to finish by Nov 15</>
+                  )}
                 </div>
               </CardContent>
             </Card>

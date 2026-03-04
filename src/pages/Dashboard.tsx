@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Target, Zap, CheckCircle2, TrendingUp, Star, Plus, ArrowRight, Crown, Shield, BarChart3 } from "lucide-react";
+import { Target, Zap, CheckCircle2, TrendingUp, Star, Plus, ArrowRight, Crown, Shield, BarChart3, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 
@@ -22,6 +22,17 @@ const Dashboard = () => {
     { id: "1", title: "Complete Dashboard UI", completed: true },
     { id: "2", title: "Integrate Auth Flow", completed: false },
     { id: "3", title: "Review Weekly Plan", completed: false },
+  ];
+
+  // Mock streak data for visualization
+  const streakDays = [
+    { day: 'M', active: true },
+    { day: 'T', active: true },
+    { day: 'W', active: true },
+    { day: 'T', active: true },
+    { day: 'F', active: true },
+    { day: 'S', active: false },
+    { day: 'S', active: false },
   ];
 
   return (
@@ -129,6 +140,33 @@ const Dashboard = () => {
 
           {/* Sidebar Area */}
           <div className="space-y-8">
+            {/* Streak Visualization */}
+            <Card className="border-none shadow-sm rounded-[2rem]">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle className="text-xl font-bold">Weekly Streak</CardTitle>
+                <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-center gap-2">
+                  {streakDays.map((d, i) => (
+                    <div key={i} className="flex flex-col items-center gap-2">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                        d.active ? 'bg-amber-100 text-amber-600 border-2 border-amber-200' : 'bg-gray-50 text-gray-300 border-2 border-transparent'
+                      }`}>
+                        <Zap className={`w-5 h-5 ${d.active ? 'fill-amber-600' : ''}`} />
+                      </div>
+                      <span className="text-[10px] font-bold text-gray-400">{d.day}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 p-4 bg-amber-50 rounded-2xl border border-amber-100">
+                  <p className="text-xs text-amber-700 font-medium text-center">
+                    You're on fire! Complete today's check-in to keep the streak alive.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Daily Check-in */}
             <Card className="border-none shadow-sm rounded-[2rem]">
               <CardHeader>
