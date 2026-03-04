@@ -17,9 +17,11 @@ import {
 import { TrendingUp, Calendar, Target, Zap, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
 import { useState } from "react";
+import { useUser } from "@/contexts/UserContext";
 
 const Insights = () => {
-  const [isPremium] = useState(false);
+  const { isPremium } = useUser();
+  const [timeframe, setTimeframe] = useState("7 Days");
 
   const weeklyData = [
     { name: 'Mon', tasks: 4 },
@@ -49,9 +51,17 @@ const Insights = () => {
             <p className="text-gray-500">Visualize your journey and track your growth.</p>
           </div>
           <div className="flex items-center gap-2 bg-white p-1 rounded-xl border border-gray-100 shadow-sm">
-            <Button variant="ghost" size="sm" className="rounded-lg bg-blue-50 text-blue-600">7 Days</Button>
-            <Button variant="ghost" size="sm" className="rounded-lg">30 Days</Button>
-            <Button variant="ghost" size="sm" className="rounded-lg">All Time</Button>
+            {["7 Days", "30 Days", "All Time"].map((t) => (
+              <Button 
+                key={t}
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setTimeframe(t)}
+                className={`rounded-lg transition-all ${timeframe === t ? 'bg-blue-50 text-blue-600' : 'text-gray-500'}`}
+              >
+                {t}
+              </Button>
+            ))}
           </div>
         </div>
 

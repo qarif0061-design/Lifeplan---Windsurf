@@ -1,8 +1,10 @@
 import Layout from "@/components/Layout";
 import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { 
   Target, 
   Calendar, 
@@ -13,14 +15,18 @@ import {
   TrendingUp,
   CheckCircle2,
   AlertCircle,
-  Shield
+  Shield,
+  Plus,
+  Trash2
 } from "lucide-react";
+import { showSuccess } from "@/utils/toast";
 
 const GoalDetails = () => {
   const { id } = useParams();
-
-  // Mock goal data for the specific ID
-  const goal = {
+  const [newMilestone, setNewMilestone] = useState("");
+  
+  // Mock goal data with state for interactivity
+  const [goal, setGoal] = useState({
     id,
     name: "Launch LifePlan Web",
     category: "Business",
@@ -33,12 +39,51 @@ const GoalDetails = () => {
     createdAt: "2024-08-15",
     successMetric: "100% feature completion and successful Vercel deployment.",
     milestones: [
-      { title: "Core UI Components", completed: true },
-      { title: "Authentication Flow", completed: true },
-      { title: "Goal Management System", completed: true },
-      { title: "Premium Gating Logic", completed: false },
-      { title: "AI Integration", completed: false },
+      { id: "m1", title: "Core UI Components", completed: true },
+      { id: "m2", title: "Authentication Flow", completed: true },
+      { id: "m3", title: "Goal Management System", completed: true },
+      { id: "m4", title: "Premium Gating Logic", completed: false },
+      { id: "m5", title: "AI Integration", completed: false },
     ]
+  });
+
+  const toggleMilestone = (milestoneId: string) => {
+    const updatedMilestones = goal.milestones.map(m => 
+      m.id === milestoneId ? { ...m, completed: !m.completed } : m
+    );
+    
+    // Calculate new progress based on milestones
+    const completedCount = updatedMilestones.filter(m => m.completed).length;
+    const newProgress = Math.round((completedCount / updatedMilestones.length) * 100);
+    
+    setGoal({ ...goal, milestones: updatedMilestones, progress: newProgress });
+    showSuccess("Milestone updated!");
+  };
+
+  const addMilestone = () => {
+    if (!newMilestone.trim()) return;
+    const milestone = {
+      id: Math.random().toString(36).substr(2, 9),
+      title: newMilestone,
+      completed: false
+    };
+    const updatedMilestones = [...goal.milestones, milestone];
+    const completedCount = updatedMilestones.filter(m => m.completed).length;
+    const newProgress = Math.round((completedCount / updatedMilestones.length) * 100);
+    
+    setGoal({ ...goal, milestones: updatedMilestones, progress: newProgress });
+    setNewMilestone("");
+    showSuccess("Milestone added!");
+  };
+
+  const deleteMilestone = (milestoneId: string) => {
+    const updatedMilestones = goal.milestones.filter(m => m.id !== milestoneId);
+    const completedCount = updatedMilestones.filter(m => m.completed).length;
+    const newProgress = updatedMilestones.length > 0 
+      ? Math.round((completedCount / updatedMilestones.length) * 100) 
+      : 0;
+    
+    setGoal({ ...goal, milestones: updatedMilestones, progress: newProgress });
   };
 
   return (
@@ -64,8 +109,8 @@ const GoalDetails = () => {
             <Button variant="outline" className="rounded-full">
               <Edit3 className="w-4 h-4 mr-2" /> Edit Goal
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 rounded-full">
-              Update Progress
+            <Button className="bg-blue-600 hover:bg-blue-700 rounded-full" onClick={() => showSuccess("Progress synced!")}>
+              Sync Progress
             </Button>
           </div>
         </div>
@@ -106,23 +151,38 @@ const GoalDetails = () => {
 
             {/* Milestones */}
             <Card className="border-none shadow-sm rounded-[2.5rem]">
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-xl font-bold">Milestones</CardTitle>
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Add milestone..." 
+                    value={newMilestone}
+                    onChange={(e) => setNewMilestone(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && addMilestone()}
+                    className="rounded-full w-48"
+                  />
+                  <Button onClick={addMilestone} size="sm" className="rounded-full bg-blue-600 hover:bg-blue-700">
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {goal.milestones.map((milestone, i) => (
-                  <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${milestone.completed ? 'bg-emerald-500 text-white' : 'bg-white border-2 border-gray-200 text-transparent'}`}>
+                {goal.milestones.map((milestone) => (
+                  <div key={milestone.id} className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 hover:bg-gray-100 transition-colors group">
+                    <button 
+                      onClick={() => toggleMilestone(milestone.id)}
+                      className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${milestone.completed ? 'bg-emerald-500 text-white' : 'bg-white border-2 border-gray-200 text-transparent hover:border-emerald-300'}`}
+                    >
                       <CheckCircle2 className="w-4 h-4" />
-                    </div>
-                    <span className={`font-medium ${milestone.completed ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
+                    </button>
+                    <span className={`flex-1 font-medium ${milestone.completed ? 'text-gray-400 line-through' : 'text-gray-700'}`}>
                       {milestone.title}
                     </span>
+                    <Button onClick={() => deleteMilestone(milestone.id)} variant="ghost" size="icon" className="text-gray-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 ))}
-                <Button variant="ghost" className="w-full rounded-xl border-2 border-dashed border-gray-200 text-gray-500 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 h-12">
-                  + Add Milestone
-                </Button>
               </CardContent>
             </Card>
           </div>
