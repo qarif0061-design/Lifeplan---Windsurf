@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { showSuccess } from "@/utils/toast";
 import { Notification } from "@/types";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +46,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div className="flex items-center">
@@ -53,17 +54,17 @@ const Navbar = () => {
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Target className="text-white w-5 h-5" />
               </div>
-              <span className="text-xl font-bold text-gray-900">LifePlan</span>
+              <span className="text-xl font-bold text-gray-900 dark:text-white">LifePlan</span>
             </Link>
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             {user && navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-600 hover:text-blue-600 flex items-center space-x-1 text-sm font-medium transition-colors"
+                className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center space-x-1 text-sm font-medium transition-colors"
               >
                 <item.icon className="w-4 h-4" />
                 <span>{item.name}</span>
@@ -71,9 +72,11 @@ const Navbar = () => {
             ))}
             
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                
                 {isPremium && (
-                  <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-bold border border-amber-100">
+                  <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-3 py-1 rounded-full text-xs font-bold border border-amber-100 dark:border-amber-900/50">
                     <Crown className="w-3 h-3" />
                     <span>PREMIUM</span>
                   </div>
@@ -83,27 +86,27 @@ const Navbar = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="relative rounded-full">
-                      <Bell className="w-5 h-5 text-gray-600" />
+                      <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                       {unreadCount > 0 && (
-                        <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+                        <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white dark:border-gray-900"></span>
                       )}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-80 rounded-2xl p-2" align="end">
+                  <DropdownMenuContent className="w-80 rounded-2xl p-2 dark:bg-gray-800 dark:border-gray-700" align="end">
                     <div className="flex items-center justify-between px-4 py-2">
-                      <DropdownMenuLabel className="p-0">Notifications</DropdownMenuLabel>
-                      <button onClick={markAllRead} className="text-xs text-blue-600 hover:underline">Mark all as read</button>
+                      <DropdownMenuLabel className="p-0 dark:text-white">Notifications</DropdownMenuLabel>
+                      <button onClick={markAllRead} className="text-xs text-blue-600 dark:text-blue-400 hover:underline">Mark all as read</button>
                     </div>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator className="dark:bg-gray-700" />
                     <div className="max-h-[300px] overflow-y-auto">
                       {notifications.length > 0 ? (
                         notifications.map((n) => (
-                          <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-1 p-4 rounded-xl cursor-pointer focus:bg-gray-50">
+                          <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-1 p-4 rounded-xl cursor-pointer focus:bg-gray-50 dark:focus:bg-gray-700">
                             <div className="flex items-center justify-between w-full">
-                              <span className={`font-bold text-sm ${n.read ? 'text-gray-500' : 'text-gray-900'}`}>{n.title}</span>
+                              <span className={`font-bold text-sm ${n.read ? 'text-gray-500' : 'text-gray-900 dark:text-white'}`}>{n.title}</span>
                               <span className="text-[10px] text-gray-400">{n.time}</span>
                             </div>
-                            <p className="text-xs text-gray-500 leading-relaxed">{n.description}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{n.description}</p>
                           </DropdownMenuItem>
                         ))
                       ) : (
@@ -116,32 +119,32 @@ const Navbar = () => {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
-                      <Avatar className="h-10 w-10 border-2 border-blue-50">
+                      <Avatar className="h-10 w-10 border-2 border-blue-50 dark:border-gray-800">
                         <AvatarImage src={user.avatar} alt={user.displayName} />
-                        <AvatarFallback className="bg-blue-100 text-blue-700 font-bold">
+                        <AvatarFallback className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-bold">
                           {user.displayName.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 rounded-2xl" align="end" forceMount>
+                  <DropdownMenuContent className="w-56 rounded-2xl dark:bg-gray-800 dark:border-gray-700" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                        <p className="text-sm font-medium leading-none dark:text-white">{user.displayName}</p>
                         <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
                       </div>
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
+                    <DropdownMenuSeparator className="dark:bg-gray-700" />
+                    <DropdownMenuItem asChild className="rounded-xl cursor-pointer dark:text-gray-300 dark:focus:bg-gray-700">
                       <Link to="/settings"><Settings className="mr-2 h-4 w-4" /> Settings</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
+                    <DropdownMenuItem asChild className="rounded-xl cursor-pointer dark:text-gray-300 dark:focus:bg-gray-700">
                       <Link to="/insights"><LayoutDashboard className="mr-2 h-4 w-4" /> Insights</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator className="dark:bg-gray-700" />
                     <DropdownMenuItem 
                       onClick={handleLogout}
-                      className="rounded-xl cursor-pointer text-rose-600 focus:text-rose-600 focus:bg-rose-50"
+                      className="rounded-xl cursor-pointer text-rose-600 focus:text-rose-600 focus:bg-rose-50 dark:focus:bg-rose-900/20"
                     >
                       <LogOut className="mr-2 h-4 w-4" /> Log out
                     </DropdownMenuItem>
@@ -149,17 +152,21 @@ const Navbar = () => {
                 </DropdownMenu>
               </div>
             ) : (
-              <Button asChild variant="default" className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
-                <Link to="/auth">Get Started</Link>
-              </Button>
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <Button asChild variant="default" className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
+                  <Link to="/auth">Get Started</Link>
+                </Button>
+              </div>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-600 hover:text-gray-900 p-2"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white p-2"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -169,13 +176,13 @@ const Navbar = () => {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden bg-white border-b border-gray-100 animate-in slide-in-from-top duration-200">
+        <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 animate-in slide-in-from-top duration-200">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {user ? (
               <>
                 {isPremium && (
                   <div className="px-3 py-2">
-                    <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-bold border border-amber-100 w-fit">
+                    <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-3 py-1 rounded-full text-xs font-bold border border-amber-100 dark:border-amber-900/50 w-fit">
                       <Crown className="w-3 h-3" />
                       <span>PREMIUM</span>
                     </div>
@@ -186,7 +193,7 @@ const Navbar = () => {
                     key={item.name}
                     to={item.path}
                     onClick={() => setIsOpen(false)}
-                    className="text-gray-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2"
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2"
                   >
                     <item.icon className="w-5 h-5" />
                     <span>{item.name}</span>
@@ -195,7 +202,7 @@ const Navbar = () => {
                 <Link
                   to="/settings"
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2"
+                  className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium flex items-center space-x-2"
                 >
                   <Settings className="w-5 h-5" />
                   <span>Settings</span>
