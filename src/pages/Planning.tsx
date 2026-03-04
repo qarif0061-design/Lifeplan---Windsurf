@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Plus, Trash2, AlertCircle, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, Target, Calendar, Zap, TrendingUp } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess } from "@/utils/toast";
