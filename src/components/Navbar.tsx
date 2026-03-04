@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Target, LayoutDashboard, Calendar, CheckCircle2, Settings, Menu, X, LogOut, User } from "lucide-react";
+import { Target, LayoutDashboard, Calendar, CheckCircle2, Settings, Menu, X, LogOut, Crown } from "lucide-react";
 import { useState } from "react";
 import { useUser } from "@/contexts/UserContext";
 import {
@@ -16,7 +16,7 @@ import { showSuccess } from "@/utils/toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = useUser();
+  const { user, logout, isPremium } = useUser();
   const navigate = useNavigate();
 
   const navItems = [
@@ -59,40 +59,48 @@ const Navbar = () => {
             ))}
             
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
-                    <Avatar className="h-10 w-10 border-2 border-blue-50">
-                      <AvatarImage src={user.avatar} alt={user.displayName} />
-                      <AvatarFallback className="bg-blue-100 text-blue-700 font-bold">
-                        {user.displayName.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 rounded-2xl" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.displayName}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
-                    <Link to="/settings"><Settings className="mr-2 h-4 w-4" /> Settings</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
-                    <Link to="/insights"><LayoutDashboard className="mr-2 h-4 w-4" /> Insights</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    onClick={handleLogout}
-                    className="rounded-xl cursor-pointer text-rose-600 focus:text-rose-600 focus:bg-rose-50"
-                  >
-                    <LogOut className="mr-2 h-4 w-4" /> Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex items-center gap-4">
+                {isPremium && (
+                  <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-bold border border-amber-100">
+                    <Crown className="w-3 h-3" />
+                    <span>PREMIUM</span>
+                  </div>
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+                      <Avatar className="h-10 w-10 border-2 border-blue-50">
+                        <AvatarImage src={user.avatar} alt={user.displayName} />
+                        <AvatarFallback className="bg-blue-100 text-blue-700 font-bold">
+                          {user.displayName.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 rounded-2xl" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user.displayName}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
+                      <Link to="/settings"><Settings className="mr-2 h-4 w-4" /> Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="rounded-xl cursor-pointer">
+                      <Link to="/insights"><LayoutDashboard className="mr-2 h-4 w-4" /> Insights</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={handleLogout}
+                      className="rounded-xl cursor-pointer text-rose-600 focus:text-rose-600 focus:bg-rose-50"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" /> Log out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             ) : (
               <Button asChild variant="default" className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
                 <Link to="/auth">Get Started</Link>
@@ -118,6 +126,14 @@ const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {user ? (
               <>
+                {isPremium && (
+                  <div className="px-3 py-2">
+                    <div className="flex items-center gap-1 bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-bold border border-amber-100 w-fit">
+                      <Crown className="w-3 h-3" />
+                      <span>PREMIUM</span>
+                    </div>
+                  </div>
+                )}
                 {navItems.map((item) => (
                   <Link
                     key={item.name}

@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2, Star, MessageSquare, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const Landing = () => {
   const features = [
@@ -31,6 +32,42 @@ const Landing = () => {
     },
   ];
 
+  const testimonials = [
+    {
+      name: "Sarah Jenkins",
+      role: "Product Designer",
+      content: "LifePlan changed how I approach my career goals. The strategy system is a game-changer.",
+      avatar: "https://i.pravatar.cc/150?u=sarah"
+    },
+    {
+      name: "Marcus Chen",
+      role: "Entrepreneur",
+      content: "The weekly planning keeps me focused on what actually moves the needle. Highly recommended.",
+      avatar: "https://i.pravatar.cc/150?u=marcus"
+    },
+    {
+      name: "Elena Rodriguez",
+      role: "Student",
+      content: "I love the daily check-ins. It's so satisfying to see my streaks grow every day!",
+      avatar: "https://i.pravatar.cc/150?u=elena"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "Is LifePlan free to use?",
+      answer: "Yes! We offer a generous free tier that includes up to 3 active goals and basic planning tools. You can upgrade to Premium for unlimited access."
+    },
+    {
+      question: "How does the Strategy System work?",
+      answer: "The Strategy System helps you define your 'Why', identify beneficiaries, and decide what to say 'No' to, creating a solid foundation for your goals."
+    },
+    {
+      question: "Can I use LifePlan on my phone?",
+      answer: "Absolutely. LifePlan is fully responsive and works beautifully on all mobile devices and tablets."
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -55,8 +92,8 @@ const Landing = () => {
             <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-14 text-lg font-semibold shadow-lg shadow-blue-200">
               <Link to="/auth">Start Planning Free <ArrowRight className="ml-2 w-5 h-5" /></Link>
             </Button>
-            <Button variant="outline" size="lg" className="rounded-full px-8 h-14 text-lg font-semibold border-gray-200">
-              View Premium Plans
+            <Button asChild variant="outline" size="lg" className="rounded-full px-8 h-14 text-lg font-semibold border-gray-200">
+              <Link to="/pricing">View Premium Plans</Link>
             </Button>
           </div>
         </div>
@@ -80,6 +117,61 @@ const Landing = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 text-blue-600 font-bold uppercase tracking-widest text-sm mb-4">
+              <MessageSquare className="w-4 h-4" />
+              <span>Testimonials</span>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900">Loved by high achievers</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((t, i) => (
+              <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                <div className="flex items-center gap-1 text-amber-400 mb-6">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                </div>
+                <p className="text-gray-700 mb-8 italic">"{t.content}"</p>
+                <div className="flex items-center gap-4">
+                  <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full" />
+                  <div>
+                    <p className="font-bold text-gray-900">{t.name}</p>
+                    <p className="text-sm text-gray-500">{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-gray-50 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 text-blue-600 font-bold uppercase tracking-widest text-sm mb-4">
+              <HelpCircle className="w-4 h-4" />
+              <span>FAQ</span>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900">Common Questions</h2>
+          </div>
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqs.map((faq, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="bg-white border border-gray-100 rounded-2xl px-6 overflow-hidden">
+                <AccordionTrigger className="text-left font-bold text-gray-900 hover:no-underline py-6">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="text-gray-600 pb-6">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 
@@ -116,7 +208,9 @@ const Landing = () => {
                     <span className="text-blue-200">/month</span>
                   </div>
                   <p className="text-sm text-blue-100 mb-6">Perfect for individuals committed to long-term growth.</p>
-                  <Button className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-full">Get Started</Button>
+                  <Button asChild className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-full">
+                    <Link to="/pricing">Get Started</Link>
+                  </Button>
                 </div>
               </div>
             </div>
