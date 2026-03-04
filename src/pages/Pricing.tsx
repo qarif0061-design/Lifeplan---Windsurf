@@ -1,9 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Check, Crown, Zap, Shield, Star } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import { useUser } from "@/contexts/UserContext";
+import { showSuccess } from "@/utils/toast";
 
 const Pricing = () => {
+  const { isPremium, togglePremium, user } = useUser();
+  const navigate = useNavigate();
+
+  const handleUpgrade = (planName: string) => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    
+    if (planName === "Free") return;
+
+    togglePremium();
+    showSuccess(`Successfully upgraded to ${planName}!`);
+    navigate("/dashboard");
+  };
+
   const plans = [
     {
       name: "Free",
@@ -15,7 +33,7 @@ const Pricing = () => {
         "Daily check-ins",
         "Community support",
       ],
-      buttonText: "Current Plan",
+      buttonText: isPremium ? "Downgrade" : "Current Plan",
       buttonVariant: "outline" as const,
       highlight: false,
     },
@@ -32,8 +50,8 @@ const Pricing = () => {
         "Detailed Progress Analytics",
         "Priority Email Support",
       ],
-      buttonText: "Upgrade to Premium",
-      buttonVariant: "default" as const,
+      buttonText: isPremium ? "Current Plan" : "Upgrade to Premium",
+      buttonVariant: (isPremium ? "outline" : "default") as "outline" | "default",
       highlight: true,
       icon: Crown,
     },
@@ -100,13 +118,13 @@ const Pricing = () => {
                 </ul>
 
                 <Button 
-                  asChild 
+                  onClick={() => handleUpgrade(plan.name)}
                   variant={plan.buttonVariant} 
                   className={`w-full rounded-2xl h-12 text-lg font-bold ${
-                    plan.highlight ? 'bg-blue-600 hover:bg-blue-700' : ''
+                    plan.highlight && !isPremium ? 'bg-blue-600 hover:bg-blue-700' : ''
                   }`}
                 >
-                  <Link to="/auth">{plan.buttonText}</Link>
+                  {plan.buttonText}
                 </Button>
               </div>
             ))}

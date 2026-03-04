@@ -3,11 +3,29 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Shield, Target, Users, Ban, Save, Sparkles } from "lucide-react";
+import { Shield, Target, Users, Ban, Save, Sparkles, Loader2 } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
+import { useUser } from "@/contexts/UserContext";
+import { showSuccess } from "@/utils/toast";
 
 const Strategy = () => {
-  const [isPremium] = useState(false);
+  const { isPremium } = useUser();
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [summary, setSummary] = useState("");
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    // Simulate AI generation
+    setTimeout(() => {
+      setIsGenerating(false);
+      setSummary("I will launch LifePlan Web to empower high achievers with a structured goal-planning system, benefiting my future self and the community, by saying 'No' to distractions and low-impact tasks.");
+      showSuccess("AI Strategy Statement generated!");
+    }, 2000);
+  };
+
+  const handleSave = () => {
+    showSuccess("Strategy saved successfully!");
+  };
 
   return (
     <Layout>
@@ -17,7 +35,7 @@ const Strategy = () => {
             <h1 className="text-3xl font-bold text-gray-900">Strategy System</h1>
             <p className="text-gray-500">Define the foundation of your success.</p>
           </div>
-          <Button className="bg-blue-600 hover:bg-blue-700 rounded-full">
+          <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700 rounded-full">
             <Save className="w-4 h-4 mr-2" /> Save Strategy
           </Button>
         </div>
@@ -97,8 +115,24 @@ const Strategy = () => {
                 </div>
                 <h3 className="text-2xl font-bold mb-4">Generate your Strategy Statement</h3>
                 <p className="text-blue-100 mb-6 max-w-xl">Our AI will analyze your answers to create a powerful, concise mission statement you can use as a daily mantra.</p>
-                <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50 rounded-xl px-8">
-                  Generate Statement
+                
+                {summary ? (
+                  <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 mb-6 animate-in zoom-in duration-300">
+                    <p className="text-lg font-medium italic">"{summary}"</p>
+                  </div>
+                ) : null}
+
+                <Button 
+                  onClick={handleGenerate} 
+                  disabled={isGenerating}
+                  variant="secondary" 
+                  className="bg-white text-blue-600 hover:bg-blue-50 rounded-xl px-8"
+                >
+                  {isGenerating ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
+                  ) : (
+                    "Generate Statement"
+                  )}
                 </Button>
               </div>
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />

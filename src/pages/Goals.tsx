@@ -36,10 +36,12 @@ import {
 } from "@/components/ui/select";
 import { Goal } from "@/types";
 import { useUser } from "@/contexts/UserContext";
+import { showSuccess } from "@/utils/toast";
 
 const Goals = () => {
   const { isPremium } = useUser();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Mock goals data
   const goals: Goal[] = [
@@ -88,6 +90,11 @@ const Goals = () => {
     }
   ];
 
+  const handleCreateGoal = () => {
+    showSuccess("Goal created successfully!");
+    setIsDialogOpen(false);
+  };
+
   const filteredGoals = goals.filter(goal => 
     goal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     goal.category.toLowerCase().includes(searchQuery.toLowerCase())
@@ -103,7 +110,7 @@ const Goals = () => {
             <p className="text-gray-500">Track and manage your long-term objectives.</p>
           </div>
           
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
                 <Plus className="w-4 h-4 mr-2" /> Create New Goal
@@ -168,7 +175,7 @@ const Goals = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">Create Goal</Button>
+                <Button onClick={handleCreateGoal} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">Create Goal</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -249,7 +256,10 @@ const Goals = () => {
           ))}
 
           {/* Empty State / Add New Card */}
-          <button className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group">
+          <button 
+            onClick={() => setIsDialogOpen(true)}
+            className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group"
+          >
             <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
               <Plus className="w-6 h-6 text-gray-400 group-hover:text-blue-600" />
             </div>
