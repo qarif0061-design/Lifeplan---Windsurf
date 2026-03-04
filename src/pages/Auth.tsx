@@ -8,25 +8,37 @@ import { Target, Github, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess, showError } from "@/utils/toast";
+import { signIn, signUp } from "@/firebase/auth";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { login } = useUser();
 
-  const handleAuth = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent, isSignUp: boolean) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate auth delay
-    setTimeout(() => {
-      setIsLoading(false);
-      login(name || email.split('@')[0] || "User");
-      showSuccess("Welcome to LifePlan!");
+    try {
+      let userProfile;
+      if (isSignUp) {
+        userProfile = await signUp(email, password, name);
+      } else {
+        userProfile = await signIn(email, password);
+      }
+      
+      // Update context
+      login(userProfile.displayName);
+      showSuccess(isSignUp ? "Account created successfully!" : "Welcome back!");
       navigate("/dashboard");
-    }, 1000);
+    } catch (error: any) {
+      showError(error.message || "Authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -57,7 +69,7 @@ const Auth = () => {
                 <CardTitle>Sign In</CardTitle>
                 <CardDescription>Enter your credentials to access your account</CardDescription>
               </CardHeader>
-              <form onSubmit={handleAuth}>
+              <form onSubmit={(e) => handleAuth(e, false)}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -76,7 +88,14 @@ const Auth = () => {
                       <Label htmlFor="password">Password</Label>
                       <button type="button" className="text-xs text-blue-600 hover:underline">Forgot password?</button>
                     </div>
-                    <Input id="password" type="password" required className="rounded-xl" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      required 
+                      className="rounded-xl"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
@@ -102,7 +121,7 @@ const Auth = () => {
                 <CardTitle>Create Account</CardTitle>
                 <CardDescription>Join LifePlan and start your journey</CardDescription>
               </CardHeader>
-              <form onSubmit={handleAuth}>
+              <form onSubmit={(e) => handleAuth(e, true)}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
@@ -117,11 +136,26 @@ const Auth = () => {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
-                    <Input id="signup-email" type="email" placeholder="name@example.com" required className="rounded-xl" />
+                    <Input 
+                      id="signup-email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      required 
+                      className="rounded-xl"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
-                    <Input id="signup-password" type="password" required className="rounded-xl" />
+                    <Input 
+                      id="signup-password" 
+                      type="password" 
+                      required 
+                      className="rounded-xl"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
