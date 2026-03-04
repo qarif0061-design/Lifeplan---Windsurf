@@ -1,176 +1,196 @@
 import Layout from "@/components/Layout";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  AreaChart,
-  Area
-} from "recharts";
-import { TrendingUp, Calendar, Target, Zap, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import PremiumGate from "@/components/PremiumGate";
-import { useState } from "react";
+import { TrendingUp, BarChart3, PieChart, Target, Calendar, Clock, Shield, Zap, Award, Loader2 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { showSuccess } from "@/utils/toast";
+import { Link } from "react-router-dom";
 
 const Insights = () => {
-  const { isPremium } = useUser();
-  const [timeframe, setTimeframe] = useState("7 Days");
+  const { user } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
+  const [insightsData, setInsightsData] = useState({
+    goalsCompleted: 0,
+    goalsInProgress: 0,
+    completionRate: 0,
+    averageStreak: 0,
+    bestStreak: 0,
+    categories: [],
+    timeSpent: 0,
+    productivityScore: 0,
+  });
 
-  const weeklyData = [
-    { name: 'Mon', tasks: 4 },
-    { name: 'Tue', tasks: 7 },
-    { name: 'Wed', tasks: 5 },
-    { name: 'Thu', tasks: 8 },
-    { name: 'Fri', tasks: 6 },
-    { name: 'Sat', tasks: 3 },
-    { name: 'Sun', tasks: 2 },
-  ];
-
-  const progressData = [
-    { month: 'Jan', progress: 20 },
-    { month: 'Feb', progress: 35 },
-    { month: 'Mar', progress: 45 },
-    { month: 'Apr', progress: 60 },
-    { month: 'May', progress: 75 },
-    { month: 'Jun', progress: 85 },
-  ];
+  useEffect(() => {
+    // Simulate data fetching
+    setTimeout(() => {
+      setInsightsData({
+        goalsCompleted: 12,
+        goalsInProgress: 5,
+        completionRate: 71,
+        averageStreak: 14,
+        bestStreak: 28,
+        categories: [
+          { name: "Health", value: 35, color: "bg-emerald-500" },
+          { name: "Career", value: 25, color: "bg-blue-500" },
+          { name: "Personal", value: 20, color: "bg-purple-500" },
+          { name: "Finance", value: 12, color: "bg-yellow-500" },
+          { name: "Other", value: 8, color: "bg-gray-500" },
+        ],
+        timeSpent: 128,
+        productivityScore: 82,
+      });
+      setIsLoading(false);
+    }, 1000);
+  }, []);
 
   return (
     <Layout>
-      <div className="space-y-8 animate-in fade-in duration-500">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Insights & Analytics</h1>
-            <p className="text-gray-500 dark:text-gray-400">Visualize your journey and track your growth.</p>
+            <h1 className="text-3xl font-bold text-gray-900">Insights</h1>
+            <p className="text-gray-500">Data-driven insights to optimize your goal achievement</p>
           </div>
-          <div className="flex items-center gap-2 bg-white dark:bg-gray-800 p-1 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-            {["7 Days", "30 Days", "All Time"].map((t) => (
-              <Button 
-                key={t}
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setTimeframe(t)}
-                className={`rounded-lg transition-all ${timeframe === t ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' : 'text-gray-500'}`}
-              >
-                {t}
-              </Button>
-            ))}
-          </div>
+          <Button variant="outline" className="rounded-full h-10 w-10 flex items-center justify-center">
+            <Calendar className="w-4 h-4" />
+          </Button>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { label: "Completion Rate", value: "78%", trend: "+12%", up: true },
-            { label: "Avg. Daily Tasks", value: "5.4", trend: "+0.8", up: true },
-            { label: "Focus Score", value: "92/100", trend: "-2%", up: false },
-            { label: "Longest Streak", value: "14 days", trend: "New Record!", up: true },
-          ].map((metric, i) => (
-            <Card key={i} className="border-none shadow-sm rounded-2xl dark:bg-gray-800">
-              <CardContent className="p-6">
-                <p className="text-sm font-medium text-gray-500 mb-1">{metric.label}</p>
-                <div className="flex items-end justify-between">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{metric.value}</h3>
-                  <div className={`flex items-center text-xs font-bold ${metric.up ? 'text-emerald-600' : 'text-rose-600'}`}>
-                    {metric.up ? <ArrowUpRight className="w-3 h-3 mr-1" /> : <ArrowDownRight className="w-3 h-3 mr-1" />}
-                    {metric.trend}
+        {/* Overview Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="border-none shadow-sm rounded-[2.5rem] dark:bg-gray-800">
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Target className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">12</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Goals Completed</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm rounded-[2.5rem] dark:bg-gray-800">
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-6 h-6 text-emerald-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">71%</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Completion Rate</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm rounded-[2.5rem] dark:bg-gray-800">
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Clock className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">14</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Avg. Streak</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm rounded-[2.5rem] dark:bg-gray-800">
+            <CardContent className="p-6 text-center">
+              <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Award className="w-6 h-6 text-amber-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">28</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Best Streak</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Category Distribution */}
+          <Card className="border-none shadow-sm rounded-[2.5rem] dark:bg-gray-800">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold dark:text-white">Goal Categories</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-3">
+                {insightsData.categories.map((category, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${category.color}`} />
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{category.name}</span>
+                    </div>
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">{category.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Productivity Over Time */}
+          <Card className="border-none shadow-sm rounded-[2.5rem] dark:bg-gray-800">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold dark:text-white">Productivity Score</CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center">
+                <div className="relative w-32 h-32">
+                  <svg className="w-full h-full">
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="14"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="transparent"
+                      className="text-gray-200 dark:text-gray-700"
+                    />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="14"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      fill="transparent"
+                      strokeDasharray={Math.PI * 28}
+                      strokeDashoffset={(Math.PI * 28) - ((Math.PI * 28) * insightsData.productivityScore) / 100}
+                      className="text-blue-600 transition-all duration-1000 ease-out"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-xl font-bold text-gray-900 dark:text-white">{insightsData.productivityScore}</span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Score</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Task Activity Chart */}
-          <Card className="border-none shadow-sm rounded-[2rem] dark:bg-gray-800">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold flex items-center gap-2 dark:text-white">
-                <Calendar className="w-5 h-5 text-blue-600" />
-                Weekly Task Activity
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px] pt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={weeklyData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-                  <Tooltip 
-                    cursor={{ fill: '#f9fafb' }}
-                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                  />
-                  <Bar dataKey="tasks" fill="#2563eb" radius={[4, 4, 0, 0]} barSize={32} />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-
-          {/* Goal Progress Chart */}
-          <Card className="border-none shadow-sm rounded-[2rem] dark:bg-gray-800">
-            <CardHeader>
-              <CardTitle className="text-xl font-bold flex items-center gap-2 dark:text-white">
-                <Target className="w-5 h-5 text-purple-600" />
-                Overall Goal Progress
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="h-[300px] pt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={progressData}>
-                  <defs>
-                    <linearGradient id="colorProgress" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.1}/>
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                  <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                  />
-                  <Area type="monotone" dataKey="progress" stroke="#8b5cf6" strokeWidth={3} fillOpacity={1} fill="url(#colorProgress)" />
-                </AreaChart>
-              </ResponsiveContainer>
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+                Your productivity score based on goal completion and consistency
+              </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Premium Insights Section */}
+        {/* Premium Insights */}
         <PremiumGate 
-          isPremium={isPremium} 
+          isPremium={true} 
           featureName="Advanced Analytics"
           description="Unlock deep behavioral insights, correlation analysis, and AI-powered growth recommendations."
         >
-          <Card className="border-none shadow-sm rounded-[2rem] bg-gradient-to-br from-gray-900 to-gray-800 text-white overflow-hidden">
-            <CardContent className="p-12 text-center space-y-6">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-blue-500/20">
-                <Zap className="w-8 h-8" />
+          <Card className="border-none shadow-sm rounded-[2.5rem] bg-gradient-to-br from-gray-900 to-blue-800 text-white">
+            <CardContent className="p-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-amber-500" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">AI-Powered Insights</h2>
+                  <p className="text-sm text-gray-400">Discover patterns and optimize your strategy with AI-driven recommendations.</p>
+                </div>
               </div>
-              <h2 className="text-3xl font-bold">AI Behavioral Analysis</h2>
-              <p className="text-gray-400 max-w-xl mx-auto">
-                Our AI has detected that your productivity peaks on Tuesday mornings. We recommend scheduling your most difficult tasks for this window.
-              </p>
-              <div className="grid sm:grid-cols-3 gap-4 pt-4">
-                <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
-                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Peak Focus</p>
-                  <p className="text-lg font-bold">9:00 AM - 11:30 AM</p>
-                </div>
-                <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
-                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Best Category</p>
-                  <p className="text-lg font-bold">Business</p>
-                </div>
-                <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
-                  <p className="text-xs text-gray-500 uppercase font-bold mb-1">Consistency</p>
-                  <p className="text-lg font-bold">High (94%)</p>
-                </div>
+              <div className="mt-6">
+                <Button 
+                  onClick={() => showSuccess("Premium features unlocked!")}
+                  variant="secondary" 
+                  className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-xl h-12"
+                >
+                  <Link to="/strategy">Explore Premium Features</Link>
+                </Button>
               </div>
             </CardContent>
           </Card>

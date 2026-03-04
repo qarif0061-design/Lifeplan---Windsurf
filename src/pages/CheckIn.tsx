@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Zap, Star, Droplets, Check, MessageSquare, Calendar, TrendingUp, Award } from "lucide-react";
+import { Zap, Star, Droplets, Check, MessageSquare, Calendar, TrendingUp, Award, Loader2, ArrowUpRight, ArrowDownRight, ArrowUpLeft, ArrowDownLeft } from "lucide-react";
 import { showSuccess } from "@/utils/toast";
 import confetti from "canvas-confetti";
 

@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Shield, Target, Users, Ban, Save, Sparkles, Loader2, Brain, Lightbulb } from "lucide-react";
 import PremiumGate from "@/components/PremiumGate";
 import { useUser } from "@/contexts/UserContext";

@@ -7,6 +7,7 @@ import { Target, Calendar, TrendingUp, CheckCircle2, Award, Zap, ArrowUpRight, A
 import PremiumGate from "@/components/PremiumGate";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess } from "@/utils/toast";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { isPremium } = useUser();
