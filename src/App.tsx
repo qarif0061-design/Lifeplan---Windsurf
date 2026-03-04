@@ -7,6 +7,9 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Goals from "./pages/Goals";
+import Planning from "./pages/Planning";
+import CheckIn from "./pages/CheckIn";
+import Strategy from "./pages/Strategy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,9 +25,9 @@ const App = () => (
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/goals" element={<Goals />} />
-          {/* Placeholder routes for future implementation */}
-          <Route path="/planning" element={<Dashboard />} />
-          <Route path="/check-in" element={<Dashboard />} />
+          <Route path="/planning" element={<Planning />} />
+          <Route path="/check-in" element={<CheckIn />} />
+          <Route path="/strategy" element={<Strategy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
