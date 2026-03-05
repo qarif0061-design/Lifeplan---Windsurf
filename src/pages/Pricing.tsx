@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Check, Crown, Zap, Shield, Star } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "@/components/Navbar";
 import { useUser } from "@/contexts/UserContext";
 import { showSuccess } from "@/utils/toast";
+import HelpDialog from "@/components/HelpDialog";
+import Layout from "@/components/Layout";
 
 const Pricing = () => {
   const { isPremium, togglePremium, user } = useUser();
@@ -56,25 +57,24 @@ const Pricing = () => {
       icon: Crown,
     },
     {
-      name: "Lifetime",
-      price: "$99",
-      description: "One-time payment for lifetime access to all features.",
+      name: "Yearly",
+      price: "$49.99",
+      period: "/year",
+      description: "Save with annual billing for full access to all Premium features.",
       features: [
         "Everything in Premium",
-        "Lifetime updates",
-        "Early access to new features",
-        "Exclusive 'Founder' badge",
+        "Annual billing",
+        "Priority email support",
       ],
-      buttonText: "Get Lifetime Access",
+      buttonText: "Get Yearly Access",
       buttonVariant: "outline" as const,
       highlight: false,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="pt-32 pb-20 px-4">
+    <Layout>
+      <div className="pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
@@ -136,16 +136,14 @@ const Pricing = () => {
               <p className="text-blue-100 mb-8 max-w-xl mx-auto">
                 We're here to help you find the right plan for your goals. Contact our support team anytime.
               </p>
-              <Button variant="secondary" className="rounded-full px-8 bg-white text-blue-600 hover:bg-blue-50">
-                Contact Support
-              </Button>
+              <HelpDialog triggerVariant="secondary" triggerClassName="rounded-full px-8 bg-white text-blue-600 hover:bg-blue-50" />
             </div>
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl" />
             <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-700 rounded-full -ml-32 -mb-32 blur-3xl" />
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

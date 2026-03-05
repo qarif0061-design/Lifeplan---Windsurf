@@ -1,1 +1,426 @@
+import Layout from "@/components/Layout";
+import { useMemo, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { 
+  Target, 
+  Plus,
+  Search,
+  Star,
+  AlertCircle,
+  Crown
+} from "lucide-react";
+import { Apple, Smartphone } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "@/contexts/UserContext";
+import { showError, showSuccess } from "@/utils/toast";
+import { useGoals } from "@/hooks/useGoals";
+import { createGoal } from "@/firebase/goals";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { Priority, Timeframe } from "@/types";
+
+const Dashboard = () => {
+  const { user, isPremium } = useUser();
+  const { goals, stats } = useGoals();
+  const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [goalName, setGoalName] = useState("");
+  const [goalCategory, setGoalCategory] = useState("");
+  const [goalPriority, setGoalPriority] = useState<Priority>("medium");
+  const [goalTimeframe, setGoalTimeframe] = useState<Timeframe>("weeks");
+  const [goalTimeframeValue, setGoalTimeframeValue] = useState<number>(4);
+  const [goalDescription, setGoalDescription] = useState("");
+
+  const daysStreak = user?.stats?.currentStreak ?? 0;
+
+  const handleCreateGoal = async () => {
+    if (!user) {
+      showError("Please sign in to create goals.");
+      return;
+    }
+    if (!goalName.trim() || !goalCategory.trim()) {
+      showError("Please enter a goal name and category.");
+      return;
+    }
+
+    setIsCreating(true);
+    try {
+      await createGoal({
+        userId: user.id,
+        name: goalName.trim(),
+        category: goalCategory.trim(),
+        priority: goalPriority,
+        timeframe: goalTimeframe,
+        timeframeValue: goalTimeframeValue,
+        description: goalDescription.trim() ? goalDescription.trim() : undefined,
+      });
+      showSuccess("Goal created successfully!");
+      setIsDialogOpen(false);
+      setGoalName("");
+      setGoalCategory("");
+      setGoalPriority("medium");
+      setGoalTimeframe("weeks");
+      setGoalTimeframeValue(4);
+      setGoalDescription("");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to create goal";
+      showError(message);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const dashboardGoals = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return goals;
+    return goals.filter((g) => g.name.toLowerCase().includes(q) || g.category.toLowerCase().includes(q));
+  }, [goals, searchQuery]);
+
+  return (
+    <Layout>
+      <div className="space-y-8 animate-in fade-in duration-500">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-gray-500">Track your progress and stay on top of your goals.</p>
+          </div>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
+                <Plus className="w-4 h-4 mr-2" /> Create New Goal
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[560px] rounded-[2rem]">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">Create New Goal</DialogTitle>
+                <DialogDescription>Define your objective, timeframe, and priority.</DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-5 py-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="goal-name">Goal Name</Label>
+                  <Input id="goal-name" value={goalName} onChange={(e) => setGoalName(e.target.value)} className="rounded-xl" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="goal-category">Category</Label>
+                  <Input id="goal-category" value={goalCategory} onChange={(e) => setGoalCategory(e.target.value)} className="rounded-xl" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label>Priority</Label>
+                    <Select value={goalPriority} onValueChange={(v) => setGoalPriority(v as Priority)}>
+                      <SelectTrigger className="rounded-xl">
+                        <SelectValue placeholder="Priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label>Timeframe</Label>
+                    <Select value={goalTimeframe} onValueChange={(v) => setGoalTimeframe(v as Timeframe)}>
+                      <SelectTrigger className="rounded-xl">
+                        <SelectValue placeholder="Timeframe" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="weeks">Weeks</SelectItem>
+                        <SelectItem value="months">Months</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="goal-timeframe-value">Duration</Label>
+                  <Input
+                    id="goal-timeframe-value"
+                    type="number"
+                    min={1}
+                    value={goalTimeframeValue}
+                    onChange={(e) => setGoalTimeframeValue(Number(e.target.value))}
+                    className="rounded-xl"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="goal-description">Description (optional)</Label>
+                  <textarea
+                    id="goal-description"
+                    value={goalDescription}
+                    onChange={(e) => setGoalDescription(e.target.value)}
+                    className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={handleCreateGoal} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700 rounded-xl h-11">
+                  {isCreating ? "Creating..." : "Create Goal"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">Get the mobile app</h2>
+            <p className="text-gray-600">Plan and check-in from anywhere.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full md:w-auto">
+            <Button asChild className="rounded-2xl bg-gray-900 hover:bg-black text-white h-12 justify-start">
+              <a
+                href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Apple className="w-5 h-5 mr-3" />
+                <span className="flex flex-col items-start leading-none">
+                  <span className="text-[11px] opacity-80">Download on the</span>
+                  <span className="text-sm font-bold">App Store</span>
+                </span>
+              </a>
+            </Button>
+            <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start">
+              <span className="flex items-center">
+                <Smartphone className="w-5 h-5 mr-3" />
+                <span className="flex flex-col items-start leading-none">
+                  <span className="text-[11px] text-gray-500">Google Play</span>
+                  <span className="text-sm font-bold">Coming soon</span>
+                </span>
+              </span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/goals?status=active")}
+            className="border-none shadow-sm rounded-[2.5rem] bg-blue-50 border border-blue-100 cursor-pointer hover:shadow-md transition"
+          >
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-blue-600 mb-2">{stats.activeCount}</div>
+              <p className="text-sm font-medium text-gray-500">Active Goals</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/goals?status=completed")}
+            className="border-none shadow-sm rounded-[2.5rem] bg-emerald-50 border border-emerald-100 cursor-pointer hover:shadow-md transition"
+          >
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-emerald-600 mb-2">{stats.completedCount}</div>
+              <p className="text-sm font-medium text-gray-500">Completed Goals</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/goals?status=failed")}
+            className="border-none shadow-sm rounded-[2.5rem] bg-rose-50 border border-rose-100 cursor-pointer hover:shadow-md transition"
+          >
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-rose-600 mb-2">{stats.failedCount}</div>
+              <p className="text-sm font-medium text-gray-500">Failed Goals</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/check-in")}
+            className="border-none shadow-sm rounded-[2.5rem] bg-purple-50 border border-purple-100 cursor-pointer hover:shadow-md transition"
+          >
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-purple-600 mb-2">{daysStreak}</div>
+              <p className="text-sm font-medium text-gray-500">Days Streak</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/insights")}
+            className="border-none shadow-sm rounded-[2.5rem] bg-amber-50 border border-amber-100 cursor-pointer hover:shadow-md transition"
+          >
+            <CardContent className="p-6 text-center">
+              <div className="text-2xl font-bold text-amber-600 mb-2">{stats.avgProgress}%</div>
+              <p className="text-sm font-medium text-gray-500">Avg. Progress</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Goals Overview */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900">Goals Overview</h2>
+          <div className="relative w-full md:w-[320px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              placeholder="Search goals..."
+              className="pl-10 rounded-2xl bg-white border-gray-100"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dashboardGoals.map((goal) => (
+            <Card key={goal.id} className="border-none shadow-sm hover:shadow-md transition-all rounded-[2rem] overflow-hidden">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                    goal.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {goal.status}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {goal.isFavorite && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
+                  </div>
+                </div>
+
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  {goal.name}
+                </h3>
+
+                <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                  <div className="flex items-center gap-1">
+                    <Target className="w-4 h-4" />
+                    <span>{goal.category}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className="text-gray-500">Progress</span>
+                    <span className="text-gray-900">{goal.progress}%</span>
+                  </div>
+                  <Progress value={goal.progress} className="h-2 bg-gray-100" />
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {goal.priority === 'high' && (
+                      <div className="flex items-center gap-1 text-rose-600 text-xs font-bold">
+                        <AlertCircle className="w-3 h-3" /> High Priority
+                      </div>
+                    )}
+                  </div>
+                  <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
+                    <Link to={`/goals/${goal.id}`}>View Details</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+
+          {/* Empty State Card */}
+          <Card className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group">
+            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+              <Plus className="w-6 h-6 text-gray-400 group-hover:text-blue-600" />
+            </div>
+            <div className="text-center">
+              <p className="font-bold text-gray-900">No Goals Yet</p>
+              <p className="text-sm text-gray-500">Create your first goal to get started</p>
+            </div>
+          </Card>
+        </div>
+
+        {stats.failedCount > 0 && (
+          <div className="mt-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Failed Goals</h2>
+              <span className="text-sm text-gray-500">Overdue goals that weren’t completed in time</span>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {stats.failed.map((goal) => (
+                <Card key={goal.id} className="border-none shadow-sm rounded-[2rem] overflow-hidden">
+                  <CardContent className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 text-rose-700">
+                        failed
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{goal.name}</h3>
+                    <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                      <div className="flex items-center gap-1">
+                        <Target className="w-4 h-4" />
+                        <span>{goal.category}</span>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm font-medium">
+                        <span className="text-gray-500">Progress</span>
+                        <span className="text-gray-900">{goal.progress}%</span>
+                      </div>
+                      <Progress value={goal.progress} className="h-2 bg-gray-100" />
+                    </div>
+                    <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-end">
+                      <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
+                        <Link to={`/goals/${goal.id}`}>View Details</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Premium Features */}
+        {!isPremium && (
+          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-[3rem] p-8 text-white">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Crown className="w-5 h-5" />
+                <h3 className="text-xl font-bold">Unlock Premium Features</h3>
+                <Crown className="w-5 h-5" />
+              </div>
+              <p className="text-lg mb-6">Get unlimited goals, advanced analytics, and AI-powered insights.</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50 rounded-full px-8">
+                  Try Premium Free
+                </Button>
+                <Button asChild className="bg-amber-400 text-gray-900 hover:bg-amber-300 rounded-full px-8">
+                  <Link to="/pricing">View Plans</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="pt-6 text-xs text-center text-gray-500">
+          <Link to="/terms" className="underline">Terms</Link>
+          <span> · </span>
+          <Link to="/privacy" className="underline">Privacy</Link>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
 export default Dashboard;

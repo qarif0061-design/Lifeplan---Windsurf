@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -34,71 +34,143 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Goal } from "@/types";
+import type { Priority, Timeframe } from "@/types";
 import { useUser } from "@/contexts/UserContext";
-import { showSuccess } from "@/utils/toast";
+import { showError, showSuccess } from "@/utils/toast";
+import { useGoals } from "@/hooks/useGoals";
+import { createGoal, deleteGoal, updateGoal } from "@/firebase/goals";
+import { Slider } from "@/components/ui/slider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Goals = () => {
-  const { isPremium } = useUser();
+  const { isPremium, user } = useUser();
+  const { goals } = useGoals();
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
-  // Mock goals data
-  const goals: Goal[] = [
-    {
-      id: "1",
-      userId: "u1",
-      name: "Launch LifePlan Web",
-      timeframe: "months",
-      timeframeValue: 3,
-      successMetric: { type: "yes-no" },
-      status: "active",
-      progress: 65,
-      priority: "high",
-      category: "Business",
-      isFavorite: true,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "2",
-      userId: "u1",
-      name: "Run a Half Marathon",
-      timeframe: "weeks",
-      timeframeValue: 12,
-      successMetric: { type: "number", target: 21, unit: "km" },
-      status: "active",
-      progress: 40,
-      priority: "medium",
-      category: "Health",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-    {
-      id: "3",
-      userId: "u1",
-      name: "Learn Advanced React",
-      timeframe: "months",
-      timeframeValue: 2,
-      successMetric: { type: "yes-no" },
-      status: "completed",
-      progress: 100,
-      priority: "medium",
-      category: "Education",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+  const [goalName, setGoalName] = useState("");
+  const [goalCategory, setGoalCategory] = useState("");
+  const [goalPriority, setGoalPriority] = useState<Priority>("medium");
+  const [goalTimeframe, setGoalTimeframe] = useState<Timeframe>("weeks");
+  const [goalTimeframeValue, setGoalTimeframeValue] = useState<number>(4);
+  const [goalDescription, setGoalDescription] = useState("");
+
+  const [draftProgress, setDraftProgress] = useState<Record<string, number>>({});
+  const [savingProgress, setSavingProgress] = useState<Record<string, boolean>>({});
+
+  const handleCreateGoal = async () => {
+    if (!user) {
+      showError("Please sign in to create goals.");
+      return;
     }
-  ];
+    if (!goalName.trim() || !goalCategory.trim()) {
+      showError("Please enter a goal name and category.");
+      return;
+    }
 
-  const handleCreateGoal = () => {
-    showSuccess("Goal created successfully!");
-    setIsDialogOpen(false);
+    setIsCreating(true);
+    try {
+      await createGoal({
+        userId: user.id,
+        name: goalName.trim(),
+        category: goalCategory.trim(),
+        priority: goalPriority,
+        timeframe: goalTimeframe,
+        timeframeValue: goalTimeframeValue,
+        description: goalDescription.trim() ? goalDescription.trim() : undefined,
+      });
+      showSuccess("Goal created successfully!");
+      setIsDialogOpen(false);
+      setGoalName("");
+      setGoalCategory("");
+      setGoalPriority("medium");
+      setGoalTimeframe("weeks");
+      setGoalTimeframeValue(4);
+      setGoalDescription("");
+    } catch (e: unknown) {
+      const raw = e instanceof Error ? e.message : "Failed to create goal";
+      const message = raw.toLowerCase().includes("insufficient permissions")
+        ? "Missing or insufficient permissions. Update your Firestore rules to allow authenticated users to write their own goals."
+        : raw;
+      showError(message);
+    } finally {
+      setIsCreating(false);
+    }
   };
 
-  const filteredGoals = goals.filter(goal => 
-    goal.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    goal.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const getDraft = (goalId: string, current: number) => {
+    const v = draftProgress[goalId];
+    return Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : current;
+  };
+
+  const setDraft = (goalId: string, value: number) => {
+    setDraftProgress((prev) => ({ ...prev, [goalId]: Math.min(100, Math.max(0, value)) }));
+  };
+
+  const handleSaveProgress = async (goalId: string, value: number) => {
+    setSavingProgress((p) => ({ ...p, [goalId]: true }));
+    try {
+      await updateGoal(goalId, {
+        progress: value,
+        status: value === 100 ? "completed" : "active",
+      });
+      showSuccess("Progress updated!");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to update progress";
+      showError(message);
+    } finally {
+      setSavingProgress((p) => ({ ...p, [goalId]: false }));
+    }
+  };
+
+  const handleMarkComplete = async (goalId: string) => {
+    await handleSaveProgress(goalId, 100);
+  };
+
+  const filteredGoals = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const statusFilter = (searchParams.get("status") ?? "").trim().toLowerCase();
+
+    const now = Date.now();
+    const byStatus = (g: typeof goals[number]) => {
+      if (!statusFilter) return true;
+      if (statusFilter === "active") return g.status === "active";
+      if (statusFilter === "completed") return g.status === "completed";
+      if (statusFilter === "failed") {
+        const due = g.dueAt ? new Date(g.dueAt).getTime() : Number.NaN;
+        const overdue = Number.isFinite(due) && due < now;
+        return g.status === "failed" || (overdue && g.status !== "completed");
+      }
+      return true;
+    };
+
+    const byQuery = (g: typeof goals[number]) => {
+      if (!q) return true;
+      return g.name.toLowerCase().includes(q) || g.category.toLowerCase().includes(q);
+    };
+
+    return goals.filter((g) => byStatus(g) && byQuery(g));
+  }, [goals, searchQuery, searchParams]);
+
+  const handleDelete = async (goalId: string) => {
+    if (!window.confirm("Delete this goal? This cannot be undone.")) return;
+    try {
+      await deleteGoal(goalId);
+      showSuccess("Goal deleted.");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to delete goal";
+      showError(message);
+    }
+  };
 
   return (
     <Layout>
@@ -112,7 +184,10 @@ const Goals = () => {
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
+                onClick={() => setIsDialogOpen(true)}
+              >
                 <Plus className="w-4 h-4 mr-2" /> Create New Goal
               </Button>
             </DialogTrigger>
@@ -124,26 +199,16 @@ const Goals = () => {
               <div className="grid gap-6 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Goal Name</Label>
-                  <Input id="name" placeholder="e.g., Learn to play Piano" className="rounded-xl" />
+                  <Input id="name" value={goalName} onChange={(e) => setGoalName(e.target.value)} className="rounded-xl" />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Category</Label>
-                    <Select>
-                      <SelectTrigger className="rounded-xl">
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="health">Health</SelectItem>
-                        <SelectItem value="business">Business</SelectItem>
-                        <SelectItem value="education">Education</SelectItem>
-                        <SelectItem value="personal">Personal</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input value={goalCategory} onChange={(e) => setGoalCategory(e.target.value)} className="rounded-xl" />
                   </div>
                   <div className="space-y-2">
                     <Label>Priority</Label>
-                    <Select>
+                    <Select value={goalPriority} onValueChange={(v) => setGoalPriority(v as Priority)}>
                       <SelectTrigger className="rounded-xl">
                         <SelectValue placeholder="Select priority" />
                       </SelectTrigger>
@@ -158,7 +223,7 @@ const Goals = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Timeframe</Label>
-                    <Select>
+                    <Select value={goalTimeframe} onValueChange={(v) => setGoalTimeframe(v as Timeframe)}>
                       <SelectTrigger className="rounded-xl">
                         <SelectValue placeholder="Select timeframe" />
                       </SelectTrigger>
@@ -170,12 +235,22 @@ const Goals = () => {
                   </div>
                   <div className="space-y-2">
                     <Label>Duration</Label>
-                    <Input type="number" placeholder="Value" className="rounded-xl" />
+                    <Input type="number" min={1} value={goalTimeframeValue} onChange={(e) => setGoalTimeframeValue(Number(e.target.value))} className="rounded-xl" />
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Description (optional)</Label>
+                  <textarea
+                    value={goalDescription}
+                    onChange={(e) => setGoalDescription(e.target.value)}
+                    className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                  />
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleCreateGoal} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">Create Goal</Button>
+                <Button onClick={handleCreateGoal} disabled={isCreating} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">
+                  {isCreating ? "Creating..." : "Create Goal"}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
@@ -210,9 +285,26 @@ const Goals = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     {goal.isFavorite && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <MoreVertical className="w-5 h-5" />
-                    </button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="text-gray-400 hover:text-gray-600" aria-label="Goal actions">
+                          <MoreVertical className="w-5 h-5" />
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-44">
+                        <DropdownMenuItem onClick={() => navigate(`/goals/${goal.id}`)}>View details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate(`/goals/${goal.id}`, { state: { openEdit: true } })}>
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          onClick={() => handleDelete(goal.id)}
+                          className="text-rose-600 focus:text-rose-600"
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
 
@@ -237,6 +329,44 @@ const Goals = () => {
                     <span className="text-gray-900">{goal.progress}%</span>
                   </div>
                   <Progress value={goal.progress} className="h-2 bg-gray-100" />
+                </div>
+
+                <div className="mt-6 pt-6 border-t border-gray-50 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-gray-400 uppercase">Quick Actions</span>
+                    <span className="text-xs font-medium text-gray-500">{getDraft(goal.id, goal.progress)}%</span>
+                  </div>
+                  <Slider
+                    value={[getDraft(goal.id, goal.progress)]}
+                    max={100}
+                    step={1}
+                    onValueChange={(v) => setDraft(goal.id, v[0] ?? 0)}
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input
+                      type="number"
+                      min={0}
+                      max={100}
+                      value={getDraft(goal.id, goal.progress)}
+                      onChange={(e) => setDraft(goal.id, Number(e.target.value))}
+                      className="rounded-xl"
+                    />
+                    <Button
+                      onClick={() => handleSaveProgress(goal.id, getDraft(goal.id, goal.progress))}
+                      disabled={savingProgress[goal.id] === true}
+                      className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                    >
+                      {savingProgress[goal.id] === true ? "Saving..." : "Save"}
+                    </Button>
+                  </div>
+                  <Button
+                    onClick={() => handleMarkComplete(goal.id)}
+                    disabled={goal.status === "completed" || savingProgress[goal.id] === true}
+                    variant="outline"
+                    className="w-full rounded-xl"
+                  >
+                    Mark Completed
+                  </Button>
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">

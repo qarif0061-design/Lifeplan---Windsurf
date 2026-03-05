@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { UserProfile } from '@/types';
-import { signIn, signUp, logout, onAuthStateChangedListener } from '@/firebase/auth';
+import { logout, onAuthStateChangedListener } from '@/firebase/auth';
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/firebase/config";
 
 interface UserContextType {
   user: UserProfile | null;
@@ -18,25 +20,60 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let unsubUserDoc: (() => void) | null = null;
     const unsubscribe = onAuthStateChangedListener(async (firebaseUser) => {
+      if (unsubUserDoc) {
+        unsubUserDoc();
+        unsubUserDoc = null;
+      }
+
       if (firebaseUser) {
-        // User is signed in, get profile from Firestore
-        try {
-          const response = await fetch(`/api/users/${firebaseUser.uid}`);
-          if (response.ok) {
-            const userProfile = await response.json();
-            setUser(userProfile);
-          }
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
-        }
+        const fallback: UserProfile = {
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? "",
+          displayName: firebaseUser.displayName ?? "",
+          isPremium: false,
+          preferences: {
+            theme: "light",
+            notifications: true,
+            reminderFrequency: "daily",
+          },
+          stats: {
+            totalGoals: 0,
+            completedGoals: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            strategiesCreated: 0,
+            plansCompleted: 0,
+          },
+        };
+
+        setUser(fallback);
+        const ref = doc(db, "users", firebaseUser.uid);
+        unsubUserDoc = onSnapshot(
+          ref,
+          (snap) => {
+            if (snap.exists()) {
+              setUser(snap.data() as UserProfile);
+            } else {
+              setUser(fallback);
+            }
+          },
+          (error) => {
+            console.error("Error subscribing to user profile:", error);
+            setUser(fallback);
+          },
+        );
       } else {
         setUser(null);
       }
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (unsubUserDoc) unsubUserDoc();
+      unsubscribe();
+    };
   }, []);
 
   const isPremium = user?.isPremium ?? false;

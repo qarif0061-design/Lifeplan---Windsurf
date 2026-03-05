@@ -32,6 +32,17 @@ export interface Goal {
   name: string;
   timeframe: Timeframe;
   timeframeValue: number;
+  dueAt?: string;
+  strategy?: {
+    whyMatters: string;
+    whoBenefits: string;
+    sayNoTo: string;
+  };
+  planning?: {
+    obstacles?: string;
+    nextActions?: string;
+    aiPreview?: string;
+  };
   successMetric: {
     type: 'number' | 'yes-no';
     target?: number;

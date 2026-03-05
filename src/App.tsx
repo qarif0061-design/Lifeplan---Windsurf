@@ -9,6 +9,17 @@ import Landing from "./pages/Landing";
 import Settings from "./pages/Settings";
 import Insights from "./pages/Insights";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+import Profile from "./pages/Profile";
+import GoalDetails from "./pages/GoalDetails";
+import CheckIn from "./pages/CheckIn";
+import Planning from "./pages/Planning";
+import Strategy from "./pages/Strategy";
+import Social from "./pages/Social";
+import Download from "./pages/Download";
+import Articles from "./pages/Articles";
+import ArticleDetails from "./pages/ArticleDetails";
 
 function App() {
   return (
@@ -22,6 +33,17 @@ function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/goals/:id" element={<GoalDetails />} />
+          <Route path="/check-in" element={<CheckIn />} />
+          <Route path="/planning" element={<Planning />} />
+          <Route path="/strategy" element={<Strategy />} />
+          <Route path="/social" element={<Social />} />
+          <Route path="/download" element={<Download />} />
+          <Route path="/articles" element={<Articles />} />
+          <Route path="/articles/:slug" element={<ArticleDetails />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />

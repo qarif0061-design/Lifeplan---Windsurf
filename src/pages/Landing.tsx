@@ -83,7 +83,7 @@ const Landing = () => {
             <span>Now available on Web</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-            Master Your Life with <span className="text-blue-600">LifePlan</span>
+            Master Your Life with <span className="text-blue-600">Lifeplans</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
             The comprehensive goal planning and life management platform designed to help you achieve what matters most.
