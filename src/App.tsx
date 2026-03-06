@@ -9,11 +9,12 @@ import Pricing from "./pages/Pricing";
 import Landing from "./pages/Landing";
 import Settings from "./pages/Settings";
 import Insights from "./pages/Insights";
-import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import Profile from "./pages/Profile";
+import BillingSuccess from "./pages/BillingSuccess";
+import RequirePremium from "./components/RequirePremium";
 import GoalDetails from "./pages/GoalDetails";
 import CheckIn from "./pages/CheckIn";
 import Planning from "./pages/Planning";
@@ -23,6 +24,7 @@ import Download from "./pages/Download";
 import Articles from "./pages/Articles";
 import ArticleDetails from "./pages/ArticleDetails";
 import Questions from "./pages/Questions";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -36,13 +38,28 @@ function App() {
             <Route path="/goals" element={<Goals />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/insights" element={<Insights />} />
+            <Route
+              path="/insights"
+              element={
+                <RequirePremium>
+                  <Insights />
+                </RequirePremium>
+              }
+            />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<RefundPolicy />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/billing/success" element={<BillingSuccess />} />
             <Route path="/goals/:id" element={<GoalDetails />} />
-            <Route path="/check-in" element={<CheckIn />} />
+            <Route
+              path="/check-in"
+              element={
+                <RequirePremium>
+                  <CheckIn />
+                </RequirePremium>
+              }
+            />
             <Route path="/planning" element={<Planning />} />
             <Route path="/strategy" element={<Strategy />} />
             <Route path="/social" element={<Social />} />

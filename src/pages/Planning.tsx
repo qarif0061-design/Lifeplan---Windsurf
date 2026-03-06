@@ -32,7 +32,7 @@ const weekStartMonday = (date: Date): string => {
 };
 
 const Planning = () => {
-  const { user } = useUser();
+  const { user, isPremium } = useUser();
   const { plans } = useWeeklyPlans();
 
   const currentWeekStart = useMemo(() => weekStartMonday(new Date()), []);
@@ -169,7 +169,18 @@ const Planning = () => {
                     <Button variant="outline" className="rounded-full" onClick={openEditor}>
                       Edit Weekly Plan
                     </Button>
-                    <Button variant="outline" className="rounded-full" onClick={() => setIsHistoryOpen(true)}>
+                    <Button
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={!isPremium}
+                      onClick={() => {
+                        if (!isPremium) {
+                          showError("Weekly plan history is a Premium feature. Upgrade to access your past plans.");
+                          return;
+                        }
+                        setIsHistoryOpen(true);
+                      }}
+                    >
                       History
                     </Button>
                   </div>
@@ -213,7 +224,16 @@ const Planning = () => {
           </CardContent>
         </Card>
 
-        <Dialog open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+        <Dialog
+          open={isHistoryOpen}
+          onOpenChange={(next) => {
+            if (next && !isPremium) {
+              showError("Weekly plan history is a Premium feature. Upgrade to access your past plans.");
+              return;
+            }
+            setIsHistoryOpen(next);
+          }}
+        >
           <DialogContent className="sm:max-w-[720px] rounded-[2rem]">
             <DialogHeader>
               <DialogTitle>Weekly Plan History</DialogTitle>

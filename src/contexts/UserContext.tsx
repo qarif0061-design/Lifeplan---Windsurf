@@ -7,7 +7,6 @@ import { db } from "@/firebase/config";
 interface UserContextType {
   user: UserProfile | null;
   isPremium: boolean;
-  togglePremium: () => void;
   login: (name: string) => void;
   logout: () => Promise<void>;
   loading: boolean;
@@ -78,13 +77,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const isPremium = user?.isPremium ?? false;
 
-  const togglePremium = () => {
-    if (user) {
-      setUser({ ...user, isPremium: !user.isPremium });
-      // TODO: Update in Firestore
-    }
-  };
-
   const login = async (name: string) => {
     // This is now handled by Firebase auth
     // Keeping for backward compatibility
@@ -100,7 +92,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, isPremium, togglePremium, login, logout: handleLogout, loading }}>
+    <UserContext.Provider value={{ user, isPremium, login, logout: handleLogout, loading }}>
       {children}
     </UserContext.Provider>
   );

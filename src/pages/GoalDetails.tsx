@@ -17,6 +17,7 @@ import { showError, showSuccess } from "@/utils/toast";
 import { Slider } from "@/components/ui/slider";
 import type { Goal, Priority, Timeframe } from "@/types";
 import { deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
+import { useUser } from "@/contexts/UserContext";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,7 @@ import {
 } from "@/components/ui/select";
 
 const GoalDetails = () => {
+  const { isPremium } = useUser();
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -168,6 +170,10 @@ const GoalDetails = () => {
 
   const handleSaveStrategy = async () => {
     if (!goal) return;
+    if (!isPremium) {
+      showError("Strategy is a Premium feature. Upgrade to edit strategy.");
+      return;
+    }
     setIsSavingStrategy(true);
     try {
       await updateGoal(goal.id, {
@@ -209,6 +215,10 @@ const GoalDetails = () => {
 
   const handleSavePlanning = async () => {
     if (!goal) return;
+    if (!isPremium) {
+      showError("Planning is a Premium feature. Upgrade to edit planning.");
+      return;
+    }
     setIsSavingPlanning(true);
     try {
       await updateGoal(goal.id, {
@@ -594,9 +604,14 @@ const GoalDetails = () => {
                       <Button
                         variant="outline"
                         onClick={() => {
+                          if (!isPremium) {
+                            showError("Strategy is a Premium feature. Upgrade to add/edit strategy.");
+                            return;
+                          }
                           setEditMode(true);
                           setEditTarget("strategy");
                         }}
+                        disabled={!isPremium}
                         className="rounded-full"
                       >
                         {goal.strategy ? "Edit Strategy" : "Add Strategy"}
@@ -604,9 +619,14 @@ const GoalDetails = () => {
                       <Button
                         variant="outline"
                         onClick={() => {
+                          if (!isPremium) {
+                            showError("Planning is a Premium feature. Upgrade to add/edit planning.");
+                            return;
+                          }
                           setEditMode(true);
                           setEditTarget("planning");
                         }}
+                        disabled={!isPremium}
                         className="rounded-full"
                       >
                         {goal.planning ? "Edit Planning" : "Add Planning"}

@@ -89,6 +89,10 @@ const Goals = () => {
       showError("Please sign in to create goals.");
       return;
     }
+    if (!isPremium && goals.length >= 1) {
+      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+      return;
+    }
     if (!goalName.trim() || !goalCategory.trim()) {
       showError("Please enter a goal name and category.");
       return;
@@ -235,7 +239,13 @@ const Goals = () => {
               <DialogTrigger asChild>
                 <Button
                   className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
-                  onClick={() => setIsDialogOpen(true)}
+                  onClick={() => {
+                    if (!isPremium && goals.length >= 1) {
+                      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+                      return;
+                    }
+                    setIsDialogOpen(true);
+                  }}
                 >
                   <Plus className="w-4 h-4 mr-2" /> Create New Goal
                 </Button>
@@ -321,7 +331,14 @@ const Goals = () => {
                       type="button"
                       variant="outline"
                       className="w-full rounded-xl"
-                      onClick={() => setShowStrategyFields(true)}
+                      disabled={!isPremium}
+                      onClick={() => {
+                        if (!isPremium) {
+                          showError("Strategy is a Premium feature. Upgrade to add strategy.");
+                          return;
+                        }
+                        setShowStrategyFields(true);
+                      }}
                     >
                       Add Strategy
                     </Button>
@@ -381,7 +398,14 @@ const Goals = () => {
                       type="button"
                       variant="outline"
                       className="w-full rounded-xl"
-                      onClick={() => setShowPlanningFields(true)}
+                      disabled={!isPremium}
+                      onClick={() => {
+                        if (!isPremium) {
+                          showError("Planning is a Premium feature. Upgrade to add planning.");
+                          return;
+                        }
+                        setShowPlanningFields(true);
+                      }}
                     >
                       Add Planning
                     </Button>
@@ -605,7 +629,13 @@ const Goals = () => {
 
           {/* Empty State / Add New Card */}
           <button 
-            onClick={() => setIsDialogOpen(true)}
+            onClick={() => {
+              if (!isPremium && goals.length >= 1) {
+                showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+                return;
+              }
+              setIsDialogOpen(true);
+            }}
             className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group"
           >
             <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
@@ -619,14 +649,14 @@ const Goals = () => {
         </div>
 
         {/* Free Tier Limit Notice */}
-        {!isPremium && goals.length >= 3 && (
+        {!isPremium && goals.length >= 1 && (
           <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-start gap-4">
             <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
               <Crown className="w-5 h-5 text-amber-600" />
             </div>
             <div>
               <h4 className="font-bold text-amber-900">Goal Limit Reached</h4>
-              <p className="text-sm text-amber-700">Free users can have up to 3 active goals. Upgrade to Premium for unlimited goals and advanced planning tools.</p>
+              <p className="text-sm text-amber-700">Free users can have up to 1 goal. Upgrade to Premium for unlimited goals and advanced planning tools.</p>
               <Button asChild variant="link" className="text-amber-700 p-0 h-auto font-bold mt-1">
                 <Link to="/pricing">Upgrade Now →</Link>
               </Button>

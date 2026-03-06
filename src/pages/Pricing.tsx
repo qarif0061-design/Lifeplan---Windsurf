@@ -2,25 +2,39 @@ import { Button } from "@/components/ui/button";
 import { Check, Crown, Zap, Shield, Star } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
-import { showSuccess } from "@/utils/toast";
 import HelpDialog from "@/components/HelpDialog";
 import Layout from "@/components/Layout";
 
 const Pricing = () => {
-  const { isPremium, togglePremium, user } = useUser();
+  const { isPremium, user } = useUser();
   const navigate = useNavigate();
+
+  const store = "goalplanner";
+  const variants = {
+    weekly: "1372523",
+    monthly: "1372984",
+    yearly: "1372982",
+  } as const;
+
+  const buildCheckoutUrl = (variantId: string) => {
+    const base = `https://${store}.lemonsqueezy.com/checkout/buy/${variantId}`;
+    if (!user) return base;
+
+    const url = new URL(base);
+    url.searchParams.set("checkout[custom][user_id]", user.id);
+    return url.toString();
+  };
 
   const handleUpgrade = (planName: string) => {
     if (!user) {
       navigate("/auth");
       return;
     }
-    
     if (planName === "Free") return;
 
-    togglePremium();
-    showSuccess(`Successfully upgraded to ${planName}!`);
-    navigate("/dashboard");
+    if (planName === "Weekly") window.location.assign(buildCheckoutUrl(variants.weekly));
+    if (planName === "Monthly") window.location.assign(buildCheckoutUrl(variants.monthly));
+    if (planName === "Yearly") window.location.assign(buildCheckoutUrl(variants.yearly));
   };
 
   const plans = [
@@ -29,32 +43,45 @@ const Pricing = () => {
       price: "$0",
       description: "Perfect for getting started with basic goal tracking.",
       features: [
-        "Up to 3 active goals",
+        "Create 1 goal",
         "Basic weekly planning",
-        "Daily check-ins",
-        "Community support",
+        "Limited goal strategy & planning",
       ],
       buttonText: isPremium ? "Downgrade" : "Current Plan",
       buttonVariant: "outline" as const,
       highlight: false,
     },
     {
-      name: "Premium",
+      name: "Monthly",
       price: "$4.99",
       period: "/month",
-      description: "The complete system for high achievers and professionals.",
+      description: "Full access to all Premium features. Cancel anytime.",
       features: [
         "Unlimited active goals",
         "Full Strategy System access",
-        "AI-powered Strategy Summaries",
-        "Advanced PDCA Weekly Reviews",
-        "Detailed Progress Analytics",
+        "Daily check-ins",
+        "Insights & analytics",
+        "Weekly planning history",
         "Priority Email Support",
       ],
-      buttonText: isPremium ? "Current Plan" : "Upgrade to Premium",
+      buttonText: isPremium ? "Current Plan" : "Subscribe Monthly",
       buttonVariant: (isPremium ? "outline" : "default") as "outline" | "default",
       highlight: true,
       icon: Crown,
+    },
+    {
+      name: "Weekly",
+      price: "$1.99",
+      period: "/week",
+      description: "Flexible weekly billing for full Premium access.",
+      features: [
+        "Everything in Premium",
+        "Weekly billing",
+        "Priority email support",
+      ],
+      buttonText: "Subscribe Weekly",
+      buttonVariant: "outline" as const,
+      highlight: false,
     },
     {
       name: "Yearly",
@@ -66,7 +93,7 @@ const Pricing = () => {
         "Annual billing",
         "Priority email support",
       ],
-      buttonText: "Get Yearly Access",
+      buttonText: "Subscribe Yearly",
       buttonVariant: "outline" as const,
       highlight: false,
     },
@@ -83,7 +110,7 @@ const Pricing = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {plans.map((plan, index) => (
               <div 
                 key={index} 

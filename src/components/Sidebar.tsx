@@ -20,7 +20,7 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
-  const { user, logout } = useUser();
+  const { user, logout, isPremium } = useUser();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,9 +33,9 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
     ? [
         { to: "/dashboard", label: "Dashboard", icon: Home },
         { to: "/goals", label: "Goals", icon: Target },
-        { to: "/check-in", label: "Daily Check-in", icon: CheckSquare },
+        ...(isPremium ? [{ to: "/check-in", label: "Daily Check-in", icon: CheckSquare } as const] : []),
         { to: "/planning", label: "Weekly Planning", icon: Calendar },
-        { to: "/insights", label: "Insights", icon: Calendar },
+        ...(isPremium ? [{ to: "/insights", label: "Insights", icon: Calendar } as const] : []),
         { to: "/articles", label: "Articles", icon: BookOpen },
         { to: "/questions", label: "Questions", icon: BookOpen },
         { to: "/download", label: "Download", icon: Download },

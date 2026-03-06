@@ -70,6 +70,10 @@ const Dashboard = () => {
       showError("Please sign in to create goals.");
       return;
     }
+    if (!isPremium && goals.length >= 1) {
+      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+      return;
+    }
     if (!goalName.trim() || !goalCategory.trim()) {
       showError("Please enter a goal name and category.");
       return;
@@ -136,7 +140,16 @@ const Dashboard = () => {
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">
+              <Button
+                className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
+                onClick={() => {
+                  if (!isPremium && goals.length >= 1) {
+                    showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+                    return;
+                  }
+                  setIsDialogOpen(true);
+                }}
+              >
                 <Plus className="w-4 h-4 mr-2" /> Create New Goal
               </Button>
             </DialogTrigger>
@@ -202,79 +215,83 @@ const Dashboard = () => {
                   />
                 </div>
 
-                {/* Strategy Section */}
-                <div className="border-t pt-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Strategy (optional)</h4>
-                  <div className="space-y-3">
-                    <div className="grid gap-2">
-                      <Label htmlFor="strategy-why">Why does this goal matter?</Label>
-                      <textarea
-                        id="strategy-why"
-                        value={strategyWhy}
-                        onChange={(e) => setStrategyWhy(e.target.value)}
-                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                        placeholder="Your deeper motivation..."
-                      />
+                {isPremium && (
+                  <>
+                    {/* Strategy Section */}
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-900 mb-3">Strategy (optional)</h4>
+                      <div className="space-y-3">
+                        <div className="grid gap-2">
+                          <Label htmlFor="strategy-why">Why does this goal matter?</Label>
+                          <textarea
+                            id="strategy-why"
+                            value={strategyWhy}
+                            onChange={(e) => setStrategyWhy(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="Your deeper motivation..."
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
+                          <textarea
+                            id="strategy-who"
+                            value={strategyWho}
+                            onChange={(e) => setStrategyWho(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="Yourself, family, team, community..."
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="strategy-no">What will you say "no" to?</Label>
+                          <textarea
+                            id="strategy-no"
+                            value={strategyNo}
+                            onChange={(e) => setStrategyNo(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="Distractions, other commitments, bad habits..."
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
-                      <textarea
-                        id="strategy-who"
-                        value={strategyWho}
-                        onChange={(e) => setStrategyWho(e.target.value)}
-                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                        placeholder="Yourself, family, team, community..."
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="strategy-no">What will you say "no" to?</Label>
-                      <textarea
-                        id="strategy-no"
-                        value={strategyNo}
-                        onChange={(e) => setStrategyNo(e.target.value)}
-                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                        placeholder="Distractions, other commitments, bad habits..."
-                      />
-                    </div>
-                  </div>
-                </div>
 
-                {/* Planning Section */}
-                <div className="border-t pt-4">
-                  <h4 className="font-semibold text-gray-900 mb-3">Planning (optional)</h4>
-                  <div className="space-y-3">
-                    <div className="grid gap-2">
-                      <Label htmlFor="planning-obstacles">Potential obstacles</Label>
-                      <textarea
-                        id="planning-obstacles"
-                        value={planningObstacles}
-                        onChange={(e) => setPlanningObstacles(e.target.value)}
-                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                        placeholder="What might get in the way?"
-                      />
+                    {/* Planning Section */}
+                    <div className="border-t pt-4">
+                      <h4 className="font-semibold text-gray-900 mb-3">Planning (optional)</h4>
+                      <div className="space-y-3">
+                        <div className="grid gap-2">
+                          <Label htmlFor="planning-obstacles">Potential obstacles</Label>
+                          <textarea
+                            id="planning-obstacles"
+                            value={planningObstacles}
+                            onChange={(e) => setPlanningObstacles(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="What might get in your way?"
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="planning-next">Next actions</Label>
+                          <textarea
+                            id="planning-next"
+                            value={planningNextActions}
+                            onChange={(e) => setPlanningNextActions(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="Small steps you can take this week..."
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="planning-ai">AI reflection (optional)</Label>
+                          <textarea
+                            id="planning-ai"
+                            value={planningAiPreview}
+                            onChange={(e) => setPlanningAiPreview(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="Ask: What's the biggest risk to this plan?"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="planning-next">Next actions</Label>
-                      <textarea
-                        id="planning-next"
-                        value={planningNextActions}
-                        onChange={(e) => setPlanningNextActions(e.target.value)}
-                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                        placeholder="First 3-5 steps to take..."
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="planning-ai">AI reflection (optional)</Label>
-                      <textarea
-                        id="planning-ai"
-                        value={planningAiPreview}
-                        onChange={(e) => setPlanningAiPreview(e.target.value)}
-                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                        placeholder="Ask AI for insights about this goal..."
-                      />
-                    </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
               <DialogFooter>
                 <Button onClick={handleCreateGoal} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700 rounded-xl h-11">
