@@ -94,6 +94,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     await logout();
     setUser(null);
+    // Clear remember me on logout
+    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('userEmail');
   };
 
   return (

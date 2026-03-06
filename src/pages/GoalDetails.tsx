@@ -43,6 +43,7 @@ const GoalDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [editTarget, setEditTarget] = useState<"strategy" | "planning" | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingStrategy, setIsSavingStrategy] = useState(false);
   const [isSavingPlanning, setIsSavingPlanning] = useState(false);
@@ -105,6 +106,7 @@ const GoalDetails = () => {
     const state = location.state as { openEdit?: boolean } | null;
     if (state?.openEdit) {
       setEditMode(true);
+      setEditTarget(null);
       setIsEditOpen(true);
     }
   }, [location.state]);
@@ -447,106 +449,190 @@ const GoalDetails = () => {
                 </Card>
 
                 <Card className="border-none shadow-sm rounded-[2.5rem]">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-bold">Strategy</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid gap-2">
-                      <Label>Why does this goal matter?</Label>
-                      <textarea
-                        value={strategyWhy}
-                        onChange={(e) => setStrategyWhy(e.target.value)}
-                        disabled={!editMode}
-                        className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Who benefits if you succeed?</Label>
-                      <textarea
-                        value={strategyWho}
-                        onChange={(e) => setStrategyWho(e.target.value)}
-                        disabled={!editMode}
-                        className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>What will you say “No” to?</Label>
-                      <textarea
-                        value={strategyNo}
-                        onChange={(e) => setStrategyNo(e.target.value)}
-                        disabled={!editMode}
-                        className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                      />
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {editMode && (
-                        <Button
-                          onClick={handleSaveStrategy}
-                          disabled={isSavingStrategy}
-                          className="rounded-full bg-blue-600 hover:bg-blue-700"
-                        >
-                          {isSavingStrategy ? "Saving..." : "Save Strategy"}
-                        </Button>
-                      )}
-                      <Button asChild variant="outline" className="rounded-full">
-                        <Link to="/strategy">Open Strategy Page</Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                  <CardContent className="space-y-6">
+                    {!goal.strategy && !goal.planning ? (
+                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5">
+                        <p className="font-semibold text-gray-900">No strategy or planning set for this goal yet.</p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          Add a simple “why” and a plan for the week to stay consistent. Use the buttons below to set it now.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-6">
+                        {!!goal.strategy && (
+                          <div className="space-y-3">
+                            <div>
+                              <h4 className="text-lg font-bold text-gray-900">Strategy</h4>
+                              <p className="text-sm text-gray-500">Your motivation and focus.</p>
+                            </div>
 
-                <Card className="border-none shadow-sm rounded-[2.5rem]">
-                  <CardHeader>
-                    <CardTitle className="text-xl font-bold">Weekly Planning</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid gap-2">
-                      <Label>Common obstacles</Label>
-                      <textarea
-                        value={planningObstacles}
-                        onChange={(e) => setPlanningObstacles(e.target.value)}
-                        disabled={!editMode}
-                        className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>Next actions for this week</Label>
-                      <textarea
-                        value={planningNextActions}
-                        onChange={(e) => setPlanningNextActions(e.target.value)}
-                        disabled={!editMode}
-                        className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label>AI-style preview (local)</Label>
-                      <textarea
-                        value={planningAiPreview}
-                        onChange={(e) => setPlanningAiPreview(e.target.value)}
-                        disabled={!editMode}
-                        className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                      />
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <div className="space-y-4">
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900">Why does this goal matter?</p>
+                                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.strategy.whyMatters}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900">Who benefits if you succeed?</p>
+                                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.strategy.whoBenefits}</p>
+                              </div>
+                              <div>
+                                <p className="text-sm font-semibold text-gray-900">What will you say “No” to?</p>
+                                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.strategy.sayNoTo}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {!!goal.planning && (
+                          <div className="space-y-3">
+                            <div>
+                              <h4 className="text-lg font-bold text-gray-900">Planning</h4>
+                              <p className="text-sm text-gray-500">What could block you, and what you’ll do next.</p>
+                            </div>
+
+                            <div className="space-y-4">
+                              {goal.planning.obstacles ? (
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900">Common obstacles</p>
+                                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.planning.obstacles}</p>
+                                </div>
+                              ) : null}
+                              {goal.planning.nextActions ? (
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900">Next actions for this week</p>
+                                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.planning.nextActions}</p>
+                                </div>
+                              ) : null}
+                              {goal.planning.aiPreview ? (
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900">AI reflection</p>
+                                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.planning.aiPreview}</p>
+                                </div>
+                              ) : null}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {editMode && (
+                      <div className="space-y-6 pt-4 border-t">
+                        {(editTarget === null || editTarget === "strategy") && (
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-3">Strategy</h4>
+                          <div className="space-y-3">
+                            <div className="grid gap-2">
+                              <Label>Why does this goal matter?</Label>
+                              <textarea
+                                value={strategyWhy}
+                                onChange={(e) => setStrategyWhy(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>Who benefits if you succeed?</Label>
+                              <textarea
+                                value={strategyWho}
+                                onChange={(e) => setStrategyWho(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>What will you say “No” to?</Label>
+                              <textarea
+                                value={strategyNo}
+                                onChange={(e) => setStrategyNo(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        )}
+
+                        {(editTarget === null || editTarget === "planning") && (
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-3">Planning</h4>
+                          <div className="space-y-3">
+                            <div className="grid gap-2">
+                              <Label>Common obstacles</Label>
+                              <textarea
+                                value={planningObstacles}
+                                onChange={(e) => setPlanningObstacles(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>Next actions for this week</Label>
+                              <textarea
+                                value={planningNextActions}
+                                onChange={(e) => setPlanningNextActions(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>AI-style preview (local)</Label>
+                              <textarea
+                                value={planningAiPreview}
+                                onChange={(e) => setPlanningAiPreview(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-4 border-t">
                       <Button
                         variant="outline"
-                        onClick={() => setPlanningAiPreview(generateLocalAiPreview())}
+                        onClick={() => {
+                          setEditMode(true);
+                          setEditTarget("strategy");
+                        }}
                         className="rounded-full"
                       >
-                        Generate Preview
+                        {goal.strategy ? "Edit Strategy" : "Add Strategy"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setEditMode(true);
+                          setEditTarget("planning");
+                        }}
+                        className="rounded-full"
+                      >
+                        {goal.planning ? "Edit Planning" : "Add Planning"}
                       </Button>
                       {editMode && (
-                        <Button
-                          onClick={handleSavePlanning}
-                          disabled={isSavingPlanning}
-                          className="rounded-full bg-blue-600 hover:bg-blue-700"
-                        >
-                          {isSavingPlanning ? "Saving..." : "Save Planning"}
-                        </Button>
+                        <>
+                          {(editTarget === null || editTarget === "strategy") && (
+                            <Button
+                              onClick={handleSaveStrategy}
+                              disabled={isSavingStrategy}
+                              className="rounded-full bg-blue-600 hover:bg-blue-700"
+                            >
+                              {isSavingStrategy ? "Saving..." : "Save Strategy"}
+                            </Button>
+                          )}
+                          {(editTarget === null || editTarget === "planning") && (
+                            <Button
+                              onClick={handleSavePlanning}
+                              disabled={isSavingPlanning}
+                              className="rounded-full bg-blue-600 hover:bg-blue-700"
+                            >
+                              {isSavingPlanning ? "Saving..." : "Save Planning"}
+                            </Button>
+                          )}
+                        </>
                       )}
-                      <Button asChild variant="outline" className="rounded-full">
-                        <Link to="/planning">Open Weekly Planning</Link>
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>

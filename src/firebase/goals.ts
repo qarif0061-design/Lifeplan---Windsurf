@@ -5,7 +5,6 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  orderBy,
   query,
   updateDoc,
   where,
@@ -21,6 +20,8 @@ type CreateGoalInput = {
   timeframe: Timeframe;
   timeframeValue: number;
   description?: string;
+  strategy?: Goal["strategy"];
+  planning?: Goal["planning"];
 };
 
 const goalsCollection = collection(db, "goals");
@@ -49,12 +50,17 @@ export const subscribeGoalsByUser = (
   userId: string,
   callback: (goals: Goal[]) => void,
 ): (() => void) => {
-  const q = query(goalsCollection, where("userId", "==", userId), orderBy("createdAt", "desc"));
+  const q = query(goalsCollection, where("userId", "==", userId));
   return onSnapshot(q, (snapshot) => {
     const goals: Goal[] = snapshot.docs.map((d) => ({
       id: d.id,
       ...(d.data() as Omit<Goal, "id">),
     }));
+    goals.sort((a, b) => {
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return bTime - aTime;
+    });
     callback(goals);
   });
 };
@@ -74,6 +80,8 @@ export const createGoal = async (input: CreateGoalInput): Promise<string> => {
     status: "active",
     progress: 0,
     description: input.description,
+    strategy: input.strategy,
+    planning: input.planning,
     createdAt: now,
     updatedAt: now,
   };

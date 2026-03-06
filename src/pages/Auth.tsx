@@ -15,6 +15,7 @@ const Auth = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
   const handleAuth = async (e: React.FormEvent, isSignUp: boolean) => {
@@ -27,6 +28,15 @@ const Auth = () => {
         userProfile = await signUp(email, password, name);
       } else {
         userProfile = await signIn(email, password);
+      }
+      
+      // Store remember me preference
+      if (rememberMe && !isSignUp) {
+        localStorage.setItem('rememberMe', 'true');
+        localStorage.setItem('userEmail', email);
+      } else {
+        localStorage.removeItem('rememberMe');
+        localStorage.removeItem('userEmail');
       }
       
       // Update context
@@ -42,19 +52,20 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900">Welcome back</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Start achieving your goals today
-          </p>
-        </div>
+      <div className="w-full max-w-6xl grid lg:grid-cols-[1fr,320px] gap-8 items-start">
+        <div className="w-full max-w-md mx-auto lg:mx-0 space-y-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900">Welcome back</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Start achieving your goals today
+            </p>
+          </div>
 
-        <Tabs defaultValue="signin" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
 
           <TabsContent value="signin">
             <Card className="border-none shadow-xl shadow-gray-200/50 rounded-3xl">
@@ -99,6 +110,16 @@ const Auth = () => {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="remember"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <Label htmlFor="remember" className="text-sm text-gray-700">Remember me</Label>
                   </div>
                 </CardContent>
                 <CardFooter className="flex flex-col space-y-4">
@@ -188,33 +209,37 @@ const Auth = () => {
             </Card>
           </TabsContent>
         </Tabs>
+        </div>
 
-        <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">Get the mobile app</h3>
-          <p className="text-sm text-gray-600 mb-4">Plan on the go with Lifeplans.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Button asChild className="rounded-2xl bg-gray-900 hover:bg-black text-white h-12 justify-start">
-              <a
-                href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Apple className="w-5 h-5 mr-3" />
-                <span className="flex flex-col items-start leading-none">
-                  <span className="text-[11px] opacity-80">Download on the</span>
-                  <span className="text-sm font-bold">App Store</span>
+        {/* Right side: Download section */}
+        <div className="hidden lg:block">
+          <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm sticky top-8">
+            <h3 className="text-lg font-bold text-gray-900 mb-1">Get the mobile app</h3>
+            <p className="text-sm text-gray-600 mb-4">Plan on the go with Lifeplans.</p>
+            <div className="grid grid-cols-1 gap-3">
+              <Button asChild className="rounded-2xl bg-gray-900 hover:bg-black text-white h-12 justify-start">
+                <a
+                  href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Apple className="w-5 h-5 mr-3" />
+                  <span className="flex flex-col items-start leading-none">
+                    <span className="text-[11px] opacity-80">Download on the</span>
+                    <span className="text-sm font-bold">App Store</span>
+                  </span>
+                </a>
+              </Button>
+              <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start">
+                <span className="flex items-center">
+                  <Smartphone className="w-5 h-5 mr-3" />
+                  <span className="flex flex-col items-start leading-none">
+                    <span className="text-[11px] text-gray-500">Google Play</span>
+                    <span className="text-sm font-bold">Coming soon</span>
+                  </span>
                 </span>
-              </a>
-            </Button>
-            <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start">
-              <span className="flex items-center">
-                <Smartphone className="w-5 h-5 mr-3" />
-                <span className="flex flex-col items-start leading-none">
-                  <span className="text-[11px] text-gray-500">Google Play</span>
-                  <span className="text-sm font-bold">Coming soon</span>
-                </span>
-              </span>
-            </Button>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,9 +1,10 @@
+import React from "react";
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
 
-const renderBody = (body: string) => {
+const renderBody = (body: string): React.ReactElement[] => {
   const lines = body.split("\n");
-  const out: JSX.Element[] = [];
+  const out: React.ReactElement[] = [];
   let list: string[] = [];
 
   const flushList = (keyBase: string) => {
@@ -301,6 +302,505 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Do one small action for your goal\n" +
       "- Complete your daily check-in\n\n" +
       "Keywords: morning routine, habits, consistency, productivity\n",
+  },
+  "best-goal-planner-app-2024": {
+    title: "Best Goal Planner App 2024: Complete Review and Comparison",
+    body:
+      "Choosing the right goal planner app can make or break your productivity. In 2024, several apps stand out for different needs.\n\n" +
+      "## What makes a great goal planner app?\n" +
+      "- Clear goal setting and tracking\n" +
+      "- Progress visualization\n" +
+      "- Mobile and web sync\n" +
+      "- Reminders and accountability\n" +
+      "- Affordable pricing\n\n" +
+      "## Top contenders\n" +
+      "1. **Goal Planner - Lifeplans**: Best for comprehensive goal management with strategy and planning features.\n" +
+      "2. **App B**: Best for simple goal tracking.\n" +
+      "3. **App C**: Best for team goals.\n\n" +
+      "Keywords: goal planner app, productivity app, goal tracking, 2024 apps\n",
+  },
+  "top-goal-planner-apps-productivity": {
+    title: "Top Goal Planner Apps to Boost Your Productivity",
+    body:
+      "Productivity isn't about doing more—it's about doing what matters. The right goal planner app helps you focus on high-impact activities.\n\n" +
+      "## Features that drive productivity\n" +
+      "- Priority-based goal setting\n" +
+      "- Time tracking integration\n" +
+      "- Progress analytics\n" +
+      "- Habit stacking\n\n" +
+      "## How to choose\n" +
+      "Consider your workflow: Do you prefer daily check-ins or weekly reviews? Do you need team features or individual focus?\n\n" +
+      "Keywords: productivity, goal planner, focus, time management\n",
+  },
+  "how-to-set-goals-beginners-guide": {
+    title: "How to Set Goals: A Beginner's Guide to Success",
+    body:
+      "Setting goals for the first time can feel overwhelming. This guide breaks it down into simple, actionable steps.\n\n" +
+      "## Start with your values\n" +
+      "What matters most to you? Your goals should align with your personal values and long-term vision.\n\n" +
+      "## Use the SMART framework\n" +
+      "- **S**pecific: Clearly define what you want\n" +
+      "- **M**easurable: How will you track progress?\n" +
+      "- **A**chievable: Is this realistic?\n" +
+      "- **R**elevant: Does this matter to you?\n" +
+      "- **T**ime-bound: When will you achieve this?\n\n" +
+      "## Write it down\n" +
+      "Studies show that writing goals increases achievement likelihood by 42%. Use a journal or app like Lifeplans.\n\n" +
+      "Keywords: goal setting, beginners, SMART goals, personal development\n",
+  },
+  "how-to-achieve-goals-consistently": {
+    title: "How to Achieve Goals Consistently: Proven Strategies",
+    body:
+      "Consistent goal achievement isn't about motivation—it's about systems. Here's how to build them.\n\n" +
+      "## 1. Create a weekly review ritual\n" +
+      "Every Sunday, review progress, celebrate wins, and plan the week ahead.\n\n" +
+      "## 2. Use implementation intentions\n" +
+      "Instead of 'I will exercise more,' say 'I will exercise for 30 minutes at 7 AM on Monday, Wednesday, and Friday.'\n\n" +
+      "## 3. Build accountability\n" +
+      "Share goals with a friend or use an app with progress tracking.\n\n" +
+      "## 4. Start ridiculously small\n" +
+      "Want to write a book? Start with 100 words a day. Small wins build momentum.\n\n" +
+      "Keywords: goal achievement, consistency, habits, accountability\n",
+  },
+  "how-to-set-targets-effectively": {
+    title: "How to Set Targets That Drive Real Results",
+    body:
+      "Targets are the specific milestones that lead to goal achievement. Here's how to set them effectively.\n\n" +
+      "## Targets vs Goals\n" +
+      "- Goals are the destination\n" +
+      "- Targets are the signposts along the way\n\n" +
+      "## Set quarterly targets\n" +
+      "Break annual goals into quarterly milestones. This creates urgency and makes progress measurable.\n\n" +
+      "## Make targets visible\n" +
+      "Display targets where you'll see them daily—on your desk, phone wallpaper, or bathroom mirror.\n\n" +
+      "Keywords: targets, milestones, goal setting, quarterly planning\n",
+  },
+  "how-to-achieve-targets-easily": {
+    title: "How to Achieve Targets Easily: Smart Approaches",
+    body:
+      "Achieving targets doesn't have to be complicated. These simple approaches make it easier.\n\n" +
+      "## The 2-Minute Rule\n" +
+      "If a target action takes less than 2 minutes, do it immediately.\n\n" +
+      "## Batch Similar Tasks\n" +
+      "Group similar target actions together to maintain focus and efficiency.\n\n" +
+      "## Use Time Blocking\n" +
+      "Schedule specific time blocks for target-related activities.\n\n" +
+      "## Track Daily Progress\n" +
+      "A simple yes/no check-in builds momentum and creates accountability.\n\n" +
+      "Keywords: target achievement, productivity, time management, habits\n",
+  },
+  "how-to-gain-focus-deep-work": {
+    title: "How to Gain Focus for Deep Work and Goal Achievement",
+    body:
+      "Deep work is the ability to focus without distraction on a cognitively demanding task. It's a skill that can be developed.\n\n" +
+      "## Create a distraction-free environment\n" +
+      "- Turn off notifications\n" +
+      "- Use noise-cancelling headphones\n" +
+      "- Close unnecessary tabs\n\n" +
+      "## Time your focus sessions\n" +
+      "Start with 25-minute Pomodoro sessions and gradually increase duration.\n\n" +
+      "## Schedule deep work\n" +
+      "Block specific times in your calendar for focused goal work.\n\n" +
+      "Keywords: focus, deep work, concentration, productivity\n",
+  },
+  "goal-tracking-methods-that-work": {
+    title: "Goal Tracking Methods That Actually Work",
+    body:
+      "Not all tracking methods are created equal. Here are the ones that actually drive progress.\n\n" +
+      "## 1. Weekly Progress Percentage\n" +
+      "Update your progress percentage weekly. This provides clear feedback without overwhelming detail.\n\n" +
+      "## 2. Milestone Checkpoints\n" +
+      "Break goals into 3-5 key milestones. Track completion of each.\n\n" +
+      "## 3. Habit-Based Tracking\n" +
+      "Track the habits that lead to goal achievement rather than the goal itself.\n\n" +
+      "## 4. Visual Progress Boards\n" +
+      "Use charts, graphs, or progress bars to visualize advancement.\n\n" +
+      "Keywords: goal tracking, progress monitoring, milestones, habits\n",
+  },
+  "monthly-goal-setting-template": {
+    title: "Monthly Goal Setting Template for Consistent Progress",
+    body:
+      "Use this template each month to set clear, achievable goals that build momentum.\n\n" +
+      "## Monthly Review (Last month)\n" +
+      "- What went well?\n" +
+      "- What challenges did I face?\n" +
+      "- What did I learn?\n\n" +
+      "## This Month's Focus Areas\n" +
+      "Choose 3-4 focus areas maximum.\n\n" +
+      "## SMART Goals\n" +
+      "Write 1-2 SMART goals for each focus area.\n\n" +
+      "## Weekly Breakdown\n" +
+      "Divide monthly goals into weekly actions.\n\n" +
+      "## Success Metrics\n" +
+      "Define how you'll measure success for each goal.\n\n" +
+      "Keywords: monthly goals, goal template, planning, productivity\n",
+  },
+  "how-to-plan-your-goals-in-10-minutes": {
+    title: "How to Plan Your Goals in 10 Minutes (A Simple Routine)",
+    body:
+      "If planning feels heavy, you don’t need a perfect system—you need a small repeatable ritual. This 10-minute routine helps you stay consistent without overthinking.\n\n" +
+      "## 1) Pick 1–3 priorities for the week\n" +
+      "Write only the outcomes that truly matter. In Goal Planner - Lifeplans, add them as weekly priorities.\n\n" +
+      "## 2) Add 3–7 tasks you can actually start\n" +
+      "Tasks should be small enough to begin in 15 minutes.\n\n" +
+      "## 3) Decide the next action for each goal\n" +
+      "If you can’t name the next action, the goal is still vague.\n\n" +
+      "## 4) Update progress honestly\n" +
+      "A truthful progress percentage is better than a motivational lie—it improves planning.\n\n" +
+      "Keywords: weekly planning, goal planner app, weekly review\n",
+  },
+  "goal-setting-for-busy-people": {
+    title: "Goal Setting for Busy People: The Minimum Effective Plan",
+    body:
+      "Busy schedules don’t require more motivation—they require smaller plans. The minimum effective plan is: one goal, one weekly priority, a few tasks, and a weekly review.\n\n" +
+      "## Choose fewer goals\n" +
+      "Start with 1–2 active goals.\n\n" +
+      "## Plan your week in constraints\n" +
+      "If you have 3 free hours, plan for 2. Leave buffer.\n\n" +
+      "## Use Lifeplans as your weekly dashboard\n" +
+      "Set the goal, add strategy (why/no), then keep weekly priorities small.\n\n" +
+      "Keywords: goal setting for busy people, weekly planning, productivity\n",
+  },
+  "how-to-write-a-goal-strategy": {
+    title: "How to Write a Goal Strategy (Why, Who, and No)",
+    body:
+      "A strategy is your ‘why’ plus your boundaries. When motivation drops, strategy keeps you moving.\n\n" +
+      "## 1) Why does this goal matter?\n" +
+      "Write one honest paragraph.\n\n" +
+      "## 2) Who benefits if you succeed?\n" +
+      "This creates meaning beyond the mood of the day.\n\n" +
+      "## 3) What will you say no to?\n" +
+      "Boundaries protect progress: distractions, overtime, scrolling.\n\n" +
+      "In Lifeplans, use the Strategy section to store this so it’s visible during planning and reviews.\n\n" +
+      "Keywords: goal strategy, motivation, boundaries, focus\n",
+  },
+  "weekly-planning-template-lifeplans": {
+    title: "Weekly Planning Template You Can Copy Into Lifeplans",
+    body:
+      "Copy/paste template for a simple weekly plan.\n\n" +
+      "## Weekly priorities (1–3)\n" +
+      "- Priority 1:\n" +
+      "- Priority 2:\n" +
+      "- Priority 3:\n\n" +
+      "## Tasks (3–7)\n" +
+      "- Task A (15–45 min)\n" +
+      "- Task B\n" +
+      "- Task C\n\n" +
+      "## Obstacles & counter-plan\n" +
+      "- Obstacle: ____ → Counter-plan: ____\n\n" +
+      "Use this inside Lifeplans Weekly Planning and keep the plan small enough to finish.\n\n" +
+      "Keywords: weekly planning template, weekly goals, productivity\n",
+  },
+  "how-to-set-goals-without-burnout": {
+    title: "How to Set Goals Without Burnout",
+    body:
+      "Burnout happens when you plan like a robot and live like a human. The fix is fewer priorities, more recovery, and shorter planning horizons.\n\n" +
+      "## Use fewer weekly priorities\n" +
+      "Pick 1–2 priorities if you’re already stressed.\n\n" +
+      "## Track progress weekly, not obsessively\n" +
+      "Weekly progress updates reduce anxiety and improve decisions.\n\n" +
+      "## Build a fallback plan\n" +
+      "Minimum actions keep the streak alive.\n\n" +
+      "Keywords: burnout, sustainable goals, weekly planning\n",
+  },
+  "habit-goals-vs-outcome-goals": {
+    title: "Habit Goals vs Outcome Goals: Which Should You Track?",
+    body:
+      "Outcome goals tell you what you want. Habit goals tell you what you’ll do. The best system uses both.\n\n" +
+      "## Track outcomes weekly\n" +
+      "Progress percentage or milestones.\n\n" +
+      "## Track habits daily\n" +
+      "Yes/no check-ins help consistency.\n\n" +
+      "In Lifeplans, keep the goal outcome in Goals, and keep the habit-driven actions in Weekly Planning.\n\n" +
+      "Keywords: habits vs goals, progress tracking\n",
+  },
+  "goal-setting-for-students": {
+    title: "Goal Setting for Students: A Weekly Study System",
+    body:
+      "Students succeed when study becomes a weekly routine, not a last-minute sprint.\n\n" +
+      "## Set one measurable outcome\n" +
+      "Example: score 80%+ on a practice test in 6 weeks.\n\n" +
+      "## Plan weekly sessions\n" +
+      "Schedule 3–5 sessions and one review day.\n\n" +
+      "## Track leading indicators\n" +
+      "Hours studied, chapters completed, practice questions.\n\n" +
+      "Keywords: study goals, weekly planning, exam preparation\n",
+  },
+  "goal-setting-for-career-growth": {
+    title: "Goal Setting for Career Growth: A 12-Week Plan",
+    body:
+      "Career growth becomes easier when you plan it like a project. A 12-week plan is long enough for progress and short enough to stay focused.\n\n" +
+      "## Pick one skill\n" +
+      "Example: React, sales, writing, design.\n\n" +
+      "## Set milestones\n" +
+      "Portfolio project, certification module, interview practice.\n\n" +
+      "## Execute weekly\n" +
+      "Use Lifeplans weekly priorities and tasks to keep the plan realistic.\n\n" +
+      "Keywords: career goals, 12 week year, weekly planning\n",
+  },
+  "how-to-set-financial-goals": {
+    title: "How to Set Financial Goals That You’ll Actually Hit",
+    body:
+      "Financial goals work when you attach them to weekly actions.\n\n" +
+      "## Make it measurable\n" +
+      "Example: Save $500 in 10 weeks.\n\n" +
+      "## Add weekly actions\n" +
+      "Budget review on Sunday + automatic transfer.\n\n" +
+      "## Track progress\n" +
+      "Update the percentage weekly so you can adjust early.\n\n" +
+      "Keywords: saving goals, budgeting, weekly review\n",
+  },
+  "how-to-recover-after-falling-off": {
+    title: "How to Recover After Falling Off Your Goal Plan",
+    body:
+      "Falling off is normal. The only failure is not restarting.\n\n" +
+      "## Step 1: Reduce scope\n" +
+      "Make the plan smaller for one week.\n\n" +
+      "## Step 2: Choose one next action\n" +
+      "A single startable task rebuilds momentum.\n\n" +
+      "## Step 3: Review weekly\n" +
+      "Lifeplans works best when you adjust weekly based on real data.\n\n" +
+      "Keywords: restart goals, consistency, weekly planning\n",
+  },
+  "goal-review-questions": {
+    title: "Weekly Goal Review Questions (Use These Every Sunday)",
+    body:
+      "Use these questions in your weekly review to improve fast.\n\n" +
+      "## Weekly review questions\n" +
+      "- What did I complete?\n" +
+      "- What did I avoid (and why)?\n" +
+      "- What obstacle appeared most?\n" +
+      "- What is the next best plan (smaller if needed)?\n\n" +
+      "In Lifeplans, update your Weekly Planning and goal progress right after answering these.\n\n" +
+      "Keywords: weekly review, reflection, planning\n",
+  },
+  "how-to-prioritize-goals": {
+    title: "How to Prioritize Goals When Everything Feels Important",
+    body:
+      "If everything is important, nothing gets finished. Prioritization is choosing what to ignore this week.\n\n" +
+      "## Use the 1–3 rule\n" +
+      "Pick 1–3 priorities for the week maximum.\n\n" +
+      "## Choose by impact\n" +
+      "Ask: which goal improves everything else?\n\n" +
+      "## Plan weekly, not yearly\n" +
+      "Long plans become fantasy. Weekly planning stays real.\n\n" +
+      "Keywords: prioritize goals, focus, weekly planning\n",
+  },
+  "goal-metrics-examples": {
+    title: "Goal Metrics Examples: What to Measure (and What to Ignore)",
+    body:
+      "Good metrics create clarity. Bad metrics create stress.\n\n" +
+      "## Fitness\n" +
+      "Workouts/week, steps/day, sleep hours.\n\n" +
+      "## Study\n" +
+      "Practice questions, study sessions, mock test score.\n\n" +
+      "## Business\n" +
+      "Publishing cadence, outreach count, conversion rate.\n\n" +
+      "Lifeplans is easiest when your goal has one primary metric and a weekly plan.\n\n" +
+      "Keywords: goal metrics, progress tracking, targets\n",
+  },
+  "how-to-break-down-big-goals": {
+    title: "How to Break Down Big Goals Into Weekly Targets",
+    body:
+      "Big goals become easy when you only focus on the next small target.\n\n" +
+      "## Step 1: Define milestones\n" +
+      "List 3–5 milestones.\n\n" +
+      "## Step 2: Choose the next milestone\n" +
+      "Ignore the rest for now.\n\n" +
+      "## Step 3: Convert it to a weekly target\n" +
+      "Then add tasks in Weekly Planning.\n\n" +
+      "Keywords: break down goals, weekly targets, planning\n",
+  },
+  "how-to-build-discipline": {
+    title: "How to Build Discipline (Without Relying on Motivation)",
+    body:
+      "Discipline is a system. If your system is good, your mood matters less.\n\n" +
+      "## Reduce decisions\n" +
+      "Plan weekly so daily choices are easier.\n\n" +
+      "## Keep the plan small\n" +
+      "Fewer tasks, higher completion rate.\n\n" +
+      "## Review and adjust weekly\n" +
+      "Use your weekly review to improve the system.\n\n" +
+      "Keywords: discipline, consistency, weekly planning\n",
+  },
+  "goal-planning-checklist": {
+    title: "Goal Planning Checklist: Set, Plan, Track, Review",
+    body:
+      "Use this checklist inside Goal Planner - Lifeplans.\n\n" +
+      "## Checklist\n" +
+      "- Define success (outcome + metric)\n" +
+      "- Set timeframe (weeks/months)\n" +
+      "- Write strategy (why/who/no)\n" +
+      "- Plan weekly priorities + tasks\n" +
+      "- Track progress weekly\n" +
+      "- Review and adjust\n\n" +
+      "Keywords: goal planning, checklist, goal planner app\n",
+  },
+  "how-to-plan-around-obstacles": {
+    title: "How to Plan Around Obstacles (Time, Energy, Distractions)",
+    body:
+      "Obstacles are predictable. Planning for them is the difference between wishful thinking and a real strategy.\n\n" +
+      "## Do a quick pre-mortem\n" +
+      "Ask: what will stop me this week?\n\n" +
+      "## Create a counter-plan\n" +
+      "Obstacle: low energy → Counter: 10-minute minimum action.\n\n" +
+      "## Store it in Lifeplans\n" +
+      "Use Strategy/Planning fields so it stays visible.\n\n" +
+      "Keywords: obstacles, planning, consistency\n",
+  },
+  "goal-setting-mistakes": {
+    title: "10 Goal Setting Mistakes (and How to Fix Them)",
+    body:
+      "Most goals fail for simple reasons: too many goals, unclear next actions, and no weekly review.\n\n" +
+      "## Top fixes\n" +
+      "- Choose fewer goals\n" +
+      "- Plan weekly actions\n" +
+      "- Track progress honestly\n" +
+      "- Review weekly and adjust\n\n" +
+      "Goal Planner - Lifeplans is designed around these fixes: strategy + planning + progress.\n\n" +
+      "Keywords: goal setting mistakes, consistency, planning\n",
+  },
+  "how-to-use-lifeplans-for-goals": {
+    title: "How to Use Goal Planner - Lifeplans (Web + Mobile Workflow)",
+    body:
+      "A simple workflow that makes goals stick across web and mobile.\n\n" +
+      "## Weekly rhythm\n" +
+      "1) Plan the week (priorities + tasks)\n" +
+      "2) Execute small tasks\n" +
+      "3) Update goal progress %\n" +
+      "4) Review and adjust\n\n" +
+      "## Strategy keeps it meaningful\n" +
+      "Write a short why/who/no so you don’t quit when it gets hard.\n\n" +
+      "Keywords: goal planner, weekly planning, progress tracking\n",
+  },
+  "goal-setting-for-beginners-step-by-step": {
+    title: "Goal Setting for Beginners: Step-by-Step (With Examples)",
+    body:
+      "If you’re new to goal setting, start simple: one goal, one timeframe, one plan.\n\n" +
+      "## Step-by-step\n" +
+      "1) Pick one outcome\n" +
+      "2) Choose weeks or months\n" +
+      "3) Add 1–3 weekly priorities\n" +
+      "4) Track progress weekly\n\n" +
+      "Use Lifeplans to keep the system in one place on web and mobile.\n\n" +
+      "Keywords: beginner goals, goal planner app, weekly plan\n",
+  },
+  "how-to-set-goals-for-2026": {
+    title: "How to Set Goals for 2026 (Quarterly + Weekly Plan)",
+    body:
+      "Your year improves when you plan in quarters and execute in weeks.\n\n" +
+      "## Step 1: Choose 1–3 yearly themes\n" +
+      "Health, career, learning, relationships.\n\n" +
+      "## Step 2: Set a quarterly target\n" +
+      "A 12-week goal is easier than a 12-month wish.\n\n" +
+      "## Step 3: Plan weekly\n" +
+      "Weekly priorities + tasks are where results happen.\n\n" +
+      "Keywords: yearly goals, quarterly planning, weekly planning\n",
+  },
+  "how-to-set-goals-when-you-feel-lost": {
+    title: "How to Set Goals When You Feel Lost",
+    body:
+      "When you feel lost, don’t commit to a huge plan. Commit to a small experiment.\n\n" +
+      "## Use 2–4 week experiments\n" +
+      "Example: try a routine, a course, or a project for one month.\n\n" +
+      "## Track what you learn\n" +
+      "Progress is clarity, not just results.\n\n" +
+      "Lifeplans works well for experiments because you can set short timeframes and review weekly.\n\n" +
+      "Keywords: unclear goals, experiment goals, motivation\n",
+  },
+  "how-to-stop-overplanning": {
+    title: "How to Stop Overplanning and Start Doing",
+    body:
+      "Overplanning is often avoidance. The cure is smaller plans and immediate next actions.\n\n" +
+      "## Use a 10-minute weekly plan\n" +
+      "Pick priorities, add tasks, start.\n\n" +
+      "## Make tasks startable\n" +
+      "If you can’t start it today, it’s too big.\n\n" +
+      "Keywords: overplanning, procrastination, weekly planning\n",
+  },
+  "goal-setting-for-adhd": {
+    title: "Goal Setting for ADHD: Simple Systems That Work",
+    body:
+      "Goal setting for ADHD works best with low friction and high visibility.\n\n" +
+      "## Make tasks tiny\n" +
+      "10–20 minute tasks reduce resistance.\n\n" +
+      "## Track progress weekly\n" +
+      "Weekly updates prevent all-or-nothing thinking.\n\n" +
+      "## Use one place for planning\n" +
+      "Lifeplans combines goals, planning, and progress so you don’t lose the system.\n\n" +
+      "Keywords: ADHD planning, focus, habits\n",
+  },
+  "goal-setting-for-anxiety": {
+    title: "Goal Setting for Anxiety: Gentle Planning Without Pressure",
+    body:
+      "Anxiety-friendly planning is gentle and flexible. It focuses on small actions and realistic pacing.\n\n" +
+      "## Choose minimum actions\n" +
+      "A plan you can do on a hard day is the best plan.\n\n" +
+      "## Keep the week small\n" +
+      "One priority is enough.\n\n" +
+      "Keywords: anxiety, gentle goals, consistency\n",
+  },
+  "how-to-set-goals-for-business": {
+    title: "How to Set Goals for Business Growth (Without Chaos)",
+    body:
+      "Business goals succeed when you run them as weekly execution sprints.\n\n" +
+      "## Set one outcome\n" +
+      "Revenue, leads, launches—pick one.\n\n" +
+      "## Define targets\n" +
+      "Weekly outreach, publish cadence, sales calls.\n\n" +
+      "## Review weekly\n" +
+      "Use Lifeplans Weekly Planning + History to improve your system.\n\n" +
+      "Keywords: business goals, targets, weekly planning\n",
+  },
+  "how-to-set-goals-for-content-creators": {
+    title: "Goal Setting for Content Creators: Output + Process Targets",
+    body:
+      "Creators win by combining output targets (posts/week) with process targets (sessions/week).\n\n" +
+      "## Example\n" +
+      "Goal: publish 12 posts in 12 weeks.\n" +
+      "Weekly plan: 3 writing sessions + 1 publish day.\n\n" +
+      "Keywords: content goals, consistency, weekly planning\n",
+  },
+  "how-to-set-goals-for-learning": {
+    title: "How to Set Goals for Learning (Languages, Skills, Courses)",
+    body:
+      "Learning goals work when you measure sessions, not feelings.\n\n" +
+      "## Track leading indicators\n" +
+      "Minutes practiced, lessons completed, conversations done.\n\n" +
+      "## Plan weekly sessions\n" +
+      "Put sessions on your calendar, then track progress weekly in Lifeplans.\n\n" +
+      "Keywords: learning goals, language learning, weekly plan\n",
+  },
+  "how-to-create-a-goal-roadmap": {
+    title: "How to Create a Goal Roadmap (Milestones + Weekly Targets)",
+    body:
+      "Roadmaps make big goals feel safe and structured.\n\n" +
+      "## Roadmap steps\n" +
+      "1) Milestones (3–5)\n" +
+      "2) Next milestone\n" +
+      "3) Weekly targets\n" +
+      "4) Tasks\n\n" +
+      "Keywords: goal roadmap, milestones, targets\n",
+  },
+  "how-to-set-goals-with-a-full-time-job": {
+    title: "How to Set Goals With a Full-Time Job (Realistic Weekly Planning)",
+    body:
+      "With a full-time job, the plan must be smaller than your ambition.\n\n" +
+      "## Use fewer priorities\n" +
+      "One priority can be enough for a busy week.\n\n" +
+      "## Build a weekly rhythm\n" +
+      "Plan once, execute small tasks, review weekly.\n\n" +
+      "Keywords: busy schedule, weekly planning, productivity\n",
+  },
+  "how-to-make-goal-progress-visible": {
+    title: "How to Make Goal Progress Visible (So You Don’t Quit)",
+    body:
+      "When progress is invisible, motivation collapses. Make it visible and you’ll keep going.\n\n" +
+      "## Use one progress metric\n" +
+      "A simple percentage updated weekly is enough.\n\n" +
+      "## Keep weekly history\n" +
+      "Your weekly plans become proof of progress.\n\n" +
+      "Keywords: progress tracking, motivation, goal planner\n",
   },
 };
 

@@ -53,6 +53,16 @@ const Dashboard = () => {
   const [goalTimeframeValue, setGoalTimeframeValue] = useState<number>(4);
   const [goalDescription, setGoalDescription] = useState("");
 
+  // Strategy fields
+  const [strategyWhy, setStrategyWhy] = useState("");
+  const [strategyWho, setStrategyWho] = useState("");
+  const [strategyNo, setStrategyNo] = useState("");
+
+  // Planning fields
+  const [planningObstacles, setPlanningObstacles] = useState("");
+  const [planningNextActions, setPlanningNextActions] = useState("");
+  const [planningAiPreview, setPlanningAiPreview] = useState("");
+
   const daysStreak = user?.stats?.currentStreak ?? 0;
 
   const handleCreateGoal = async () => {
@@ -75,15 +85,32 @@ const Dashboard = () => {
         timeframe: goalTimeframe,
         timeframeValue: goalTimeframeValue,
         description: goalDescription.trim() ? goalDescription.trim() : undefined,
+        strategy: (strategyWhy.trim() || strategyWho.trim() || strategyNo.trim()) ? {
+          whyMatters: strategyWhy.trim(),
+          whoBenefits: strategyWho.trim(),
+          sayNoTo: strategyNo.trim(),
+        } : undefined,
+        planning: (planningObstacles.trim() || planningNextActions.trim() || planningAiPreview.trim()) ? {
+          obstacles: planningObstacles.trim(),
+          nextActions: planningNextActions.trim(),
+          aiPreview: planningAiPreview.trim(),
+        } : undefined,
       });
       showSuccess("Goal created successfully!");
       setIsDialogOpen(false);
+      // Reset all fields
       setGoalName("");
       setGoalCategory("");
       setGoalPriority("medium");
       setGoalTimeframe("weeks");
       setGoalTimeframeValue(4);
       setGoalDescription("");
+      setStrategyWhy("");
+      setStrategyWho("");
+      setStrategyNo("");
+      setPlanningObstacles("");
+      setPlanningNextActions("");
+      setPlanningAiPreview("");
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Failed to create goal";
       showError(message);
@@ -173,6 +200,80 @@ const Dashboard = () => {
                     onChange={(e) => setGoalDescription(e.target.value)}
                     className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
                   />
+                </div>
+
+                {/* Strategy Section */}
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold text-gray-900 mb-3">Strategy (optional)</h4>
+                  <div className="space-y-3">
+                    <div className="grid gap-2">
+                      <Label htmlFor="strategy-why">Why does this goal matter?</Label>
+                      <textarea
+                        id="strategy-why"
+                        value={strategyWhy}
+                        onChange={(e) => setStrategyWhy(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="Your deeper motivation..."
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
+                      <textarea
+                        id="strategy-who"
+                        value={strategyWho}
+                        onChange={(e) => setStrategyWho(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="Yourself, family, team, community..."
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="strategy-no">What will you say "no" to?</Label>
+                      <textarea
+                        id="strategy-no"
+                        value={strategyNo}
+                        onChange={(e) => setStrategyNo(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="Distractions, other commitments, bad habits..."
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Planning Section */}
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold text-gray-900 mb-3">Planning (optional)</h4>
+                  <div className="space-y-3">
+                    <div className="grid gap-2">
+                      <Label htmlFor="planning-obstacles">Potential obstacles</Label>
+                      <textarea
+                        id="planning-obstacles"
+                        value={planningObstacles}
+                        onChange={(e) => setPlanningObstacles(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="What might get in the way?"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="planning-next">Next actions</Label>
+                      <textarea
+                        id="planning-next"
+                        value={planningNextActions}
+                        onChange={(e) => setPlanningNextActions(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="First 3-5 steps to take..."
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="planning-ai">AI reflection (optional)</Label>
+                      <textarea
+                        id="planning-ai"
+                        value={planningAiPreview}
+                        onChange={(e) => setPlanningAiPreview(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="Ask AI for insights about this goal..."
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
               <DialogFooter>
@@ -339,7 +440,7 @@ const Dashboard = () => {
           ))}
 
           {/* Empty State Card */}
-          <Card className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group">
+          <Card onClick={() => setIsDialogOpen(true)} className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group cursor-pointer">
             <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
               <Plus className="w-6 h-6 text-gray-400 group-hover:text-blue-600" />
             </div>

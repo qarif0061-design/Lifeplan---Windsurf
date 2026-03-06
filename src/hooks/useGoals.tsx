@@ -23,7 +23,7 @@ export const useGoals = () => {
     });
 
     return () => unsubscribe();
-  }, [user, userLoading]);
+  }, [user?.id, userLoading]);
 
   const stats = useMemo(() => {
     const now = Date.now();

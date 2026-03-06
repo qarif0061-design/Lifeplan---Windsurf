@@ -36,22 +36,34 @@ const Terms = () => {
             We may modify, suspend, or discontinue parts of the Service at any time. We do not guarantee uninterrupted availability.
           </p>
 
-          <h2 className="text-xl font-bold text-gray-900">6. Disclaimers</h2>
+          <h2 className="text-xl font-bold text-gray-900">6. No custom services</h2>
+          <p>
+            Lifeplans is a pre-made digital product (software). We do not offer consultations, coaching, or custom deliverables as part
+            of subscriptions or purchases.
+          </p>
+
+          <h2 className="text-xl font-bold text-gray-900">7. Billing and subscriptions</h2>
+          <p>
+            If you purchase a subscription, payments may be processed by a third-party merchant of record / payment provider. We do not
+            store your full payment card details. Your access to Premium features is tied to your subscription status.
+          </p>
+
+          <h2 className="text-xl font-bold text-gray-900">8. Disclaimers</h2>
           <p>
             The Service is provided “as is” without warranties of any kind. Lifeplans provides planning tools and does not provide
             medical, legal, or financial advice.
           </p>
 
-          <h2 className="text-xl font-bold text-gray-900">7. Limitation of liability</h2>
+          <h2 className="text-xl font-bold text-gray-900">9. Limitation of liability</h2>
           <p>
             To the maximum extent permitted by law, Lifeplans will not be liable for indirect, incidental, special, consequential, or
             punitive damages.
           </p>
 
-          <h2 className="text-xl font-bold text-gray-900">8. Changes to these Terms</h2>
+          <h2 className="text-xl font-bold text-gray-900">10. Changes to these Terms</h2>
           <p>We may update these Terms from time to time. Continued use of the Service means you accept the updated Terms.</p>
 
-          <h2 className="text-xl font-bold text-gray-900">9. Contact</h2>
+          <h2 className="text-xl font-bold text-gray-900">11. Contact</h2>
           <p>
             Questions about these Terms can be sent to <span className="font-semibold">info@goalplanner.io</span>.
           </p>

@@ -3,7 +3,6 @@ import {
   collection,
   doc,
   onSnapshot,
-  orderBy,
   query,
   serverTimestamp,
   updateDoc,
@@ -44,12 +43,13 @@ export const subscribeWeeklyPlansByUser = (
   userId: string,
   callback: (plans: WeeklyPlan[]) => void,
 ): (() => void) => {
-  const q = query(plansCollection, where("userId", "==", userId), orderBy("weekStart", "desc"));
+  const q = query(plansCollection, where("userId", "==", userId));
   return onSnapshot(q, (snapshot) => {
     const plans: WeeklyPlan[] = snapshot.docs.map((d) => ({
       id: d.id,
       ...(d.data() as Omit<WeeklyPlan, "id">),
     }));
+    plans.sort((a, b) => (a.weekStart < b.weekStart ? 1 : a.weekStart > b.weekStart ? -1 : 0));
     callback(plans);
   });
 };

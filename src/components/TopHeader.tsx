@@ -14,7 +14,7 @@ const TopHeader = () => {
     if (location.pathname.startsWith("/insights")) return "Insights";
     if (location.pathname.startsWith("/articles")) return "Articles";
     if (location.pathname.startsWith("/profile")) return "Profile";
-    return "Lifeplans";
+    return "Goal Planner - Lifeplans";
   }, [location.pathname]);
 
   const greetingName = user?.displayName?.trim() ? user.displayName.trim() : "";
@@ -24,7 +24,14 @@ const TopHeader = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
-            <div className="text-2xl font-extrabold text-gray-900">Lifeplans</div>
+            <div className="flex items-center gap-3">
+              <img
+                src="/HI_RES_ICON-9160.png"
+                alt="Goal Planner - Lifeplans"
+                className="w-9 h-9 rounded-xl"
+              />
+              <div className="text-2xl font-extrabold text-gray-900">Goal Planner - Lifeplans</div>
+            </div>
             <div className="text-sm text-gray-600">Plan smarter. Stay consistent. Achieve more.</div>
           </div>
           <div className="text-sm text-gray-600">

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2, Star, MessageSquare, HelpCircle } from "lucide-react";
+import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2, Star, MessageSquare, HelpCircle, Apple, Smartphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -73,7 +73,29 @@ const Landing = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
+      <section className="pt-32 pb-20 px-4 relative">
+        {/* Top Right Download Banner */}
+        <div className="absolute top-4 right-4 hidden lg:block animate-in fade-in slide-in-from-right-4 duration-700 delay-500">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 w-64">
+            <p className="text-sm font-semibold text-gray-900 mb-3">Get the mobile app</p>
+            <div className="space-y-2">
+              <Button asChild className="w-full bg-gray-900 hover:bg-black text-white h-10 justify-start rounded-xl">
+                <a
+                  href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Apple className="w-4 h-4 mr-2" />
+                  <span className="text-xs">App Store</span>
+                </a>
+              </Button>
+              <Button disabled className="w-full bg-white border border-gray-200 text-gray-700 h-10 justify-start rounded-xl">
+                <Smartphone className="w-4 h-4 mr-2" />
+                <span className="text-xs">Google Play</span>
+              </Button>
+            </div>
+          </div>
+        </div>
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <span className="relative flex h-2 w-2">
@@ -83,7 +105,7 @@ const Landing = () => {
             <span>Now available on Web</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-            Master Your Life with <span className="text-blue-600">Lifeplans</span>
+            Master Your Life with <span className="text-blue-600">Goal Planner - Lifeplans</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
             The comprehensive goal planning and life management platform designed to help you achieve what matters most.
@@ -229,6 +251,11 @@ const Landing = () => {
               <Target className="text-white w-4 h-4" />
             </div>
             <span className="text-lg font-bold text-gray-900">LifePlan</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm mb-4">
+            <Link to="/terms" className="text-gray-600 hover:text-blue-600 transition-colors">Terms of Service</Link>
+            <Link to="/privacy" className="text-gray-600 hover:text-blue-600 transition-colors">Privacy Policy</Link>
+            <Link to="/refund" className="text-gray-600 hover:text-blue-600 transition-colors">Refund Policy</Link>
           </div>
           <p className="text-gray-500 text-sm">© 2024 LifePlan. All rights reserved.</p>
         </div>

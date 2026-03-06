@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,12 +8,19 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useUser } from "@/contexts/UserContext";
 import { createWeeklyPlan, updateWeeklyPlan, type WeeklyPlan } from "@/firebase/plans";
 import { useWeeklyPlans } from "@/hooks/useWeeklyPlans";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const toDateKeyLocal = (d: Date): string => {
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
+  return String(yyyy) + "-" + mm + "-" + dd;
 };
 
 const weekStartMonday = (date: Date): string => {
@@ -39,11 +46,24 @@ const Planning = () => {
   const [priority3, setPriority3] = useState("");
   const [taskTitle, setTaskTitle] = useState("");
   const [saving, setSaving] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const mergedPlan: WeeklyPlan | null = useMemo(() => {
     if (!currentPlan) return null;
     return currentPlan;
   }, [currentPlan]);
+
+  useEffect(() => {
+    if (!mergedPlan) return;
+    setPriority1(mergedPlan.priorities?.[0] ?? "");
+    setPriority2(mergedPlan.priorities?.[1] ?? "");
+    setPriority3(mergedPlan.priorities?.[2] ?? "");
+  }, [mergedPlan?.id]);
+
+  const openEditor = () => {
+    setShowEditor(true);
+  };
 
   const handleSavePriorities = async () => {
     if (!user) {
@@ -127,42 +147,166 @@ const Planning = () => {
 
         <Card className="border-none shadow-sm rounded-[2.5rem]">
           <CardHeader>
-            <CardTitle className="text-xl font-bold">Week of {currentWeekStart}</CardTitle>
+            <CardTitle className="text-xl font-bold">Preview Weekly Planning</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid gap-3">
-              <Label>Top Priorities (1–3)</Label>
-              <Input value={priority1} onChange={(e) => setPriority1(e.target.value)} className="rounded-xl" placeholder="Priority 1" />
-              <Input value={priority2} onChange={(e) => setPriority2(e.target.value)} className="rounded-xl" placeholder="Priority 2" />
-              <Input value={priority3} onChange={(e) => setPriority3(e.target.value)} className="rounded-xl" placeholder="Priority 3" />
-              <Button onClick={handleSavePriorities} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700 w-fit">
-                Save Priorities
-              </Button>
+          <CardContent className="space-y-4">
+            {!mergedPlan ? (
+              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5">
+                <p className="font-semibold text-gray-900">No weekly plan set yet.</p>
+                <p className="text-sm text-gray-600 mt-1">Set your weekly priorities and tasks to stay on track.</p>
+                <Button onClick={openEditor} className="mt-4 rounded-full bg-blue-600 hover:bg-blue-700">
+                  Set Weekly Plan
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm text-gray-500">Week of</p>
+                    <p className="text-lg font-bold text-gray-900">{mergedPlan.weekStart}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" className="rounded-full" onClick={openEditor}>
+                      Edit Weekly Plan
+                    </Button>
+                    <Button variant="outline" className="rounded-full" onClick={() => setIsHistoryOpen(true)}>
+                      History
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Top priorities</p>
+                    <div className="mt-2 space-y-1 text-sm text-gray-600">
+                      {(mergedPlan.priorities ?? []).length ? (
+                        (mergedPlan.priorities ?? []).map((p, idx) => (
+                          <div key={String(idx) + "-" + p} className="whitespace-pre-wrap">{idx + 1}. {p}</div>
+                        ))
+                      ) : (
+                        <div className="text-sm text-gray-500">No priorities yet.</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Tasks</p>
+                    <div className="mt-2 space-y-2">
+                      {(mergedPlan.tasks ?? []).length ? (
+                        (mergedPlan.tasks ?? []).slice(0, 6).map((t) => (
+                          <div key={t.id} className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-4">
+                            <span className={t.completed ? "text-gray-400 line-through" : "text-gray-900"}>{t.title}</span>
+                            <span className="text-xs font-medium text-gray-500">{t.completed ? "Done" : "Pending"}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-sm text-gray-500">No tasks yet.</div>
+                      )}
+                      {(mergedPlan.tasks ?? []).length > 6 && (
+                        <div className="text-sm text-gray-500">+{(mergedPlan.tasks ?? []).length - 6} more</div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Dialog open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+          <DialogContent className="sm:max-w-[720px] rounded-[2rem]">
+            <DialogHeader>
+              <DialogTitle>Weekly Plan History</DialogTitle>
+              <DialogDescription>Review your previous weekly plans.</DialogDescription>
+            </DialogHeader>
+            <div className="max-h-[70vh] overflow-y-auto space-y-4 pr-2">
+              {plans.length ? (
+                plans.map((p) => (
+                  <div key={p.id} className="rounded-2xl border border-gray-100 bg-white p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-sm text-gray-500">Week of</p>
+                        <p className="font-bold text-gray-900">{p.weekStart}</p>
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="rounded-full"
+                        onClick={() => {
+                          if (p.weekStart === currentWeekStart) {
+                            openEditor();
+                            setIsHistoryOpen(false);
+                            return;
+                          }
+                          setPriority1(p.priorities?.[0] ?? "");
+                          setPriority2(p.priorities?.[1] ?? "");
+                          setPriority3(p.priorities?.[2] ?? "");
+                          setIsHistoryOpen(false);
+                          setShowEditor(true);
+                        }}
+                      >
+                        View
+                      </Button>
+                    </div>
+                    <div className="mt-3 text-sm text-gray-600 space-y-1">
+                      {(p.priorities ?? []).length ? (
+                        (p.priorities ?? []).map((pr, idx) => (
+                          <div key={p.id + "-p-" + String(idx)} className="whitespace-pre-wrap">{idx + 1}. {pr}</div>
+                        ))
+                      ) : (
+                        <div className="text-gray-500">No priorities saved.</div>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                  No weekly plans yet.
+                </div>
+              )}
             </div>
+          </DialogContent>
+        </Dialog>
 
-            <div className="pt-2 border-t border-gray-100" />
-
-            <div className="grid gap-3">
-              <Label>Tasks</Label>
-              <div className="flex gap-2">
-                <Input value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} className="rounded-xl" placeholder="Add a task" />
-                <Button onClick={handleAddTask} disabled={saving} className="rounded-xl bg-blue-600 hover:bg-blue-700">
-                  Add
+        {showEditor && (
+          <Card className="border-none shadow-sm rounded-[2.5rem]">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">Week of {currentWeekStart}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-3">
+                <Label>Top Priorities (1-3)</Label>
+                <Input value={priority1} onChange={(e) => setPriority1(e.target.value)} className="rounded-xl" placeholder="Priority 1" />
+                <Input value={priority2} onChange={(e) => setPriority2(e.target.value)} className="rounded-xl" placeholder="Priority 2" />
+                <Input value={priority3} onChange={(e) => setPriority3(e.target.value)} className="rounded-xl" placeholder="Priority 3" />
+                <Button onClick={handleSavePriorities} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700 w-fit">
+                  Save Priorities
                 </Button>
               </div>
 
-              <div className="space-y-2">
-                {(mergedPlan?.tasks ?? []).map((t) => (
-                  <label key={t.id} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                    <input type="checkbox" checked={t.completed} onChange={() => handleToggleTask(t.id)} />
-                    <span className={t.completed ? "text-gray-400 line-through" : "text-gray-900"}>{t.title}</span>
-                  </label>
-                ))}
-                {!mergedPlan?.tasks?.length && <div className="text-sm text-gray-500">No tasks yet.</div>}
+              <div className="pt-2 border-t border-gray-100" />
+
+              <div className="grid gap-3">
+                <Label>Tasks</Label>
+                <div className="flex gap-2">
+                  <Input value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} className="rounded-xl" placeholder="Add a task" />
+                  <Button onClick={handleAddTask} disabled={saving} className="rounded-xl bg-blue-600 hover:bg-blue-700">
+                    Add
+                  </Button>
+                </div>
+
+                <div className="space-y-2">
+                  {(mergedPlan?.tasks ?? []).map((t) => (
+                    <label key={t.id} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
+                      <input type="checkbox" checked={t.completed} onChange={() => handleToggleTask(t.id)} />
+                      <span className={t.completed ? "text-gray-400 line-through" : "text-gray-900"}>{t.title}</span>
+                    </label>
+                  ))}
+                  {!mergedPlan?.tasks?.length && <div className="text-sm text-gray-500">No tasks yet.</div>}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </Layout>
   );

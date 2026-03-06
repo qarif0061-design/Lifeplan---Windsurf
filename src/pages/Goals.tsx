@@ -1,3 +1,4 @@
+import React from "react";
 import Layout from "@/components/Layout";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -48,12 +49,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+type ProgressDraftMap = Record<string, number>;
+type ProgressSavingMap = Record<string, boolean>;
+
 const Goals = () => {
   const { isPremium, user } = useUser();
   const { goals } = useGoals();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -64,8 +68,21 @@ const Goals = () => {
   const [goalTimeframeValue, setGoalTimeframeValue] = useState<number>(4);
   const [goalDescription, setGoalDescription] = useState("");
 
-  const [draftProgress, setDraftProgress] = useState<Record<string, number>>({});
-  const [savingProgress, setSavingProgress] = useState<Record<string, boolean>>({});
+  // Strategy fields
+  const [strategyWhy, setStrategyWhy] = useState("");
+  const [strategyWho, setStrategyWho] = useState("");
+  const [strategyNo, setStrategyNo] = useState("");
+  const [showStrategyFields, setShowStrategyFields] = useState(false);
+
+  // Planning fields
+  const [planningObstacles, setPlanningObstacles] = useState("");
+  const [planningNextActions, setPlanningNextActions] = useState("");
+  const [planningAiPreview, setPlanningAiPreview] = useState("");
+  const [showPlanningFields, setShowPlanningFields] = useState(false);
+  const [showAiReflectionField, setShowAiReflectionField] = useState(false);
+
+  const [draftProgress, setDraftProgress] = useState<ProgressDraftMap>(() => ({}));
+  const [savingProgress, setSavingProgress] = useState<ProgressSavingMap>(() => ({}));
 
   const handleCreateGoal = async () => {
     if (!user) {
@@ -87,15 +104,35 @@ const Goals = () => {
         timeframe: goalTimeframe,
         timeframeValue: goalTimeframeValue,
         description: goalDescription.trim() ? goalDescription.trim() : undefined,
+        strategy: (strategyWhy.trim() || strategyWho.trim() || strategyNo.trim()) ? {
+          whyMatters: strategyWhy.trim(),
+          whoBenefits: strategyWho.trim(),
+          sayNoTo: strategyNo.trim(),
+        } : undefined,
+        planning: (planningObstacles.trim() || planningNextActions.trim() || planningAiPreview.trim()) ? {
+          obstacles: planningObstacles.trim(),
+          nextActions: planningNextActions.trim(),
+          aiPreview: planningAiPreview.trim(),
+        } : undefined,
       });
       showSuccess("Goal created successfully!");
       setIsDialogOpen(false);
+      // Reset all fields
       setGoalName("");
       setGoalCategory("");
       setGoalPriority("medium");
       setGoalTimeframe("weeks");
       setGoalTimeframeValue(4);
       setGoalDescription("");
+      setStrategyWhy("");
+      setStrategyWho("");
+      setStrategyNo("");
+      setPlanningObstacles("");
+      setPlanningNextActions("");
+      setPlanningAiPreview("");
+      setShowStrategyFields(false);
+      setShowPlanningFields(false);
+      setShowAiReflectionField(false);
     } catch (e: unknown) {
       const raw = e instanceof Error ? e.message : "Failed to create goal";
       const message = raw.toLowerCase().includes("insufficient permissions")
@@ -138,22 +175,17 @@ const Goals = () => {
 
   const filteredGoals = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    const statusFilter = (searchParams.get("status") ?? "").trim().toLowerCase();
+    const statusFilter = (searchParams.get("status") ?? "all").trim().toLowerCase();
 
-    const now = Date.now();
-    const byStatus = (g: typeof goals[number]) => {
+    const byStatus = (g: (typeof goals)[number]) => {
       if (!statusFilter) return true;
+      if (statusFilter === "all") return true;
       if (statusFilter === "active") return g.status === "active";
       if (statusFilter === "completed") return g.status === "completed";
-      if (statusFilter === "failed") {
-        const due = g.dueAt ? new Date(g.dueAt).getTime() : Number.NaN;
-        const overdue = Number.isFinite(due) && due < now;
-        return g.status === "failed" || (overdue && g.status !== "completed");
-      }
       return true;
     };
 
-    const byQuery = (g: typeof goals[number]) => {
+    const byQuery = (g: (typeof goals)[number]) => {
       if (!q) return true;
       return g.name.toLowerCase().includes(q) || g.category.toLowerCase().includes(q);
     };
@@ -181,30 +213,58 @@ const Goals = () => {
             <h1 className="text-3xl font-bold text-gray-900">My Goals</h1>
             <p className="text-gray-500">Track and manage your long-term objectives.</p>
           </div>
-          
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                <Plus className="w-4 h-4 mr-2" /> Create New Goal
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px] rounded-[2rem]">
+          <div className="flex items-center gap-3">
+            <Select
+              value={searchParams.get("status") ?? "all"}
+              onValueChange={(value) => {
+                const params = new URLSearchParams(searchParams);
+                params.set("status", value);
+                setSearchParams(params);
+              }}
+            >
+              <SelectTrigger className="w-40 rounded-xl">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+              </SelectContent>
+            </Select>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
+                  onClick={() => setIsDialogOpen(true)}
+                >
+                  <Plus className="w-4 h-4 mr-2" /> Create New Goal
+                </Button>
+              </DialogTrigger>
+            <DialogContent className="w-[92vw] sm:max-w-[520px] md:w-[50vw] md:max-w-[720px] rounded-[2rem]">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold">Create New Goal</DialogTitle>
                 <DialogDescription>Define your objective and how you'll measure success.</DialogDescription>
               </DialogHeader>
-              <div className="grid gap-6 py-4">
+              <div className="grid gap-6 py-4 max-h-[70vh] overflow-y-auto pr-2">
                 <div className="space-y-2">
                   <Label htmlFor="name">Goal Name</Label>
-                  <Input id="name" value={goalName} onChange={(e) => setGoalName(e.target.value)} className="rounded-xl" />
+                  <Input
+                    id="name"
+                    value={goalName}
+                    onChange={(e) => setGoalName(e.target.value)}
+                    className="rounded-xl"
+                    placeholder="e.g., Run a 5K without stopping"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Category</Label>
-                    <Input value={goalCategory} onChange={(e) => setGoalCategory(e.target.value)} className="rounded-xl" />
+                    <Input
+                      value={goalCategory}
+                      onChange={(e) => setGoalCategory(e.target.value)}
+                      className="rounded-xl"
+                      placeholder="e.g., Health"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label>Priority</Label>
@@ -235,7 +295,14 @@ const Goals = () => {
                   </div>
                   <div className="space-y-2">
                     <Label>Duration</Label>
-                    <Input type="number" min={1} value={goalTimeframeValue} onChange={(e) => setGoalTimeframeValue(Number(e.target.value))} className="rounded-xl" />
+                    <Input
+                      type="number"
+                      min={1}
+                      value={goalTimeframeValue}
+                      onChange={(e) => setGoalTimeframeValue(Number(e.target.value))}
+                      className="rounded-xl"
+                      placeholder="e.g., 4"
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -244,7 +311,157 @@ const Goals = () => {
                     value={goalDescription}
                     onChange={(e) => setGoalDescription(e.target.value)}
                     className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                    placeholder="Add context, motivation, or any notes you want to remember..."
                   />
+                </div>
+
+                <div className="border-t pt-4 space-y-3">
+                  {!showStrategyFields ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full rounded-xl"
+                      onClick={() => setShowStrategyFields(true)}
+                    >
+                      Add Strategy
+                    </Button>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-gray-900">Strategy</h4>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-8 px-2"
+                          onClick={() => {
+                            setShowStrategyFields(false);
+                            setStrategyWhy("");
+                            setStrategyWho("");
+                            setStrategyNo("");
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="strategy-why">Why does this goal matter?</Label>
+                        <textarea
+                          id="strategy-why"
+                          value={strategyWhy}
+                          onChange={(e) => setStrategyWhy(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., I want more energy and confidence"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
+                        <textarea
+                          id="strategy-who"
+                          value={strategyWho}
+                          onChange={(e) => setStrategyWho(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Me and my family"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="strategy-no">What will you say "no" to?</Label>
+                        <textarea
+                          id="strategy-no"
+                          value={strategyNo}
+                          onChange={(e) => setStrategyNo(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Late-night scrolling"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {!showPlanningFields ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full rounded-xl"
+                      onClick={() => setShowPlanningFields(true)}
+                    >
+                      Add Planning
+                    </Button>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-gray-900">Planning</h4>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-8 px-2"
+                          onClick={() => {
+                            setShowPlanningFields(false);
+                            setShowAiReflectionField(false);
+                            setPlanningObstacles("");
+                            setPlanningNextActions("");
+                            setPlanningAiPreview("");
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="planning-obstacles">Potential obstacles</Label>
+                        <textarea
+                          id="planning-obstacles"
+                          value={planningObstacles}
+                          onChange={(e) => setPlanningObstacles(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Busy schedule, low motivation"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="planning-next">Next actions</Label>
+                        <textarea
+                          id="planning-next"
+                          value={planningNextActions}
+                          onChange={(e) => setPlanningNextActions(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Buy running shoes, schedule 3 runs/week"
+                        />
+                      </div>
+
+                      {!showAiReflectionField ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full rounded-xl"
+                          onClick={() => setShowAiReflectionField(true)}
+                        >
+                          Add AI Reflection
+                        </Button>
+                      ) : (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="planning-ai">AI reflection</Label>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              className="h-8 px-2"
+                              onClick={() => {
+                                setShowAiReflectionField(false);
+                                setPlanningAiPreview("");
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                          <textarea
+                            id="planning-ai"
+                            value={planningAiPreview}
+                            onChange={(e) => setPlanningAiPreview(e.target.value)}
+                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                            placeholder="e.g., Ask: What are the biggest risks to this plan?"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               <DialogFooter>
@@ -254,6 +471,7 @@ const Goals = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+        </div>
         </div>
 
         {/* Filters & Search */}
@@ -361,7 +579,7 @@ const Goals = () => {
                   </div>
                   <Button
                     onClick={() => handleMarkComplete(goal.id)}
-                    disabled={goal.status === "completed" || savingProgress[goal.id] === true}
+                    disabled={savingProgress[goal.id] === true}
                     variant="outline"
                     className="w-full rounded-xl"
                   >

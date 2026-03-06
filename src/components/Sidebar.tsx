@@ -37,6 +37,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         { to: "/planning", label: "Weekly Planning", icon: Calendar },
         { to: "/insights", label: "Insights", icon: Calendar },
         { to: "/articles", label: "Articles", icon: BookOpen },
+        { to: "/questions", label: "Questions", icon: BookOpen },
         { to: "/download", label: "Download", icon: Download },
       ]
     : [{ to: "/auth", label: "Sign In", icon: User }];
