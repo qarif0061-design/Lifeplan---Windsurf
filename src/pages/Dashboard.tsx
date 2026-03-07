@@ -9,7 +9,8 @@ import {
   Search,
   Star,
   AlertCircle,
-  Crown
+  Crown,
+  Lock
 } from "lucide-react";
 import { Apple, Smartphone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -57,13 +58,24 @@ const Dashboard = () => {
   const [strategyWhy, setStrategyWhy] = useState("");
   const [strategyWho, setStrategyWho] = useState("");
   const [strategyNo, setStrategyNo] = useState("");
+  const [showStrategyFields, setShowStrategyFields] = useState(false);
 
   // Planning fields
   const [planningObstacles, setPlanningObstacles] = useState("");
   const [planningNextActions, setPlanningNextActions] = useState("");
   const [planningAiPreview, setPlanningAiPreview] = useState("");
+  const [showPlanningFields, setShowPlanningFields] = useState(false);
+  const [showAiReflectionField, setShowAiReflectionField] = useState(false);
 
   const daysStreak = user?.stats?.currentStreak ?? 0;
+
+  const openCreateGoalDialog = () => {
+    if (!isPremium && goals.length >= 1) {
+      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+      return;
+    }
+    setIsDialogOpen(true);
+  };
 
   const handleCreateGoal = async () => {
     if (!user) {
@@ -115,6 +127,9 @@ const Dashboard = () => {
       setPlanningObstacles("");
       setPlanningNextActions("");
       setPlanningAiPreview("");
+      setShowStrategyFields(false);
+      setShowPlanningFields(false);
+      setShowAiReflectionField(false);
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Failed to create goal";
       showError(message);
@@ -143,36 +158,43 @@ const Dashboard = () => {
               <Button
                 className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
                 onClick={() => {
-                  if (!isPremium && goals.length >= 1) {
-                    showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
-                    return;
-                  }
-                  setIsDialogOpen(true);
+                  openCreateGoalDialog();
                 }}
               >
                 <Plus className="w-4 h-4 mr-2" /> Create New Goal
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[560px] rounded-[2rem]">
+            <DialogContent className="w-[92vw] sm:max-w-[520px] md:w-[50vw] md:max-w-[720px] rounded-[2rem]">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold">Create New Goal</DialogTitle>
-                <DialogDescription>Define your objective, timeframe, and priority.</DialogDescription>
+                <DialogDescription>Define your objective and how you'll measure success.</DialogDescription>
               </DialogHeader>
-              <div className="grid gap-5 py-2">
-                <div className="grid gap-2">
-                  <Label htmlFor="goal-name">Goal Name</Label>
-                  <Input id="goal-name" value={goalName} onChange={(e) => setGoalName(e.target.value)} className="rounded-xl" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="goal-category">Category</Label>
-                  <Input id="goal-category" value={goalCategory} onChange={(e) => setGoalCategory(e.target.value)} className="rounded-xl" />
+              <div className="grid gap-6 py-4 max-h-[70vh] overflow-y-auto pr-2">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Goal Name</Label>
+                  <Input
+                    id="name"
+                    value={goalName}
+                    onChange={(e) => setGoalName(e.target.value)}
+                    className="rounded-xl"
+                    placeholder="e.g., Run a 5K without stopping"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
+                  <div className="space-y-2">
+                    <Label>Category</Label>
+                    <Input
+                      value={goalCategory}
+                      onChange={(e) => setGoalCategory(e.target.value)}
+                      className="rounded-xl"
+                      placeholder="e.g., Health"
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label>Priority</Label>
                     <Select value={goalPriority} onValueChange={(v) => setGoalPriority(v as Priority)}>
                       <SelectTrigger className="rounded-xl">
-                        <SelectValue placeholder="Priority" />
+                        <SelectValue placeholder="Select priority" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="low">Low</SelectItem>
@@ -181,11 +203,13 @@ const Dashboard = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="grid gap-2">
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
                     <Label>Timeframe</Label>
                     <Select value={goalTimeframe} onValueChange={(v) => setGoalTimeframe(v as Timeframe)}>
                       <SelectTrigger className="rounded-xl">
-                        <SelectValue placeholder="Timeframe" />
+                        <SelectValue placeholder="Select timeframe" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="weeks">Weeks</SelectItem>
@@ -193,108 +217,195 @@ const Dashboard = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="space-y-2">
+                    <Label>Duration</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={goalTimeframeValue}
+                      onChange={(e) => setGoalTimeframeValue(Number(e.target.value))}
+                      className="rounded-xl"
+                      placeholder="e.g., 4"
+                    />
+                  </div>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="goal-timeframe-value">Duration</Label>
-                  <Input
-                    id="goal-timeframe-value"
-                    type="number"
-                    min={1}
-                    value={goalTimeframeValue}
-                    onChange={(e) => setGoalTimeframeValue(Number(e.target.value))}
-                    className="rounded-xl"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="goal-description">Description (optional)</Label>
+                <div className="space-y-2">
+                  <Label>Description (optional)</Label>
                   <textarea
-                    id="goal-description"
                     value={goalDescription}
                     onChange={(e) => setGoalDescription(e.target.value)}
                     className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                    placeholder="Add context, motivation, or any notes you want to remember..."
                   />
                 </div>
 
-                {isPremium && (
-                  <>
-                    {/* Strategy Section */}
-                    <div className="border-t pt-4">
-                      <h4 className="font-semibold text-gray-900 mb-3">Strategy (optional)</h4>
-                      <div className="space-y-3">
-                        <div className="grid gap-2">
-                          <Label htmlFor="strategy-why">Why does this goal matter?</Label>
-                          <textarea
-                            id="strategy-why"
-                            value={strategyWhy}
-                            onChange={(e) => setStrategyWhy(e.target.value)}
-                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="Your deeper motivation..."
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
-                          <textarea
-                            id="strategy-who"
-                            value={strategyWho}
-                            onChange={(e) => setStrategyWho(e.target.value)}
-                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="Yourself, family, team, community..."
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <Label htmlFor="strategy-no">What will you say "no" to?</Label>
-                          <textarea
-                            id="strategy-no"
-                            value={strategyNo}
-                            onChange={(e) => setStrategyNo(e.target.value)}
-                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="Distractions, other commitments, bad habits..."
-                          />
-                        </div>
+                <div className="border-t pt-4 space-y-3">
+                  {!showStrategyFields ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full rounded-xl"
+                      onClick={() => {
+                        if (!isPremium) {
+                          showError("Strategy is a Premium feature. Upgrade to add strategy.");
+                          navigate("/pricing");
+                          return;
+                        }
+                        setShowStrategyFields(true);
+                      }}
+                    >
+                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
+                      Add Strategy
+                    </Button>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-gray-900">Strategy</h4>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-8 px-2"
+                          onClick={() => {
+                            setShowStrategyFields(false);
+                            setStrategyWhy("");
+                            setStrategyWho("");
+                            setStrategyNo("");
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="strategy-why">Why does this goal matter?</Label>
+                        <textarea
+                          id="strategy-why"
+                          value={strategyWhy}
+                          onChange={(e) => setStrategyWhy(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., I want more energy and confidence"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
+                        <textarea
+                          id="strategy-who"
+                          value={strategyWho}
+                          onChange={(e) => setStrategyWho(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Me and my family"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="strategy-no">What will you say \"no\" to?</Label>
+                        <textarea
+                          id="strategy-no"
+                          value={strategyNo}
+                          onChange={(e) => setStrategyNo(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Late-night scrolling"
+                        />
                       </div>
                     </div>
+                  )}
 
-                    {/* Planning Section */}
-                    <div className="border-t pt-4">
-                      <h4 className="font-semibold text-gray-900 mb-3">Planning (optional)</h4>
-                      <div className="space-y-3">
-                        <div className="grid gap-2">
-                          <Label htmlFor="planning-obstacles">Potential obstacles</Label>
-                          <textarea
-                            id="planning-obstacles"
-                            value={planningObstacles}
-                            onChange={(e) => setPlanningObstacles(e.target.value)}
-                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="What might get in your way?"
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <Label htmlFor="planning-next">Next actions</Label>
-                          <textarea
-                            id="planning-next"
-                            value={planningNextActions}
-                            onChange={(e) => setPlanningNextActions(e.target.value)}
-                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="Small steps you can take this week..."
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <Label htmlFor="planning-ai">AI reflection (optional)</Label>
+                  {!showPlanningFields ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full rounded-xl"
+                      onClick={() => {
+                        if (!isPremium) {
+                          showError("Planning is a Premium feature. Upgrade to add planning.");
+                          navigate("/pricing");
+                          return;
+                        }
+                        setShowPlanningFields(true);
+                      }}
+                    >
+                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
+                      Add Planning
+                    </Button>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-gray-900">Planning</h4>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-8 px-2"
+                          onClick={() => {
+                            setShowPlanningFields(false);
+                            setShowAiReflectionField(false);
+                            setPlanningObstacles("");
+                            setPlanningNextActions("");
+                            setPlanningAiPreview("");
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="planning-obstacles">Potential obstacles</Label>
+                        <textarea
+                          id="planning-obstacles"
+                          value={planningObstacles}
+                          onChange={(e) => setPlanningObstacles(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Busy schedule, low motivation"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="planning-next">Next actions</Label>
+                        <textarea
+                          id="planning-next"
+                          value={planningNextActions}
+                          onChange={(e) => setPlanningNextActions(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Buy running shoes, schedule 3 runs/week"
+                        />
+                      </div>
+
+                      {!showAiReflectionField ? (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full rounded-xl"
+                          onClick={() => setShowAiReflectionField(true)}
+                        >
+                          Add AI Reflection
+                        </Button>
+                      ) : (
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="planning-ai">AI reflection</Label>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              className="h-8 px-2"
+                              onClick={() => {
+                                setShowAiReflectionField(false);
+                                setPlanningAiPreview("");
+                              }}
+                            >
+                              Remove
+                            </Button>
+                          </div>
                           <textarea
                             id="planning-ai"
                             value={planningAiPreview}
                             onChange={(e) => setPlanningAiPreview(e.target.value)}
                             className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="Ask: What's the biggest risk to this plan?"
+                            placeholder="e.g., Ask: What are the biggest risks to this plan?"
                           />
                         </div>
-                      </div>
+                      )}
                     </div>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleCreateGoal} disabled={isCreating} className="bg-blue-600 hover:bg-blue-700 rounded-xl h-11">
+                <Button onClick={handleCreateGoal} disabled={isCreating} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">
                   {isCreating ? "Creating..." : "Create Goal"}
                 </Button>
               </DialogFooter>
@@ -341,7 +452,21 @@ const Dashboard = () => {
             onClick={() => navigate("/goals?status=active")}
             className="border-none shadow-sm rounded-[2.5rem] bg-blue-50 border border-blue-100 cursor-pointer hover:shadow-md transition"
           >
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-6 text-center relative">
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-3 top-3 h-9 w-9 rounded-full hover:bg-blue-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  openCreateGoalDialog();
+                }}
+                aria-label="Add new goal"
+              >
+                <Plus className="w-4 h-4" />
+              </Button>
               <div className="text-2xl font-bold text-blue-600 mb-2">{stats.activeCount}</div>
               <p className="text-sm font-medium text-gray-500">Active Goals</p>
             </CardContent>
@@ -457,13 +582,16 @@ const Dashboard = () => {
           ))}
 
           {/* Empty State Card */}
-          <Card onClick={() => setIsDialogOpen(true)} className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group cursor-pointer">
+          <Card
+            onClick={() => openCreateGoalDialog()}
+            className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group cursor-pointer"
+          >
             <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
               <Plus className="w-6 h-6 text-gray-400 group-hover:text-blue-600" />
             </div>
             <div className="text-center">
-              <p className="font-bold text-gray-900">No Goals Yet</p>
-              <p className="text-sm text-gray-500">Create your first goal to get started</p>
+              <p className="font-bold text-gray-900">Add new goal</p>
+              <p className="text-sm text-gray-500">Add new goal, start a new journey</p>
             </div>
           </Card>
         </div>
