@@ -60,6 +60,7 @@ const Pricing = () => {
       features: [
         "Unlimited active goals",
         "Full Strategy System access",
+        "Smart planning for each goal",
         "Daily check-ins",
         "Insights & analytics",
         "Weekly planning history",

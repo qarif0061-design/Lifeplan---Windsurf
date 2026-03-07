@@ -56,7 +56,7 @@ const Landing = () => {
   const faqs = [
     {
       question: "Is LifePlan free to use?",
-      answer: "Yes! We offer a generous free tier that includes up to 3 active goals and basic planning tools. You can upgrade to Premium for unlimited access."
+      answer: "Yes! We offer a free tier that includes up to 1 active goal and basic planning tools. You can upgrade to Premium for unlimited access."
     },
     {
       question: "How does the Strategy System work?",
@@ -64,7 +64,7 @@ const Landing = () => {
     },
     {
       question: "Can I use LifePlan on my phone?",
-      answer: "Absolutely. LifePlan is fully responsive and works beautifully on all mobile devices and tablets."
+      answer: "Yes. LifePlan works on mobile web, and we also offer native mobile app versions in the iOS App Store and Google Play Store."
     }
   ];
 

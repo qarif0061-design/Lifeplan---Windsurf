@@ -2,6 +2,23 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import admin from "firebase-admin";
 
+type HeadersLike = Record<string, string | string[] | undefined>;
+
+type VercelReq = IncomingMessage & {
+  method?: string;
+  headers: HeadersLike;
+};
+
+type VercelRes = ServerResponse & {
+  statusCode: number;
+  setHeader: (name: string, value: string) => void;
+  end: (data?: string) => void;
+};
+
+const isRecord = (v: unknown): v is Record<string, unknown> => {
+  return typeof v === "object" && v !== null;
+};
+
 const getRawBody = async (req: IncomingMessage): Promise<string> => {
   return await new Promise((resolve, reject) => {
     let data = "";
@@ -45,7 +62,7 @@ const safeEqualHex = (aHex: string, bHex: string): boolean => {
   return timingSafeEqual(a, b);
 };
 
-export default async function handler(req: IncomingMessage & { method?: string; headers: Record<string, any> }, res: ServerResponse & any) {
+export default async function handler(req: VercelReq, res: VercelRes) {
   if (req.method !== "POST") {
     res.statusCode = 405;
     res.setHeader("Content-Type", "application/json");
@@ -75,9 +92,15 @@ export default async function handler(req: IncomingMessage & { method?: string; 
       return;
     }
 
-    const payload = JSON.parse(raw || "{}") as any;
-    const eventName = String(payload?.meta?.event_name ?? req.headers["x-event-name"] ?? "");
-    const userId = String(payload?.meta?.custom_data?.user_id ?? "");
+    const parsed: unknown = JSON.parse(raw || "{}");
+    const payload = isRecord(parsed) ? parsed : {};
+    const meta = isRecord(payload.meta) ? payload.meta : {};
+    const customData = isRecord(meta.custom_data) ? meta.custom_data : {};
+    const data = isRecord(payload.data) ? payload.data : {};
+    const attributes = isRecord(data.attributes) ? data.attributes : {};
+
+    const eventName = String(meta.event_name ?? req.headers["x-event-name"] ?? "");
+    const userId = String(customData.user_id ?? "");
 
     if (!userId) {
       res.statusCode = 400;
@@ -86,7 +109,7 @@ export default async function handler(req: IncomingMessage & { method?: string; 
       return;
     }
 
-    const status = String(payload?.data?.attributes?.status ?? "");
+    const status = String(attributes.status ?? "");
     const isActive = status === "active";
     const isCancelledLike = status === "cancelled" || status === "expired";
 
@@ -117,9 +140,10 @@ export default async function handler(req: IncomingMessage & { method?: string; 
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify({ ok: true, userId, isPremium: nextIsPremium, eventName, status }));
-  } catch (e: any) {
+  } catch (e: unknown) {
     res.statusCode = 500;
     res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ error: e?.message ?? "Webhook error" }));
+    const message = e instanceof Error ? e.message : "Webhook error";
+    res.end(JSON.stringify({ error: message }));
   }
 }

@@ -8,6 +8,8 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useUser } from "@/contexts/UserContext";
 import { createWeeklyPlan, updateWeeklyPlan, type WeeklyPlan } from "@/firebase/plans";
 import { useWeeklyPlans } from "@/hooks/useWeeklyPlans";
+import { Lock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +35,7 @@ const weekStartMonday = (date: Date): string => {
 
 const Planning = () => {
   const { user, isPremium } = useUser();
+  const navigate = useNavigate();
   const { plans } = useWeeklyPlans();
 
   const currentWeekStart = useMemo(() => weekStartMonday(new Date()), []);
@@ -172,15 +175,16 @@ const Planning = () => {
                     <Button
                       variant="outline"
                       className="rounded-full"
-                      disabled={!isPremium}
                       onClick={() => {
                         if (!isPremium) {
                           showError("Weekly plan history is a Premium feature. Upgrade to access your past plans.");
+                          navigate("/pricing");
                           return;
                         }
                         setIsHistoryOpen(true);
                       }}
                     >
+                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
                       History
                     </Button>
                   </div>
@@ -229,6 +233,7 @@ const Planning = () => {
           onOpenChange={(next) => {
             if (next && !isPremium) {
               showError("Weekly plan history is a Premium feature. Upgrade to access your past plans.");
+              navigate("/pricing");
               return;
             }
             setIsHistoryOpen(next);

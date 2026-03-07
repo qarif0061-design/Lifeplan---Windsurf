@@ -14,7 +14,6 @@ import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import Profile from "./pages/Profile";
 import BillingSuccess from "./pages/BillingSuccess";
-import RequirePremium from "./components/RequirePremium";
 import GoalDetails from "./pages/GoalDetails";
 import CheckIn from "./pages/CheckIn";
 import Planning from "./pages/Planning";
@@ -38,28 +37,14 @@ function App() {
             <Route path="/goals" element={<Goals />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/settings" element={<Settings />} />
-            <Route
-              path="/insights"
-              element={
-                <RequirePremium>
-                  <Insights />
-                </RequirePremium>
-              }
-            />
+            <Route path="/insights" element={<Insights />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<RefundPolicy />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/billing/success" element={<BillingSuccess />} />
             <Route path="/goals/:id" element={<GoalDetails />} />
-            <Route
-              path="/check-in"
-              element={
-                <RequirePremium>
-                  <CheckIn />
-                </RequirePremium>
-              }
-            />
+            <Route path="/check-in" element={<CheckIn />} />
             <Route path="/planning" element={<Planning />} />
             <Route path="/strategy" element={<Strategy />} />
             <Route path="/social" element={<Social />} />

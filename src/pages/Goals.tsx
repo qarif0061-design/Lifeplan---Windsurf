@@ -17,7 +17,8 @@ import {
   Clock, 
   CheckCircle2,
   AlertCircle,
-  Crown
+  Crown,
+  Lock
 } from "lucide-react";
 import {
   Dialog,
@@ -331,15 +332,16 @@ const Goals = () => {
                       type="button"
                       variant="outline"
                       className="w-full rounded-xl"
-                      disabled={!isPremium}
                       onClick={() => {
                         if (!isPremium) {
                           showError("Strategy is a Premium feature. Upgrade to add strategy.");
+                          navigate("/pricing");
                           return;
                         }
                         setShowStrategyFields(true);
                       }}
                     >
+                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
                       Add Strategy
                     </Button>
                   ) : (
@@ -398,15 +400,16 @@ const Goals = () => {
                       type="button"
                       variant="outline"
                       className="w-full rounded-xl"
-                      disabled={!isPremium}
                       onClick={() => {
                         if (!isPremium) {
                           showError("Planning is a Premium feature. Upgrade to add planning.");
+                          navigate("/pricing");
                           return;
                         }
                         setShowPlanningFields(true);
                       }}
                     >
+                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
                       Add Planning
                     </Button>
                   ) : (

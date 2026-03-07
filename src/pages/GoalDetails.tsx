@@ -11,7 +11,8 @@ import {
   Edit3, 
   Trash2,
   Trophy,
-  TrendingUp
+  TrendingUp,
+  Lock
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
 import { Slider } from "@/components/ui/slider";
@@ -606,14 +607,15 @@ const GoalDetails = () => {
                         onClick={() => {
                           if (!isPremium) {
                             showError("Strategy is a Premium feature. Upgrade to add/edit strategy.");
+                            navigate("/pricing");
                             return;
                           }
                           setEditMode(true);
                           setEditTarget("strategy");
                         }}
-                        disabled={!isPremium}
                         className="rounded-full"
                       >
+                        {!isPremium && <Lock className="w-4 h-4 mr-2" />}
                         {goal.strategy ? "Edit Strategy" : "Add Strategy"}
                       </Button>
                       <Button
@@ -621,14 +623,15 @@ const GoalDetails = () => {
                         onClick={() => {
                           if (!isPremium) {
                             showError("Planning is a Premium feature. Upgrade to add/edit planning.");
+                            navigate("/pricing");
                             return;
                           }
                           setEditMode(true);
                           setEditTarget("planning");
                         }}
-                        disabled={!isPremium}
                         className="rounded-full"
                       >
+                        {!isPremium && <Lock className="w-4 h-4 mr-2" />}
                         {goal.planning ? "Edit Planning" : "Add Planning"}
                       </Button>
                       {editMode && (

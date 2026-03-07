@@ -520,9 +520,6 @@ const Dashboard = () => {
               </div>
               <p className="text-lg mb-6">Get unlimited goals, advanced analytics, and AI-powered insights.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="secondary" className="bg-white text-blue-600 hover:bg-blue-50 rounded-full px-8">
-                  Try Premium Free
-                </Button>
                 <Button asChild className="bg-amber-400 text-gray-900 hover:bg-amber-300 rounded-full px-8">
                   <Link to="/pricing">View Plans</Link>
                 </Button>

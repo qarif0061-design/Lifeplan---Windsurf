@@ -6,6 +6,8 @@ import { useGoals } from "@/hooks/useGoals";
 import { useCheckIns } from "@/hooks/useCheckIns";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useUser } from "@/contexts/UserContext";
+import { Lock } from "lucide-react";
 
 const toDateKeyLocal = (d: Date): string => {
   const yyyy = d.getFullYear();
@@ -15,6 +17,7 @@ const toDateKeyLocal = (d: Date): string => {
 };
 
 const Insights = () => {
+  const { isPremium } = useUser();
   const { stats } = useGoals();
   const { checkIns, stats: checkInStats } = useCheckIns();
 
@@ -38,11 +41,16 @@ const Insights = () => {
 
   return (
     <Layout>
-      <div className="space-y-8 animate-in fade-in duration-500">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Insights</h1>
-          <p className="text-gray-500">Real-time stats from your goals and daily check-ins.</p>
-        </div>
+      <div className="relative">
+        <div
+          className={`space-y-8 animate-in fade-in duration-500 ${
+            isPremium ? "" : "blur-sm select-none pointer-events-none"
+          }`}
+        >
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Insights</h1>
+            <p className="text-gray-500">Real-time stats from your goals and daily check-ins.</p>
+          </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card className="border-none shadow-sm rounded-[2rem]">
@@ -130,6 +138,27 @@ const Insights = () => {
             </CardContent>
           </Card>
         </div>
+        </div>
+
+        {!isPremium && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="max-w-xl mx-auto bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-[2.5rem] p-8 text-center">
+              <div className="flex items-center justify-center gap-2 text-gray-900 mb-3">
+                <Lock className="w-5 h-5" />
+                <h2 className="text-xl font-bold">Premium feature</h2>
+              </div>
+              <p className="text-gray-600 mb-6">Upgrade to Premium to unlock full Insights and analytics.</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                  <Link to="/pricing">Upgrade to Premium</Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/dashboard">Back to Dashboard</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );

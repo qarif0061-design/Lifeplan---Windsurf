@@ -11,6 +11,7 @@ import {
   Target,
   User,
   CheckSquare,
+  Lock,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -33,9 +34,9 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
     ? [
         { to: "/dashboard", label: "Dashboard", icon: Home },
         { to: "/goals", label: "Goals", icon: Target },
-        ...(isPremium ? [{ to: "/check-in", label: "Daily Check-in", icon: CheckSquare } as const] : []),
+        { to: "/check-in", label: "Daily Check-in", icon: CheckSquare, premiumOnly: true as const },
         { to: "/planning", label: "Weekly Planning", icon: Calendar },
-        ...(isPremium ? [{ to: "/insights", label: "Insights", icon: Calendar } as const] : []),
+        { to: "/insights", label: "Insights", icon: Calendar, premiumOnly: true as const },
         { to: "/articles", label: "Articles", icon: BookOpen },
         { to: "/questions", label: "Questions", icon: BookOpen },
         { to: "/download", label: "Download", icon: Download },
@@ -65,6 +66,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         {nav.map((item) => {
           const active = location.pathname === item.to;
           const Icon = item.icon;
+          const isLocked = Boolean(user && (item as { premiumOnly?: boolean }).premiumOnly && !isPremium);
           return (
             <Button
               key={item.to}
@@ -74,7 +76,12 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
             >
               <Link to={item.to} className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
                 <Icon className="w-4 h-4" />
-                {!collapsed && <span>{item.label}</span>}
+                {!collapsed && (
+                  <span className="flex items-center gap-2">
+                    <span>{item.label}</span>
+                    {isLocked && <Lock className="w-3.5 h-3.5 opacity-70" />}
+                  </span>
+                )}
               </Link>
             </Button>
           );

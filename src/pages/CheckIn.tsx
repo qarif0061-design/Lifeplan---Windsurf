@@ -10,6 +10,8 @@ import { useUser } from "@/contexts/UserContext";
 import { upsertDailyCheckIn } from "@/firebase/checkins";
 import { updateUserStreak } from "@/firebase/users";
 import { useCheckIns, computeStreakFromDates } from "@/hooks/useCheckIns";
+import { Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const toDateKeyLocal = (d: Date): string => {
   const yyyy = d.getFullYear();
@@ -19,7 +21,7 @@ const toDateKeyLocal = (d: Date): string => {
 };
 
 const CheckIn = () => {
-  const { user } = useUser();
+  const { user, isPremium } = useUser();
   const { checkIns, stats } = useCheckIns();
 
   const todayKey = useMemo(() => toDateKeyLocal(new Date()), []);
@@ -74,63 +76,85 @@ const CheckIn = () => {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Daily Check-in</h1>
-          <p className="text-gray-500">Build consistency and keep your streak alive.</p>
+      <div className="relative max-w-4xl mx-auto">
+        <div className={`space-y-8 animate-in fade-in duration-500 ${isPremium ? "" : "blur-sm select-none pointer-events-none"}`}>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Daily Check-in</h1>
+            <p className="text-gray-500">Build consistency and keep your streak alive.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <Card className="border-none shadow-sm rounded-[2rem]">
+              <CardContent className="p-6 text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-1">{stats.streak}</div>
+                <div className="text-sm text-gray-500">Current Streak</div>
+              </CardContent>
+            </Card>
+            <Card className="border-none shadow-sm rounded-[2rem]">
+              <CardContent className="p-6 text-center">
+                <div className="text-2xl font-bold text-emerald-600 mb-1">{stats.avgLast7CompletionPct}%</div>
+                <div className="text-sm text-gray-500">Last 7 Days Completion</div>
+              </CardContent>
+            </Card>
+            <Card className="border-none shadow-sm rounded-[2rem]">
+              <CardContent className="p-6 text-center">
+                <div className="text-2xl font-bold text-purple-600 mb-1">{stats.totalCheckIns}</div>
+                <div className="text-sm text-gray-500">Total Check-ins</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card className="border-none shadow-sm rounded-[2.5rem]">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">Today ({todayKey})</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid sm:grid-cols-3 gap-4">
+                <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
+                  <input type="checkbox" checked={hydration} onChange={(e) => setHydration(e.target.checked)} />
+                  <span className="font-medium text-gray-900">Hydration</span>
+                </label>
+                <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
+                  <input type="checkbox" checked={healthyEating} onChange={(e) => setHealthyEating(e.target.checked)} />
+                  <span className="font-medium text-gray-900">Healthy Eating</span>
+                </label>
+                <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
+                  <input type="checkbox" checked={exercise} onChange={(e) => setExercise(e.target.checked)} />
+                  <span className="font-medium text-gray-900">Exercise</span>
+                </label>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="checkin-notes">Notes (optional)</Label>
+                <Input id="checkin-notes" value={notes} onChange={(e) => setNotes(e.target.value)} className="rounded-xl" />
+              </div>
+
+              <Button onClick={handleSave} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700">
+                {saving ? "Saving..." : "Save Check-in"}
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4">
-          <Card className="border-none shadow-sm rounded-[2rem]">
-            <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-blue-600 mb-1">{stats.streak}</div>
-              <div className="text-sm text-gray-500">Current Streak</div>
-            </CardContent>
-          </Card>
-          <Card className="border-none shadow-sm rounded-[2rem]">
-            <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-emerald-600 mb-1">{stats.avgLast7CompletionPct}%</div>
-              <div className="text-sm text-gray-500">Last 7 Days Completion</div>
-            </CardContent>
-          </Card>
-          <Card className="border-none shadow-sm rounded-[2rem]">
-            <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-purple-600 mb-1">{stats.totalCheckIns}</div>
-              <div className="text-sm text-gray-500">Total Check-ins</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card className="border-none shadow-sm rounded-[2.5rem]">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold">Today ({todayKey})</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid sm:grid-cols-3 gap-4">
-              <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                <input type="checkbox" checked={hydration} onChange={(e) => setHydration(e.target.checked)} />
-                <span className="font-medium text-gray-900">Hydration</span>
-              </label>
-              <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                <input type="checkbox" checked={healthyEating} onChange={(e) => setHealthyEating(e.target.checked)} />
-                <span className="font-medium text-gray-900">Healthy Eating</span>
-              </label>
-              <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                <input type="checkbox" checked={exercise} onChange={(e) => setExercise(e.target.checked)} />
-                <span className="font-medium text-gray-900">Exercise</span>
-              </label>
+        {!isPremium && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="max-w-xl mx-auto bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-[2.5rem] p-8 text-center">
+              <div className="flex items-center justify-center gap-2 text-gray-900 mb-3">
+                <Lock className="w-5 h-5" />
+                <h2 className="text-xl font-bold">Premium feature</h2>
+              </div>
+              <p className="text-gray-600 mb-6">Upgrade to Premium to unlock Daily Check-ins and build streaks.</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                  <Link to="/pricing">Upgrade to Premium</Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/dashboard">Back to Dashboard</Link>
+                </Button>
+              </div>
             </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="checkin-notes">Notes (optional)</Label>
-              <Input id="checkin-notes" value={notes} onChange={(e) => setNotes(e.target.value)} className="rounded-xl" />
-            </div>
-
-            <Button onClick={handleSave} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700">
-              {saving ? "Saving..." : "Save Check-in"}
-            </Button>
-          </CardContent>
-        </Card>
+          </div>
+        )}
       </div>
     </Layout>
   );
