@@ -112,6 +112,7 @@ const Landing = () => {
                         href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="flex items-center min-w-0"
                       >
                         <Apple className="w-5 h-5 mr-3" />
                         <span className="flex flex-col items-start leading-none min-w-0">
@@ -121,11 +122,11 @@ const Landing = () => {
                       </a>
                     </Button>
                     <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start">
-                      <span className="flex items-center">
+                      <span className="flex items-center min-w-0">
                         <Smartphone className="w-5 h-5 mr-3" />
-                        <span className="flex flex-col items-start leading-none">
-                          <span className="text-[11px] text-gray-500">Google Play</span>
-                          <span className="text-sm font-bold">Coming soon</span>
+                        <span className="flex flex-col items-start leading-none min-w-0">
+                          <span className="text-[11px] text-gray-500 truncate">Google Play</span>
+                          <span className="text-sm font-bold truncate">Coming soon</span>
                         </span>
                       </span>
                     </Button>
