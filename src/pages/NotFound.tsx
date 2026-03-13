@@ -5,8 +5,8 @@ import { ArrowLeft, Search, Home, Target } from "lucide-react";
 
 const NotFound = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="text-center">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
         <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-600">
           <Search className="h-6 w-6 text-white" />
         </div>

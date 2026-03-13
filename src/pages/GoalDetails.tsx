@@ -136,7 +136,7 @@ const GoalDetails = () => {
         timeframe,
         timeframeValue,
         progress: clampedProgress,
-        status: clampedProgress === 100 ? "completed" : goal.status,
+        status: clampedProgress === 100 ? "completed" : "active",
       });
       const refreshed = await getGoalById(goal.id);
       setGoal(refreshed);

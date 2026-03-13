@@ -51,8 +51,8 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-6xl grid lg:grid-cols-[1fr,320px] gap-8 items-start">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-6xl grid lg:grid-cols-[1fr,320px] gap-8 items-start animate-in fade-in slide-in-from-bottom-2 duration-500">
         <div className="w-full max-w-md mx-auto lg:mx-0 space-y-8">
           <div className="text-center">
             <h2 className="text-3xl font-extrabold text-gray-900">Welcome back</h2>
