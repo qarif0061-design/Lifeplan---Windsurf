@@ -114,9 +114,9 @@ const Landing = () => {
                         rel="noopener noreferrer"
                       >
                         <Apple className="w-5 h-5 mr-3" />
-                        <span className="flex flex-col items-start leading-none">
-                          <span className="text-[11px] opacity-80">Download on the</span>
-                          <span className="text-sm font-bold">App Store</span>
+                        <span className="flex flex-col items-start leading-none min-w-0">
+                          <span className="text-[11px] opacity-80 truncate">Download on the</span>
+                          <span className="text-sm font-bold truncate">App Store</span>
                         </span>
                       </a>
                     </Button>

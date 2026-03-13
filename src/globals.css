@@ -57,28 +57,43 @@
     @apply border-border;
   }
 
+  html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+  }
+
   body {
     @apply text-foreground;
     background-color: hsl(var(--background));
-    background-image:
-      radial-gradient(1200px 600px at 15% 10%, rgba(37, 99, 235, 0.16), transparent 60%),
-      radial-gradient(900px 500px at 85% 25%, rgba(168, 85, 247, 0.14), transparent 55%),
-      radial-gradient(800px 500px at 25% 90%, rgba(16, 185, 129, 0.10), transparent 60%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85));
-    background-attachment: fixed;
-    background-size: 140% 140%;
-    animation: app-bg-shift 18s ease-in-out infinite;
+    position: relative;
   }
 }
 
-@keyframes app-bg-shift {
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1200px 600px at 15% 10%, rgba(37, 99, 235, 0.16), transparent 60%),
+    radial-gradient(900px 500px at 85% 25%, rgba(168, 85, 247, 0.14), transparent 55%),
+    radial-gradient(800px 500px at 25% 90%, rgba(16, 185, 129, 0.10), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85));
+  transform: translate3d(0, 0, 0) scale(1.06);
+  transform-origin: center;
+  will-change: transform;
+  animation: app-bg-float 18s ease-in-out infinite;
+}
+
+@keyframes app-bg-float {
   0% {
-    background-position: 0% 0%;
+    transform: translate3d(-0.6%, -0.4%, 0) scale(1.06);
   }
   50% {
-    background-position: 100% 60%;
+    transform: translate3d(0.6%, 0.4%, 0) scale(1.06);
   }
   100% {
-    background-position: 0% 0%;
+    transform: translate3d(-0.6%, -0.4%, 0) scale(1.06);
   }
 }
