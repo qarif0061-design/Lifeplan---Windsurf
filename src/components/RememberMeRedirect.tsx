@@ -17,6 +17,9 @@ const RememberMeRedirect: React.FC<RememberMeRedirectProps> = ({ children }) => 
     if (location.pathname !== '/') return;
     // If user is logged in and rememberMe was set, redirect to dashboard
     if (user && localStorage.getItem('rememberMe') === 'true') {
+      const guardKey = "rememberMeRedirectedFromRoot";
+      if (sessionStorage.getItem(guardKey) === "true") return;
+      sessionStorage.setItem(guardKey, "true");
       navigate('/dashboard', { replace: true });
     }
   }, [user, loading, location.pathname, navigate]);
