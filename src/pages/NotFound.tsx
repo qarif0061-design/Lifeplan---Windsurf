@@ -1,12 +1,25 @@
-import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Search, Home, Target } from "lucide-react";
 
 const NotFound = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <div className="flex justify-center mb-6">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+        </div>
         <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-600">
           <Search className="h-6 w-6 text-white" />
         </div>

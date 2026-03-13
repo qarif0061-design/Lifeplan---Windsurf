@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Apple, Eye, EyeOff, Github, Mail, Smartphone } from "lucide-react";
+import { Apple, ArrowLeft, Eye, EyeOff, Github, Mail, Smartphone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "@/utils/toast";
 import { signIn, signUp } from "@/firebase/auth";
@@ -53,6 +53,18 @@ const Auth = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-6xl grid lg:grid-cols-[1fr,320px] gap-8 items-start animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <div className="lg:col-span-2 -mb-4">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </div>
         <div className="w-full max-w-md mx-auto lg:mx-0 space-y-8">
           <div className="text-center">
             <h2 className="text-3xl font-extrabold text-gray-900">Welcome back</h2>

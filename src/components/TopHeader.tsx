@@ -1,10 +1,13 @@
 import { useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const TopHeader = () => {
   const { user } = useUser();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const title = useMemo(() => {
     if (location.pathname.startsWith("/dashboard")) return "Dashboard";
@@ -18,6 +21,7 @@ const TopHeader = () => {
   }, [location.pathname]);
 
   const greetingName = user?.displayName?.trim() ? user.displayName.trim() : "";
+  const showBack = location.pathname !== "/" && !location.pathname.startsWith("/dashboard");
 
   return (
     <header className="border-b border-gray-100 bg-white">
@@ -25,6 +29,18 @@ const TopHeader = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
             <div className="flex items-center gap-3">
+              {showBack && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  onClick={() => navigate(-1)}
+                  aria-label="Go back"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </Button>
+              )}
               <img
                 src="/HI_RES_ICON-9160.png"
                 alt="Goal Planner - Lifeplans"

@@ -69,33 +69,11 @@ const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <Navbar />
       
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 relative">
-        {/* Top Right Download Banner */}
-        <div className="absolute top-4 right-4 hidden lg:block animate-in fade-in slide-in-from-right-4 duration-700 delay-500">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 w-64">
-            <p className="text-sm font-semibold text-gray-900 mb-3">Get the mobile app</p>
-            <div className="space-y-2">
-              <Button asChild className="w-full bg-gray-900 hover:bg-black text-white h-10 justify-start rounded-xl">
-                <a
-                  href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Apple className="w-4 h-4 mr-2" />
-                  <span className="text-xs">App Store</span>
-                </a>
-              </Button>
-              <Button disabled className="w-full bg-white border border-gray-200 text-gray-700 h-10 justify-start rounded-xl">
-                <Smartphone className="w-4 h-4 mr-2" />
-                <span className="text-xs">Google Play</span>
-              </Button>
-            </div>
-          </div>
-        </div>
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <span className="relative flex h-2 w-2">
@@ -117,6 +95,44 @@ const Landing = () => {
             <Button asChild variant="outline" size="lg" className="rounded-full px-8 h-14 text-lg font-semibold border-gray-200">
               <Link to="/pricing">View Premium Plans</Link>
             </Button>
+          </div>
+
+          <div className="mt-10 max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
+            <div className="rounded-[2.5rem] bg-gradient-to-r from-blue-600 to-purple-600 p-[1px] shadow-xl shadow-blue-200/40">
+              <div className="rounded-[2.5rem] bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70 border border-white/40 p-6 sm:p-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                  <div className="text-left">
+                    <p className="text-xs font-bold uppercase tracking-widest text-blue-700">Mobile Apps</p>
+                    <h3 className="mt-2 text-2xl sm:text-3xl font-extrabold text-gray-900">Download the mobile applications</h3>
+                    <p className="mt-2 text-gray-600">Plan, check-in, and stay consistent from anywhere.</p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full md:w-auto">
+                    <Button asChild className="rounded-2xl bg-gray-900 hover:bg-black text-white h-12 justify-start">
+                      <a
+                        href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Apple className="w-5 h-5 mr-3" />
+                        <span className="flex flex-col items-start leading-none">
+                          <span className="text-[11px] opacity-80">Download on the</span>
+                          <span className="text-sm font-bold">App Store</span>
+                        </span>
+                      </a>
+                    </Button>
+                    <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start">
+                      <span className="flex items-center">
+                        <Smartphone className="w-5 h-5 mr-3" />
+                        <span className="flex flex-col items-start leading-none">
+                          <span className="text-[11px] text-gray-500">Google Play</span>
+                          <span className="text-sm font-bold">Coming soon</span>
+                        </span>
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
