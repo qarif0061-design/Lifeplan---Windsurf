@@ -80,9 +80,11 @@ const Dashboard = () => {
     return `${yyyy}-${mm}-${dd}`;
   }, []);
 
-  const todaysDailyTasksCount = useMemo(() => {
+  const todaysPrioritiesProgress = useMemo(() => {
     const day = dailyTaskDays.find((d) => d.date === todayKey);
-    return day?.tasks?.length ?? 0;
+    const total = (day?.priorities ?? []).filter((p) => (p.title ?? "").trim().length > 0).length;
+    const done = (day?.priorities ?? []).filter((p) => p.completed && (p.title ?? "").trim().length > 0).length;
+    return { total, done };
   }, [dailyTaskDays, todayKey]);
 
   const openCreateGoalDialog = () => {
@@ -563,8 +565,10 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="pt-0">
             <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-4">
-              <div className="text-sm font-medium text-gray-700">Today’s tasks</div>
-              <div className="text-sm font-semibold text-gray-900">{todaysDailyTasksCount}</div>
+              <div className="text-sm font-medium text-gray-700">Today’s priorities</div>
+              <div className="text-sm font-semibold text-gray-900">
+                {todaysPrioritiesProgress.done}/{todaysPrioritiesProgress.total}
+              </div>
             </div>
           </CardContent>
         </Card>

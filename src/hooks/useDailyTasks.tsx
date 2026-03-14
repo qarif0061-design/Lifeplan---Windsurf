@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useUser } from "@/contexts/UserContext";
+import { auth } from "@/firebase/config";
 import {
   subscribeDailyTaskDaysByUser,
   type DailyTaskDay,
@@ -19,9 +20,16 @@ export const useDailyTasks = () => {
       return;
     }
 
+    const uid = auth.currentUser?.uid ?? user.id;
+    if (!uid) {
+      setDays([]);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     const unsub = subscribeDailyTaskDaysByUser(
-      user.id,
+      uid,
       (next) => {
         setDays(next);
         setLoading(false);
@@ -37,8 +45,29 @@ export const useDailyTasks = () => {
   }, [user, userLoading]);
 
   const distinctDates = useMemo(() => {
-    const withTasks = days.filter((d) => (d.tasks?.length ?? 0) > 0);
-    return Array.from(new Set(withTasks.map((d) => d.date)));
+    const hasAnyContent = (d: DailyTaskDay) => {
+      const hasTasks = (d.tasks?.length ?? 0) > 0;
+      const hasSchedule = Object.values(d.schedule ?? {}).some((v) => (v ?? "").trim().length > 0);
+      const hasPriorities = (d.priorities ?? []).some((p) => (p.title ?? "").trim().length > 0);
+      const hasReminder = (d.reminder ?? "").trim().length > 0;
+      const hasCallEmail = (d.callEmail ?? []).some((c) => (c.title ?? "").trim().length > 0);
+      const hasForTomorrow = (d.forTomorrow ?? "").trim().length > 0;
+      const hasAffirmation = (d.affirmation ?? "").trim().length > 0;
+      const hasNotes = (d.notes ?? "").trim().length > 0;
+      return (
+        hasTasks ||
+        hasSchedule ||
+        hasPriorities ||
+        hasReminder ||
+        hasCallEmail ||
+        hasForTomorrow ||
+        hasAffirmation ||
+        hasNotes
+      );
+    };
+
+    const withContent = days.filter(hasAnyContent);
+    return Array.from(new Set(withContent.map((d) => d.date)));
   }, [days]);
 
   const freeLimit = 3;
