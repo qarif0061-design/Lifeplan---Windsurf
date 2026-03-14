@@ -41,5 +41,12 @@ service cloud.firestore {
       allow update: if isOwnerExisting();
       allow delete: if isOwnerExisting();
     }
+
+    match /daily_tasks/{dayId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
+    }
   }
 }
