@@ -802,6 +802,57 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "Your weekly plans become proof of progress.\n\n" +
       "Keywords: progress tracking, motivation, goal planner\n",
   },
+  "daily-planner-app": {
+    title: "Daily Planner App: A Simple System to Plan Your Day (and Stick to It)",
+    body:
+      "A daily planner app should do one thing: help you decide what matters today and actually do it. The goal isn’t to plan more—it’s to take action with less friction.\n\n" +
+      "In this guide, you’ll learn a simple daily planning routine you can use inside Goal Planner - Lifeplans (web + mobile). It’s designed for busy schedules and real life: you plan quickly, you stay organized, and you track progress without overwhelm.\n\n" +
+      "## 1) Start with 1–3 daily priorities\n" +
+      "If everything is important, nothing gets finished. Choose 1–3 priorities for the day. These are outcomes, not a long wish list.\n\n" +
+      "Examples:\n" +
+      "- Write 500 words\n" +
+      "- 30-minute workout\n" +
+      "- Review weekly plan and schedule tomorrow\n\n" +
+      "## 2) Convert priorities into startable tasks\n" +
+      "A good daily task is small enough to start in 2 minutes. Big tasks create procrastination.\n\n" +
+      "Bad: ‘Work on project’\n" +
+      "Good: ‘Open doc + outline 3 bullets’, ‘Send 1 email’, ‘Do 10 minutes’\n\n" +
+      "## 3) Use time blocking for focus\n" +
+      "Time blocking is the fastest way to protect focus. Put at least one focus block on your calendar for the most important task.\n\n" +
+      "## 4) Track progress (daily + weekly)\n" +
+      "Tracking is not pressure—it’s feedback. When you see progress, motivation becomes easier. In Lifeplans, you can track goal progress weekly and keep a daily planner list for execution.\n\n" +
+      "## 5) Keep it sustainable (consistency wins)\n" +
+      "Consistency beats intensity. If you can only do a small version today, do that. A system you can repeat every day beats a perfect plan you quit.\n\n" +
+      "## A simple template you can copy\n" +
+      "- Top priority:\n" +
+      "- Task 1 (15–45 min):\n" +
+      "- Task 2 (5–20 min):\n" +
+      "- Task 3 (optional):\n" +
+      "- Notes (1 sentence):\n\n" +
+      "## Keywords\n" +
+      "daily planner app, daily planning, stay organized, focus, time management, time blocking, track progress\n",
+  },
+  "daily-journal-app": {
+    title: "Daily Journal App: The 5-Minute Habit That Improves Consistency",
+    body:
+      "A daily journal doesn’t need to be long. A 5-minute daily journal habit is enough to improve consistency, mindset, and progress—because it helps you notice patterns and make better decisions.\n\n" +
+      "This guide shows a simple daily journal routine you can use alongside your Daily Planner tasks in Goal Planner - Lifeplans.\n\n" +
+      "## 1) Keep your daily journal short\n" +
+      "If journaling takes 20 minutes, you’ll stop. Keep it short and repeatable.\n\n" +
+      "## 2) Use prompts that support action\n" +
+      "Here are 3 prompts that work:\n" +
+      "- What did I do today that moved my goal forward?\n" +
+      "- What got in the way (time, energy, distractions)?\n" +
+      "- What is the next smallest action for tomorrow?\n\n" +
+      "## 3) Link journaling to your daily routine\n" +
+      "Attach journaling to an existing habit: after coffee, after dinner, or before bed. This makes it automatic.\n\n" +
+      "## 4) Use journaling to build a growth mindset\n" +
+      "A growth mindset is the ability to learn from what happened, not judge yourself for it. Journaling turns ‘failure’ into feedback.\n\n" +
+      "## 5) Combine journal + planner\n" +
+      "The best system is both: plan the tasks, then reflect briefly. Planning helps you take action; journaling helps you improve the system.\n\n" +
+      "## Keywords\n" +
+      "daily journal app, daily journal, daily routine, mindset, growth mindset, consistency, motivation, self improvement\n",
+  },
 };
 
 const ArticleDetails = () => {

@@ -143,7 +143,7 @@ const CheckIn = () => {
                 <Lock className="w-5 h-5" />
                 <h2 className="text-xl font-bold">Premium feature</h2>
               </div>
-              <p className="text-gray-600 mb-6">Upgrade to Premium to unlock Daily Check-ins and build streaks.</p>
+              <p className="text-gray-600 mb-6">Upgrade to Premium to unlock Daily Check-ins, build streaks, and create unlimited Daily Planner tasks.</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
                   <Link to="/pricing">Upgrade to Premium</Link>

@@ -86,7 +86,7 @@ const Landing = () => {
             Master Your Life with <span className="text-blue-600">Goal Planner - Lifeplans</span>
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-            The comprehensive goal planning and life management platform designed to help you achieve what matters most.
+            Goal planning, weekly routines, and a daily planner/journal to help you take action, stay consistent, and track progress.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
             <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-14 text-lg font-semibold shadow-lg shadow-blue-200">
@@ -96,6 +96,10 @@ const Landing = () => {
               <Link to="/pricing">View Premium Plans</Link>
             </Button>
           </div>
+
+          <p className="mt-4 text-sm text-gray-500 animate-in fade-in duration-700 delay-400">
+            Free includes Daily Planner tasks for up to 3 days. Upgrade to Premium for unlimited daily tasks.
+          </p>
 
           <div className="mt-10 max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
             <div className="rounded-[2.5rem] bg-gradient-to-r from-blue-600 to-purple-600 p-[1px] shadow-xl shadow-blue-200/40">

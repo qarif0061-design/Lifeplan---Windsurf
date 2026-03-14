@@ -10,13 +10,15 @@ import {
   Star,
   AlertCircle,
   Crown,
-  Lock
+  Lock,
+  ListTodo
 } from "lucide-react";
 import { Apple, Smartphone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
 import { useGoals } from "@/hooks/useGoals";
+import { useDailyTasks } from "@/hooks/useDailyTasks";
 import { createGoal } from "@/firebase/goals";
 import {
   Dialog,
@@ -41,6 +43,7 @@ import type { Priority, Timeframe } from "@/types";
 const Dashboard = () => {
   const { user, isPremium } = useUser();
   const { goals, stats } = useGoals();
+  const { days: dailyTaskDays } = useDailyTasks();
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -68,6 +71,19 @@ const Dashboard = () => {
   const [showAiReflectionField, setShowAiReflectionField] = useState(false);
 
   const daysStreak = user?.stats?.currentStreak ?? 0;
+
+  const todayKey = useMemo(() => {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }, []);
+
+  const todaysDailyTasksCount = useMemo(() => {
+    const day = dailyTaskDays.find((d) => d.date === todayKey);
+    return day?.tasks?.length ?? 0;
+  }, [dailyTaskDays, todayKey]);
 
   const openCreateGoalDialog = () => {
     if (!isPremium && goals.length >= 1) {
@@ -445,7 +461,7 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <Card
             role="button"
             tabIndex={0}
@@ -513,6 +529,21 @@ const Dashboard = () => {
             <CardContent className="p-6 text-center">
               <div className="text-2xl font-bold text-amber-600 mb-2">{stats.avgProgress}%</div>
               <p className="text-sm font-medium text-gray-500">Avg. Progress</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/daily-planner")}
+            className="border-none shadow-sm rounded-[2.5rem] bg-sky-50 border border-sky-100 cursor-pointer hover:shadow-md transition"
+          >
+            <CardContent className="p-6 text-center">
+              <div className="flex items-center justify-center gap-2 text-sky-700 mb-2">
+                <ListTodo className="w-4 h-4" />
+                <span className="text-sm font-medium">Today</span>
+              </div>
+              <div className="text-2xl font-bold text-sky-600 mb-2">{todaysDailyTasksCount}</div>
+              <p className="text-sm font-medium text-gray-500">Daily Tasks</p>
             </CardContent>
           </Card>
         </div>
@@ -646,7 +677,7 @@ const Dashboard = () => {
                 <h3 className="text-xl font-bold">Unlock Premium Features</h3>
                 <Crown className="w-5 h-5" />
               </div>
-              <p className="text-lg mb-6">Get unlimited goals, advanced analytics, and AI-powered insights.</p>
+              <p className="text-lg mb-6">Get unlimited goals, unlimited Daily Planner tasks, advanced analytics, and AI-powered insights.</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild className="bg-amber-400 text-gray-900 hover:bg-amber-300 rounded-full px-8">
                   <Link to="/pricing">View Plans</Link>

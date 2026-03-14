@@ -8,6 +8,7 @@ import {
   Download,
   Home,
   LogOut,
+  ListTodo,
   Target,
   User,
   CheckSquare,
@@ -34,6 +35,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
     ? [
         { to: "/dashboard", label: "Dashboard", icon: Home },
         { to: "/goals", label: "Goals", icon: Target },
+        { to: "/daily-planner", label: "Daily Planner", icon: ListTodo },
         { to: "/check-in", label: "Daily Check-in", icon: CheckSquare, premiumOnly: true as const },
         { to: "/planning", label: "Weekly Planning", icon: Calendar },
         { to: "/insights", label: "Insights", icon: Calendar, premiumOnly: true as const },

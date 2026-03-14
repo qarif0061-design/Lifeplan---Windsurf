@@ -356,6 +356,18 @@ const ARTICLES: Article[] = [
     excerpt: "Progress visibility creates momentum. Learn which metrics to track and how often.",
     topics: ["targets", "motivation"],
   },
+  {
+    slug: "daily-planner-app",
+    title: "Daily Planner App: A Simple System to Plan Your Day (and Stick to It)",
+    excerpt: "How to use a daily planner app to stay organized, focus, and track progress—without overplanning.",
+    topics: ["productivity", "habits"],
+  },
+  {
+    slug: "daily-journal-app",
+    title: "Daily Journal App: The 5-Minute Habit That Improves Consistency",
+    excerpt: "A practical daily journal routine to build mindset, reduce overwhelm, and stay consistent with goals.",
+    topics: ["habits", "motivation"],
+  },
 ];
 
 const Articles = () => {

@@ -30,6 +30,8 @@ import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
 import TimeManagementSeo from "./pages/TimeManagementSeo";
 import SmartGoalsSeo from "./pages/SmartGoalsSeo";
 import MotivationQuotesSeo from "./pages/MotivationQuotesSeo";
+import DailyPlanner from "./pages/DailyPlanner";
+import DailyPlannerHistory from "./pages/DailyPlannerHistory";
 
 function App() {
   return (
@@ -64,6 +66,8 @@ function App() {
             <Route path="/articles" element={<Articles />} />
             <Route path="/articles/:slug" element={<ArticleDetails />} />
             <Route path="/questions" element={<Questions />} />
+            <Route path="/daily-planner" element={<DailyPlanner />} />
+            <Route path="/daily-planner/history" element={<DailyPlannerHistory />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
