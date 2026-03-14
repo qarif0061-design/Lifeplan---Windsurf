@@ -18,11 +18,34 @@ export type DailyTaskItem = {
   updatedAt: string;
 };
 
+export type DailyCallEmailItem = {
+  id: string;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type DailyPriorityItem = {
+  id: string;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type DailyTaskDay = {
   id: string;
   userId: string;
   date: string; // YYYY-MM-DD
   tasks: DailyTaskItem[];
+  schedule?: Record<string, string>; // key: HH:00 (e.g., "06:00")
+  priorities?: DailyPriorityItem[]; // top 3
+  reminder?: string;
+  callEmail?: DailyCallEmailItem[];
+  forTomorrow?: string;
+  affirmation?: string;
+  notes?: string;
   createdAt?: unknown;
   updatedAt?: unknown;
 };
@@ -76,10 +99,10 @@ export const upsertDailyTaskDay = async (input: Omit<DailyTaskDay, "id">): Promi
   return ref.id;
 };
 
-export const updateDailyTaskDayTasks = async (
+export const updateDailyTaskDay = async (
   userId: string,
   date: string,
-  tasks: DailyTaskItem[],
+  patch: Partial<Omit<DailyTaskDay, "id" | "userId" | "date" | "createdAt" | "updatedAt">>,
 ): Promise<void> => {
   const ref = doc(db, "daily_tasks", dailyTaskDayId(userId, date));
   await setDoc(
@@ -87,10 +110,18 @@ export const updateDailyTaskDayTasks = async (
     {
       userId,
       date,
-      tasks,
+      ...omitUndefined(patch as Record<string, unknown>),
       updatedAt: serverTimestamp(),
       createdAt: serverTimestamp(),
     },
     { merge: true },
   );
+};
+
+export const updateDailyTaskDayTasks = async (
+  userId: string,
+  date: string,
+  tasks: DailyTaskItem[],
+): Promise<void> => {
+  await updateDailyTaskDay(userId, date, { tasks });
 };

@@ -15,7 +15,13 @@ import {
 } from "@/components/ui/dialog";
 import { useDailyTasks } from "@/hooks/useDailyTasks";
 import { useUser } from "@/contexts/UserContext";
-import { updateDailyTaskDayTasks, type DailyTaskItem } from "@/firebase/dailyTasks";
+import {
+  updateDailyTaskDay,
+  updateDailyTaskDayTasks,
+  type DailyCallEmailItem,
+  type DailyPriorityItem,
+  type DailyTaskItem,
+} from "@/firebase/dailyTasks";
 import { showError, showSuccess } from "@/utils/toast";
 import { Calendar as CalendarIcon, History, Pencil, Plus, Trash2 } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -38,6 +44,26 @@ const newTaskId = (): string => {
     return crypto.randomUUID();
   }
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+};
+
+const scheduleHours = Array.from({ length: 18 }, (_, i) => String(i + 6).padStart(2, "0") + ":00");
+
+const normalizeTop3 = (items?: DailyPriorityItem[]): DailyPriorityItem[] => {
+  const now = new Date().toISOString();
+  const base = items ? [...items] : [];
+  while (base.length < 3) {
+    base.push({ id: newTaskId(), title: "", completed: false, createdAt: now, updatedAt: now });
+  }
+  return base.slice(0, 3);
+};
+
+const normalizeCallEmail3 = (items?: DailyCallEmailItem[]): DailyCallEmailItem[] => {
+  const now = new Date().toISOString();
+  const base = items ? [...items] : [];
+  while (base.length < 3) {
+    base.push({ id: newTaskId(), title: "", completed: false, createdAt: now, updatedAt: now });
+  }
+  return base.slice(0, 3);
 };
 
 const DailyPlanner = () => {
@@ -64,6 +90,14 @@ const DailyPlanner = () => {
   );
 
   const selectedTasks = selectedDay?.tasks ?? [];
+
+  const [schedule, setSchedule] = useState<Record<string, string>>({});
+  const [priorities, setPriorities] = useState<DailyPriorityItem[]>(() => normalizeTop3(undefined));
+  const [reminder, setReminder] = useState("");
+  const [callEmail, setCallEmail] = useState<DailyCallEmailItem[]>(() => normalizeCallEmail3(undefined));
+  const [forTomorrow, setForTomorrow] = useState("");
+  const [affirmation, setAffirmation] = useState("");
+  const [notes, setNotes] = useState("");
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
@@ -112,6 +146,54 @@ const DailyPlanner = () => {
       setSaving(false);
     }
   };
+
+  const persistDay = async () => {
+    if (!user) {
+      showError("Please sign in to manage your daily planner.");
+      return;
+    }
+
+    if (!canWriteToSelectedDate) {
+      showError(limitMessage ?? "Upgrade to Premium to add more daily tasks.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await updateDailyTaskDay(user.id, selectedDateKey, {
+        schedule,
+        priorities,
+        reminder: reminder.trim() ? reminder.trim() : "",
+        callEmail,
+        forTomorrow: forTomorrow.trim() ? forTomorrow.trim() : "",
+        affirmation: affirmation.trim() ? affirmation.trim() : "",
+        notes: notes.trim() ? notes.trim() : "",
+      });
+      showSuccess("Daily planner saved.");
+    } catch (e: unknown) {
+      const raw = e instanceof Error ? e.message : "Failed to save daily planner";
+      const message = raw.toLowerCase().includes("insufficient permissions")
+        ? "Missing or insufficient permissions. Update your Firestore rules to allow authenticated users to write their own daily tasks."
+        : raw;
+      showError(message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    const nextSchedule: Record<string, string> = {};
+    for (const h of scheduleHours) {
+      nextSchedule[h] = selectedDay?.schedule?.[h] ?? "";
+    }
+    setSchedule(nextSchedule);
+    setPriorities(normalizeTop3(selectedDay?.priorities));
+    setReminder(selectedDay?.reminder ?? "");
+    setCallEmail(normalizeCallEmail3(selectedDay?.callEmail));
+    setForTomorrow(selectedDay?.forTomorrow ?? "");
+    setAffirmation(selectedDay?.affirmation ?? "");
+    setNotes(selectedDay?.notes ?? "");
+  }, [selectedDateKey, selectedDay]);
 
   const handleSaveTask = async () => {
     if (!taskTitle.trim()) {
@@ -179,6 +261,15 @@ const DailyPlanner = () => {
                 <History className="w-4 h-4 mr-2" /> History
               </Link>
             </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full"
+              onClick={persistDay}
+              disabled={!canWriteToSelectedDate || saving}
+            >
+              {saving ? "Saving..." : "Save Day"}
+            </Button>
             <Button onClick={openAdd} className="rounded-full bg-blue-600 hover:bg-blue-700" disabled={!canWriteToSelectedDate || saving}>
               <Plus className="w-4 h-4 mr-2" /> Add Task
             </Button>
@@ -223,24 +314,178 @@ const DailyPlanner = () => {
           </CardContent>
         </Card>
 
+        <div className="grid lg:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">Today's Schedule</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {scheduleHours.map((h) => (
+                  <div key={h} className="flex items-center gap-3">
+                    <div className="w-14 text-xs font-semibold text-gray-500">{h}</div>
+                    <Input
+                      value={schedule[h] ?? ""}
+                      onChange={(e) =>
+                        setSchedule((prev) => ({
+                          ...prev,
+                          [h]: e.target.value,
+                        }))
+                      }
+                      className="rounded-xl"
+                      placeholder=""
+                      disabled={saving}
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">Notes</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="min-h-[160px] w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm"
+                  placeholder=""
+                  disabled={saving}
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-6">
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">Top 3 Priorities</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {priorities.map((p, idx) => (
+                  <div key={p.id} className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={p.completed}
+                      onChange={() => {
+                        const now = new Date().toISOString();
+                        setPriorities((prev) =>
+                          prev.map((x) => (x.id === p.id ? { ...x, completed: !x.completed, updatedAt: now } : x)),
+                        );
+                      }}
+                      disabled={saving}
+                    />
+                    <Input
+                      value={p.title}
+                      onChange={(e) => {
+                        const now = new Date().toISOString();
+                        setPriorities((prev) =>
+                          prev.map((x, i) => (i === idx ? { ...x, title: e.target.value, updatedAt: now } : x)),
+                        );
+                      }}
+                      className="rounded-xl"
+                      placeholder={idx === 0 ? "Priority 1" : idx === 1 ? "Priority 2" : "Priority 3"}
+                      disabled={saving}
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">Reminder</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <textarea
+                  value={reminder}
+                  onChange={(e) => setReminder(e.target.value)}
+                  className="min-h-[120px] w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm"
+                  placeholder=""
+                  disabled={saving}
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">To Call / Email</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {callEmail.map((c, idx) => (
+                  <div key={c.id} className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={c.completed}
+                      onChange={() => {
+                        const now = new Date().toISOString();
+                        setCallEmail((prev) =>
+                          prev.map((x) => (x.id === c.id ? { ...x, completed: !x.completed, updatedAt: now } : x)),
+                        );
+                      }}
+                      disabled={saving}
+                    />
+                    <Input
+                      value={c.title}
+                      onChange={(e) => {
+                        const now = new Date().toISOString();
+                        setCallEmail((prev) =>
+                          prev.map((x, i) => (i === idx ? { ...x, title: e.target.value, updatedAt: now } : x)),
+                        );
+                      }}
+                      className="rounded-xl"
+                      placeholder={idx === 0 ? "Person / action" : idx === 1 ? "Person / action" : "Person / action"}
+                      disabled={saving}
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">For Tomorrow</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <textarea
+                  value={forTomorrow}
+                  onChange={(e) => setForTomorrow(e.target.value)}
+                  className="min-h-[120px] w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm"
+                  placeholder=""
+                  disabled={saving}
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-sm rounded-[2.5rem]">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold">Daily Affirmation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <textarea
+                  value={affirmation}
+                  onChange={(e) => setAffirmation(e.target.value)}
+                  className="min-h-[80px] w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm"
+                  placeholder=""
+                  disabled={saving}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         <Card className="border-none shadow-sm rounded-[2.5rem]">
           <CardHeader>
             <CardTitle className="text-xl font-bold">Tasks</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {!selectedTasks.length && (
-              <div className="text-sm text-gray-500">No tasks for this date yet.</div>
-            )}
+            {!selectedTasks.length && <div className="text-sm text-gray-500">No tasks for this date yet.</div>}
 
             {selectedTasks.map((t) => (
               <div key={t.id} className="flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white p-4">
                 <div className="flex items-center gap-3 min-w-0">
-                  <input
-                    type="checkbox"
-                    checked={t.completed}
-                    onChange={() => handleToggle(t.id)}
-                    disabled={saving}
-                  />
+                  <input type="checkbox" checked={t.completed} onChange={() => handleToggle(t.id)} disabled={saving} />
                   <div className="min-w-0">
                     <div className={`font-medium text-gray-900 ${t.completed ? "line-through opacity-70" : ""} truncate`}>
                       {t.title}
