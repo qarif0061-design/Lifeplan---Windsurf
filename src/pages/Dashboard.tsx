@@ -461,7 +461,7 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <Card
             role="button"
             tabIndex={0}
@@ -531,21 +531,6 @@ const Dashboard = () => {
               <p className="text-sm font-medium text-gray-500">Avg. Progress</p>
             </CardContent>
           </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/daily-planner")}
-            className="border-none shadow-sm rounded-[2.5rem] bg-sky-50 border border-sky-100 cursor-pointer hover:shadow-md transition"
-          >
-            <CardContent className="p-6 text-center">
-              <div className="flex items-center justify-center gap-2 text-sky-700 mb-2">
-                <ListTodo className="w-4 h-4" />
-                <span className="text-sm font-medium">Today</span>
-              </div>
-              <div className="text-2xl font-bold text-sky-600 mb-2">{todaysDailyTasksCount}</div>
-              <p className="text-sm font-medium text-gray-500">Daily Tasks</p>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Goals Overview */}
@@ -561,6 +546,28 @@ const Dashboard = () => {
             />
           </div>
         </div>
+
+        <Card className="border-none shadow-sm rounded-[2.5rem] mb-8">
+          <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <CardTitle className="text-xl font-bold">Daily Tasks</CardTitle>
+              <p className="text-sm text-gray-500">Plan your day and keep momentum.</p>
+            </div>
+            <Button
+              type="button"
+              className="rounded-full bg-blue-600 hover:bg-blue-700"
+              onClick={() => navigate("/daily-planner")}
+            >
+              <ListTodo className="w-4 h-4 mr-2" /> Open Daily Planner
+            </Button>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-4">
+              <div className="text-sm font-medium text-gray-700">Today’s tasks</div>
+              <div className="text-sm font-semibold text-gray-900">{todaysDailyTasksCount}</div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardGoals.map((goal) => (

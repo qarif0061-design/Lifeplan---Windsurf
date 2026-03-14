@@ -20,10 +20,18 @@ export const useDailyTasks = () => {
     }
 
     setLoading(true);
-    const unsub = subscribeDailyTaskDaysByUser(user.id, (next) => {
-      setDays(next);
-      setLoading(false);
-    });
+    const unsub = subscribeDailyTaskDaysByUser(
+      user.id,
+      (next) => {
+        setDays(next);
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Failed to subscribe daily tasks", err);
+        setDays([]);
+        setLoading(false);
+      },
+    );
 
     return () => unsub();
   }, [user, userLoading]);

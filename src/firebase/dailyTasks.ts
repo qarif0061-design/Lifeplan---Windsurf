@@ -2,7 +2,6 @@ import {
   collection,
   doc,
   onSnapshot,
-  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -43,15 +42,24 @@ export const dailyTaskDayId = (userId: string, date: string) => `${userId}_${dat
 export const subscribeDailyTaskDaysByUser = (
   userId: string,
   callback: (days: DailyTaskDay[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
-  const q = query(dailyTasksCollection, where("userId", "==", userId), orderBy("date", "desc"));
-  return onSnapshot(q, (snapshot) => {
-    const days: DailyTaskDay[] = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...(d.data() as Omit<DailyTaskDay, "id">),
-    }));
-    callback(days);
-  });
+  const q = query(dailyTasksCollection, where("userId", "==", userId));
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const days: DailyTaskDay[] = snapshot.docs
+        .map((d) => ({
+          id: d.id,
+          ...(d.data() as Omit<DailyTaskDay, "id">),
+        }))
+        .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+      callback(days);
+    },
+    (err) => {
+      onError?.(err as Error);
+    },
+  );
 };
 
 export const upsertDailyTaskDay = async (input: Omit<DailyTaskDay, "id">): Promise<string> => {
