@@ -24,6 +24,12 @@ import Articles from "./pages/Articles";
 import ArticleDetails from "./pages/ArticleDetails";
 import Questions from "./pages/Questions";
 import NotFound from "./pages/NotFound";
+import LifePlanning from "./pages/LifePlanning";
+import GettingThingsDone from "./pages/GettingThingsDone";
+import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
+import TimeManagementSeo from "./pages/TimeManagementSeo";
+import SmartGoalsSeo from "./pages/SmartGoalsSeo";
+import MotivationQuotesSeo from "./pages/MotivationQuotesSeo";
 
 function App() {
   return (
@@ -32,6 +38,12 @@ function App() {
         <RememberMeRedirect>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/life-planning" element={<LifePlanning />} />
+            <Route path="/getting-things-done" element={<GettingThingsDone />} />
+            <Route path="/weekly-planning" element={<WeeklyPlanningSeo />} />
+            <Route path="/time-management" element={<TimeManagementSeo />} />
+            <Route path="/smart-goals" element={<SmartGoalsSeo />} />
+            <Route path="/motivation" element={<MotivationQuotesSeo />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />
