@@ -29,6 +29,13 @@ const firebaseConfig = envConfig.projectId ? (envConfig as typeof fallbackConfig
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
 const db = getFirestore(app);
-const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+let analytics: ReturnType<typeof getAnalytics> | null = null;
+if (typeof window !== "undefined") {
+  try {
+    analytics = getAnalytics(app);
+  } catch {
+    analytics = null;
+  }
+}
 
 export { app, auth, db, analytics };
