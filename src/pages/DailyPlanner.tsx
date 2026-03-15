@@ -1,6 +1,13 @@
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -13,7 +20,7 @@ import {
   type DailyPriorityItem,
 } from "@/firebase/dailyTasks";
 import { showError, showSuccess } from "@/utils/toast";
-import { Calendar as CalendarIcon, History } from "lucide-react";
+import { Calendar as CalendarIcon, Eye, History, RotateCcw } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
@@ -88,6 +95,7 @@ const DailyPlanner = () => {
   const [notes, setNotes] = useState("");
 
   const [saving, setSaving] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const canWriteToSelectedDate = useMemo(() => {
     if (isPremium) return true;
@@ -136,6 +144,20 @@ const DailyPlanner = () => {
     }
   };
 
+  const resetInputs = () => {
+    const nextSchedule: Record<string, string> = {};
+    for (const h of scheduleHours) {
+      nextSchedule[h] = "";
+    }
+    setSchedule(nextSchedule);
+    setPriorities(normalizeTop3(undefined));
+    setReminder("");
+    setCallEmail(normalizeCallEmail3(undefined));
+    setForTomorrow("");
+    setAffirmation("");
+    setNotes("");
+  };
+
   useEffect(() => {
     const nextSchedule: Record<string, string> = {};
     for (const h of scheduleHours) {
@@ -174,6 +196,107 @@ const DailyPlanner = () => {
                 <History className="w-4 h-4 mr-2" /> History
               </Link>
             </Button>
+
+            <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+              <DialogTrigger asChild>
+                <Button type="button" variant="outline" className="rounded-full">
+                  <Eye className="w-4 h-4 mr-2" /> Preview
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="w-[92vw] sm:max-w-[720px] rounded-[2rem]">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-bold">Preview: {toDisplayDate(selectedDateKey)}</DialogTitle>
+                </DialogHeader>
+
+                <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">Top 3 Priorities</div>
+                    <div className="space-y-2">
+                      {(selectedDay?.priorities ?? []).filter((p) => (p.title ?? "").trim().length > 0).length === 0 ? (
+                        <div className="text-sm text-gray-500">No priorities saved.</div>
+                      ) : (
+                        (selectedDay?.priorities ?? [])
+                          .filter((p) => (p.title ?? "").trim().length > 0)
+                          .slice(0, 3)
+                          .map((p) => (
+                            <div key={p.id} className="flex items-center gap-3 text-sm">
+                              <input type="checkbox" checked={!!p.completed} readOnly />
+                              <div className="text-gray-900">{p.title}</div>
+                            </div>
+                          ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">Today's Schedule</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {scheduleHours
+                        .filter((h) => (selectedDay?.schedule?.[h] ?? "").trim().length > 0)
+                        .map((h) => (
+                          <div key={h} className="flex items-center gap-3 text-sm rounded-xl border border-gray-100 p-2">
+                            <div className="w-14 text-xs font-semibold text-gray-500">{h}</div>
+                            <div className="text-gray-900">{selectedDay?.schedule?.[h]}</div>
+                          </div>
+                        ))}
+                      {scheduleHours.filter((h) => (selectedDay?.schedule?.[h] ?? "").trim().length > 0).length === 0 && (
+                        <div className="text-sm text-gray-500">No schedule saved.</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">Reminder</div>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.reminder ?? "").trim() || "No reminder saved."}</div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">To Call / Email</div>
+                    <div className="space-y-2">
+                      {(selectedDay?.callEmail ?? []).filter((c) => (c.title ?? "").trim().length > 0).length === 0 ? (
+                        <div className="text-sm text-gray-500">No calls/emails saved.</div>
+                      ) : (
+                        (selectedDay?.callEmail ?? [])
+                          .filter((c) => (c.title ?? "").trim().length > 0)
+                          .slice(0, 3)
+                          .map((c) => (
+                            <div key={c.id} className="flex items-center gap-3 text-sm">
+                              <input type="checkbox" checked={!!c.completed} readOnly />
+                              <div className="text-gray-900">{c.title}</div>
+                            </div>
+                          ))
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">For Tomorrow</div>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.forTomorrow ?? "").trim() || "Nothing saved."}</div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">Daily Affirmation</div>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.affirmation ?? "").trim() || "Nothing saved."}</div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-semibold text-gray-900">Notes</div>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.notes ?? "").trim() || "No notes saved."}</div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full"
+              onClick={resetInputs}
+              disabled={saving}
+            >
+              <RotateCcw className="w-4 h-4 mr-2" /> Reset
+            </Button>
+
             <Button
               type="button"
               variant="outline"

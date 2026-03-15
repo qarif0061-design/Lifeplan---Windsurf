@@ -53,7 +53,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           ref,
           (snap) => {
             if (snap.exists()) {
-              setUser(snap.data() as UserProfile);
+              const data = snap.data() as UserProfile;
+              setUser({ ...data, id: firebaseUser.uid });
             } else {
               setUser(fallback);
             }
