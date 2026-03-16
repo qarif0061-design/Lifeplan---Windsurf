@@ -47,7 +47,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
 
   return (
     <aside
-      className={`sticky top-0 h-screen border-r border-gray-100 bg-white transition-all duration-200 ${
+      className={`sticky top-0 h-screen border-r border-gray-100 bg-slate-50 transition-all duration-200 ${
         collapsed ? "w-[72px]" : "w-[260px]"
       }`}
     >

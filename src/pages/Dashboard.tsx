@@ -20,6 +20,7 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useGoals } from "@/hooks/useGoals";
 import { useDailyTasks } from "@/hooks/useDailyTasks";
 import { createGoal } from "@/firebase/goals";
+import type { Goal } from "@/types";
 import {
   Dialog,
   DialogContent,
@@ -39,6 +40,52 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Priority } from "@/types";
+
+const getDerivedProgress = (g: Goal): number => {
+  const cps = g.checkpoints ?? [];
+  if (cps.length > 0) {
+    const done = cps.filter((c) => c.completed).length;
+    return Math.round((done / cps.length) * 100);
+  }
+  return g.progress ?? 0;
+};
+
+const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }) => {
+  const stroke = 7;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const pct = Math.min(100, Math.max(0, value));
+  const dash = (pct / 100) * circumference;
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={stroke}
+          className="text-white/70"
+          stroke="currentColor"
+          fill="transparent"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={stroke}
+          className="text-blue-600"
+          stroke="currentColor"
+          fill="transparent"
+          strokeDasharray={`${dash} ${circumference - dash}`}
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-gray-900">
+        {pct}%
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const { user, isPremium } = useUser();
@@ -162,6 +209,12 @@ const Dashboard = () => {
     if (!q) return goals;
     return goals.filter((g) => g.name.toLowerCase().includes(q) || g.category.toLowerCase().includes(q));
   }, [goals, searchQuery]);
+
+  const effectiveFeaturedGoal = useMemo(() => {
+    const featuredId = user?.featuredGoalId;
+    const byId = featuredId ? goals.find((g) => g.id === featuredId) : undefined;
+    return byId ?? goals[0] ?? null;
+  }, [goals, user?.featuredGoalId]);
 
   return (
     <Layout>
@@ -458,6 +511,67 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {effectiveFeaturedGoal && (
+          <Card className="border-none shadow-sm rounded-[2.5rem] mb-8 overflow-hidden">
+            <CardContent className="p-8 bg-gradient-to-br from-amber-50 via-white to-blue-50 border border-amber-100 rounded-[2.5rem]">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 text-amber-800">
+                    <Crown className="w-4 h-4 text-amber-600" />
+                    <div className="text-xs font-extrabold uppercase tracking-wider">Featured Goal</div>
+                    {!user?.featuredGoalId && (
+                      <div className="text-xs font-semibold text-gray-500">(auto)</div>
+                    )}
+                  </div>
+                  <div className="mt-3 text-3xl font-black text-gray-900 truncate">{effectiveFeaturedGoal.name}</div>
+                  <div className="mt-1 text-sm font-medium text-gray-600 truncate">{effectiveFeaturedGoal.category}</div>
+                  {(effectiveFeaturedGoal.startDate || effectiveFeaturedGoal.endDate) && (
+                    <div className="mt-3 text-sm text-gray-600">
+                      <span className="font-semibold text-gray-700">Dates:</span>{" "}
+                      {effectiveFeaturedGoal.startDate ?? ""} → {effectiveFeaturedGoal.endDate ?? ""}
+                    </div>
+                  )}
+
+                  <div className="mt-6 space-y-3">
+                    <div className="flex items-center justify-between text-sm font-semibold">
+                      <span className="text-gray-700">Progress</span>
+                      <span className="text-gray-900">
+                        {(() => {
+                          const cps = effectiveFeaturedGoal.checkpoints ?? [];
+                          if (cps.length === 0) return `${getDerivedProgress(effectiveFeaturedGoal)}%`;
+                          const done = cps.filter((c) => c.completed).length;
+                          return `${done}/${cps.length} (${getDerivedProgress(effectiveFeaturedGoal)}%)`;
+                        })()}
+                      </span>
+                    </div>
+                    <Progress value={getDerivedProgress(effectiveFeaturedGoal)} className="h-5 bg-white" />
+                  </div>
+
+                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                    <Button
+                      className="rounded-full bg-blue-600 hover:bg-blue-700"
+                      onClick={() => navigate(`/goals/${effectiveFeaturedGoal.id}`)}
+                    >
+                      View Goal
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="rounded-full"
+                      onClick={() => openCreateGoalDialog()}
+                    >
+                      <Plus className="w-4 h-4 mr-2" /> Add Goal
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-start lg:justify-end gap-5">
+                  <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={88} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Stats Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <Card
@@ -598,9 +712,9 @@ const Dashboard = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm font-medium">
                     <span className="text-gray-500">Progress</span>
-                    <span className="text-gray-900">{goal.progress}%</span>
+                    <span className="text-gray-900">{getDerivedProgress(goal)}%</span>
                   </div>
-                  <Progress value={goal.progress} className="h-2 bg-gray-100" />
+                  <Progress value={getDerivedProgress(goal)} className="h-2 bg-gray-100" />
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
