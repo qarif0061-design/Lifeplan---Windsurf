@@ -9,3 +9,10 @@ export const updateUserStreak = async (userId: string, currentStreak: number, lo
     "stats.longestStreak": longestStreak,
   });
 };
+
+export const updateFeaturedGoalId = async (userId: string, featuredGoalId?: string): Promise<void> => {
+  const ref = doc(db, "users", userId);
+  await updateDoc(ref, {
+    featuredGoalId: featuredGoalId ?? null,
+  });
+};

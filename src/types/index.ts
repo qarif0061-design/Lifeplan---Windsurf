@@ -3,6 +3,14 @@ export type GoalStatus = 'active' | 'completed' | 'paused' | 'not-started';
 export type Priority = 'low' | 'medium' | 'high';
 export type EnergyLevel = 'low' | 'medium' | 'high';
 
+export type GoalCheckpoint = {
+  id: string;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -30,9 +38,11 @@ export interface Goal {
   id: string;
   userId: string;
   name: string;
-  timeframe: Timeframe;
-  timeframeValue: number;
-  dueAt?: string;
+  startDate?: string; // YYYY-MM-DD
+  endDate?: string; // YYYY-MM-DD
+  dueAt?: string; // derived from endDate for legacy views
+  timeframe?: Timeframe;
+  timeframeValue?: number;
   strategy?: {
     whyMatters: string;
     whoBenefits: string;
@@ -50,6 +60,7 @@ export interface Goal {
   };
   status: GoalStatus;
   progress: number;
+  checkpoints?: GoalCheckpoint[];
   priority: Priority;
   category: string;
   description?: string;
