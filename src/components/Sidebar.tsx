@@ -47,7 +47,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
 
   return (
     <aside
-      className={`sticky top-0 h-screen border-r border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 transition-all duration-200 ${
+      className={`sticky top-0 h-screen border-r border-white/10 bg-gradient-to-t from-blue-950 via-slate-900 to-sky-700 transition-all duration-200 ${
         collapsed ? "w-[72px]" : "w-[260px]"
       }`}
     >

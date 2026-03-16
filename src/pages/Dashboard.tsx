@@ -77,7 +77,7 @@ const getProgressStroke = (pct: number): { from: string; to: string } => {
 
 const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }) => {
   const gradId = useId();
-  const stroke = 7;
+  const stroke = 12;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const pct = Math.min(100, Math.max(0, value));
@@ -607,7 +607,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="flex items-center justify-start lg:justify-end gap-5">
-                  <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={264} />
+                  <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={66} />
                 </div>
               </div>
             </CardContent>
