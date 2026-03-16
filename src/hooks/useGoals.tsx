@@ -3,6 +3,15 @@ import { subscribeGoalsByUser } from "@/firebase/goals";
 import type { Goal } from "@/types";
 import { useUser } from "@/contexts/UserContext";
 
+const getDerivedProgress = (g: Goal): number => {
+  const cps = g.checkpoints ?? [];
+  if (cps.length > 0) {
+    const done = cps.filter((c) => c.completed).length;
+    return Math.round((done / cps.length) * 100);
+  }
+  return g.progress ?? 0;
+};
+
 export const useGoals = () => {
   const { user, loading: userLoading } = useUser();
   const [goals, setGoals] = useState<Goal[]>([]);
@@ -35,7 +44,7 @@ export const useGoals = () => {
       return new Date(g.dueAt).getTime() < now;
     });
     const avgProgress = goals.length
-      ? Math.round(goals.reduce((sum, g) => sum + (g.progress ?? 0), 0) / goals.length)
+      ? Math.round(goals.reduce((sum, g) => sum + getDerivedProgress(g), 0) / goals.length)
       : 0;
 
     return {

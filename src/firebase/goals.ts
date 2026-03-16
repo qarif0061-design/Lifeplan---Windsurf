@@ -17,8 +17,11 @@ type CreateGoalInput = {
   name: string;
   category: string;
   priority: Priority;
-  timeframe: Timeframe;
-  timeframeValue: number;
+  startDate?: string; // YYYY-MM-DD
+  endDate?: string; // YYYY-MM-DD
+  checkpoints?: Goal["checkpoints"];
+  timeframe?: Timeframe;
+  timeframeValue?: number;
   description?: string;
   strategy?: Goal["strategy"];
   planning?: Goal["planning"];
@@ -26,7 +29,7 @@ type CreateGoalInput = {
 
 const goalsCollection = collection(db, "goals");
 
-const computeDueAt = (createdAtIso: string, timeframe: Timeframe, timeframeValue: number): string => {
+const computeDueAtFromLegacy = (createdAtIso: string, timeframe: Timeframe, timeframeValue: number): string => {
   const d = new Date(createdAtIso);
   if (timeframe === "weeks") {
     d.setDate(d.getDate() + timeframeValue * 7);
@@ -34,6 +37,12 @@ const computeDueAt = (createdAtIso: string, timeframe: Timeframe, timeframeValue
     d.setMonth(d.getMonth() + timeframeValue);
   }
   return d.toISOString();
+};
+
+const toDueAtFromEndDate = (endDate?: string): string | undefined => {
+  if (!endDate) return undefined;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(endDate)) return undefined;
+  return new Date(`${endDate}T23:59:59.999Z`).toISOString();
 };
 
 const omitUndefined = <T extends Record<string, unknown>>(obj: T): Partial<T> => {
@@ -67,18 +76,25 @@ export const subscribeGoalsByUser = (
 
 export const createGoal = async (input: CreateGoalInput): Promise<string> => {
   const now = new Date().toISOString();
-  const dueAt = computeDueAt(now, input.timeframe, input.timeframeValue);
+
+  const dueAt =
+    toDueAtFromEndDate(input.endDate) ??
+    (input.timeframe && input.timeframeValue ? computeDueAtFromLegacy(now, input.timeframe, input.timeframeValue) : undefined);
+
   const goalBase: Omit<Goal, "id"> = {
     userId: input.userId,
     name: input.name,
     category: input.category,
     priority: input.priority,
+    startDate: input.startDate,
+    endDate: input.endDate,
+    dueAt,
     timeframe: input.timeframe,
     timeframeValue: input.timeframeValue,
-    dueAt,
     successMetric: { type: "yes-no" },
     status: "active",
     progress: 0,
+    checkpoints: input.checkpoints,
     description: input.description,
     strategy: input.strategy,
     planning: input.planning,
@@ -101,7 +117,8 @@ export const updateGoal = async (goalId: string, patch: Partial<Goal>): Promise<
   const ref = doc(db, "goals", goalId);
   const updatedAt = new Date().toISOString();
   const { id: _id, ...rest } = patch as Goal;
-  await updateDoc(ref, omitUndefined({ ...rest, updatedAt }));
+  const dueAtPatch = "endDate" in rest ? { dueAt: toDueAtFromEndDate((rest as Partial<Goal>).endDate) } : {};
+  await updateDoc(ref, omitUndefined({ ...rest, ...dueAtPatch, updatedAt }));
 };
 
 export const deleteGoal = async (goalId: string): Promise<void> => {

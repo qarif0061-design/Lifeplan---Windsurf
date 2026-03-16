@@ -15,8 +15,7 @@ import {
   Lock
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
-import { Slider } from "@/components/ui/slider";
-import type { Goal, Priority, Timeframe } from "@/types";
+import type { Goal, GoalCheckpoint, Priority } from "@/types";
 import { deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { useUser } from "@/contexts/UserContext";
 import {
@@ -37,6 +36,57 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const newId = (): string => {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+};
+
+const getDerivedProgress = (g: Goal, checkpoints?: GoalCheckpoint[]): number => {
+  const cps = checkpoints ?? g.checkpoints ?? [];
+  if (cps.length > 0) {
+    const done = cps.filter((c) => c.completed).length;
+    return Math.round((done / cps.length) * 100);
+  }
+  return g.progress ?? 0;
+};
+
+const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }) => {
+  const stroke = 7;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const pct = Math.min(100, Math.max(0, value));
+  const dash = (pct / 100) * circumference;
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={stroke}
+          className="text-gray-100"
+          stroke="currentColor"
+          fill="transparent"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={stroke}
+          className="text-blue-600"
+          stroke="currentColor"
+          fill="transparent"
+          strokeDasharray={`${dash} ${circumference - dash}`}
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-gray-900">
+        {pct}%
+      </div>
+    </div>
+  );
+};
+
 const GoalDetails = () => {
   const { isPremium } = useUser();
   const { id } = useParams();
@@ -55,9 +105,10 @@ const GoalDetails = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
-  const [timeframe, setTimeframe] = useState<Timeframe>("weeks");
-  const [timeframeValue, setTimeframeValue] = useState<number>(4);
-  const [progress, setProgress] = useState<number>(0);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [checkpoints, setCheckpoints] = useState<GoalCheckpoint[]>([]);
+  const [newCheckpointTitle, setNewCheckpointTitle] = useState("");
 
   const [strategyWhy, setStrategyWhy] = useState("");
   const [strategyWho, setStrategyWho] = useState("");
@@ -84,9 +135,9 @@ const GoalDetails = () => {
           setCategory(g.category);
           setDescription(g.description ?? "");
           setPriority(g.priority);
-          setTimeframe(g.timeframe);
-          setTimeframeValue(g.timeframeValue);
-          setProgress(g.progress ?? 0);
+          setStartDate(g.startDate ?? "");
+          setEndDate(g.endDate ?? "");
+          setCheckpoints(g.checkpoints ?? []);
 
           setStrategyWhy(g.strategy?.whyMatters ?? "");
           setStrategyWho(g.strategy?.whoBenefits ?? "");
@@ -114,10 +165,16 @@ const GoalDetails = () => {
     }
   }, [location.state]);
 
-  const clampedProgress = useMemo(
-    () => Math.min(100, Math.max(0, Number.isFinite(progress) ? progress : 0)),
-    [progress],
-  );
+  const derivedProgress = useMemo(() => {
+    if (!goal) return 0;
+    return getDerivedProgress(goal, checkpoints);
+  }, [goal, checkpoints]);
+
+  const derivedCheckpointStats = useMemo(() => {
+    const total = checkpoints.length;
+    const done = checkpoints.filter((c) => c.completed).length;
+    return { total, done };
+  }, [checkpoints]);
 
   const handleSave = async () => {
     if (!goal) return;
@@ -133,10 +190,11 @@ const GoalDetails = () => {
         category: category.trim(),
         description: description.trim() ? description.trim() : undefined,
         priority,
-        timeframe,
-        timeframeValue,
-        progress: clampedProgress,
-        status: clampedProgress === 100 ? "completed" : "active",
+        startDate: startDate.trim() ? startDate.trim() : undefined,
+        endDate: endDate.trim() ? endDate.trim() : undefined,
+        checkpoints,
+        progress: derivedProgress,
+        status: checkpoints.length > 0 && derivedCheckpointStats.done === derivedCheckpointStats.total ? "completed" : "active",
       });
       const refreshed = await getGoalById(goal.id);
       setGoal(refreshed);
@@ -199,7 +257,9 @@ const GoalDetails = () => {
     const lines: string[] = [];
     if (goal) {
       lines.push(`Goal: ${goal.name}`);
-      lines.push(`Timeframe: ${goal.timeframeValue} ${goal.timeframe}`);
+      if (goal.startDate || goal.endDate) {
+        lines.push(`Dates: ${goal.startDate ?? ""} → ${goal.endDate ?? ""}`.trim());
+      }
       lines.push("");
     }
     lines.push("Suggested next actions:");
@@ -244,10 +304,18 @@ const GoalDetails = () => {
     if (!goal) return;
     setIsSaving(true);
     try {
-      await updateGoal(goal.id, { progress: 100, status: "completed" });
+      const now = new Date().toISOString();
+      const cps = checkpoints.length
+        ? checkpoints.map((c) => ({ ...c, completed: true, updatedAt: now }))
+        : checkpoints;
+      await updateGoal(goal.id, {
+        checkpoints: cps,
+        progress: 100,
+        status: "completed",
+      });
       const refreshed = await getGoalById(goal.id);
       setGoal(refreshed);
-      setProgress(100);
+      setCheckpoints(cps);
       showSuccess("Goal marked as completed!");
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Failed to mark complete";
@@ -255,6 +323,66 @@ const GoalDetails = () => {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const persistCheckpoints = async (next: GoalCheckpoint[]) => {
+    if (!goal) return;
+    setIsSaving(true);
+    try {
+      const done = next.filter((c) => c.completed).length;
+      const total = next.length;
+      const nextProgress = total > 0 ? Math.round((done / total) * 100) : (goal.progress ?? 0);
+      await updateGoal(goal.id, {
+        checkpoints: next,
+        progress: nextProgress,
+        status: total > 0 && done === total ? "completed" : "active",
+      });
+      const refreshed = await getGoalById(goal.id);
+      setGoal(refreshed);
+      setCheckpoints(next);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to update checkpoints";
+      showError(message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleAddCheckpoint = async () => {
+    const title = newCheckpointTitle.trim();
+    if (!goal) return;
+    if (!title) return;
+    const now = new Date().toISOString();
+    const next: GoalCheckpoint[] = [
+      ...checkpoints,
+      { id: newId(), title, completed: false, createdAt: now, updatedAt: now },
+    ];
+    setNewCheckpointTitle("");
+    await persistCheckpoints(next);
+  };
+
+  const handleToggleCheckpoint = async (checkpointId: string) => {
+    const now = new Date().toISOString();
+    const next = checkpoints.map((c) =>
+      c.id === checkpointId ? { ...c, completed: !c.completed, updatedAt: now } : c,
+    );
+    await persistCheckpoints(next);
+  };
+
+  const handleRenameCheckpoint = (checkpointId: string, title: string) => {
+    const now = new Date().toISOString();
+    setCheckpoints((prev) =>
+      prev.map((c) => (c.id === checkpointId ? { ...c, title, updatedAt: now } : c)),
+    );
+  };
+
+  const handleCommitRenameCheckpoint = async () => {
+    await persistCheckpoints(checkpoints);
+  };
+
+  const handleDeleteCheckpoint = async (checkpointId: string) => {
+    const next = checkpoints.filter((c) => c.id !== checkpointId);
+    await persistCheckpoints(next);
   };
 
   return (
@@ -309,7 +437,7 @@ const GoalDetails = () => {
                   <DialogContent className="sm:max-w-[640px] rounded-[2rem]">
                     <DialogHeader>
                       <DialogTitle className="text-2xl font-bold">Edit Goal</DialogTitle>
-                      <DialogDescription>Update goal details and progress.</DialogDescription>
+                      <DialogDescription>Update goal details.</DialogDescription>
                     </DialogHeader>
 
                     <div className="grid gap-5 py-2">
@@ -356,48 +484,22 @@ const GoalDetails = () => {
                           </Select>
                         </div>
                         <div className="grid gap-2">
-                          <Label>Timeframe</Label>
-                          <Select value={timeframe} onValueChange={(v) => setTimeframe(v as Timeframe)}>
-                            <SelectTrigger className="rounded-xl">
-                              <SelectValue placeholder="Timeframe" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="weeks">Weeks</SelectItem>
-                              <SelectItem value="months">Months</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <Label>Start Date</Label>
+                          <Input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="rounded-xl"
+                          />
                         </div>
                       </div>
 
                       <div className="grid gap-2">
-                        <Label htmlFor="edit-duration">Duration</Label>
+                        <Label>End Date</Label>
                         <Input
-                          id="edit-duration"
-                          type="number"
-                          min={1}
-                          value={timeframeValue}
-                          onChange={(e) => setTimeframeValue(Number(e.target.value))}
-                          className="rounded-xl"
-                        />
-                      </div>
-
-                      <div className="grid gap-3">
-                        <div className="flex items-center justify-between">
-                          <Label>Progress</Label>
-                          <span className="text-sm font-medium text-gray-600">{clampedProgress}%</span>
-                        </div>
-                        <Slider
-                          value={[clampedProgress]}
-                          max={100}
-                          step={1}
-                          onValueChange={(v) => setProgress(v[0] ?? 0)}
-                        />
-                        <Input
-                          type="number"
-                          min={0}
-                          max={100}
-                          value={clampedProgress}
-                          onChange={(e) => setProgress(Number(e.target.value))}
+                          type="date"
+                          value={endDate}
+                          onChange={(e) => setEndDate(e.target.value)}
                           className="rounded-xl"
                         />
                       </div>
@@ -448,14 +550,74 @@ const GoalDetails = () => {
                           goal.status === "completed" ? "text-emerald-600" : "text-gray-900"
                         }`}
                       >
-                        {goal.progress}%
+                        {derivedProgress}%
                       </span>
                       <span className="text-sm font-medium text-gray-500">Target: 100%</span>
                     </div>
                     <Progress
-                      value={goal.progress}
+                      value={derivedProgress}
                       className={`h-4 bg-gray-100 ${goal.status === "completed" ? "[&>div]:bg-emerald-500" : ""}`}
                     />
+                  </CardContent>
+                </Card>
+
+                <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl font-bold flex items-center justify-between">
+                      <span>Checkpoints</span>
+                      <span className="text-sm font-medium text-gray-500">
+                        {derivedCheckpointStats.done}/{derivedCheckpointStats.total}
+                      </span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-8 space-y-5">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Input
+                        value={newCheckpointTitle}
+                        onChange={(e) => setNewCheckpointTitle(e.target.value)}
+                        className="rounded-xl"
+                        placeholder="Add a checkpoint (e.g., Week 1 complete)"
+                      />
+                      <Button
+                        onClick={handleAddCheckpoint}
+                        disabled={isSaving || !newCheckpointTitle.trim()}
+                        className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                      >
+                        Add
+                      </Button>
+                    </div>
+
+                    {checkpoints.length === 0 ? (
+                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                        Add checkpoints to automatically calculate progress.
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {checkpoints.map((c) => (
+                          <div key={c.id} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3">
+                            <input
+                              type="checkbox"
+                              checked={c.completed}
+                              onChange={() => handleToggleCheckpoint(c.id)}
+                              className="h-4 w-4"
+                            />
+                            <Input
+                              value={c.title}
+                              onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
+                              onBlur={handleCommitRenameCheckpoint}
+                              className="rounded-xl"
+                            />
+                            <Button
+                              variant="outline"
+                              className="rounded-xl text-rose-600"
+                              onClick={() => handleDeleteCheckpoint(c.id)}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -697,10 +859,15 @@ const GoalDetails = () => {
                       <span className="text-gray-900">{goal.priority}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">Timeframe</span>
-                      <span className="text-gray-900">
-                        {goal.timeframeValue} {goal.timeframe}
-                      </span>
+                      <span className="font-medium text-gray-500">Start</span>
+                      <span className="text-gray-900">{goal.startDate ?? ""}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-500">End</span>
+                      <span className="text-gray-900">{goal.endDate ?? ""}</span>
+                    </div>
+                    <div className="pt-3">
+                      <CircularProgress value={derivedProgress} />
                     </div>
                   </CardContent>
                 </Card>

@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Priority, Timeframe } from "@/types";
+import type { Priority } from "@/types";
 
 const Dashboard = () => {
   const { user, isPremium } = useUser();
@@ -53,8 +53,8 @@ const Dashboard = () => {
   const [goalName, setGoalName] = useState("");
   const [goalCategory, setGoalCategory] = useState("");
   const [goalPriority, setGoalPriority] = useState<Priority>("medium");
-  const [goalTimeframe, setGoalTimeframe] = useState<Timeframe>("weeks");
-  const [goalTimeframeValue, setGoalTimeframeValue] = useState<number>(4);
+  const [goalStartDate, setGoalStartDate] = useState("");
+  const [goalEndDate, setGoalEndDate] = useState("");
   const [goalDescription, setGoalDescription] = useState("");
 
   // Strategy fields
@@ -116,8 +116,9 @@ const Dashboard = () => {
         name: goalName.trim(),
         category: goalCategory.trim(),
         priority: goalPriority,
-        timeframe: goalTimeframe,
-        timeframeValue: goalTimeframeValue,
+        startDate: goalStartDate.trim() ? goalStartDate.trim() : undefined,
+        endDate: goalEndDate.trim() ? goalEndDate.trim() : undefined,
+        checkpoints: [],
         description: goalDescription.trim() ? goalDescription.trim() : undefined,
         strategy: (strategyWhy.trim() || strategyWho.trim() || strategyNo.trim()) ? {
           whyMatters: strategyWhy.trim(),
@@ -136,8 +137,8 @@ const Dashboard = () => {
       setGoalName("");
       setGoalCategory("");
       setGoalPriority("medium");
-      setGoalTimeframe("weeks");
-      setGoalTimeframeValue(4);
+      setGoalStartDate("");
+      setGoalEndDate("");
       setGoalDescription("");
       setStrategyWhy("");
       setStrategyWho("");
@@ -224,26 +225,21 @@ const Dashboard = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Timeframe</Label>
-                    <Select value={goalTimeframe} onValueChange={(v) => setGoalTimeframe(v as Timeframe)}>
-                      <SelectTrigger className="rounded-xl">
-                        <SelectValue placeholder="Select timeframe" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="weeks">Weeks</SelectItem>
-                        <SelectItem value="months">Months</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Start Date</Label>
+                    <Input
+                      type="date"
+                      value={goalStartDate}
+                      onChange={(e) => setGoalStartDate(e.target.value)}
+                      className="rounded-xl"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label>Duration</Label>
+                    <Label>End Date</Label>
                     <Input
-                      type="number"
-                      min={1}
-                      value={goalTimeframeValue}
-                      onChange={(e) => setGoalTimeframeValue(Number(e.target.value))}
+                      type="date"
+                      value={goalEndDate}
+                      onChange={(e) => setGoalEndDate(e.target.value)}
                       className="rounded-xl"
-                      placeholder="e.g., 4"
                     />
                   </div>
                 </div>

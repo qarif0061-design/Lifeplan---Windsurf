@@ -36,12 +36,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Priority, Timeframe } from "@/types";
+import type { Goal, Priority } from "@/types";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
 import { useGoals } from "@/hooks/useGoals";
 import { createGoal, deleteGoal, updateGoal } from "@/firebase/goals";
-import { Slider } from "@/components/ui/slider";
+import { updateFeaturedGoalId } from "@/firebase/users";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,8 +50,56 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type ProgressDraftMap = Record<string, number>;
-type ProgressSavingMap = Record<string, boolean>;
+const newId = (): string => {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
+  return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+};
+
+const getDerivedProgress = (g: Goal): number => {
+  const cps = g.checkpoints ?? [];
+  if (cps.length > 0) {
+    const done = cps.filter((c) => c.completed).length;
+    return Math.round((done / cps.length) * 100);
+  }
+  return g.progress ?? 0;
+};
+
+const CircularProgress = ({ value, size = 54 }: { value: number; size?: number }) => {
+  const stroke = 6;
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const pct = Math.min(100, Math.max(0, value));
+  const dash = (pct / 100) * circumference;
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={stroke}
+          className="text-gray-100"
+          stroke="currentColor"
+          fill="transparent"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={stroke}
+          className="text-blue-600"
+          stroke="currentColor"
+          fill="transparent"
+          strokeDasharray={`${dash} ${circumference - dash}`}
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900">
+        {pct}%
+      </div>
+    </div>
+  );
+};
 
 const Goals = () => {
   const { isPremium, user } = useUser();
@@ -65,8 +113,8 @@ const Goals = () => {
   const [goalName, setGoalName] = useState("");
   const [goalCategory, setGoalCategory] = useState("");
   const [goalPriority, setGoalPriority] = useState<Priority>("medium");
-  const [goalTimeframe, setGoalTimeframe] = useState<Timeframe>("weeks");
-  const [goalTimeframeValue, setGoalTimeframeValue] = useState<number>(4);
+  const [goalStartDate, setGoalStartDate] = useState("");
+  const [goalEndDate, setGoalEndDate] = useState("");
   const [goalDescription, setGoalDescription] = useState("");
 
   // Strategy fields
@@ -81,9 +129,6 @@ const Goals = () => {
   const [planningAiPreview, setPlanningAiPreview] = useState("");
   const [showPlanningFields, setShowPlanningFields] = useState(false);
   const [showAiReflectionField, setShowAiReflectionField] = useState(false);
-
-  const [draftProgress, setDraftProgress] = useState<ProgressDraftMap>(() => ({}));
-  const [savingProgress, setSavingProgress] = useState<ProgressSavingMap>(() => ({}));
 
   const handleCreateGoal = async () => {
     if (!user) {
@@ -106,8 +151,9 @@ const Goals = () => {
         name: goalName.trim(),
         category: goalCategory.trim(),
         priority: goalPriority,
-        timeframe: goalTimeframe,
-        timeframeValue: goalTimeframeValue,
+        startDate: goalStartDate.trim() ? goalStartDate.trim() : undefined,
+        endDate: goalEndDate.trim() ? goalEndDate.trim() : undefined,
+        checkpoints: [],
         description: goalDescription.trim() ? goalDescription.trim() : undefined,
         strategy: (strategyWhy.trim() || strategyWho.trim() || strategyNo.trim()) ? {
           whyMatters: strategyWhy.trim(),
@@ -126,8 +172,8 @@ const Goals = () => {
       setGoalName("");
       setGoalCategory("");
       setGoalPriority("medium");
-      setGoalTimeframe("weeks");
-      setGoalTimeframeValue(4);
+      setGoalStartDate("");
+      setGoalEndDate("");
       setGoalDescription("");
       setStrategyWhy("");
       setStrategyWho("");
@@ -149,33 +195,24 @@ const Goals = () => {
     }
   };
 
-  const getDraft = (goalId: string, current: number) => {
-    const v = draftProgress[goalId];
-    return Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : current;
-  };
-
-  const setDraft = (goalId: string, value: number) => {
-    setDraftProgress((prev) => ({ ...prev, [goalId]: Math.min(100, Math.max(0, value)) }));
-  };
-
-  const handleSaveProgress = async (goalId: string, value: number) => {
-    setSavingProgress((p) => ({ ...p, [goalId]: true }));
+  const handleToggleFavorite = async (g: Goal) => {
     try {
-      await updateGoal(goalId, {
-        progress: value,
-        status: value === 100 ? "completed" : "active",
-      });
-      showSuccess("Progress updated!");
+      await updateGoal(g.id, { isFavorite: !g.isFavorite });
     } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : "Failed to update progress";
+      const message = e instanceof Error ? e.message : "Failed to update favorite";
       showError(message);
-    } finally {
-      setSavingProgress((p) => ({ ...p, [goalId]: false }));
     }
   };
 
-  const handleMarkComplete = async (goalId: string) => {
-    await handleSaveProgress(goalId, 100);
+  const handleSetFeatured = async (goalId?: string) => {
+    if (!user) return;
+    try {
+      await updateFeaturedGoalId(user.id, goalId);
+      showSuccess(goalId ? "Featured goal updated." : "Featured goal cleared.");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to update featured goal";
+      showError(message);
+    }
   };
 
   const filteredGoals = useMemo(() => {
@@ -208,6 +245,14 @@ const Goals = () => {
       showError(message);
     }
   };
+
+  const featuredGoal = useMemo(() => {
+    const featuredId = user?.featuredGoalId;
+    if (!featuredId) return null;
+    return goals.find((g) => g.id === featuredId) ?? null;
+  }, [goals, user?.featuredGoalId]);
+
+  const favoriteGoals = useMemo(() => goals.filter((g) => g.isFavorite), [goals]);
 
   return (
     <Layout>
@@ -293,26 +338,21 @@ const Goals = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Timeframe</Label>
-                    <Select value={goalTimeframe} onValueChange={(v) => setGoalTimeframe(v as Timeframe)}>
-                      <SelectTrigger className="rounded-xl">
-                        <SelectValue placeholder="Select timeframe" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="weeks">Weeks</SelectItem>
-                        <SelectItem value="months">Months</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Start Date</Label>
+                    <Input
+                      type="date"
+                      value={goalStartDate}
+                      onChange={(e) => setGoalStartDate(e.target.value)}
+                      className="rounded-xl"
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label>Duration</Label>
+                    <Label>End Date</Label>
                     <Input
-                      type="number"
-                      min={1}
-                      value={goalTimeframeValue}
-                      onChange={(e) => setGoalTimeframeValue(Number(e.target.value))}
+                      type="date"
+                      value={goalEndDate}
+                      onChange={(e) => setGoalEndDate(e.target.value)}
                       className="rounded-xl"
-                      placeholder="e.g., 4"
                     />
                   </div>
                 </div>
@@ -501,6 +541,72 @@ const Goals = () => {
         </div>
         </div>
 
+        {featuredGoal && (
+          <div className="rounded-[2.5rem] border border-amber-100 bg-amber-50 p-6 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <Crown className="w-4 h-4 text-amber-600" />
+                  <div className="text-sm font-bold text-amber-800">Featured Goal</div>
+                </div>
+                <div className="mt-2 text-xl font-extrabold text-gray-900 truncate">{featuredGoal.name}</div>
+                <div className="text-sm text-gray-600 truncate">{featuredGoal.category}</div>
+              </div>
+              <div className="flex items-center gap-3">
+                <CircularProgress value={getDerivedProgress(featuredGoal)} size={64} />
+                <Button variant="outline" className="rounded-full" onClick={() => handleSetFeatured(undefined)}>
+                  Clear
+                </Button>
+                <Button className="rounded-full bg-blue-600 hover:bg-blue-700" onClick={() => navigate(`/goals/${featuredGoal.id}`)}>
+                  View
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {favoriteGoals.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">Favorites</h2>
+              <div className="text-sm text-gray-500">{favoriteGoals.length}</div>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {favoriteGoals.map((goal) => {
+                const prog = getDerivedProgress(goal);
+                const isFeatured = Boolean(user?.featuredGoalId && user.featuredGoalId === goal.id);
+                return (
+                  <Card key={goal.id} className="border-none shadow-sm hover:shadow-md transition-all rounded-[2rem] overflow-hidden">
+                    <CardContent className="p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <button type="button" onClick={() => handleToggleFavorite(goal)} aria-label="Toggle favorite">
+                              <Star className={`w-4 h-4 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-300"}`} />
+                            </button>
+                            <h3 className="text-lg font-bold text-gray-900 truncate">{goal.name}</h3>
+                            {isFeatured && <Crown className="w-4 h-4 text-amber-600" />}
+                          </div>
+                          <div className="text-sm text-gray-500 truncate">{goal.category}</div>
+                        </div>
+                        <CircularProgress value={prog} />
+                      </div>
+                      <div className="mt-5 flex items-center justify-between">
+                        <Button variant="outline" className="rounded-full" onClick={() => handleSetFeatured(isFeatured ? undefined : goal.id)}>
+                          <Crown className="w-4 h-4 mr-2" /> {isFeatured ? "Unfeature" : "Feature"}
+                        </Button>
+                        <Button className="rounded-full bg-blue-600 hover:bg-blue-700" onClick={() => navigate(`/goals/${goal.id}`)}>
+                          View
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Filters & Search */}
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
@@ -519,7 +625,10 @@ const Goals = () => {
 
         {/* Goals Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGoals.map((goal) => (
+          {filteredGoals.map((goal) => {
+            const prog = getDerivedProgress(goal);
+            const isFeatured = Boolean(user?.featuredGoalId && user.featuredGoalId === goal.id);
+            return (
             <Card key={goal.id} className="border-none shadow-sm hover:shadow-md transition-all rounded-[2rem] overflow-hidden group">
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-4">
@@ -529,7 +638,9 @@ const Goals = () => {
                     {goal.status}
                   </div>
                   <div className="flex items-center gap-2">
-                    {goal.isFavorite && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
+                    <button type="button" onClick={() => handleToggleFavorite(goal)} aria-label="Toggle favorite">
+                      <Star className={`w-4 h-4 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-300"}`} />
+                    </button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button className="text-gray-400 hover:text-gray-600" aria-label="Goal actions">
@@ -537,6 +648,12 @@ const Goals = () => {
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-44">
+                        <DropdownMenuItem onClick={() => handleSetFeatured(isFeatured ? undefined : goal.id)}>
+                          {isFeatured ? "Remove featured" : "Set as featured"}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleToggleFavorite(goal)}>
+                          {goal.isFavorite ? "Remove favorite" : "Add to favorites"}
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate(`/goals/${goal.id}`)}>View details</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate(`/goals/${goal.id}`, { state: { openEdit: true } })}>
                           Edit
@@ -562,56 +679,14 @@ const Goals = () => {
                     <Target className="w-4 h-4" />
                     <span>{goal.category}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{goal.timeframeValue} {goal.timeframe}</span>
-                  </div>
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm font-medium">
                     <span className="text-gray-500">Progress</span>
-                    <span className="text-gray-900">{goal.progress}%</span>
+                    <span className="text-gray-900">{prog}%</span>
                   </div>
-                  <Progress value={goal.progress} className="h-2 bg-gray-100" />
-                </div>
-
-                <div className="mt-6 pt-6 border-t border-gray-50 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-400 uppercase">Quick Actions</span>
-                    <span className="text-xs font-medium text-gray-500">{getDraft(goal.id, goal.progress)}%</span>
-                  </div>
-                  <Slider
-                    value={[getDraft(goal.id, goal.progress)]}
-                    max={100}
-                    step={1}
-                    onValueChange={(v) => setDraft(goal.id, v[0] ?? 0)}
-                  />
-                  <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="number"
-                      min={0}
-                      max={100}
-                      value={getDraft(goal.id, goal.progress)}
-                      onChange={(e) => setDraft(goal.id, Number(e.target.value))}
-                      className="rounded-xl"
-                    />
-                    <Button
-                      onClick={() => handleSaveProgress(goal.id, getDraft(goal.id, goal.progress))}
-                      disabled={savingProgress[goal.id] === true}
-                      className="rounded-xl bg-blue-600 hover:bg-blue-700"
-                    >
-                      {savingProgress[goal.id] === true ? "Saving..." : "Save"}
-                    </Button>
-                  </div>
-                  <Button
-                    onClick={() => handleMarkComplete(goal.id)}
-                    disabled={savingProgress[goal.id] === true}
-                    variant="outline"
-                    className="w-full rounded-xl"
-                  >
-                    Mark Completed
-                  </Button>
+                  <Progress value={prog} className="h-2 bg-gray-100" />
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
@@ -622,13 +697,18 @@ const Goals = () => {
                       </div>
                     )}
                   </div>
-                  <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
-                    <Link to={`/goals/${goal.id}`}>View Details</Link>
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    {isFeatured && <Crown className="w-4 h-4 text-amber-600" />}
+                    <CircularProgress value={prog} />
+                    <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
+                      <Link to={`/goals/${goal.id}`}>View Details</Link>
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          ))}
+            );
+          })}
 
           {/* Empty State / Add New Card */}
           <button 
