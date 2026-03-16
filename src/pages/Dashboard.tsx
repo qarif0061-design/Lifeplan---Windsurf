@@ -637,7 +637,7 @@ const Dashboard = () => {
                 </div>
 
                 <div className="flex items-center justify-start lg:justify-end gap-5">
-                  <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={66} />
+                  <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={198} />
                 </div>
               </div>
             </CardContent>
