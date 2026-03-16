@@ -12,12 +12,15 @@ import {
   Trash2,
   Trophy,
   TrendingUp,
+  Star,
+  Crown,
   Lock
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
 import type { Goal, GoalCheckpoint, Priority } from "@/types";
 import { deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { useUser } from "@/contexts/UserContext";
+import { updateFeaturedGoalId } from "@/firebase/users";
 import {
   Dialog,
   DialogContent,
@@ -55,6 +58,26 @@ const getProgressStroke = (pct: number): { from: string; to: string } => {
   if (pct < 50) return { from: "#f59e0b", to: "#fde047" };
   if (pct < 80) return { from: "#0ea5e9", to: "#4f46e5" };
   return { from: "#22c55e", to: "#0ea5e9" };
+};
+
+const getRemainingDaysText = (g: Goal): string => {
+  const end = g.endDate?.trim();
+  if (!end) return "No date set";
+  const endAt = new Date(`${end}T23:59:59.999`).getTime();
+  if (Number.isNaN(endAt)) return "No date set";
+  const now = Date.now();
+  const diffMs = endAt - now;
+  const days = Math.ceil(Math.abs(diffMs) / (1000 * 60 * 60 * 24));
+  if (diffMs < 0) return `Overdue ${days}d`;
+  return `${days}d left`;
+};
+
+const getRemainingDaysBadgeClass = (g: Goal, pct: number): string => {
+  if (!g.endDate) return "bg-slate-100 text-slate-700";
+  if (pct >= 100) return "bg-emerald-100 text-emerald-700";
+  if (pct < 20) return "bg-rose-100 text-rose-700";
+  if (pct < 50) return "bg-amber-100 text-amber-800";
+  return "bg-blue-100 text-blue-700";
 };
 
 const getDerivedProgress = (g: Goal, checkpoints?: GoalCheckpoint[]): number => {
@@ -120,7 +143,7 @@ const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }
 };
 
 const GoalDetails = () => {
-  const { isPremium } = useUser();
+  const { isPremium, user } = useUser();
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -141,6 +164,39 @@ const GoalDetails = () => {
   const [endDate, setEndDate] = useState("");
   const [checkpoints, setCheckpoints] = useState<GoalCheckpoint[]>([]);
   const [newCheckpointTitle, setNewCheckpointTitle] = useState("");
+
+  const isFeatured = Boolean(user?.featuredGoalId && goal?.id && user.featuredGoalId === goal.id);
+
+  const handleToggleFavorite = async () => {
+    if (!goal) return;
+    setIsSaving(true);
+    try {
+      const next = !goal.isFavorite;
+      await updateGoal(goal.id, { isFavorite: next });
+      setGoal((prev) => (prev ? { ...prev, isFavorite: next } : prev));
+      showSuccess(next ? "Added to favorites" : "Removed from favorites");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to update favorite";
+      showError(message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSetFeatured = async () => {
+    if (!user || !goal) return;
+    setIsSaving(true);
+    try {
+      const nextId = isFeatured ? undefined : goal.id;
+      await updateFeaturedGoalId(user.id, nextId);
+      showSuccess(isFeatured ? "Featured goal cleared" : "Goal set as featured");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to update featured goal";
+      showError(message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const [strategyWhy, setStrategyWhy] = useState("");
   const [strategyWho, setStrategyWho] = useState("");
@@ -562,11 +618,38 @@ const GoalDetails = () => {
                   >
                     {goal.status}
                   </span>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
+                      goal,
+                      derivedProgress,
+                    )}`}
+                  >
+                    {getRemainingDaysText(goal)}
+                  </span>
                 </div>
                 {goal.description && <p className="text-gray-500 max-w-2xl">{goal.description}</p>}
               </div>
 
               <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  className="rounded-full"
+                  onClick={handleToggleFavorite}
+                  disabled={isSaving}
+                >
+                  <Star className={`w-4 h-4 mr-2 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-500"}`} />
+                  {goal.isFavorite ? "Favorited" : "Favorite"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="rounded-full"
+                  onClick={handleSetFeatured}
+                  disabled={isSaving || !user}
+                >
+                  <Crown className="w-4 h-4 mr-2 text-amber-600" /> {isFeatured ? "Unfeature" : "Set Featured"}
+                </Button>
+
                 <Button
                   variant="outline"
                   className="rounded-full"
@@ -1079,11 +1162,11 @@ const GoalDetails = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">Start</span>
-                      <span className="text-gray-900">{goal.startDate ?? ""}</span>
+                      <span className="text-gray-900">{goal.startDate?.trim() ? goal.startDate : "No date set"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">End</span>
-                      <span className="text-gray-900">{goal.endDate ?? ""}</span>
+                      <span className="text-gray-900">{goal.endDate?.trim() ? goal.endDate : "No date set"}</span>
                     </div>
                     <div className="pt-3">
                       <CircularProgress value={derivedProgress} />

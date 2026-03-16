@@ -59,6 +59,27 @@ const getDerivedProgress = (g: Goal): number => {
   return g.progress ?? 0;
 };
 
+const getRemainingDaysText = (g: Goal): string => {
+  const end = g.endDate?.trim();
+  if (!end) return "No date set";
+  const endAt = new Date(`${end}T23:59:59.999`).getTime();
+  if (Number.isNaN(endAt)) return "No date set";
+  const now = Date.now();
+  const diffMs = endAt - now;
+  const days = Math.ceil(Math.abs(diffMs) / (1000 * 60 * 60 * 24));
+  if (diffMs < 0) return `Overdue ${days}d`;
+  return `${days}d left`;
+};
+
+const getRemainingDaysBadgeClass = (g: Goal): string => {
+  const pct = getDerivedProgress(g);
+  if (!g.endDate) return "bg-slate-100 text-slate-700";
+  if (pct >= 100) return "bg-emerald-100 text-emerald-700";
+  if (pct < 20) return "bg-rose-100 text-rose-700";
+  if (pct < 50) return "bg-amber-100 text-amber-800";
+  return "bg-blue-100 text-blue-700";
+};
+
 const getProgressIndicatorClass = (pct: number): string => {
   if (pct >= 100) return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-emerald-400 [&>div]:to-lime-400";
   if (pct < 20) return "[&>div]:bg-gradient-to-r [&>div]:from-rose-600 [&>div]:via-rose-500 [&>div]:to-amber-500";
@@ -555,7 +576,16 @@ const Dashboard = () => {
                       <div className="text-xs font-semibold text-gray-500">(auto)</div>
                     )}
                   </div>
-                  <div className="mt-3 text-3xl font-black text-gray-900 truncate">{effectiveFeaturedGoal.name}</div>
+                  <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="text-3xl font-black text-gray-900 truncate">{effectiveFeaturedGoal.name}</div>
+                    <div
+                      className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
+                        effectiveFeaturedGoal,
+                      )}`}
+                    >
+                      {getRemainingDaysText(effectiveFeaturedGoal)}
+                    </div>
+                  </div>
                   <div className="mt-1 text-sm font-medium text-gray-600 truncate">{effectiveFeaturedGoal.category}</div>
                   {(effectiveFeaturedGoal.startDate || effectiveFeaturedGoal.endDate) && (
                     <div className="mt-3 text-sm text-gray-600">
@@ -740,9 +770,16 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {goal.name}
-                </h3>
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <h3 className="text-xl font-bold text-gray-900 min-w-0 truncate">{goal.name}</h3>
+                  <div
+                    className={`shrink-0 inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
+                      goal,
+                    )}`}
+                  >
+                    {getRemainingDaysText(goal)}
+                  </div>
+                </div>
 
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
                   <div className="flex items-center gap-1">

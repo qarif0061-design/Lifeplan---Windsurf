@@ -71,6 +71,26 @@ const getProgressStroke = (pct: number): { from: string; to: string } => {
   return { from: "#22c55e", to: "#0ea5e9" };
 };
 
+const getRemainingDaysText = (g: Goal): string => {
+  const end = g.endDate?.trim();
+  if (!end) return "No date set";
+  const endAt = new Date(`${end}T23:59:59.999`).getTime();
+  if (Number.isNaN(endAt)) return "No date set";
+  const now = Date.now();
+  const diffMs = endAt - now;
+  const days = Math.ceil(Math.abs(diffMs) / (1000 * 60 * 60 * 24));
+  if (diffMs < 0) return `Overdue ${days}d`;
+  return `${days}d left`;
+};
+
+const getRemainingDaysBadgeClass = (g: Goal, pct: number): string => {
+  if (!g.endDate) return "bg-slate-100 text-slate-700";
+  if (pct >= 100) return "bg-emerald-100 text-emerald-700";
+  if (pct < 20) return "bg-rose-100 text-rose-700";
+  if (pct < 50) return "bg-amber-100 text-amber-800";
+  return "bg-blue-100 text-blue-700";
+};
+
 const getDerivedProgress = (g: Goal): number => {
   const cps = g.checkpoints ?? [];
   if (cps.length > 0) {
@@ -620,6 +640,14 @@ const Goals = () => {
                             {isFeatured && <Crown className="w-4 h-4 text-amber-600" />}
                           </div>
                           <div className="text-sm text-gray-500 truncate">{goal.category}</div>
+                          <div
+                            className={`mt-3 inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
+                              goal,
+                              prog,
+                            )}`}
+                          >
+                            {getRemainingDaysText(goal)}
+                          </div>
                         </div>
                         <CircularProgress value={prog} />
                       </div>
@@ -702,9 +730,19 @@ const Goals = () => {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                  {goal.name}
-                </h3>
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <h3 className="text-xl font-bold text-gray-900 min-w-0 truncate group-hover:text-blue-600 transition-colors">
+                    {goal.name}
+                  </h3>
+                  <div
+                    className={`shrink-0 inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
+                      goal,
+                      prog,
+                    )}`}
+                  >
+                    {getRemainingDaysText(goal)}
+                  </div>
+                </div>
                 
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
                   <div className="flex items-center gap-1">
