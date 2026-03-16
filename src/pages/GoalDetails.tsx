@@ -592,20 +592,13 @@ const GoalDetails = () => {
   return (
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
-        <Link
-          to="/goals"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4 mr-1" /> Back to Goals
-        </Link>
-
         {loading ? (
           <div className="text-gray-600">Loading...</div>
         ) : !goal ? (
           <div className="text-gray-600">Goal not found.</div>
         ) : (
           <>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <h1 className="text-4xl font-bold text-gray-900">{goal.name}</h1>
@@ -630,7 +623,14 @@ const GoalDetails = () => {
                 {goal.description && <p className="text-gray-500 max-w-2xl">{goal.description}</p>}
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  to="/goals"
+                  className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" /> Back to Goals
+                </Link>
+
                 <Button
                   variant="outline"
                   className="rounded-full"
