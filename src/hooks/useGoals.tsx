@@ -6,8 +6,17 @@ import { useUser } from "@/contexts/UserContext";
 const getDerivedProgress = (g: Goal): number => {
   const cps = g.checkpoints ?? [];
   if (cps.length > 0) {
-    const done = cps.filter((c) => c.completed).length;
-    return Math.round((done / cps.length) * 100);
+    const per = cps.map((c) => {
+      if (c.kind === "number") {
+        const target = Math.max(0, c.target ?? 0);
+        const current = Math.max(0, c.current ?? 0);
+        if (target <= 0) return 0;
+        return Math.min(1, current / target);
+      }
+      return c.completed ? 1 : 0;
+    });
+    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
+    return Math.round(avg * 100);
   }
   return g.progress ?? 0;
 };

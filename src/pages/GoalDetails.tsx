@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
-import { useMemo, useState, useEffect } from "react";
+import { useId, useMemo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -41,24 +41,57 @@ const newId = (): string => {
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
 };
 
+const getProgressIndicatorClass = (pct: number): string => {
+  if (pct >= 100) return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-emerald-400 [&>div]:to-lime-400";
+  if (pct < 20) return "[&>div]:bg-gradient-to-r [&>div]:from-rose-600 [&>div]:via-rose-500 [&>div]:to-amber-500";
+  if (pct < 50) return "[&>div]:bg-gradient-to-r [&>div]:from-amber-500 [&>div]:via-orange-500 [&>div]:to-yellow-400";
+  if (pct < 80) return "[&>div]:bg-gradient-to-r [&>div]:from-sky-500 [&>div]:via-blue-600 [&>div]:to-indigo-500";
+  return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-teal-500 [&>div]:to-sky-500";
+};
+
+const getProgressStroke = (pct: number): { from: string; to: string } => {
+  if (pct >= 100) return { from: "#22c55e", to: "#a3e635" };
+  if (pct < 20) return { from: "#e11d48", to: "#f59e0b" };
+  if (pct < 50) return { from: "#f59e0b", to: "#fde047" };
+  if (pct < 80) return { from: "#0ea5e9", to: "#4f46e5" };
+  return { from: "#22c55e", to: "#0ea5e9" };
+};
+
 const getDerivedProgress = (g: Goal, checkpoints?: GoalCheckpoint[]): number => {
   const cps = checkpoints ?? g.checkpoints ?? [];
   if (cps.length > 0) {
-    const done = cps.filter((c) => c.completed).length;
-    return Math.round((done / cps.length) * 100);
+    const per = cps.map((c) => {
+      if (c.kind === "number") {
+        const target = Math.max(0, c.target ?? 0);
+        const current = Math.max(0, c.current ?? 0);
+        if (target <= 0) return 0;
+        return Math.min(1, current / target);
+      }
+      return c.completed ? 1 : 0;
+    });
+    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
+    return Math.round(avg * 100);
   }
   return g.progress ?? 0;
 };
 
 const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }) => {
+  const gradId = useId();
   const stroke = 7;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const pct = Math.min(100, Math.max(0, value));
   const dash = (pct / 100) * circumference;
+  const strokeColors = getProgressStroke(pct);
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={strokeColors.from} />
+            <stop offset="100%" stopColor={strokeColors.to} />
+          </linearGradient>
+        </defs>
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -73,8 +106,7 @@ const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }
           cy={size / 2}
           r={radius}
           strokeWidth={stroke}
-          className="text-blue-600"
-          stroke="currentColor"
+          stroke={`url(#${gradId})`}
           fill="transparent"
           strokeDasharray={`${dash} ${circumference - dash}`}
           strokeLinecap="round"
@@ -172,7 +204,14 @@ const GoalDetails = () => {
 
   const derivedCheckpointStats = useMemo(() => {
     const total = checkpoints.length;
-    const done = checkpoints.filter((c) => c.completed).length;
+    const done = checkpoints.filter((c) => {
+      if (c.kind === "number") {
+        const target = Math.max(0, c.target ?? 0);
+        const current = Math.max(0, c.current ?? 0);
+        return target > 0 && current >= target;
+      }
+      return c.completed;
+    }).length;
     return { total, done };
   }, [checkpoints]);
 
@@ -306,7 +345,13 @@ const GoalDetails = () => {
     try {
       const now = new Date().toISOString();
       const cps = checkpoints.length
-        ? checkpoints.map((c) => ({ ...c, completed: true, updatedAt: now }))
+        ? checkpoints.map((c) => {
+            if (c.kind === "number") {
+              const target = Math.max(1, c.target ?? 1);
+              return { ...c, target, current: target, completed: true, updatedAt: now };
+            }
+            return { ...c, completed: true, updatedAt: now };
+          })
         : checkpoints;
       await updateGoal(goal.id, {
         checkpoints: cps,
@@ -329,13 +374,12 @@ const GoalDetails = () => {
     if (!goal) return;
     setIsSaving(true);
     try {
-      const done = next.filter((c) => c.completed).length;
       const total = next.length;
-      const nextProgress = total > 0 ? Math.round((done / total) * 100) : (goal.progress ?? 0);
+      const nextProgress = total > 0 ? getDerivedProgress(goal, next) : (goal.progress ?? 0);
       await updateGoal(goal.id, {
         checkpoints: next,
         progress: nextProgress,
-        status: total > 0 && done === total ? "completed" : "active",
+        status: total > 0 && nextProgress === 100 ? "completed" : "active",
       });
       const refreshed = await getGoalById(goal.id);
       setGoal(refreshed);
@@ -355,17 +399,95 @@ const GoalDetails = () => {
     const now = new Date().toISOString();
     const next: GoalCheckpoint[] = [
       ...checkpoints,
-      { id: newId(), title, completed: false, createdAt: now, updatedAt: now },
+      { id: newId(), title, kind: "boolean", completed: false, createdAt: now, updatedAt: now },
     ];
     setNewCheckpointTitle("");
     await persistCheckpoints(next);
   };
 
-  const handleToggleCheckpoint = async (checkpointId: string) => {
+  const handleSetCheckpointLocalNumbers = (
+    checkpointId: string,
+    patch: { current?: number; target?: number },
+  ) => {
     const now = new Date().toISOString();
-    const next = checkpoints.map((c) =>
-      c.id === checkpointId ? { ...c, completed: !c.completed, updatedAt: now } : c,
+    setCheckpoints((prev) =>
+      prev.map((c) => {
+        if (c.id !== checkpointId) return c;
+        const target = Math.max(1, Math.trunc(patch.target ?? c.target ?? 1));
+        const current = Math.max(0, Math.trunc(patch.current ?? c.current ?? 0));
+        const clampedCurrent = Math.min(current, target);
+        return {
+          ...c,
+          kind: "number" as const,
+          target,
+          current: clampedCurrent,
+          completed: clampedCurrent >= target,
+          updatedAt: now,
+        };
+      }),
     );
+  };
+
+  const handleToggleCheckpoint = async (checkpointId: string) => {
+    const c = checkpoints.find((x) => x.id === checkpointId);
+    if (!c) return;
+    if (c.kind === "number") {
+      const target = Math.max(1, c.target ?? 1);
+      await handleUpdateCheckpointNumbers(checkpointId, { current: target, target });
+      return;
+    }
+    const now = new Date().toISOString();
+    const next = checkpoints.map((x) => (x.id === checkpointId ? { ...x, completed: !x.completed, updatedAt: now } : x));
+    await persistCheckpoints(next);
+  };
+
+  const handleSetCheckpointKind = async (checkpointId: string, kind: "boolean" | "number") => {
+    const now = new Date().toISOString();
+    const next = checkpoints.map((c) => {
+      if (c.id !== checkpointId) return c;
+      if (kind === "number") {
+        const target = Math.max(1, c.target ?? 1);
+        const current = Math.max(0, c.current ?? 0);
+        return {
+          ...c,
+          kind,
+          target,
+          current: Math.min(current, target),
+          completed: Math.min(current, target) >= target,
+          updatedAt: now,
+        };
+      }
+      return {
+        ...c,
+        kind,
+        current: undefined,
+        target: undefined,
+        completed: Boolean(c.completed),
+        updatedAt: now,
+      };
+    });
+    await persistCheckpoints(next);
+  };
+
+  const handleUpdateCheckpointNumbers = async (
+    checkpointId: string,
+    patch: { current?: number; target?: number },
+  ) => {
+    const now = new Date().toISOString();
+    const next = checkpoints.map((c) => {
+      if (c.id !== checkpointId) return c;
+      const target = Math.max(1, Math.trunc(patch.target ?? c.target ?? 1));
+      const current = Math.max(0, Math.trunc(patch.current ?? c.current ?? 0));
+      const clampedCurrent = Math.min(current, target);
+      return {
+        ...c,
+        kind: "number" as const,
+        target,
+        current: clampedCurrent,
+        completed: clampedCurrent >= target,
+        updatedAt: now,
+      };
+    });
     await persistCheckpoints(next);
   };
 
@@ -556,7 +678,9 @@ const GoalDetails = () => {
                     </div>
                     <Progress
                       value={derivedProgress}
-                      className={`h-4 bg-gray-100 ${goal.status === "completed" ? "[&>div]:bg-emerald-500" : ""}`}
+                      className={`h-4 bg-gray-100 ${getProgressIndicatorClass(derivedProgress)} ${
+                        goal.status === "completed" ? "[&>div]:from-emerald-500 [&>div]:to-lime-400" : ""
+                      }`}
                     />
                   </CardContent>
                 </Card>
@@ -597,7 +721,7 @@ const GoalDetails = () => {
                           <div key={c.id} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-3">
                             <input
                               type="checkbox"
-                              checked={c.completed}
+                              checked={c.kind === "number" ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1) : c.completed}
                               onChange={() => handleToggleCheckpoint(c.id)}
                               className="h-4 w-4"
                             />
@@ -607,6 +731,63 @@ const GoalDetails = () => {
                               onBlur={handleCommitRenameCheckpoint}
                               className="rounded-xl"
                             />
+
+                            <Select
+                              value={c.kind ?? "boolean"}
+                              onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
+                            >
+                              <SelectTrigger className="w-[150px] rounded-xl">
+                                <SelectValue placeholder="Type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="boolean">Checkbox</SelectItem>
+                                <SelectItem value="number">Number</SelectItem>
+                              </SelectContent>
+                            </Select>
+
+                            {c.kind === "number" && (
+                              <div className="flex items-center gap-2">
+                                <Input
+                                  type="number"
+                                  inputMode="numeric"
+                                  value={c.current ?? 0}
+                                  onChange={(e) =>
+                                    handleSetCheckpointLocalNumbers(c.id, {
+                                      current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
+                                    })
+                                  }
+                                  onBlur={() =>
+                                    handleUpdateCheckpointNumbers(c.id, {
+                                      current: c.current ?? 0,
+                                      target: c.target ?? 1,
+                                    })
+                                  }
+                                  className="w-[96px] rounded-xl"
+                                />
+                                <span className="text-sm text-gray-500">/</span>
+                                <Input
+                                  type="number"
+                                  inputMode="numeric"
+                                  value={c.target ?? 1}
+                                  onChange={(e) =>
+                                    handleSetCheckpointLocalNumbers(c.id, {
+                                      target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
+                                    })
+                                  }
+                                  onBlur={() =>
+                                    handleUpdateCheckpointNumbers(c.id, {
+                                      current: c.current ?? 0,
+                                      target: c.target ?? 1,
+                                    })
+                                  }
+                                  className="w-[96px] rounded-xl"
+                                />
+                                <div className="hidden xl:block text-xs font-semibold text-gray-500 min-w-[92px] text-right">
+                                  {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} left
+                                </div>
+                              </div>
+                            )}
+
                             <Button
                               variant="outline"
                               className="rounded-xl text-rose-600"

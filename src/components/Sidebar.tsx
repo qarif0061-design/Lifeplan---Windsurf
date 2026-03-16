@@ -47,17 +47,17 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
 
   return (
     <aside
-      className={`sticky top-0 h-screen border-r border-gray-100 bg-slate-50 transition-all duration-200 ${
+      className={`sticky top-0 h-screen border-r border-white/10 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 transition-all duration-200 ${
         collapsed ? "w-[72px]" : "w-[260px]"
       }`}
     >
-      <div className="h-16 px-3 flex items-center justify-between border-b border-gray-100">
+      <div className="h-16 px-3 flex items-center justify-between border-b border-white/10">
         <div />
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleCollapsed}
-          className="rounded-full"
+          className="rounded-full text-white/80 hover:text-white hover:bg-white/10"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -73,8 +73,10 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
             <Button
               key={item.to}
               asChild
-              variant={active ? "default" : "ghost"}
-              className={`w-full justify-start rounded-2xl ${collapsed ? "px-0" : "px-3"}`}
+              variant="ghost"
+              className={`w-full justify-start rounded-2xl text-white/80 hover:text-white hover:bg-white/10 ${
+                active ? "bg-white/10 text-white" : ""
+              } ${collapsed ? "px-0" : "px-3"}`}
             >
               <Link to={item.to} className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
                 <Icon className="w-4 h-4" />
@@ -90,13 +92,15 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         })}
       </div>
 
-      <div className="mt-auto p-3 border-t border-gray-100 space-y-1">
+      <div className="mt-auto p-3 border-t border-white/10 space-y-1">
         {user && (
           <>
             <Button
               asChild
               variant="ghost"
-              className={`w-full justify-start rounded-2xl ${collapsed ? "px-0" : "px-3"}`}
+              className={`w-full justify-start rounded-2xl text-white/80 hover:text-white hover:bg-white/10 ${
+                collapsed ? "px-0" : "px-3"
+              }`}
             >
               <Link to="/profile" className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
                 <User className="w-4 h-4" />
@@ -106,7 +110,9 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
             <Button
               onClick={handleLogout}
               variant="outline"
-              className={`w-full rounded-2xl ${collapsed ? "px-0" : "px-3 justify-start"}`}
+              className={`w-full rounded-2xl border-white/20 bg-transparent text-white/90 hover:bg-white/10 hover:text-white ${
+                collapsed ? "px-0" : "px-3 justify-start"
+              }`}
             >
               <span className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""} w-full`}>
                 <LogOut className="w-4 h-4" />

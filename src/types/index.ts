@@ -6,7 +6,10 @@ export type EnergyLevel = 'low' | 'medium' | 'high';
 export type GoalCheckpoint = {
   id: string;
   title: string;
+  kind?: 'boolean' | 'number';
   completed: boolean;
+  current?: number;
+  target?: number;
   createdAt: string;
   updatedAt: string;
 };

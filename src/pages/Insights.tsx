@@ -18,7 +18,7 @@ const toDateKeyLocal = (d: Date): string => {
 
 const Insights = () => {
   const { isPremium } = useUser();
-  const { stats } = useGoals();
+  const { goals, stats } = useGoals();
   const { checkIns, stats: checkInStats } = useCheckIns();
 
   const last7 = useMemo(() => {
@@ -130,7 +130,20 @@ const Insights = () => {
                       </Button>
                     </div>
                     <div className="mt-2">
-                      <Progress value={g.progress} className="h-2 bg-gray-100" />
+                      <Progress
+                        value={g.progress}
+                        className={`h-2 bg-gray-100 ${
+                          g.progress >= 100
+                            ? "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-emerald-400 [&>div]:to-lime-400"
+                            : g.progress < 20
+                              ? "[&>div]:bg-gradient-to-r [&>div]:from-rose-600 [&>div]:via-rose-500 [&>div]:to-amber-500"
+                              : g.progress < 50
+                                ? "[&>div]:bg-gradient-to-r [&>div]:from-amber-500 [&>div]:via-orange-500 [&>div]:to-yellow-400"
+                                : g.progress < 80
+                                  ? "[&>div]:bg-gradient-to-r [&>div]:from-sky-500 [&>div]:via-blue-600 [&>div]:to-indigo-500"
+                                  : "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-teal-500 [&>div]:to-sky-500"
+                        }`}
+                      />
                     </div>
                   </div>
                 ))

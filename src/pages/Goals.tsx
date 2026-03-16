@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "@/components/Layout";
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -55,24 +55,57 @@ const newId = (): string => {
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
 };
 
+const getProgressIndicatorClass = (pct: number): string => {
+  if (pct >= 100) return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-emerald-400 [&>div]:to-lime-400";
+  if (pct < 20) return "[&>div]:bg-gradient-to-r [&>div]:from-rose-600 [&>div]:via-rose-500 [&>div]:to-amber-500";
+  if (pct < 50) return "[&>div]:bg-gradient-to-r [&>div]:from-amber-500 [&>div]:via-orange-500 [&>div]:to-yellow-400";
+  if (pct < 80) return "[&>div]:bg-gradient-to-r [&>div]:from-sky-500 [&>div]:via-blue-600 [&>div]:to-indigo-500";
+  return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-teal-500 [&>div]:to-sky-500";
+};
+
+const getProgressStroke = (pct: number): { from: string; to: string } => {
+  if (pct >= 100) return { from: "#22c55e", to: "#a3e635" };
+  if (pct < 20) return { from: "#e11d48", to: "#f59e0b" };
+  if (pct < 50) return { from: "#f59e0b", to: "#fde047" };
+  if (pct < 80) return { from: "#0ea5e9", to: "#4f46e5" };
+  return { from: "#22c55e", to: "#0ea5e9" };
+};
+
 const getDerivedProgress = (g: Goal): number => {
   const cps = g.checkpoints ?? [];
   if (cps.length > 0) {
-    const done = cps.filter((c) => c.completed).length;
-    return Math.round((done / cps.length) * 100);
+    const per = cps.map((c) => {
+      if (c.kind === "number") {
+        const target = Math.max(0, c.target ?? 0);
+        const current = Math.max(0, c.current ?? 0);
+        if (target <= 0) return 0;
+        return Math.min(1, current / target);
+      }
+      return c.completed ? 1 : 0;
+    });
+    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
+    return Math.round(avg * 100);
   }
   return g.progress ?? 0;
 };
 
 const CircularProgress = ({ value, size = 54 }: { value: number; size?: number }) => {
+  const gradId = useId();
   const stroke = 6;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const pct = Math.min(100, Math.max(0, value));
   const dash = (pct / 100) * circumference;
+  const strokeColors = getProgressStroke(pct);
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={strokeColors.from} />
+            <stop offset="100%" stopColor={strokeColors.to} />
+          </linearGradient>
+        </defs>
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -87,8 +120,7 @@ const CircularProgress = ({ value, size = 54 }: { value: number; size?: number }
           cy={size / 2}
           r={radius}
           strokeWidth={stroke}
-          className="text-blue-600"
-          stroke="currentColor"
+          stroke={`url(#${gradId})`}
           fill="transparent"
           strokeDasharray={`${dash} ${circumference - dash}`}
           strokeLinecap="round"
@@ -686,7 +718,7 @@ const Goals = () => {
                     <span className="text-gray-500">Progress</span>
                     <span className="text-gray-900">{prog}%</span>
                   </div>
-                  <Progress value={prog} className="h-2 bg-gray-100" />
+                  <Progress value={prog} className={`h-2 bg-gray-100 ${getProgressIndicatorClass(prog)}`} />
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
