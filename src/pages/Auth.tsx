@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Apple, ArrowLeft, Eye, EyeOff, Github, Mail, Smartphone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "@/utils/toast";
-import { signIn, signUp } from "@/firebase/auth";
+import { signIn, signInWithApple, signInWithGithub, signInWithGoogle, signUp } from "@/firebase/auth";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +17,26 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+
+  const handleProviderSignIn = async (provider: "google" | "github" | "apple") => {
+    setIsLoading(true);
+    try {
+      if (provider === "google") {
+        await signInWithGoogle();
+      } else if (provider === "github") {
+        await signInWithGithub();
+      } else {
+        await signInWithApple();
+      }
+      showSuccess("Welcome back!");
+      navigate("/dashboard");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Authentication failed";
+      showError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleAuth = async (e: React.FormEvent, isSignUp: boolean) => {
     e.preventDefault();
@@ -142,9 +162,34 @@ const Auth = () => {
                     <div className="absolute inset-0 flex items-center"><span className="w-full border-t"></span></div>
                     <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-gray-500">Or continue with</span></div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 w-full">
-                    <Button variant="outline" className="rounded-xl h-11"><Mail className="mr-2 h-4 w-4" /> Google</Button>
-                    <Button variant="outline" className="rounded-xl h-11"><Github className="mr-2 h-4 w-4" /> Github</Button>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl h-11"
+                      onClick={() => handleProviderSignIn("google")}
+                      disabled={isLoading}
+                    >
+                      <Mail className="mr-2 h-4 w-4" /> Google
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl h-11"
+                      onClick={() => handleProviderSignIn("github")}
+                      disabled={isLoading}
+                    >
+                      <Github className="mr-2 h-4 w-4" /> Github
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="rounded-xl h-11"
+                      onClick={() => handleProviderSignIn("apple")}
+                      disabled={isLoading}
+                    >
+                      <Apple className="mr-2 h-4 w-4" /> Apple
+                    </Button>
                   </div>
                   <div className="text-xs text-center text-gray-500">
                     <Link to="/terms" className="underline">Terms</Link>
