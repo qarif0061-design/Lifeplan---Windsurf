@@ -55,6 +55,29 @@ const omitUndefined = <T extends Record<string, unknown>>(obj: T): Partial<T> =>
   return out;
 };
 
+const deepOmitUndefined = (value: unknown): unknown => {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+
+  if (Array.isArray(value)) {
+    const cleaned = value
+      .map((v) => deepOmitUndefined(v))
+      .filter((v) => v !== undefined);
+    return cleaned;
+  }
+
+  if (typeof value === "object") {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+      const cleaned = deepOmitUndefined(v);
+      if (cleaned !== undefined) out[k] = cleaned;
+    }
+    return out;
+  }
+
+  return value;
+};
+
 export const subscribeGoalsByUser = (
   userId: string,
   callback: (goals: Goal[]) => void,
@@ -102,7 +125,7 @@ export const createGoal = async (input: CreateGoalInput): Promise<string> => {
     updatedAt: now,
   };
 
-  const created = await addDoc(goalsCollection, omitUndefined(goalBase));
+  const created = await addDoc(goalsCollection, deepOmitUndefined(goalBase) as any);
   return created.id;
 };
 
@@ -118,7 +141,7 @@ export const updateGoal = async (goalId: string, patch: Partial<Goal>): Promise<
   const updatedAt = new Date().toISOString();
   const { id: _id, ...rest } = patch as Goal;
   const dueAtPatch = "endDate" in rest ? { dueAt: toDueAtFromEndDate((rest as Partial<Goal>).endDate) } : {};
-  await updateDoc(ref, omitUndefined({ ...rest, ...dueAtPatch, updatedAt }));
+  await updateDoc(ref, deepOmitUndefined({ ...rest, ...dueAtPatch, updatedAt }) as any);
 };
 
 export const deleteGoal = async (goalId: string): Promise<void> => {

@@ -80,6 +80,61 @@ const getRemainingDaysBadgeClass = (g: Goal, pct: number): string => {
   return "bg-blue-100 text-blue-700";
 };
 
+const normalizeCheckpointList = (
+  input: unknown,
+  newId: () => string,
+  nowIso: string,
+): GoalCheckpoint[] => {
+  const arr = Array.isArray(input) ? input : [];
+  return arr
+    .map((raw) => {
+      const c = raw as Record<string, unknown>;
+
+      const id = typeof c.id === "string" && c.id.trim() ? c.id.trim() : newId();
+      const title = typeof c.title === "string" ? c.title.trim() : "";
+
+      const createdAt = typeof c.createdAt === "string" && c.createdAt ? c.createdAt : nowIso;
+      const updatedAt = nowIso;
+
+      const kindFromField = typeof c.kind === "string" ? c.kind : undefined;
+      const currentRaw = typeof c.current === "number" ? c.current : Number(c.current);
+      const targetRaw = typeof c.target === "number" ? c.target : Number(c.target);
+      const hasNumberShape = Number.isFinite(currentRaw) || Number.isFinite(targetRaw);
+
+      const kind: "boolean" | "number" =
+        kindFromField === "number" || (kindFromField !== "boolean" && hasNumberShape) ? "number" : "boolean";
+
+      const completedRaw = c.completed;
+      const completedBool = Boolean(completedRaw);
+
+      if (kind === "number") {
+        const target = Math.max(1, Math.trunc(Number.isFinite(targetRaw) ? targetRaw : 1));
+        const current = Math.max(0, Math.trunc(Number.isFinite(currentRaw) ? currentRaw : 0));
+        const clampedCurrent = Math.min(current, target);
+        return {
+          id,
+          title,
+          kind,
+          target,
+          current: clampedCurrent,
+          completed: clampedCurrent >= target,
+          createdAt,
+          updatedAt,
+        };
+      }
+
+      return {
+        id,
+        title,
+        kind,
+        completed: completedBool,
+        createdAt,
+        updatedAt,
+      };
+    })
+    .filter((c) => c.title.trim().length > 0);
+};
+
 const getDerivedProgress = (g: Goal, checkpoints?: GoalCheckpoint[]): number => {
   const cps = checkpoints ?? g.checkpoints ?? [];
   if (cps.length > 0) {
@@ -219,13 +274,14 @@ const GoalDetails = () => {
       .then((g) => {
         setGoal(g);
         if (g) {
+          const nowIso = new Date().toISOString();
           setName(g.name);
           setCategory(g.category);
           setDescription(g.description ?? "");
           setPriority(g.priority);
           setStartDate(g.startDate ?? "");
           setEndDate(g.endDate ?? "");
-          setCheckpoints(g.checkpoints ?? []);
+          setCheckpoints(normalizeCheckpointList(g.checkpoints, newId, nowIso));
 
           setStrategyWhy(g.strategy?.whyMatters ?? "");
           setStrategyWho(g.strategy?.whoBenefits ?? "");
@@ -280,6 +336,11 @@ const GoalDetails = () => {
 
     setIsSaving(true);
     try {
+      const nowIso = new Date().toISOString();
+      const sanitizedCheckpoints = normalizeCheckpointList(checkpoints, newId, nowIso);
+      const computedProgress = sanitizedCheckpoints.length ? getDerivedProgress(goal, sanitizedCheckpoints) : (goal.progress ?? 0);
+      const computedStatus =
+        sanitizedCheckpoints.length > 0 && computedProgress === 100 ? "completed" : "active";
       await updateGoal(goal.id, {
         name: name.trim(),
         category: category.trim(),
@@ -287,9 +348,9 @@ const GoalDetails = () => {
         priority,
         startDate: startDate.trim() ? startDate.trim() : undefined,
         endDate: endDate.trim() ? endDate.trim() : undefined,
-        checkpoints,
-        progress: derivedProgress,
-        status: checkpoints.length > 0 && derivedCheckpointStats.done === derivedCheckpointStats.total ? "completed" : "active",
+        checkpoints: sanitizedCheckpoints,
+        progress: computedProgress,
+        status: computedStatus,
       });
       const refreshed = await getGoalById(goal.id);
       setGoal(refreshed);
@@ -400,15 +461,16 @@ const GoalDetails = () => {
     setIsSaving(true);
     try {
       const now = new Date().toISOString();
-      const cps = checkpoints.length
-        ? checkpoints.map((c) => {
+      const cpsRaw = normalizeCheckpointList(checkpoints, newId, now);
+      const cps = cpsRaw.length
+        ? cpsRaw.map((c) => {
             if (c.kind === "number") {
               const target = Math.max(1, c.target ?? 1);
               return { ...c, target, current: target, completed: true, updatedAt: now };
             }
             return { ...c, completed: true, updatedAt: now };
           })
-        : checkpoints;
+        : cpsRaw;
       await updateGoal(goal.id, {
         checkpoints: cps,
         progress: 100,
@@ -430,31 +492,8 @@ const GoalDetails = () => {
     if (!goal) return;
     setIsSaving(true);
     try {
-      const sanitized: GoalCheckpoint[] = next.map((c) => {
-        if (c.kind === "number") {
-          const target = Math.max(1, Math.trunc(c.target ?? 1));
-          const current = Math.max(0, Math.trunc(c.current ?? 0));
-          const clampedCurrent = Math.min(current, target);
-          return {
-            id: c.id,
-            title: c.title,
-            kind: "number",
-            target,
-            current: clampedCurrent,
-            completed: clampedCurrent >= target,
-            createdAt: c.createdAt,
-            updatedAt: c.updatedAt,
-          };
-        }
-        return {
-          id: c.id,
-          title: c.title,
-          kind: "boolean",
-          completed: Boolean(c.completed),
-          createdAt: c.createdAt,
-          updatedAt: c.updatedAt,
-        };
-      });
+      const now = new Date().toISOString();
+      const sanitized = normalizeCheckpointList(next, newId, now);
 
       const total = next.length;
       const nextProgress = total > 0 ? getDerivedProgress(goal, sanitized) : (goal.progress ?? 0);
