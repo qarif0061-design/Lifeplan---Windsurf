@@ -27,9 +27,15 @@ const Download = () => {
 
           <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-gray-900 mb-2">Android</h2>
-            <p className="text-gray-600 mb-6">Coming soon on Google Play.</p>
-            <Button disabled className="rounded-full">
-              Coming Soon
+            <p className="text-gray-600 mb-6">Download from Google Play.</p>
+            <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.faran.lifeplans"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on Google Play
+              </a>
             </Button>
           </div>
         </div>
