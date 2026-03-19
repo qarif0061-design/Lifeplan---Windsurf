@@ -47,17 +47,17 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
 
   return (
     <aside
-      className={`sticky top-0 h-screen border-r border-white/10 bg-gradient-to-t from-blue-950 via-slate-900 to-sky-700 transition-all duration-200 ${
+      className={`sticky top-0 h-screen border-r border-slate-200/80 bg-gradient-to-b from-white via-sky-50 to-blue-100/60 transition-all duration-200 ${
         collapsed ? "w-[72px]" : "w-[260px]"
       }`}
     >
-      <div className="h-16 px-3 flex items-center justify-between border-b border-white/10">
+      <div className="h-16 px-3 flex items-center justify-between border-b border-slate-200/80">
         <div />
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleCollapsed}
-          className="rounded-full text-white/80 hover:text-white hover:bg-white/10"
+          className="rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-900/5"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
@@ -74,8 +74,8 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
               key={item.to}
               asChild
               variant="ghost"
-              className={`w-full justify-start rounded-2xl text-white/80 hover:text-white hover:bg-white/10 ${
-                active ? "bg-white/10 text-white" : ""
+              className={`w-full justify-start rounded-2xl text-slate-700 hover:text-slate-900 hover:bg-slate-900/5 ${
+                active ? "bg-blue-600/10 text-blue-900" : ""
               } ${collapsed ? "px-0" : "px-3"}`}
             >
               <Link to={item.to} className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
@@ -92,13 +92,13 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         })}
       </div>
 
-      <div className="mt-auto p-3 border-t border-white/10 space-y-1">
+      <div className="mt-auto p-3 border-t border-slate-200/80 space-y-1">
         {user && (
           <>
             <Button
               asChild
               variant="ghost"
-              className={`w-full justify-start rounded-2xl text-white/80 hover:text-white hover:bg-white/10 ${
+              className={`w-full justify-start rounded-2xl text-slate-700 hover:text-slate-900 hover:bg-slate-900/5 ${
                 collapsed ? "px-0" : "px-3"
               }`}
             >
@@ -110,7 +110,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
             <Button
               onClick={handleLogout}
               variant="outline"
-              className={`w-full rounded-2xl border-white/20 bg-transparent text-white/90 hover:bg-white/10 hover:text-white ${
+              className={`w-full rounded-2xl border-slate-300/70 bg-white/40 text-slate-700 hover:bg-white/70 hover:text-slate-900 ${
                 collapsed ? "px-0" : "px-3 justify-start"
               }`}
             >
