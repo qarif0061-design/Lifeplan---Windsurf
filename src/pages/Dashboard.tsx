@@ -60,9 +60,13 @@ const getDerivedProgress = (g: Goal): number => {
 };
 
 const getRemainingDaysText = (g: Goal): string => {
-  const end = g.endDate?.trim();
+  const endValue = (g as unknown as { endDate?: unknown }).endDate;
+  const end = typeof endValue === "string" ? endValue.trim() : "";
   if (!end) return "No date set";
-  const endAt = new Date(`${end}T23:59:59.999`).getTime();
+  const parsedEnd = new Date(end);
+  const endAt = Number.isNaN(parsedEnd.getTime())
+    ? new Date(`${end}T23:59:59.999`).getTime()
+    : parsedEnd.getTime();
   if (Number.isNaN(endAt)) return "No date set";
   const now = Date.now();
   const diffMs = endAt - now;

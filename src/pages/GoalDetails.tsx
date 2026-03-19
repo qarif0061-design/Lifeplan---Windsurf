@@ -61,9 +61,13 @@ const getProgressStroke = (pct: number): { from: string; to: string } => {
 };
 
 const getRemainingDaysText = (g: Goal): string => {
-  const end = g.endDate?.trim();
+  const endValue = (g as unknown as { endDate?: unknown }).endDate;
+  const end = typeof endValue === "string" ? endValue.trim() : "";
   if (!end) return "No date set";
-  const endAt = new Date(`${end}T23:59:59.999`).getTime();
+  const parsedEnd = new Date(end);
+  const endAt = Number.isNaN(parsedEnd.getTime())
+    ? new Date(`${end}T23:59:59.999`).getTime()
+    : parsedEnd.getTime();
   if (Number.isNaN(endAt)) return "No date set";
   const now = Date.now();
   const diffMs = endAt - now;
@@ -1201,11 +1205,11 @@ const GoalDetails = () => {
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">Start</span>
-                      <span className="text-gray-900">{goal.startDate?.trim() ? goal.startDate : "No date set"}</span>
+                      <span className="text-gray-900">{typeof (goal as unknown as { startDate?: unknown }).startDate === "string" && (goal as unknown as { startDate?: string }).startDate?.trim() ? (goal as unknown as { startDate?: string }).startDate : "No date set"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">End</span>
-                      <span className="text-gray-900">{goal.endDate?.trim() ? goal.endDate : "No date set"}</span>
+                      <span className="text-gray-900">{typeof (goal as unknown as { endDate?: unknown }).endDate === "string" && (goal as unknown as { endDate?: string }).endDate?.trim() ? (goal as unknown as { endDate?: string }).endDate : "No date set"}</span>
                     </div>
                     <div className="pt-3">
                       <CircularProgress value={derivedProgress} />

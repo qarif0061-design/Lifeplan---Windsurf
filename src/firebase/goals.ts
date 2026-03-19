@@ -1,16 +1,16 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  onSnapshot,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
 import { db } from "@/firebase/config";
 import type { Goal, Priority, Timeframe } from "@/types";
+import {
+    addDoc,
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    onSnapshot,
+    query,
+    updateDoc,
+    where,
+} from "firebase/firestore";
 
 type CreateGoalInput = {
   userId: string;
@@ -78,16 +78,61 @@ const deepOmitUndefined = (value: unknown): unknown => {
   return value;
 };
 
+const toIsoString = (value: unknown): string | undefined => {
+  if (!value) return undefined;
+  if (typeof value === "string") return value;
+  if (value instanceof Date) return value.toISOString();
+
+  const anyValue: any = value as any;
+  if (typeof anyValue?.toDate === "function") {
+    const d = anyValue.toDate();
+    if (d instanceof Date && !Number.isNaN(d.getTime())) return d.toISOString();
+  }
+
+  // Timestamp-like object (seconds/nanoseconds)
+  if (typeof anyValue?.seconds === "number") {
+    const ms = anyValue.seconds * 1000;
+    const d = new Date(ms);
+    if (!Number.isNaN(d.getTime())) return d.toISOString();
+  }
+
+  // Fallback: try Date parsing
+  const d = new Date(value as any);
+  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
+};
+
+const normalizeGoalFromFirestore = (goalId: string, raw: unknown): Goal => {
+  const data = (raw || {}) as Record<string, any>;
+
+  const checkpoints = Array.isArray(data.checkpoints)
+    ? data.checkpoints.map((c: any) => ({
+        ...c,
+        createdAt: toIsoString(c?.createdAt) ?? c?.createdAt,
+        updatedAt: toIsoString(c?.updatedAt) ?? c?.updatedAt,
+        completedAt: toIsoString(c?.completedAt) ?? c?.completedAt,
+      }))
+    : data.checkpoints;
+
+  return {
+    id: goalId,
+    ...(data as Omit<Goal, "id">),
+    // Normalize common date fields that may be written as Firestore Timestamp by mobile
+    createdAt: toIsoString(data.createdAt) ?? (data.createdAt as any),
+    updatedAt: toIsoString(data.updatedAt) ?? (data.updatedAt as any),
+    startDate: toIsoString(data.startDate) ?? data.startDate,
+    endDate: toIsoString(data.endDate) ?? data.endDate,
+    dueAt: toIsoString(data.dueAt) ?? data.dueAt,
+    checkpoints,
+  } as Goal;
+};
+
 export const subscribeGoalsByUser = (
   userId: string,
   callback: (goals: Goal[]) => void,
 ): (() => void) => {
   const q = query(goalsCollection, where("userId", "==", userId));
   return onSnapshot(q, (snapshot) => {
-    const goals: Goal[] = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...(d.data() as Omit<Goal, "id">),
-    }));
+    const goals: Goal[] = snapshot.docs.map((d) => normalizeGoalFromFirestore(d.id, d.data()));
     goals.sort((a, b) => {
       const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
       const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -133,7 +178,7 @@ export const getGoalById = async (goalId: string): Promise<Goal | null> => {
   const ref = doc(db, "goals", goalId);
   const snap = await getDoc(ref);
   if (!snap.exists()) return null;
-  return { id: snap.id, ...(snap.data() as Omit<Goal, "id">) };
+  return normalizeGoalFromFirestore(snap.id, snap.data());
 };
 
 export const updateGoal = async (goalId: string, patch: Partial<Goal>): Promise<void> => {
