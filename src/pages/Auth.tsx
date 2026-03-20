@@ -287,14 +287,19 @@ const Auth = () => {
                   </span>
                 </a>
               </Button>
-              <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start">
-                <span className="flex items-center">
+              <Button asChild className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-12 justify-start hover:bg-gray-50">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.faran.lifeplans"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center"
+                >
                   <Smartphone className="w-5 h-5 mr-3" />
                   <span className="flex flex-col items-start leading-none">
                     <span className="text-[11px] text-gray-500">Google Play</span>
-                    <span className="text-sm font-bold">Coming soon</span>
+                    <span className="text-sm font-bold">Download on Google Play</span>
                   </span>
-                </span>
+                </a>
               </Button>
             </div>
           </div>

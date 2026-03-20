@@ -125,14 +125,19 @@ const Landing = () => {
                         </span>
                       </a>
                     </Button>
-                    <Button disabled className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-16 justify-start">
-                      <span className="flex items-center min-w-0">
+                    <Button asChild className="rounded-2xl bg-white border border-gray-200 text-gray-700 h-16 justify-start hover:bg-gray-50">
+                      <a
+                        href="https://play.google.com/store/apps/details?id=com.faran.lifeplans"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center min-w-0"
+                      >
                         <Smartphone className="w-6 h-6 mr-3" />
                         <span className="flex flex-col items-start leading-none min-w-0">
                           <span className="text-xs text-gray-500 truncate">Google Play</span>
-                          <span className="text-base font-bold truncate">Coming soon</span>
+                          <span className="text-base font-bold truncate">Download on Google Play</span>
                         </span>
-                      </span>
+                      </a>
                     </Button>
                   </div>
                 </div>
