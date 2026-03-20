@@ -134,8 +134,8 @@ const Landing = () => {
                       >
                         <Smartphone className="w-6 h-6 mr-3" />
                         <span className="flex flex-col items-start leading-none min-w-0">
-                          <span className="text-xs text-gray-500 truncate">Google Play</span>
-                          <span className="text-base font-bold truncate">Download on Google Play</span>
+                          <span className="text-xs text-gray-500 truncate">Download on the</span>
+                          <span className="text-base font-bold truncate">Google Play</span>
                         </span>
                       </a>
                     </Button>
