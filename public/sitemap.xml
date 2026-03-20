@@ -1,45 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://goalplanner.io/</loc>
+    <loc>https://www.goalplanner.io/</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/life-planning</loc>
+    <loc>https://www.goalplanner.io/life-planning</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/getting-things-done</loc>
+    <loc>https://www.goalplanner.io/getting-things-done</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/weekly-planning</loc>
+    <loc>https://www.goalplanner.io/weekly-planning</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/time-management</loc>
+    <loc>https://www.goalplanner.io/time-management</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/smart-goals</loc>
+    <loc>https://www.goalplanner.io/smart-goals</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/motivation</loc>
+    <loc>https://www.goalplanner.io/motivation</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/pricing</loc>
+    <loc>https://www.goalplanner.io/pricing</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/terms</loc>
+    <loc>https://www.goalplanner.io/terms</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/privacy</loc>
+    <loc>https://www.goalplanner.io/privacy</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/refund</loc>
+    <loc>https://www.goalplanner.io/refund</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/articles</loc>
+    <loc>https://www.goalplanner.io/articles</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/questions</loc>
+    <loc>https://www.goalplanner.io/articles/best-motivational-quotes-for-daily-life</loc>
   </url>
   <url>
-    <loc>https://goalplanner.io/auth</loc>
+    <loc>https://www.goalplanner.io/articles/short-inspirational-quotes-to-start-your-day</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/positive-quotes-to-stay-motivated-at-work</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/motivational-life-quotes-for-students</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/daily-encouragement-quotes-for-personal-growth</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/inspirational-quotes-to-overcome-challenges</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/best-quotes-for-positive-mindset-and-attitude</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/motivational-words-of-encouragement-for-teens</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/short-success-quotes-for-daily-inspiration</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/quotes-to-boost-self-confidence-and-courage</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/positive-good-morning-quotes-for-a-productive-day</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/motivational-thoughts-for-achieving-goals</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/inspirational-quotes-for-women-in-career</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/best-quotes-to-stay-focused-and-motivated</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/encouraging-quotes-for-hard-times-and-struggles</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/daily-positive-affirmations-for-self-improvement</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/uplifting-quotes-to-start-your-day-right</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/motivational-quotes-for-personal-growth-journey</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/best-inspirational-quotes-for-leaders-and-teams</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/articles/quotes-about-persistence-and-never-giving-up</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/questions</loc>
+  </url>
+  <url>
+    <loc>https://www.goalplanner.io/auth</loc>
   </url>
 </urlset>

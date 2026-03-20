@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://goalplanner.io/sitemap.xml
+Sitemap: https://www.goalplanner.io/sitemap.xml

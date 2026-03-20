@@ -1,6 +1,7 @@
 import React from "react";
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
+import Seo from "@/components/Seo";
 
 const renderBody = (body: string): React.ReactElement[] => {
   const lines = body.split("\n");
@@ -52,6 +53,13 @@ const renderBody = (body: string): React.ReactElement[] => {
 
   flushList("end");
   return out;
+};
+
+const extractDescription = (body: string) => {
+  const firstBlock = body.split("\n\n")[0] ?? "";
+  const text = firstBlock.replace(/\s+/g, " ").trim();
+  if (!text) return "Read this Lifeplans guide for motivation, mindset, and consistent goal progress.";
+  return text.length > 155 ? `${text.slice(0, 152)}...` : text;
 };
 
 const CONTENT: Record<string, { title: string; body: string }> = {
@@ -853,6 +861,284 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Keywords\n" +
       "daily journal app, daily journal, daily routine, mindset, growth mindset, consistency, motivation, self improvement\n",
   },
+
+  "best-motivational-quotes-for-daily-life": {
+    title: "Best Motivational Quotes for Daily Life (Use Them to Take Action)",
+    body:
+      "If you’re searching for the best motivational quotes for daily life, you probably want one thing: momentum. Quotes can help — but only if they trigger a small action. Use one quote as a cue, then do one next step for your goal.\n\n" +
+      "## Best motivational quotes for daily life\n" +
+      "- ‘Small steps every day add up to big results.’\n" +
+      "- ‘Discipline is choosing what you want most over what you want now.’\n" +
+      "- ‘Start before you feel ready.’\n" +
+      "- ‘Progress is proof.’\n" +
+      "- ‘Consistency beats intensity.’\n\n" +
+      "## How to use quotes (without wasting time)\n" +
+      "1) Pick one quote\n" +
+      "2) Write one next action (15 minutes)\n" +
+      "3) Track it in your weekly plan and check in daily\n\n" +
+      "Keywords: best motivational quotes for daily life, motivation, consistency, daily routine\n",
+  },
+  "short-inspirational-quotes-to-start-your-day": {
+    title: "Short Inspirational Quotes to Start Your Day (Morning Momentum)",
+    body:
+      "Short inspirational quotes to start your day work best when they help you choose a priority and begin. Use them as a 30‑second reset — not a scrolling habit.\n\n" +
+      "## Short inspirational quotes to start your day\n" +
+      "- ‘Begin again.’\n" +
+      "- ‘One step today.’\n" +
+      "- ‘Focus on what matters.’\n" +
+      "- ‘Do the next right thing.’\n" +
+      "- ‘Make progress, not excuses.’\n\n" +
+      "## A simple morning routine\n" +
+      "- Pick 1–3 priorities\n" +
+      "- Block 25 minutes\n" +
+      "- Do one task, then check in\n\n" +
+      "Keywords: short inspirational quotes to start your day, morning routine, focus\n",
+  },
+  "positive-quotes-to-stay-motivated-at-work": {
+    title: "Positive Quotes to Stay Motivated at Work (Without Burnout)",
+    body:
+      "Positive quotes to stay motivated at work are most helpful when your day is noisy and your attention is split. Pair a quote with a single focus block and a clear definition of ‘done’.\n\n" +
+      "## Positive quotes to stay motivated at work\n" +
+      "- ‘Protect your focus — it’s your advantage.’\n" +
+      "- ‘Finish one thing before starting the next.’\n" +
+      "- ‘Your calendar is your strategy.’\n" +
+      "- ‘Quality beats speed.’\n" +
+      "- ‘Consistency is a career skill.’\n\n" +
+      "## Quick workday system\n" +
+      "- One priority\n" +
+      "- One 25–50 min focus block\n" +
+      "- One small review at end of day\n\n" +
+      "Keywords: positive quotes to stay motivated at work, productivity, time management\n",
+  },
+  "motivational-life-quotes-for-students": {
+    title: "Motivational Life Quotes for Students (Study Consistency)",
+    body:
+      "Motivational life quotes for students work best when they reduce overwhelm and make the next study session feel simple. Motivation follows clarity: decide what you’ll study and when.\n\n" +
+      "## Motivational life quotes for students\n" +
+      "- ‘You don’t need more time — you need a plan.’\n" +
+      "- ‘Study is a system, not a mood.’\n" +
+      "- ‘Small sessions beat all‑night cramming.’\n" +
+      "- ‘Practice is progress.’\n\n" +
+      "## A simple weekly study plan\n" +
+      "- 3–5 study sessions\n" +
+      "- 1 review session\n" +
+      "- Track sessions, not feelings\n\n" +
+      "Keywords: motivational life quotes for students, study motivation, consistency\n",
+  },
+  "daily-encouragement-quotes-for-personal-growth": {
+    title: "Daily Encouragement Quotes for Personal Growth (With a Tiny Action)",
+    body:
+      "Daily encouragement quotes for personal growth are most powerful when they remind you to keep the plan small and repeatable. Personal growth is built in days, not dramatic moments.\n\n" +
+      "## Daily encouragement quotes for personal growth\n" +
+      "- ‘You’re allowed to be a beginner.’\n" +
+      "- ‘Keep promises to yourself.’\n" +
+      "- ‘Do the smallest version today.’\n" +
+      "- ‘Progress is still progress.’\n\n" +
+      "## One action to pair with a quote\n" +
+      "Write one sentence: ‘Today I will ______ for 10 minutes.’ Then do it.\n\n" +
+      "Keywords: daily encouragement quotes for personal growth, self improvement, habits\n",
+  },
+  "inspirational-quotes-to-overcome-challenges": {
+    title: "Inspirational Quotes to Overcome Challenges (Resilience + Next Step)",
+    body:
+      "Inspirational quotes to overcome challenges help most when you feel stuck. The goal isn’t to feel perfect — it’s to identify one controllable next step and take it.\n\n" +
+      "## Inspirational quotes to overcome challenges\n" +
+      "- ‘Courage is doing it anyway.’\n" +
+      "- ‘Reduce the plan. Don’t quit the goal.’\n" +
+      "- ‘One step is enough to restart.’\n" +
+      "- ‘You can be consistent even when life is hard.’\n\n" +
+      "## Reset framework\n" +
+      "- Reduce scope for 7 days\n" +
+      "- Choose one next action\n" +
+      "- Review weekly and adjust\n\n" +
+      "Keywords: inspirational quotes to overcome challenges, resilience, persistence\n",
+  },
+  "best-quotes-for-positive-mindset-and-attitude": {
+    title: "Best Quotes for Positive Mindset and Attitude (Daily Reset)",
+    body:
+      "The best quotes for positive mindset and attitude are reminders to control what you can: your next action, your schedule, and your attention.\n\n" +
+      "## Best quotes for positive mindset and attitude\n" +
+      "- ‘Your mindset is your direction.’\n" +
+      "- ‘Attention is your life.’\n" +
+      "- ‘Choose progress over perfection.’\n" +
+      "- ‘Focus on the next step, not the whole staircase.’\n\n" +
+      "## Practice: 60-second mindset reset\n" +
+      "Write: 1 priority, 1 task, 1 time block.\n\n" +
+      "Keywords: best quotes for positive mindset and attitude, positive mindset, growth mindset\n",
+  },
+  "motivational-words-of-encouragement-for-teens": {
+    title: "Motivational Words of Encouragement for Teens (Confidence + Consistency)",
+    body:
+      "Motivational words of encouragement for teens work best when they’re practical: keep the plan small, keep it visible, and celebrate consistency.\n\n" +
+      "## Motivational words of encouragement for teens\n" +
+      "- ‘You’re not behind — you’re building.’\n" +
+      "- ‘Practice makes confidence.’\n" +
+      "- ‘One small win today.’\n" +
+      "- ‘Your future is built by routines.’\n\n" +
+      "## Simple goal system\n" +
+      "Pick one goal, one weekly plan, and a daily check-in.\n\n" +
+      "Keywords: motivational words of encouragement for teens, self confidence, motivation\n",
+  },
+  "short-success-quotes-for-daily-inspiration": {
+    title: "Short Success Quotes for Daily Inspiration (Daily Focus)",
+    body:
+      "Short success quotes for daily inspiration are useful when they help you focus on one meaningful task instead of many tiny distractions.\n\n" +
+      "## Short success quotes for daily inspiration\n" +
+      "- ‘Show up.’\n" +
+      "- ‘Finish.’\n" +
+      "- ‘Do the work.’\n" +
+      "- ‘Progress wins.’\n\n" +
+      "## Make success measurable\n" +
+      "Track one metric weekly and one habit daily.\n\n" +
+      "Keywords: short success quotes for daily inspiration, success quotes, focus\n",
+  },
+  "quotes-to-boost-self-confidence-and-courage": {
+    title: "Quotes to Boost Self-Confidence and Courage (Action Builds Confidence)",
+    body:
+      "Quotes to boost self-confidence and courage work best when they remind you that confidence is built by action. Start with the smallest step you can complete today.\n\n" +
+      "## Quotes to boost self-confidence and courage\n" +
+      "- ‘Confidence is earned in reps.’\n" +
+      "- ‘Do it scared.’\n" +
+      "- ‘Start small — start now.’\n" +
+      "- ‘Keep your promises to yourself.’\n\n" +
+      "## Confidence plan\n" +
+      "- Choose one goal\n" +
+      "- Schedule one focus block\n" +
+      "- Track one completed action\n\n" +
+      "Keywords: quotes to boost self-confidence and courage, courage quotes, confidence\n",
+  },
+  "positive-good-morning-quotes-for-a-productive-day": {
+    title: "Positive Good Morning Quotes for a Productive Day (Morning Routine)",
+    body:
+      "Positive good morning quotes for a productive day are helpful when they trigger a simple routine: choose priorities, start a focus block, and avoid reactive scrolling.\n\n" +
+      "## Positive good morning quotes for a productive day\n" +
+      "- ‘Good morning — choose one priority.’\n" +
+      "- ‘Start with the next step.’\n" +
+      "- ‘Protect your focus early.’\n\n" +
+      "## 10-minute morning routine\n" +
+      "- 1 minute: review weekly priorities\n" +
+      "- 8 minutes: begin a task\n" +
+      "- 1 minute: check in\n\n" +
+      "Keywords: positive good morning quotes for a productive day, good morning quotes, productivity\n",
+  },
+  "motivational-thoughts-for-achieving-goals": {
+    title: "Motivational Thoughts for Achieving Goals (Systems > Mood)",
+    body:
+      "Motivational thoughts for achieving goals are most useful when they shift you from waiting to working. You don’t need perfect motivation — you need a repeatable plan.\n\n" +
+      "## Motivational thoughts for achieving goals\n" +
+      "- ‘Motivation follows progress.’\n" +
+      "- ‘Plan weekly, execute daily.’\n" +
+      "- ‘Make it startable.’\n\n" +
+      "## The simplest goal system\n" +
+      "- One goal\n" +
+      "- One weekly plan\n" +
+      "- One daily check-in\n\n" +
+      "Keywords: motivational thoughts for achieving goals, goal achievement, planning\n",
+  },
+  "inspirational-quotes-for-women-in-career": {
+    title: "Inspirational Quotes for Women in Career (Focus + Confidence)",
+    body:
+      "Inspirational quotes for women in career can be a powerful reminder to protect your focus and build confidence through consistent action.\n\n" +
+      "## Inspirational quotes for women in career\n" +
+      "- ‘Your work matters — make time for it.’\n" +
+      "- ‘Confidence comes from finishing.’\n" +
+      "- ‘Small progress compounds.’\n\n" +
+      "## Career momentum routine\n" +
+      "Pick one skill to build, one weekly target, and one focus block on your calendar.\n\n" +
+      "Keywords: inspirational quotes for women in career, career growth, focus\n",
+  },
+  "best-quotes-to-stay-focused-and-motivated": {
+    title: "Best Quotes to Stay Focused and Motivated (Distraction-Proof)",
+    body:
+      "The best quotes to stay focused and motivated remind you of a simple truth: your attention is your life. Build a plan that protects it.\n\n" +
+      "## Best quotes to stay focused and motivated\n" +
+      "- ‘Your focus is your advantage.’\n" +
+      "- ‘One thing at a time.’\n" +
+      "- ‘Schedule it or it won’t happen.’\n" +
+      "- ‘Finish the block.’\n\n" +
+      "## Focus system\n" +
+      "- One priority\n" +
+      "- One time block\n" +
+      "- One review\n\n" +
+      "Keywords: best quotes to stay focused and motivated, focus quotes, motivation\n",
+  },
+  "encouraging-quotes-for-hard-times-and-struggles": {
+    title: "Encouraging Quotes for Hard Times and Struggles (Keep Going)",
+    body:
+      "Encouraging quotes for hard times and struggles are not about pretending things are easy. They’re reminders to reduce the plan, protect the essentials, and keep moving.\n\n" +
+      "## Encouraging quotes for hard times and struggles\n" +
+      "- ‘Reduce the plan. Don’t quit.’\n" +
+      "- ‘You can restart today.’\n" +
+      "- ‘One small win is enough.’\n\n" +
+      "## Minimum-action week\n" +
+      "Pick a tiny version of your habit and do it daily for 7 days.\n\n" +
+      "Keywords: encouraging quotes for hard times and struggles, encouragement, resilience\n",
+  },
+  "daily-positive-affirmations-for-self-improvement": {
+    title: "Daily Positive Affirmations for Self-Improvement (Pair With Action)",
+    body:
+      "Daily positive affirmations for self-improvement work best when they support behavior. Say the affirmation — then do one action that makes it true.\n\n" +
+      "## Daily positive affirmations for self-improvement\n" +
+      "- ‘I keep promises to myself.’\n" +
+      "- ‘I can do hard things in small steps.’\n" +
+      "- ‘I improve through consistency.’\n\n" +
+      "## Action pairing\n" +
+      "After the affirmation, complete one 10‑minute task toward your goal.\n\n" +
+      "Keywords: daily positive affirmations for self-improvement, affirmations, self improvement\n",
+  },
+  "uplifting-quotes-to-start-your-day-right": {
+    title: "Uplifting Quotes to Start Your Day Right (Energy + Focus)",
+    body:
+      "Uplifting quotes to start your day right can give you a fast emotional reset. Keep it simple: one quote, one priority, one focus block.\n\n" +
+      "## Uplifting quotes to start your day right\n" +
+      "- ‘Today is a fresh start.’\n" +
+      "- ‘Begin with one step.’\n" +
+      "- ‘Make progress early.’\n\n" +
+      "## Start-right checklist\n" +
+      "- 1 priority\n" +
+      "- 1 focus block\n" +
+      "- 1 check-in\n\n" +
+      "Keywords: uplifting quotes to start your day right, uplifting quotes, morning motivation\n",
+  },
+  "motivational-quotes-for-personal-growth-journey": {
+    title: "Motivational Quotes for Personal Growth Journey (Compounding Wins)",
+    body:
+      "Motivational quotes for personal growth journey are most useful when they remind you that growth compounds. The goal is not a perfect day — it’s a repeatable week.\n\n" +
+      "## Motivational quotes for personal growth journey\n" +
+      "- ‘Be 1% better today.’\n" +
+      "- ‘Consistency is self-respect.’\n" +
+      "- ‘Small actions build big identity.’\n\n" +
+      "## Weekly growth system\n" +
+      "Plan weekly, track progress, and review what worked.\n\n" +
+      "Keywords: motivational quotes for personal growth journey, personal growth, growth mindset\n",
+  },
+  "best-inspirational-quotes-for-leaders-and-teams": {
+    title: "Best Inspirational Quotes for Leaders and Teams (Execution Culture)",
+    body:
+      "The best inspirational quotes for leaders and teams reinforce execution: clarity, accountability, and consistent follow-through.\n\n" +
+      "## Best inspirational quotes for leaders and teams\n" +
+      "- ‘Clarity creates speed.’\n" +
+      "- ‘What gets reviewed gets improved.’\n" +
+      "- ‘One priority, one plan.’\n\n" +
+      "## Team routine\n" +
+      "Weekly priorities → daily check-ins → weekly review.\n\n" +
+      "Keywords: best inspirational quotes for leaders and teams, leadership, team motivation\n",
+  },
+  "quotes-about-persistence-and-never-giving-up": {
+    title: "Quotes About Persistence and Never Giving Up (Keep Showing Up)",
+    body:
+      "Quotes about persistence and never giving up matter most when progress is slow. Persistence is not intensity — it’s returning to the plan again and again.\n\n" +
+      "## Quotes about persistence and never giving up\n" +
+      "- ‘Keep showing up.’\n" +
+      "- ‘Progress is built in boring weeks.’\n" +
+      "- ‘Restart is a skill.’\n" +
+      "- ‘Don’t quit — reduce the plan.’\n\n" +
+      "## Persistence checklist\n" +
+      "- Make the plan smaller\n" +
+      "- Track one win\n" +
+      "- Review weekly\n\n" +
+      "Keywords: quotes about persistence and never giving up, persistence, never give up\n",
+  },
 };
 
 const ArticleDetails = () => {
@@ -870,6 +1156,18 @@ const ArticleDetails = () => {
           <div className="text-gray-600">Article not found.</div>
         ) : (
           <>
+            <Seo
+              title={`${article.title} | Lifeplans`}
+              description={extractDescription(article.body)}
+              canonicalPath={`/articles/${slug}`}
+              jsonLd={{
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: article.title,
+                url: `https://www.goalplanner.io/articles/${slug}`,
+                description: extractDescription(article.body),
+              }}
+            />
             <h1 className="text-3xl font-bold text-gray-900">{article.title}</h1>
             <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm">
               <div className="space-y-3">{renderBody(article.body)}</div>
