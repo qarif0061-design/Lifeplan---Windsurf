@@ -84,6 +84,23 @@ const SupportingCard = ({ pillarSlug, pillarTitle }: { pillarSlug: string; pilla
   </div>
 );
 
+const buildFaqJsonLd = (
+  faqs: { question: string; answer: string }[],
+  pageUrl: string,
+): Record<string, unknown> => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  url: pageUrl,
+  mainEntity: faqs.slice(0, 6).map((f) => ({
+    "@type": "Question",
+    name: f.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.answer,
+    },
+  })),
+});
+
 const CONTENT: Record<string, { title: string; body: string }> = {
   "how-to-set-goals-that-stick": {
     title: "How to Set Goals That Stick",
@@ -1189,19 +1206,28 @@ const ArticleDetails = () => {
           <div className="text-gray-600">Article not found.</div>
         ) : (
           <>
-            <Seo
-              title={`${article.title} | Lifeplans`}
-              description={extractDescription(article.body)}
-              canonicalPath={canonicalPath}
-              noIndex={isSupporting}
-              jsonLd={{
+            {(() => {
+              const url = `https://www.goalplanner.io${canonicalPath}`;
+              const articleJsonLd = {
                 "@context": "https://schema.org",
                 "@type": "Article",
                 headline: article.title,
-                url: `https://www.goalplanner.io${canonicalPath}`,
+                url,
                 description: extractDescription(article.body),
-              }}
-            />
+              };
+              const faqJsonLd = pillar ? buildFaqJsonLd(pillar.faqs, url) : undefined;
+              const jsonLd = faqJsonLd ? [articleJsonLd, faqJsonLd] : articleJsonLd;
+
+              return (
+                <Seo
+                  title={`${article.title} | Lifeplans`}
+                  description={extractDescription(article.body)}
+                  canonicalPath={canonicalPath}
+                  noIndex={isSupporting}
+                  jsonLd={jsonLd}
+                />
+              );
+            })()}
             <h1 className="text-3xl font-bold text-gray-900">{article.title}</h1>
 
             {isSupporting && (
