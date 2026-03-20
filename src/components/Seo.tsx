@@ -9,6 +9,7 @@ type SeoProps = {
   canonicalPath?: string;
   imageUrl?: string;
   jsonLd?: JsonLd | JsonLd[];
+  noIndex?: boolean;
 };
 
 const SITE_URL = "https://www.goalplanner.io";
@@ -32,7 +33,7 @@ const upsertLink = (rel: string, href: string) => {
   el.setAttribute("href", href);
 };
 
-const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd }: SeoProps) => {
+const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd, noIndex }: SeoProps) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -46,6 +47,13 @@ const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd }: SeoProps) 
       name: "description",
       content: description,
     });
+
+    if (noIndex) {
+      upsertMeta("meta[name='robots']", { name: "robots", content: "noindex,follow" });
+    } else {
+      const existingRobots = document.head.querySelector("meta[name='robots']");
+      if (existingRobots) existingRobots.remove();
+    }
 
     upsertLink("canonical", canonical);
 
@@ -73,7 +81,7 @@ const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd }: SeoProps) 
     } else if (existing) {
       existing.remove();
     }
-  }, [title, description, canonicalPath, imageUrl, jsonLd, location.pathname]);
+  }, [title, description, canonicalPath, imageUrl, jsonLd, noIndex, location.pathname]);
 
   return null;
 };

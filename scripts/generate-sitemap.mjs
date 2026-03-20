@@ -4,21 +4,19 @@ import path from "node:path";
 const ROOT = path.resolve(process.cwd());
 const SITE = "https://www.goalplanner.io";
 
-const slugify = (input) =>
-  String(input ?? "")
-    .trim()
-    .toLowerCase()
-    .replace(/[’']/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/(^-|-$)/g, "");
+const readPillarSlugs = () => {
+  const pillarsPath = path.join(ROOT, "src", "seo", "pillars.ts");
+  const raw = fs.readFileSync(pillarsPath, "utf8");
 
-const readKeywords = () => {
-  const keywordsPath = path.join(ROOT, "src", "seo", "keywords.json");
-  const raw = fs.readFileSync(keywordsPath, "utf8");
-  const list = JSON.parse(raw);
-  if (!Array.isArray(list)) throw new Error("keywords.json must be an array");
-  return list.map((k) => String(k).trim()).filter(Boolean);
+  const slugs = [];
+  const re = /\bslug:\s*"([a-z0-9-]+)"/g;
+  let m;
+  // eslint-disable-next-line no-cond-assign
+  while ((m = re.exec(raw))) {
+    slugs.push(m[1]);
+  }
+
+  return Array.from(new Set(slugs)).sort();
 };
 
 const buildUrlset = (urls) => {
@@ -52,13 +50,15 @@ const main = () => {
     `${SITE}/download`,
   ];
 
-  const keywords = readKeywords();
-  const articleUrls = keywords.map((k) => `${SITE}/articles/${slugify(k)}`);
+  const pillarSlugs = readPillarSlugs();
+  const articleUrls = pillarSlugs.map((s) => `${SITE}/articles/${s}`);
 
   const xml = buildUrlset([...basePages, ...articleUrls]);
   const outPath = path.join(ROOT, "public", "sitemap.xml");
   fs.writeFileSync(outPath, xml, "utf8");
-  process.stdout.write(`Generated sitemap with ${new Set([...basePages, ...articleUrls]).size} URLs -> public/sitemap.xml\n`);
+  process.stdout.write(
+    `Generated sitemap with ${new Set([...basePages, ...articleUrls]).size} URLs (pillars only) -> public/sitemap.xml\n`,
+  );
 };
 
 main();

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
-import { GENERATED_ARTICLES } from "@/seo/articles";
+import { PILLARS } from "@/seo/pillars";
 
 type Article = {
   slug: string;
@@ -491,16 +491,16 @@ const STATIC_ARTICLES: Article[] = [
   },
 ];
 
-const GENERATED_LISTING: Article[] = GENERATED_ARTICLES.map((a) => ({
-  slug: a.slug,
-  title: a.title,
-  excerpt: a.excerpt,
-  topics: a.topics,
+const PILLAR_LISTING: Article[] = PILLARS.map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  excerpt: p.excerpt,
+  topics: p.topics,
 }));
 
 const ARTICLES: Article[] = (() => {
   const bySlug = new Map<string, Article>();
-  [...STATIC_ARTICLES, ...GENERATED_LISTING].forEach((a) => {
+  [...STATIC_ARTICLES, ...PILLAR_LISTING].forEach((a) => {
     if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
   });
   return Array.from(bySlug.values());

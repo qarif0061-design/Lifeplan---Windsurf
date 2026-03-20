@@ -3,6 +3,7 @@ import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
 import Seo from "@/components/Seo";
 import { getGeneratedArticleBySlug } from "@/seo/articles";
+import { getPillarBySlug, getPillarForKeyword, getPillarUrl } from "@/seo/pillars";
 
 const renderBody = (body: string): React.ReactElement[] => {
   const lines = body.split("\n");
@@ -62,6 +63,26 @@ const extractDescription = (body: string) => {
   if (!text) return "Read this Lifeplans guide for motivation, mindset, and consistent goal progress.";
   return text.length > 155 ? `${text.slice(0, 152)}...` : text;
 };
+
+const SupportingCard = ({ pillarSlug, pillarTitle }: { pillarSlug: string; pillarTitle: string }) => (
+  <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm space-y-3">
+    <div className="text-sm font-semibold text-gray-900">Want the full guide?</div>
+    <p className="text-gray-700">
+      This page is supporting content. For the complete, updated guide, read:
+    </p>
+    <Link to={`/articles/${pillarSlug}`} className="text-blue-600 font-semibold hover:underline">
+      {pillarTitle}
+    </Link>
+    <div className="pt-2">
+      <Link
+        to="/download"
+        className="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-white font-semibold hover:bg-blue-700"
+      >
+        Try Lifeplans (Free)
+      </Link>
+    </div>
+  </div>
+);
 
 const CONTENT: Record<string, { title: string; body: string }> = {
   "how-to-set-goals-that-stick": {
@@ -1144,9 +1165,18 @@ const CONTENT: Record<string, { title: string; body: string }> = {
 
 const ArticleDetails = () => {
   const { slug } = useParams();
+  const pillar = slug ? getPillarBySlug(slug) : undefined;
   const staticArticle = slug ? CONTENT[slug] : undefined;
   const generatedArticle = slug ? getGeneratedArticleBySlug(slug) : undefined;
-  const article = staticArticle ?? generatedArticle;
+  const article = pillar ?? staticArticle ?? generatedArticle;
+
+  const supportingPillar = !pillar && generatedArticle ? getPillarForKeyword(generatedArticle.keyword) : undefined;
+  const isSupporting = Boolean(!pillar && generatedArticle && supportingPillar);
+  const canonicalPath = pillar
+    ? `/articles/${pillar.slug}`
+    : isSupporting
+      ? `/articles/${supportingPillar!.slug}`
+      : `/articles/${slug}`;
 
   return (
     <Layout>
@@ -1162,19 +1192,38 @@ const ArticleDetails = () => {
             <Seo
               title={`${article.title} | Lifeplans`}
               description={extractDescription(article.body)}
-              canonicalPath={`/articles/${slug}`}
+              canonicalPath={canonicalPath}
+              noIndex={isSupporting}
               jsonLd={{
                 "@context": "https://schema.org",
                 "@type": "Article",
                 headline: article.title,
-                url: `https://www.goalplanner.io/articles/${slug}`,
+                url: `https://www.goalplanner.io${canonicalPath}`,
                 description: extractDescription(article.body),
               }}
             />
             <h1 className="text-3xl font-bold text-gray-900">{article.title}</h1>
+
+            {isSupporting && (
+              <SupportingCard pillarSlug={supportingPillar!.slug} pillarTitle={supportingPillar!.title} />
+            )}
+
             <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm">
               <div className="space-y-3">{renderBody(article.body)}</div>
             </div>
+
+            {pillar && (
+              <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm space-y-3">
+                <div className="text-sm font-semibold text-gray-900">Related guides</div>
+                <div className="space-y-1">
+                  {pillar.relatedSlugs.slice(0, 6).map((s) => (
+                    <Link key={s} to={`/articles/${s}`} className="block text-blue-600 hover:underline">
+                      {getPillarUrl(s)}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>
