@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "@/components/Layout";
 import { Link, useParams } from "react-router-dom";
 import Seo from "@/components/Seo";
+import { getGeneratedArticleBySlug } from "@/seo/articles";
 
 const renderBody = (body: string): React.ReactElement[] => {
   const lines = body.split("\n");
@@ -1143,7 +1144,9 @@ const CONTENT: Record<string, { title: string; body: string }> = {
 
 const ArticleDetails = () => {
   const { slug } = useParams();
-  const article = slug ? CONTENT[slug] : undefined;
+  const staticArticle = slug ? CONTENT[slug] : undefined;
+  const generatedArticle = slug ? getGeneratedArticleBySlug(slug) : undefined;
+  const article = staticArticle ?? generatedArticle;
 
   return (
     <Layout>

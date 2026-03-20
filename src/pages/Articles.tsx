@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
+import { GENERATED_ARTICLES } from "@/seo/articles";
 
 type Article = {
   slug: string;
@@ -31,7 +32,7 @@ const topicLabel = (t: Topic) =>
     .map((w) => w[0]?.toUpperCase() + w.slice(1))
     .join(" ");
 
-const ARTICLES: Article[] = [
+const STATIC_ARTICLES: Article[] = [
   {
     slug: "how-to-set-goals-that-stick",
     title: "How to Set Goals That Stick",
@@ -489,6 +490,21 @@ const ARTICLES: Article[] = [
     topics: ["motivation"],
   },
 ];
+
+const GENERATED_LISTING: Article[] = GENERATED_ARTICLES.map((a) => ({
+  slug: a.slug,
+  title: a.title,
+  excerpt: a.excerpt,
+  topics: a.topics,
+}));
+
+const ARTICLES: Article[] = (() => {
+  const bySlug = new Map<string, Article>();
+  [...STATIC_ARTICLES, ...GENERATED_LISTING].forEach((a) => {
+    if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
+  });
+  return Array.from(bySlug.values());
+})();
 
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState("");
