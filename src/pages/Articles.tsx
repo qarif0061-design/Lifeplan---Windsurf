@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { PILLARS } from "@/seo/pillars";
-import { GENERATED_ARTICLES } from "@/seo/articles";
 
 type Article = {
   slug: string;
@@ -23,6 +22,11 @@ const TOPICS = [
   "motivation",
   "habits",
   "productivity",
+  "time_management",
+  "focus",
+  "mindset",
+  "self_improvement",
+  "daily_routines",
 ] as const;
 
 type Topic = (typeof TOPICS)[number];
@@ -32,6 +36,20 @@ const topicLabel = (t: Topic) =>
     .split("_")
     .map((w) => w[0]?.toUpperCase() + w.slice(1))
     .join(" ");
+
+const derivedTopics = (a: Article): Set<Topic> => {
+  const text = `${a.title} ${a.excerpt} ${a.slug}`.toLowerCase();
+  const out = new Set<Topic>();
+
+  if (/(time management|time block|time blocking|schedule|calendar)/.test(text)) out.add("time_management");
+  if (/(focus|deep work|distraction|concentration|pomodoro)/.test(text)) out.add("focus");
+  if (/(mindset|confidence|resilience|attitude|growth)/.test(text)) out.add("mindset");
+  if (/(self improvement|self-improvement|personal growth|self growth|improve yourself)/.test(text))
+    out.add("self_improvement");
+  if (/(routine|daily|morning|evening|check-in|habit)/.test(text)) out.add("daily_routines");
+
+  return out;
+};
 
 const STATIC_ARTICLES: Article[] = [
   {
@@ -507,47 +525,22 @@ const ARTICLES: Article[] = (() => {
   return Array.from(bySlug.values());
 })();
 
-const PILLAR_SLUGS = new Set(PILLARS.map((p) => p.slug));
-
-const SUPPORTING_LISTING: Article[] = (() => {
-  const bySlug = new Map<string, Article>();
-  GENERATED_ARTICLES.forEach((a) => {
-    if (PILLAR_SLUGS.has(a.slug)) return;
-    if (!bySlug.has(a.slug)) {
-      bySlug.set(a.slug, {
-        slug: a.slug,
-        title: a.title,
-        excerpt: a.excerpt,
-        topics: a.topics,
-      });
-    }
-  });
-  return Array.from(bySlug.values());
-})();
-
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
-  const [showSupporting, setShowSupporting] = useState(false);
-
-  const allForListing = useMemo(() => {
-    if (!showSupporting) return ARTICLES;
-    const bySlug = new Map<string, Article>();
-    [...ARTICLES, ...SUPPORTING_LISTING].forEach((a) => {
-      if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
-    });
-    return Array.from(bySlug.values());
-  }, [showSupporting]);
 
   const filteredArticles = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return allForListing.filter((article) => {
-      const topicOk = selectedTopic === "all" ? true : article.topics.includes(selectedTopic);
+    return ARTICLES.filter((article) => {
+      const topicOk =
+        selectedTopic === "all"
+          ? true
+          : article.topics.includes(selectedTopic) || derivedTopics(article).has(selectedTopic);
       if (!topicOk) return false;
       if (!q) return true;
       return article.title.toLowerCase().includes(q) || article.excerpt.toLowerCase().includes(q);
     });
-  }, [allForListing, searchQuery, selectedTopic]);
+  }, [searchQuery, selectedTopic]);
 
   return (
     <Layout>
@@ -590,20 +583,7 @@ const Articles = () => {
           ))}
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          <div className="text-sm text-gray-500">
-            Showing {filteredArticles.length} of {allForListing.length} articles.
-            {showSupporting ? " (Includes supporting keyword pages)" : " (Pillars only)"}
-          </div>
-          <Button
-            type="button"
-            variant={showSupporting ? "default" : "outline"}
-            className="rounded-full"
-            onClick={() => setShowSupporting((v) => !v)}
-          >
-            {showSupporting ? "Hide Supporting Pages" : "Show Supporting Pages"}
-          </Button>
-        </div>
+        <div className="text-sm text-gray-500">Showing {filteredArticles.length} articles.</div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {filteredArticles.map((a) => (
@@ -614,9 +594,6 @@ const Articles = () => {
                     {a.title}
                   </Link>
                 </CardTitle>
-                {PILLAR_SLUGS.has(a.slug) && (
-                  <div className="text-xs font-semibold text-blue-700">Pillar</div>
-                )}
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">{a.excerpt}</p>
