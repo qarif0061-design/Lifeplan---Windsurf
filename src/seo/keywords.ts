@@ -1,4 +1,4 @@
-export const KEYWORDS = [
+const BASE_KEYWORDS = [
   "how to manage time effectively at home",
   "best productivity tips for daily life",
   "how to avoid procrastination and stay productive",
@@ -167,3 +167,28 @@ export const KEYWORDS = [
   "mindset exercises for success and happiness",
   "habits that improve your mindset fast",
 ] as const;
+
+const expandKeywords = (base: readonly string[]) => {
+  const suffixes = ["in 2026", "step by step"] as const;
+  const audiences = ["for beginners", "for students", "for busy people"] as const;
+
+  const out = new Set<string>();
+
+  base.forEach((k) => {
+    const kw = k.trim();
+    if (!kw) return;
+    out.add(kw);
+
+    suffixes.forEach((s) => {
+      if (!kw.toLowerCase().includes(s)) out.add(`${kw} ${s}`);
+    });
+
+    audiences.forEach((a) => {
+      if (!kw.toLowerCase().includes(a)) out.add(`${kw} ${a}`);
+    });
+  });
+
+  return Array.from(out);
+};
+
+export const KEYWORDS = expandKeywords(BASE_KEYWORDS);

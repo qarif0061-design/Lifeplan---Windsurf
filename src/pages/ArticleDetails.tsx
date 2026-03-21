@@ -5,6 +5,30 @@ import Seo from "@/components/Seo";
 import { getGeneratedArticleBySlug } from "@/seo/articles";
 import { getPillarBySlug, getPillarForKeyword, getPillarUrl } from "@/seo/pillars";
 
+const URL_RE = /(https?:\/\/[^\s)\]]+)/g;
+
+const renderInlineWithLinks = (text: string): React.ReactNode[] => {
+  const parts = text.split(URL_RE);
+  return parts
+    .filter((p) => p.length > 0)
+    .map((p, idx) => {
+      if (p.startsWith("http://") || p.startsWith("https://")) {
+        return (
+          <a
+            key={`url-${idx}`}
+            href={p}
+            className="text-blue-600 underline"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {p}
+          </a>
+        );
+      }
+      return <React.Fragment key={`txt-${idx}`}>{p}</React.Fragment>;
+    });
+};
+
 const renderBody = (body: string): React.ReactElement[] => {
   const lines = body.split("\n");
   const out: React.ReactElement[] = [];
@@ -15,7 +39,7 @@ const renderBody = (body: string): React.ReactElement[] => {
     out.push(
       <ul key={`${keyBase}-ul`} className="list-disc pl-6 space-y-2 text-gray-700">
         {list.map((t, idx) => (
-          <li key={`${keyBase}-li-${idx}`}>{t}</li>
+          <li key={`${keyBase}-li-${idx}`}>{renderInlineWithLinks(t)}</li>
         ))}
       </ul>,
     );
@@ -48,7 +72,7 @@ const renderBody = (body: string): React.ReactElement[] => {
 
     out.push(
       <p key={`p-${i}`} className="text-gray-700 leading-relaxed">
-        {line}
+        {renderInlineWithLinks(line)}
       </p>,
     );
   });

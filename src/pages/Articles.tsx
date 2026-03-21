@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { PILLARS } from "@/seo/pillars";
+import { GENERATED_ARTICLES } from "@/seo/articles";
 
 type Article = {
   slug: string;
@@ -506,19 +507,47 @@ const ARTICLES: Article[] = (() => {
   return Array.from(bySlug.values());
 })();
 
+const PILLAR_SLUGS = new Set(PILLARS.map((p) => p.slug));
+
+const SUPPORTING_LISTING: Article[] = (() => {
+  const bySlug = new Map<string, Article>();
+  GENERATED_ARTICLES.forEach((a) => {
+    if (PILLAR_SLUGS.has(a.slug)) return;
+    if (!bySlug.has(a.slug)) {
+      bySlug.set(a.slug, {
+        slug: a.slug,
+        title: a.title,
+        excerpt: a.excerpt,
+        topics: a.topics,
+      });
+    }
+  });
+  return Array.from(bySlug.values());
+})();
+
 const Articles = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTopic, setSelectedTopic] = useState<Topic | "all">("all");
+  const [showSupporting, setShowSupporting] = useState(false);
+
+  const allForListing = useMemo(() => {
+    if (!showSupporting) return ARTICLES;
+    const bySlug = new Map<string, Article>();
+    [...ARTICLES, ...SUPPORTING_LISTING].forEach((a) => {
+      if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
+    });
+    return Array.from(bySlug.values());
+  }, [showSupporting]);
 
   const filteredArticles = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return ARTICLES.filter((article) => {
+    return allForListing.filter((article) => {
       const topicOk = selectedTopic === "all" ? true : article.topics.includes(selectedTopic);
       if (!topicOk) return false;
       if (!q) return true;
       return article.title.toLowerCase().includes(q) || article.excerpt.toLowerCase().includes(q);
     });
-  }, [searchQuery, selectedTopic]);
+  }, [allForListing, searchQuery, selectedTopic]);
 
   return (
     <Layout>
@@ -561,6 +590,21 @@ const Articles = () => {
           ))}
         </div>
 
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="text-sm text-gray-500">
+            Showing {filteredArticles.length} of {allForListing.length} articles.
+            {showSupporting ? " (Includes supporting keyword pages)" : " (Pillars only)"}
+          </div>
+          <Button
+            type="button"
+            variant={showSupporting ? "default" : "outline"}
+            className="rounded-full"
+            onClick={() => setShowSupporting((v) => !v)}
+          >
+            {showSupporting ? "Hide Supporting Pages" : "Show Supporting Pages"}
+          </Button>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-6">
           {filteredArticles.map((a) => (
             <Card key={a.slug} className="border-none shadow-sm rounded-[2rem]">
@@ -570,6 +614,9 @@ const Articles = () => {
                     {a.title}
                   </Link>
                 </CardTitle>
+                {PILLAR_SLUGS.has(a.slug) && (
+                  <div className="text-xs font-semibold text-blue-700">Pillar</div>
+                )}
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">{a.excerpt}</p>

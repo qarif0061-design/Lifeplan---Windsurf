@@ -65,6 +65,30 @@ const Landing = () => {
     {
       question: "Can I use LifePlan on my phone?",
       answer: "Yes. LifePlan works on mobile web, and we also offer native mobile app versions in the iOS App Store and Google Play Store."
+    },
+    {
+      question: "What’s included in Premium?",
+      answer: "Premium unlocks unlimited active goals, full Strategy System access, advanced weekly reviews, and richer analytics so you can stay consistent long-term."
+    },
+    {
+      question: "How do weekly plans help me hit long-term goals?",
+      answer: "Weekly planning turns big goals into small priorities and tasks you can actually finish. You plan once per week, then track progress and adjust in a weekly review."
+    },
+    {
+      question: "Can I track habits and daily routines?",
+      answer: "Yes. Use daily check-ins and tasks to track habits (like exercise, hydration, study sessions) and keep streaks visible."
+    },
+    {
+      question: "Does LifePlan sync across devices?",
+      answer: "Yes. Your account syncs your goals and plans so you can use LifePlan on web and mobile without losing progress."
+    },
+    {
+      question: "Is my data private and secure?",
+      answer: "We treat your goals and notes as private. Access is tied to your account, and we follow best practices to keep data protected."
+    },
+    {
+      question: "How do I get started in 5 minutes?",
+      answer: "Create one goal, choose a timeframe, write a short strategy (why it matters), then set 1–3 weekly priorities. That’s enough to begin building consistency."
     }
   ];
 
@@ -273,9 +297,11 @@ const Landing = () => {
       <footer className="py-12 border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-6">
-            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-              <Target className="text-white w-4 h-4" />
-            </div>
+            <img
+              src="/HI_RES_ICON-9160.png"
+              alt="LifePlan"
+              className="w-7 h-7 rounded"
+            />
             <span className="text-lg font-bold text-gray-900">LifePlan</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm mb-4">

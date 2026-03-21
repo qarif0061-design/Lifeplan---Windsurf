@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { PILLARS } from "@/seo/pillars";
 
 type QaItem = {
   id: string;
@@ -11,6 +12,29 @@ type QaItem = {
   answer: string;
   topics: string[];
 };
+
+const PILLAR_QUESTIONS: QaItem[] = (() => {
+  const items: QaItem[] = [];
+  PILLARS.forEach((p) => {
+    p.faqs.forEach((f, idx) => {
+      items.push({
+        id: `pillar-${p.slug}-${idx}`,
+        question: f.question,
+        answer: f.answer,
+        topics: p.topics,
+      });
+    });
+  });
+
+  const seen = new Set<string>();
+  return items.filter((i) => {
+    const key = i.question.trim().toLowerCase();
+    if (!key) return false;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+})();
 
 const TOPICS = [
   "goal_planning",
@@ -380,6 +404,18 @@ const QUESTIONS: QaItem[] = [
   },
 ];
 
+const ALL_QUESTIONS: QaItem[] = (() => {
+  const merged = [...QUESTIONS, ...PILLAR_QUESTIONS];
+  const seen = new Set<string>();
+  return merged.filter((i) => {
+    const key = i.question.trim().toLowerCase();
+    if (!key) return false;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+})();
+
 const topicLabel = (t: Topic) =>
   t
     .split("_")
@@ -392,7 +428,7 @@ const Questions = () => {
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return QUESTIONS.filter((item) => {
+    return ALL_QUESTIONS.filter((item) => {
       const topicOk = selectedTopic === "all" ? true : item.topics.includes(selectedTopic);
       if (!topicOk) return false;
       if (!q) return true;
