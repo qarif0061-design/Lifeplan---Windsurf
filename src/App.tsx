@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/contexts/UserContext";
 import RememberMeRedirect from "@/components/RememberMeRedirect";
@@ -24,12 +24,7 @@ import Articles from "./pages/Articles";
 import ArticleDetails from "./pages/ArticleDetails";
 import Questions from "./pages/Questions";
 import NotFound from "./pages/NotFound";
-import LifePlanning from "./pages/LifePlanning";
-import GettingThingsDone from "./pages/GettingThingsDone";
 import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
-import TimeManagementSeo from "./pages/TimeManagementSeo";
-import SmartGoalsSeo from "./pages/SmartGoalsSeo";
-import MotivationQuotesSeo from "./pages/MotivationQuotesSeo";
 import DailyPlanner from "./pages/DailyPlanner";
 import DailyPlannerHistory from "./pages/DailyPlannerHistory";
 
@@ -40,12 +35,27 @@ function App() {
         <RememberMeRedirect>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/life-planning" element={<LifePlanning />} />
-            <Route path="/getting-things-done" element={<GettingThingsDone />} />
+            <Route
+              path="/life-planning"
+              element={<Navigate to="/articles/how-to-set-goals-and-actually-achieve-them" replace />}
+            />
+            <Route
+              path="/getting-things-done"
+              element={<Navigate to="/articles/how-to-get-things-done-system-2026" replace />}
+            />
             <Route path="/weekly-planning" element={<WeeklyPlanningSeo />} />
-            <Route path="/time-management" element={<TimeManagementSeo />} />
-            <Route path="/smart-goals" element={<SmartGoalsSeo />} />
-            <Route path="/motivation" element={<MotivationQuotesSeo />} />
+            <Route
+              path="/time-management"
+              element={<Navigate to="/articles/time-management-tips-and-strategies-2026" replace />}
+            />
+            <Route
+              path="/smart-goals"
+              element={<Navigate to="/articles/smart-goals-template-and-examples-2026" replace />}
+            />
+            <Route
+              path="/motivation"
+              element={<Navigate to="/articles/best-motivational-quotes-2026" replace />}
+            />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />

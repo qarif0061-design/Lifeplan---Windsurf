@@ -1,5 +1,32 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/getting-things-done",
+      "destination": "/articles/how-to-get-things-done-system-2026",
+      "permanent": true
+    },
+    {
+      "source": "/life-planning",
+      "destination": "/articles/how-to-set-goals-and-actually-achieve-them",
+      "permanent": true
+    },
+    {
+      "source": "/time-management",
+      "destination": "/articles/time-management-tips-and-strategies-2026",
+      "permanent": true
+    },
+    {
+      "source": "/smart-goals",
+      "destination": "/articles/smart-goals-template-and-examples-2026",
+      "permanent": true
+    },
+    {
+      "source": "/motivation",
+      "destination": "/articles/best-motivational-quotes-2026",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/(.*)",
