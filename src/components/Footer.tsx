@@ -13,6 +13,8 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="text-sm text-gray-500">© {new Date().getFullYear()} Lifeplans</div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            <a href="/about" className="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+            <a href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors">Contact</a>
             <a href="/terms" className="text-gray-600 hover:text-blue-600 transition-colors">Terms of Service</a>
             <a href="/privacy" className="text-gray-600 hover:text-blue-600 transition-colors">Privacy Policy</a>
             <a href="/refund" className="text-gray-600 hover:text-blue-600 transition-colors">Refund Policy</a>

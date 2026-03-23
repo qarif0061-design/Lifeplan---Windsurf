@@ -27,6 +27,8 @@ import NotFound from "./pages/NotFound";
 import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
 import DailyPlanner from "./pages/DailyPlanner";
 import DailyPlannerHistory from "./pages/DailyPlannerHistory";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
         <RememberMeRedirect>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route
               path="/life-planning"
               element={<Navigate to="/articles/how-to-set-goals-and-actually-achieve-them" replace />}

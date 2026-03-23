@@ -13,4 +13,17 @@ Allow: /
 User-agent: *
 Allow: /
 
+Disallow: /dashboard
+Disallow: /goals
+Disallow: /check-in
+Disallow: /planning
+Disallow: /strategy
+Disallow: /insights
+Disallow: /settings
+Disallow: /profile
+Disallow: /billing
+Disallow: /social
+Disallow: /auth
+Disallow: /daily-planner
+
 Sitemap: https://www.goalplanner.io/sitemap.xml
