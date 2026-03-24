@@ -30,8 +30,9 @@ const normalizeKeyword = (k: string) => k.trim().toLowerCase();
 
 const KW = KEYWORDS.map((k) => k.trim()).filter(Boolean);
 
-const pickKeywords = (patterns: readonly RegExp[], max = 18) => {
-  const hits = KW.filter((k) => patterns.some((p) => p.test(normalizeKeyword(k))));
+const pickKeywords = (patterns: readonly RegExp[] | undefined, max = 18) => {
+  const safePatterns = patterns ?? [];
+  const hits = KW.filter((k) => safePatterns.some((p) => p.test(normalizeKeyword(k))));
   const unique = Array.from(new Set(hits));
   return unique.slice(0, max);
 };
@@ -8724,7 +8725,7 @@ export const getPillarForKeyword = (keyword: string): PillarArticle | undefined 
   const match = PILLARS.find((p) => normalizeKeyword(p.primaryKeyword) === k);
   if (match) return match;
 
-  return PILLARS.find((p) => p.relatedKeywords.some((rk) => normalizeKeyword(rk) === k));
+  return PILLARS.find((p) => (p.relatedKeywords ?? []).some((rk) => normalizeKeyword(rk) === k));
 };
 
 export const PILLAR_SLUGS = PILLARS.map((p) => p.slug);
