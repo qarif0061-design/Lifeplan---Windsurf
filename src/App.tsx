@@ -29,6 +29,11 @@ import DailyPlanner from "./pages/DailyPlanner";
 import DailyPlannerHistory from "./pages/DailyPlannerHistory";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import GoalPlannerApp from "./pages/GoalPlannerApp";
+import DailyPlannerApp from "./pages/DailyPlannerApp";
+import HabitTrackerApp from "./pages/HabitTrackerApp";
+import DailyJournalApp from "./pages/DailyJournalApp";
+import ProductivityApp from "./pages/ProductivityApp";
 
 function App() {
   return (
@@ -82,6 +87,11 @@ function App() {
             <Route path="/questions" element={<Questions />} />
             <Route path="/daily-planner" element={<DailyPlanner />} />
             <Route path="/daily-planner/history" element={<DailyPlannerHistory />} />
+            <Route path="/goal-planner-app" element={<GoalPlannerApp />} />
+            <Route path="/daily-planner-app" element={<DailyPlannerApp />} />
+            <Route path="/habit-tracker-app" element={<HabitTrackerApp />} />
+            <Route path="/daily-journal-app" element={<DailyJournalApp />} />
+            <Route path="/productivity-app" element={<ProductivityApp />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
