@@ -197,6 +197,416 @@ const ProductivityApp = () => {
           </div>
         </section>
 
+        {/* Best Productivity App Section */}
+        <section className="space-y-6" id="best-productivity-app">
+          <h2 className="text-3xl font-bold text-gray-900">Best Productivity App: What Actually Works</h2>
+          <p className="text-lg text-gray-600">The best productivity apps don't just organize tasks—they help you make consistent progress on what matters most.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">🎯 What Makes Productivity Apps Effective</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Priority Protection</p>
+                    <p className="text-gray-600 text-sm">Helps you focus on what moves you forward</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Consistency Support</p>
+                    <p className="text-gray-600 text-sm">Builds routines that don't depend on willpower</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Mental Load Reduction</p>
+                    <p className="text-gray-600 text-sm">Externalizes commitments so your brain can focus</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Pattern Recognition</p>
+                    <p className="text-gray-600 text-sm">Shows what works so you can repeat success</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">⚠️ Why Most Productivity Apps Fail</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Task Overload</p>
+                    <p className="text-gray-600 text-sm">Endless lists that create overwhelm</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">No Priority Limits</p>
+                    <p className="text-gray-600 text-sm">Everything feels equally important</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Constant Notifications</p>
+                    <p className="text-gray-600 text-sm">Fragments attention instead of protecting it</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Complex Systems</p>
+                    <p className="text-gray-600 text-sm">More overhead than the problems they solve</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* All-in-One vs Separate Apps */}
+        <section className="space-y-6" id="all-in-one-vs-separate">
+          <h2 className="text-3xl font-bold text-gray-900">All-in-One Productivity App vs Using Multiple Apps</h2>
+          <p className="text-lg text-gray-600">The right approach depends on your personality, goals, and how you work best.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="text-blue-900 flex items-center gap-2">
+                  <span className="text-2xl">🔄</span> All-in-One System
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-blue-800">
+                  <p><strong>Best for:</strong> People who want simplicity and reduced context switching</p>
+                  <p><strong>Key benefits:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• One place to manage everything</li>
+                    <li>• Better visibility of connections between areas</li>
+                    <li>• Fewer apps to maintain and update</li>
+                    <li>• Integrated progress tracking</li>
+                    <li>• Reduced mental overhead</li>
+                  </ul>
+                  <p><strong>When to choose:</strong> When you want to see how goals, habits, tasks, and reflection work together</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-orange-200 bg-orange-50">
+              <CardHeader>
+                <CardTitle className="text-orange-900 flex items-center gap-2">
+                  <span className="text-2xl">🧩</span> Multiple Specialized Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-orange-800">
+                  <p><strong>Best for:</strong> People who want best-in-class tools for each specific need</p>
+                  <p><strong>Key benefits:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Optimized features for each use case</li>
+                    <li>• More powerful specialized functionality</li>
+                    <li>• Can pick the best tool for each job</li>
+                    <li>• Flexibility to mix and match</li>
+                    <li>• Often more advanced in specific areas</li>
+                  </ul>
+                  <p><strong>When to choose:</strong> When you have specific needs that require specialized tools</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700 text-center">
+              <strong>The reality:</strong> Most people start with multiple apps and eventually consolidate when they realize the cost of context switching.
+            </p>
+          </div>
+        </section>
+
+        {/* Productivity Systems Section */}
+        <section className="space-y-6" id="productivity-systems">
+          <h2 className="text-3xl font-bold text-gray-900">How Productivity Systems Reduce Mental Overload</h2>
+          <p className="text-lg text-gray-600">Good productivity systems don't add more work—they free up mental bandwidth for what matters.</p>
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🧠 Mental Load Reduction</h3>
+                <div className="space-y-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Externalizes Commitments</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">When you trust your system, your brain stops constantly scanning for unfinished tasks and deadlines.</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Creates Predictability</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Routines and structures reduce decision fatigue by making choices automatic.</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Provides Closure</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Completing planned items creates satisfaction and reduces the feeling of being perpetually behind.</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">⚡ Focus Protection</h3>
+                <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
+                  <p className="text-yellow-800 mb-3">The attention economy works against productivity:</p>
+                  <ul className="space-y-2 text-yellow-700 ml-4">
+                    <li>• Social media and notifications fragment attention</li>
+                    <li>• Open loops and unfinished tasks create mental clutter</li>
+                    <li>• Too many priorities create decision paralysis</li>
+                    <li>• Context switching drains mental energy</li>
+                  </ul>
+                  <p className="text-yellow-800 mt-3">Good productivity systems protect your attention like a bodyguard.</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🔄 Weekly Review</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Regular reviews prevent systems from becoming outdated and overwhelming.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Priority Limits</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Limiting daily priorities prevents overwhelm and ensures focus on what matters.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">⏰ Time Blocking</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Protecting time for important work prevents the day from being consumed by urgent but low-value tasks.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Real-Life Productivity */}
+        <section className="space-y-6" id="real-life-productivity">
+          <h2 className="text-3xl font-bold text-gray-900">Personal Productivity System for Real Life</h2>
+          <p className="text-lg text-gray-600">Productivity isn't about doing more—it's about making consistent progress on the right things.</p>
+          <div className="space-y-6">
+            <div className="bg-indigo-50 rounded-2xl p-8 border border-indigo-100">
+              <h3 className="text-xl font-semibold text-indigo-900 mb-4">The Sustainable Productivity Framework</h3>
+              <div className="grid md:grid-cols-4 gap-6">
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">🎯 Clear Goals</h4>
+                  <p className="text-indigo-700 text-sm">Know what you're working toward so daily actions have purpose and meaning.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "Complete certification" guides daily study priorities.</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">📅 Daily Planning</h4>
+                  <p className="text-indigo-700 text-sm">Structure each day with 1-3 priorities and protected focus time.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "9-11am deep work on key project" prevents reactive work.</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">✅ Consistent Habits</h4>
+                  <p className="text-indigo-700 text-sm">Build routines that support your goals without requiring constant willpower.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "Morning review" ensures daily alignment with goals.</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">📝 Weekly Reflection</h4>
+                  <p className="text-indigo-700 text-sm">Review progress, identify patterns, and adjust your approach for better results.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "Friday review" reveals what's working and what needs adjustment.</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">💼 Work Productivity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Focus on high-impact projects, protect deep work time, and limit meeting overload.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🏃‍♂️ Personal Growth</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Allocate time for learning, skill development, and health alongside work priorities.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🏠 Life Balance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Schedule personal activities with the same seriousness as work commitments.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Focus and Follow-Through */}
+        <section className="space-y-6" id="focus-follow-through">
+          <h2 className="text-3xl font-bold text-gray-900">How to Stay Productive Without Burnout</h2>
+          <p className="text-lg text-gray-600">Sustainable productivity comes from smart systems, not heroic effort and constant intensity.</p>
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🔥 The Burnout Prevention System</h3>
+                <div className="space-y-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Priority Limits</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Limit daily priorities to 1-3 items. Quality focus beats quantity every time.</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Energy Matching</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Schedule demanding work during peak energy periods and easier tasks when energy is low.</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Recovery Protection</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Schedule rest and recovery with the same commitment as work activities.</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">⚡ The Focus + Follow-Through Method</h3>
+                <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+                  <p className="text-green-800 mb-3">Most productivity fails at execution:</p>
+                  <ol className="space-y-2 text-green-700 ml-4">
+                    <li>• Plan 1-3 priorities for the day</li>
+                    <li>• Protect specific time blocks for each priority</li>
+                    <li>• Eliminate distractions during focus time</li>
+                    <li>• Track completion without shame for misses</li>
+                    <li>• Review weekly and adjust based on reality</li>
+                  </ol>
+                  <p className="text-green-800 mt-3">The key is making starting easier than avoiding.</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">📊 Progress Tracking</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Focus on weekly consistency rather than daily perfection.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🔄 Weekly Reviews</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Adjust your system based on what actually works in your life.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Context Switching</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Group similar tasks together to reduce mental switching costs.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Mid-Page CTA */}
+        <section className="space-y-6" id="mid-cta">
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready for a Productivity System That Actually Works?</h2>
+            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+              Try Goal Planner – LifePlans for an all-in-one system that connects goals, daily planning, habits, and reflection without the overwhelm.
+            </p>
+            <Button asChild size="lg" className="rounded-full bg-green-600 hover:bg-green-700">
+              <Link to="/auth">Start Your Productivity System Free</Link>
+            </Button>
+          </div>
+        </section>
+
+        {/* Internal Links */}
+        <section className="space-y-6" id="related-topics">
+          <h2 className="text-3xl font-bold text-gray-900">Build Your Complete Productivity System</h2>
+          <p className="text-lg text-gray-600">The most effective productivity systems integrate all areas of your life and work.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Set meaningful goals that give your daily productivity purpose and direction</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/goal-planner-app">Goal Planner App →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Structure your day with realistic priorities and protected focus time</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/daily-planner-app">Daily Planner App →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">✅ Habit Building</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Build consistent routines that support your productivity without willpower</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/habit-tracker-app">Habit Tracker App →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">📝 Daily Reflection</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Review progress and improve your productivity system through regular reflection</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/daily-journal-app">Daily Journal App →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* What Is Section */}
         <section className="space-y-6" id="what-is">
           <h2 className="text-3xl font-bold text-gray-900">What Is a Productivity App?</h2>
