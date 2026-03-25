@@ -10,27 +10,51 @@ const GoalPlannerApp = () => {
   const faqData = [
     {
       question: "What's the difference between a goal planner app and a goal tracker app?",
-      answer: "A goal tracker app is mainly about measurement (recording progress). A goal planner app helps you define the goal and plan the steps—especially the weekly and daily actions that create progress. The best tools do both: plan + track + review."
+      answer: "A goal tracker app focuses on measurement—recording progress, checking off completions, and showing statistics. A goal planner app helps you define the goal and create the action plan—especially breaking goals into weekly and daily steps that create progress. The best goal planner apps combine both: they help you plan the path forward AND track your progress along that path. Think of it this way: a tracker tells you where you've been, while a planner helps you figure out where to go next."
     },
     {
       question: "How do I choose the best goal planner app for me?",
-      answer: "Choose the app you'll realistically use every week. Look for quick setup (goal + next action), daily planning integration, habit/routine tracking, reminders you control, and simple progress views. If it feels like too much administration, you won't stick with it."
+      answer: "The best goal planner app is one you'll actually use consistently. Start with your real needs: Do you need simple goal setting or complex project management? Daily planning integration or just goal tracking? Look for these key features: quick goal setup (goal + next action in minutes), daily/weekly planning connection, habit and routine tracking, reminders you control (not constant notifications), simple progress views (not overwhelming dashboards), and weekly review capabilities. If an app feels like too much administrative work, you won't stick with it. Try free trials to see what fits your workflow before committing."
     },
     {
       question: "Is a free goal planner app good enough to achieve goals?",
-      answer: "Often, yes—if it supports consistent action. The biggest determinant isn't price; it's whether the tool helps you plan and follow through on small steps week after week."
+      answer: "Yes, often a free goal planner app is completely sufficient—especially if it supports consistent action. The biggest factor in achieving goals isn't the price of the tool; it's whether the app helps you plan and follow through on small steps week after week. Many free goal planner apps include essential features like goal setting, progress tracking, reminders, and basic reporting. The main limitations of free versions are usually advanced features like detailed analytics, unlimited goals, or team collaboration. For most personal goal planning, a well-designed free app that helps you take daily action is more valuable than a paid app you never use."
     },
     {
       question: "How many goals should I track at once?",
-      answer: "For most people, 1–3 active goals is ideal. Too many goals creates diluted effort and constant guilt. Start with one priority goal and build consistency first."
+      answer: "For most people, 1–3 active goals is ideal. Research and experience show that having too many goals creates diluted effort, decision fatigue, and constant guilt about what you're NOT working on. Start with one priority goal and build consistency first. If you have multiple areas of life to work on (career, health, learning), consider rotating focus quarterly rather than trying to advance everything simultaneously. Some people use a 'primary goal + maintenance goals' approach: one major focus area while maintaining small habits in other areas. The key is ensuring your goals don't compete for the same limited resources like time, energy, or willpower."
     },
     {
-      question: "Can a goal planner app help with ADHD or overwhelm?",
-      answer: "It can help by reducing decision fatigue: clarifying the next action, limiting priorities, and using reminders to protect routines. A tool is support—not diagnosis or treatment."
+      question: "Can a goal planner app help with ADHD or executive function challenges?",
+      answer: "A goal planner app can be particularly helpful for ADHD or executive function challenges, but it's important to choose the right features. Look for apps that reduce decision fatigue (clear next actions, not overwhelming options), provide external structure (time-based reminders, routine templates), offer visual progress tracking (immediate feedback), allow for flexible planning (adjustable schedules), and minimize distractions (clean interfaces, optional notifications). The app serves as an external brain—storing information, providing prompts, and maintaining structure when internal executive functions are challenged. However, remember that an app is a support tool, not a replacement for professional treatment or comprehensive ADHD management strategies."
     },
     {
       question: "What if I keep falling off goals after a few days?",
-      answer: "That's usually a signal to shrink the plan, not abandon the goal: reduce the daily baseline, attach the habit to a consistent trigger, and review weekly to remove friction. Consistency comes from design."
+      answer: "This is incredibly common and usually signals that your plan needs adjustment, not that you lack discipline. When you consistently drop goals after a few days, examine these factors: Is the daily action too big? Can you shrink it to 2-5 minutes? Is the trigger unclear? Try attaching the action to something you already do daily. Is the timing wrong? Maybe morning works better than evening. Are you trying to change too much at once? Focus on one habit change for 2-3 weeks before adding another. The goal is to make the action easier than skipping it. Remember: consistency beats intensity. A 5-minute action done daily is better than a 30-minute action done once per week."
+    },
+    {
+      question: "What's the difference between digital goal planner apps and paper planners?",
+      answer: "Digital goal planner apps offer advantages like reminders, searchability, progress tracking, easy editing, and cross-device access. Paper planners provide benefits like writing memory, reduced screen time, creative freedom, and fewer distractions. Digital excels at tracking data over time and sending timely reminders. Paper often leads to deeper thinking during the planning process. Many people use both: paper for initial goal setting and reflection, digital for daily tracking and reminders. The best choice depends on your preferences, tech comfort, and whether you value data tracking or the physical act of writing more."
+    },
+    {
+      question: "How do I break big goals into smaller daily actions?",
+      answer: "Breaking big goals into daily actions follows a simple hierarchy: Start with your big goal (e.g., 'Run a marathon'). Create quarterly milestones (e.g., 'Run 10 miles without stopping'). Set monthly targets (e.g., 'Run 3 times per week'). Define weekly actions (e.g., 'Complete 3 runs: 2 short, 1 long'). Finally, identify daily steps (e.g., 'Monday: 3-mile run after work; Tuesday: strength training; Wednesday: rest'). The key is making each daily action specific, time-bound, and small enough to complete even on busy days. If a daily action takes more than 30 minutes, consider breaking it further. Remember: some days will only support maintenance actions (like laying out running clothes), and that's still progress."
+    },
+    {
+      question: "What are common goal-setting mistakes that keep people stuck?",
+      answer: "The most common goal-setting mistakes include: setting vague goals ('be healthier' instead of 'exercise 3x weekly'), focusing on outcomes instead of processes (wanting to 'lose 20 pounds' instead of 'walk 30 minutes daily'), not defining the next action, trying to change everything at once, setting unrealistic timelines, not tracking progress, and expecting perfect consistency. Another major mistake is not accounting for real life—busy periods, low motivation days, unexpected obstacles. Successful goal planners build flexibility and 'minimum viable days' into their plans. The antidote to these mistakes is clarity (specific, measurable goals), simplicity (focus on 1-3 priorities), and systems (repeated actions rather than willpower)."
+    },
+    {
+      question: "Who should use a goal planner app?",
+      answer: "Goal planner apps are valuable for anyone who wants to achieve meaningful outcomes but struggles with consistency, clarity, or follow-through. They're particularly helpful for: professionals managing career development, students working toward academic goals, health and fitness enthusiasts tracking progress, people building new habits or skills, entrepreneurs managing multiple objectives, and anyone feeling overwhelmed by too many goals. They're also useful for people who like data and seeing patterns over time. If you're someone who sets goals but struggles to maintain momentum, or if you find yourself repeatedly starting over, a goal planner app can provide the structure and accountability needed for lasting change."
+    },
+    {
+      question: "How does a goal planner app help with consistency?",
+      answer: "Goal planner apps support consistency through several mechanisms: they provide external reminders when motivation fades, track streaks and patterns that create positive reinforcement, break large goals into small daily actions that are easier to complete, offer immediate feedback on progress, create accountability through visible tracking, and help you learn from your patterns (what works, what doesn't). The key is that consistency comes from systems, not willpower. A good app reduces the mental overhead of remembering what to do next, protects time for important actions, and makes progress visible—even when progress feels slow. This visibility and structure helps maintain momentum through inevitable dips in motivation."
+    },
+    {
+      question: "What makes GoalPlanner useful for real daily life?",
+      answer: "GoalPlanner is designed specifically for real life's constraints and unpredictability. Unlike overly complex systems that require perfect discipline, GoalPlanner focuses on practical features: quick goal setup that fits busy schedules, integration with daily planning so goals become part of your routine, habit tracking that supports your goals rather than competing with them, flexible reminders that protect your time without nagging, simple progress views that show trends without overwhelming data, and weekly reviews that help you adjust based on real experience. The app recognizes that some weeks are for maintenance, not growth, and provides tools for both. It's built for people who have jobs, families, and other commitments—helping you make steady progress without requiring life to be perfect first."
     }
   ];
 
@@ -283,6 +307,551 @@ const GoalPlannerApp = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Best Goal Planner App Section */}
+        <section className="space-y-6" id="best-goal-planner-app">
+          <h2 className="text-3xl font-bold text-gray-900">Best Goal Planner App: What Actually Matters</h2>
+          <p className="text-lg text-gray-600">When searching for the best goal planner app, look beyond flashy features and focus on what drives real results.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">🎯 Essential Features That Matter</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Clear Next Actions</p>
+                    <p className="text-gray-600 text-sm">The app should always show you what to do next, not just what you want to achieve</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Daily Planning Integration</p>
+                    <p className="text-gray-600 text-sm">Goals should connect to your daily tasks and calendar</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Progress Without Overwhelm</p>
+                    <p className="text-gray-600 text-sm">Simple tracking that shows trends without complicated dashboards</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Flexible Scheduling</p>
+                    <p className="text-gray-600 text-sm">Adapts to busy weeks, travel, and life's unpredictability</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">⚠️ Features That Often Distract</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Over-Complicated Analytics</p>
+                    <p className="text-gray-600 text-sm">Too many charts and metrics that don't drive action</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Gamification Over Substance</p>
+                    <p className="text-gray-600 text-sm">Points and badges that replace real progress</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Constant Notifications</p>
+                    <p className="text-gray-600 text-sm">Alerts that create anxiety rather than support</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Complex Setup Requirements</p>
+                    <p className="text-gray-600 text-sm">Apps that require hours of configuration before you can start</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Free vs Paid Section */}
+        <section className="space-y-6" id="free-vs-paid">
+          <h2 className="text-3xl font-bold text-gray-900">Free Goal Planner App vs Paid Tools</h2>
+          <p className="text-lg text-gray-600">You don't need to pay for effective goal planning—but understanding the trade-offs helps you choose wisely.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-900 flex items-center gap-2">
+                  <span className="text-2xl">🆓</span> Free Goal Planner Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-green-800">
+                  <p><strong>What you typically get:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Goal setting and basic categorization</li>
+                    <li>• Progress tracking and completion checkmarks</li>
+                    <li>• Simple reminders and notifications</li>
+                    <li>• Basic progress visualization</li>
+                    <li>• Limited number of active goals</li>
+                  </ul>
+                  <p className="mt-3"><strong>Best for:</strong> Personal goal planning, habit building, and anyone starting their goal-setting journey.</p>
+                  <p className="mt-2"><strong>Limitations:</strong> Advanced analytics, unlimited goals, team features, detailed reporting.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="text-blue-900 flex items-center gap-2">
+                  <span className="text-2xl">💎</span> Paid Goal Planner Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-blue-800">
+                  <p><strong>What you typically get:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Unlimited goals and projects</li>
+                    <li>• Advanced analytics and insights</li>
+                    <li>• Team collaboration features</li>
+                    <li>• Custom reporting and data export</li>
+                    <li>• Priority support and integrations</li>
+                  </ul>
+                  <p className="mt-3"><strong>Best for:</strong> Power users, teams, business goals, and data-driven planners who need detailed tracking.</p>
+                  <p className="mt-2"><strong>Consider:</strong> Many paid apps offer free trials—test before committing to ensure the features justify the cost.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700 text-center">
+              <strong>Our recommendation:</strong> Start with a free app. If you outgrow its features and can clearly identify how paid features would help you achieve more, then upgrade.
+            </p>
+          </div>
+        </section>
+
+        {/* Digital vs Paper Section */}
+        <section className="space-y-6" id="digital-vs-paper">
+          <h2 className="text-3xl font-bold text-gray-900">Digital Goal Planner vs Paper Goal Planner</h2>
+          <p className="text-lg text-gray-600">Both approaches work—the choice depends on your personality, preferences, and what helps you stay consistent.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-purple-200 bg-purple-50">
+              <CardHeader>
+                <CardTitle className="text-purple-900 flex items-center gap-2">
+                  <span className="text-2xl">📱</span> Digital Goal Planner Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-purple-800">
+                  <p><strong>Key advantages:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Automatic reminders and notifications</li>
+                    <li>• Easy to edit and reorganize goals</li>
+                    <li>• Progress tracking and data visualization</li>
+                    <li>• Searchable history and notes</li>
+                    <li>• Cross-device sync (phone, tablet, computer)</li>
+                    <li>• Can integrate with calendar and other apps</li>
+                  </ul>
+                  <p className="mt-3"><strong>Best for:</strong> People who appreciate data, need reminders, or want to track progress over long periods.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-orange-200 bg-orange-50">
+              <CardHeader>
+                <CardTitle className="text-orange-900 flex items-center gap-2">
+                  <span className="text-2xl">📓</span> Paper Goal Planners
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-orange-800">
+                  <p><strong>Key advantages:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Writing enhances memory and commitment</li>
+                    <li>• No digital distractions or notifications</li>
+                    <li>• Creative freedom (drawings, mind maps)</li>
+                    <li>• Tangible satisfaction of physical completion</li>
+                    <li>• No battery or connectivity required</li>
+                    <li>• Can be more relaxing and mindful</li>
+                  </ul>
+                  <p className="mt-3"><strong>Best for:</strong> People who enjoy writing, want to reduce screen time, or find physical planning more satisfying.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
+            <p className="text-blue-800 text-center">
+              <strong>Hybrid approach:</strong> Many people use paper for initial goal setting and weekly reviews, then digital for daily tracking and reminders.
+            </p>
+          </div>
+        </section>
+
+        {/* Who Should Use Section */}
+        <section className="space-y-6" id="who-should-use">
+          <h2 className="text-3xl font-bold text-gray-900">Who Should Use a Goal Planner App?</h2>
+          <p className="text-lg text-gray-600">Goal planner apps aren't just for "high achievers"—they're for anyone who wants to turn intentions into actions.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">💼</span> Professionals
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <p>Career development, skill building, project milestones, performance goals, work-life balance targets.</p>
+                  <p className="text-gray-600">Benefit: Structure for long-term career growth with busy work schedules.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">🎓</span> Students
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <p>Academic targets, study habits, skill acquisition, research deadlines, personal development goals.</p>
+                  <p className="text-gray-600">Benefit: Breaking large academic projects into manageable daily tasks.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">🏃</span> Fitness Enthusiasts
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <p>Training consistency, performance targets, habit formation, nutrition tracking, recovery goals.</p>
+                  <p className="text-gray-600">Benefit: Maintaining motivation through plateaus and busy periods.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">🎨</span> Creatives
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <p>Project completion, skill development, portfolio building, creative habits, networking goals.</p>
+                  <p className="text-gray-600">Benefit: Structure for creative work that doesn't feel restrictive.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">🏠</span> Life Planners
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <p>Home organization, family goals, personal development, financial targets, relationship improvements.</p>
+                  <p className="text-gray-600">Benefit: Balancing multiple life areas without dropping important priorities.</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">🔄</span> Habit Builders
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-sm">
+                  <p>Breaking old patterns, building new routines, consistency tracking, milestone celebrations.</p>
+                  <p className="text-gray-600">Benefit: Accountability and progress visibility for long-term behavior change.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Consistency Section */}
+        <section className="space-y-6" id="consistency-help">
+          <h2 className="text-3xl font-bold text-gray-900">How a Goal Planner App Helps You Stay Consistent</h2>
+          <p className="text-lg text-gray-600">Consistency isn't about perfect discipline—it's about having the right support system when motivation fades.</p>
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="border-green-200 bg-green-50">
+                <CardHeader>
+                  <CardTitle className="text-green-900 flex items-center gap-2">
+                    <span className="text-xl">🧠</span> External Memory
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-green-800">The app remembers your goals and next steps when your brain is busy or tired. No more "I forgot what I was supposed to work on."</p>
+                </CardContent>
+              </Card>
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="text-blue-900 flex items-center gap-2">
+                    <span className="text-xl">⏰</span> Timely Reminders
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-blue-800">Gentle nudges at the right moment protect your time and energy, preventing important tasks from getting lost in daily chaos.</p>
+                </CardContent>
+              </Card>
+              <Card className="border-purple-200 bg-purple-50">
+                <CardHeader>
+                  <CardTitle className="text-purple-900 flex items-center gap-2">
+                    <span className="text-xl">📊</span> Visual Progress
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-purple-800">Seeing your progress creates momentum and reinforces the habit, especially on days when motivation is low.</p>
+                </CardContent>
+              </Card>
+              <Card className="border-orange-200 bg-orange-50">
+                <CardHeader>
+                  <CardTitle className="text-orange-900 flex items-center gap-2">
+                    <span className="text-xl">🔄</span> Pattern Recognition
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-orange-800">The app helps you see what works (and what doesn't) so you can adjust your approach instead of quitting.</p>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+              <p className="text-gray-700">
+                <strong>The key insight:</strong> Consistency comes from systems, not willpower. A goal planner app provides the external structure that keeps you moving forward through busy weeks, low motivation, and unexpected obstacles.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Breaking Goals Section */}
+        <section className="space-y-6" id="breaking-goals">
+          <h2 className="text-3xl font-bold text-gray-900">How to Break Big Goals into Daily Actions</h2>
+          <p className="text-lg text-gray-600">The gap between "I want to achieve X" and "Today I will do Y" is where most goals die. Here's how to bridge it.</p>
+          <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+            <h3 className="text-xl font-semibold text-blue-900 mb-6">The Goal Decomposition Framework</h3>
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900">Start with the Big Outcome</h4>
+                  <p className="text-blue-800">Define your destination clearly: "Complete marathon in under 4 hours" not "get better at running."</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900">Work Backward with Milestones</h4>
+                  <p className="text-blue-800">Create quarterly checkpoints: Month 3: 10 miles, Month 6: 15 miles, Month 9: 20 miles.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900">Define Weekly Targets</h4>
+                  <p className="text-blue-800">Break milestones into weekly actions: "Week 1: Run 3x, 2 miles each. Week 2: Run 3x, 2.5 miles each."</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900">Identify Daily Actions</h4>
+                  <p className="text-blue-800">Convert weekly targets to specific daily tasks: "Monday: 3-mile run after work. Tuesday: 20-minute stretching."</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900">Make Actions "Too Easy to Skip"</h4>
+                  <p className="text-blue-800">Ensure each daily action is small enough to complete even on your worst day: "Put on running shoes" is better than "run 5 miles."</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">💡 Pro Tip: Time-Based Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 text-sm">Attach actions to specific times: "Run Monday/Wednesday/Friday at 6pm" rather than "run 3x this week."</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🎯 Pro Tip: Trigger-Based Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 text-sm">Link to existing habits: "After morning coffee, review goal progress" or "After dinner, plan tomorrow's goal action."</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🔄 Pro Tip: Weekly Review</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 text-sm">Every Sunday, adjust next week's actions based on what worked, what didn't, and upcoming challenges.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Common Mistakes Section */}
+        <section className="space-y-6" id="common-mistakes">
+          <h2 className="text-3xl font-bold text-gray-900">Common Goal-Setting Mistakes That Keep People Stuck</h2>
+          <p className="text-lg text-gray-600">Understanding these pitfalls is half the battle. Most goal failures aren't motivation problems—they're planning problems.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <Card className="border-red-200 bg-red-50">
+                <CardHeader>
+                  <CardTitle className="text-red-900 flex items-center gap-2">
+                    <span className="text-xl">🌫️</span> Vague Goals
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-red-800"><strong>The mistake:</strong> "Get healthier," "be more productive," "learn something new"</p>
+                  <p className="text-red-700 mt-2"><strong>The fix:</strong> Make goals specific and measurable: "Exercise 3x weekly," "complete online course," "read 20 pages daily"</p>
+                </CardContent>
+              </Card>
+              <Card className="border-orange-200 bg-orange-50">
+                <CardHeader>
+                  <CardTitle className="text-orange-900 flex items-center gap-2">
+                    <span className="text-xl">🎯</span> Outcome-Only Focus
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-orange-800"><strong>The mistake:</strong> Focusing only on the result (lose 20 pounds) without defining the process</p>
+                  <p className="text-orange-700 mt-2"><strong>The fix:</strong> Define daily/weekly actions that lead to the outcome: "walk 30 minutes daily," "meal prep Sundays"</p>
+                </CardContent>
+              </Card>
+              <Card className="border-yellow-200 bg-yellow-50">
+                <CardHeader>
+                  <CardTitle className="text-yellow-900 flex items-center gap-2">
+                    <span className="text-xl">📋</span> No Next Action
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-yellow-800"><strong>The mistake:</strong> Knowing what you want but not what to do right now</p>
+                  <p className="text-yellow-700 mt-2"><strong>The fix:</strong> Always have a clear, immediate next step: "Email professor about research opportunity" not "advance career"</p>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="space-y-6">
+              <Card className="border-purple-200 bg-purple-50">
+                <CardHeader>
+                  <CardTitle className="text-purple-900 flex items-center gap-2">
+                    <span className="text-xl">⚡</span> Too Much, Too Soon
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-purple-800"><strong>The mistake:</strong> Trying to change everything at once</p>
+                  <p className="text-purple-700 mt-2"><strong>The fix:</strong> Start with one habit or goal for 2-3 weeks before adding more. Build momentum gradually.</p>
+                </CardContent>
+              </Card>
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="text-blue-900 flex items-center gap-2">
+                    <span className="text-xl">📅</span> Unrealistic Timelines
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-blue-800"><strong>The mistake:</strong> Expecting major changes in weeks</p>
+                  <p className="text-blue-700 mt-2"><strong>The fix:</strong> Set realistic timeframes and celebrate small milestones along the way</p>
+                </CardContent>
+              </Card>
+              <Card className="border-green-200 bg-green-50">
+                <CardHeader>
+                  <CardTitle className="text-green-900 flex items-center gap-2">
+                    <span className="text-xl">🔄</span> No Tracking or Review
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-green-800"><strong>The mistake:</strong> Setting goals and never checking progress</p>
+                  <p className="text-green-700 mt-2"><strong>The fix:</strong> Weekly reviews to adjust plans based on real experience and obstacles</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700">
+              <strong>The pattern:</strong> Most goal-setting mistakes come from focusing on the destination instead of the journey. A good goal planner app helps you focus on daily actions while keeping the destination in sight.
+            </p>
+          </div>
+        </section>
+
+        {/* Why GoalPlanner Section */}
+        <section className="space-y-6" id="why-goalplanner">
+          <h2 className="text-3xl font-bold text-gray-900">Why GoalPlanner is Useful for Real Daily Life</h2>
+          <p className="text-lg text-gray-600">Most goal planning systems assume you have perfect discipline and unlimited time. GoalPlanner is built for reality.</p>
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🏠 Built for Real Life Constraints</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Quick setup that fits into busy schedules</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Flexible planning for travel, sick days, and unexpected events</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Recognizes some weeks are for maintenance, not growth</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🔗 Integrated System Approach</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Goals connect directly to daily planning and habits</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">No context switching between multiple apps</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Weekly reviews that actually improve your plans</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
+              <h3 className="text-xl font-semibold text-blue-900 mb-4">The GoalPlanner Difference</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-2">🎯 Focus on Action</h4>
+                  <p className="text-blue-700 text-sm">Always shows you what to do next, not just what you want to achieve</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-2">🔄 Sustainable Pacing</h4>
+                  <p className="text-blue-700 text-sm">Helps you maintain momentum through busy periods and low motivation</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-2">📊 Simple Progress</h4>
+                  <p className="text-blue-700 text-sm">Shows trends without overwhelming analytics or complicated dashboards</p>
+                </div>
+              </div>
+              <p className="text-blue-900 mt-6 text-center font-medium">
+                GoalPlanner works because it's designed for people who have jobs, families, and other commitments—helping you make steady progress without requiring life to be perfect first.
+              </p>
             </div>
           </div>
         </section>
