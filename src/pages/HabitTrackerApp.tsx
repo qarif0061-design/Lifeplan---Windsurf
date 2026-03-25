@@ -10,23 +10,51 @@ const HabitTrackerApp = () => {
   const faqData = [
     {
       question: "What's the best habit tracker app?",
-      answer: "The best habit tracker app is the one you'll use consistently. Look for simple tracking, flexible scheduling, reminders you control, and a way to learn from patterns—not just chase streaks."
+      answer: "The best habit tracker app is the one you'll actually use consistently. Look for: simple tracking (tap to mark completion), flexible scheduling (daily, weekly, custom patterns), reminders you control (gentle nudges, not constant alerts), pattern insights (see what works, not just streaks), integration with goals (connect habits to bigger outcomes), and minimal friction (quick to open, quick to use). The goal is building consistency, not perfect tracking. Many people abandon habit apps that feel like work—choose one that disappears into your routine."
     },
     {
       question: "How many habits should I track at once?",
-      answer: "Start with 1–3. If you track too many, it becomes a guilt list. Build one stable routine first, then add more."
+      answer: "Start with 1-3 habits maximum. Research shows that trying to build more than 3 new habits simultaneously dramatically reduces success rates for all of them. Focus on building one solid routine first, then gradually add more. Some people use a 'primary habit + maintenance habits' approach: one new habit you're actively building, plus 2-3 existing habits you're maintaining. The key is ensuring your habits don't compete for the same time, energy, or triggers. Quality trumps quantity every time."
     },
     {
-      question: "Do streaks help or hurt?",
-      answer: "They can help early on, but they can also create all-or-nothing thinking. A better target is weekly consistency (e.g., 4–5 days/week) with a small baseline."
+      question: "Do streaks help or hurt habit building?",
+      answer: "Streaks are a double-edged sword. They help initially by creating momentum and visual progress, but they can create all-or-nothing thinking that leads to quitting after one missed day. A better approach is focusing on weekly consistency (e.g., 5-7 days per week) rather than daily perfection. Many successful habit trackers now show weekly rates and trends instead of just streak counters. The psychology matters: streaks can motivate but also shame—weekly consistency feels achievable and forgiving while still driving results."
     },
     {
       question: "How do I build a habit when I have no time?",
-      answer: "Shrink the habit until it fits: 2–5 minutes is enough to maintain identity and momentum. Consistency beats intensity—especially in busy seasons."
+      answer: "Shrink the habit until it fits. The '2-minute rule' works: make your habit so small you can do it in 2 minutes or less. 'Exercise' becomes 'put on workout clothes.' 'Read more' becomes 'read one page.' 'Meditate' becomes 'sit and breathe for 60 seconds.' Consistency beats intensity, especially during busy seasons. Once the tiny habit is automatic, you can gradually increase the duration. Many people fail because they start with ambitious habits that collapse during busy weeks—start ridiculously small and build from there."
     },
     {
       question: "Can habit tracking help break bad habits?",
-      answer: "Yes—especially when you track triggers and replacements. The goal isn't never slipping; it's understanding what causes the behavior and designing a better default."
+      answer: "Yes, but you need to track the right things. Instead of just tracking 'didn't do bad habit,' track triggers and replacement behaviors. For example: track 'felt urge to scroll social media' and 'did 5 deep breaths instead.' This helps you understand patterns and build replacement routines. The key is tracking what you want to do, not just what you want to avoid. Many habit tracker apps support notes and reflections so you can identify triggers, test replacement behaviors, and learn from slips without judgment."
+    },
+    {
+      question: "What's the difference between a habit tracker app and a routine planner app?",
+      answer: "Habit tracker apps focus on individual behaviors and consistency—did you do the thing today? Routine planner apps focus on sequences of actions and timing—morning routine, evening routine, work startup routine. Habit tracking answers 'did I do it?' while routine planning answers 'how should I do it and when?' The best systems combine both: track individual habits while organizing them into meaningful routines. Many people use habit tracking for consistency and routine planning for structure."
+    },
+    {
+      question: "How do I track habits without obsessing over streaks?",
+      answer: "Focus on weekly patterns instead of daily perfection. Aim for 80% consistency (4-5 days per week for daily habits) rather than 100%. Use habit tracker apps that show trends and weekly rates rather than just streak counters. Practice 'never miss twice'—if you miss one day, get back on track the next day, but don't let one miss become two. Remember: habits are built through repetition over time, not perfect performance. Some days are for maintenance, not growth—and that's normal and sustainable."
+    },
+    {
+      question: "How do habits connect to goals and daily planning?",
+      answer: "Habits are the daily actions that achieve your goals. Goals set the destination, habits create the path. For example: Goal 'run marathon' → Habit 'run 3x weekly'. Goal 'learn Spanish' → Habit 'study 15 minutes daily'. Daily planning provides the structure to ensure habits happen: schedule habit time, protect it from conflicts, review what worked. The most effective systems connect all three: goals give purpose, habits provide consistency, daily planning creates execution. Many habit tracker apps now integrate with goal setting and daily planning for this reason."
+    },
+    {
+      question: "What features should I look for in a simple habit tracker app?",
+      answer: "For effective habit tracking, look for: one-tap completion (no complex forms), flexible scheduling (daily, specific days, custom patterns), gentle reminders (not constant notifications), pattern insights (weekly rates, best days, trouble spots), simple progress visualization (not overwhelming charts), and optional notes (for learning from slips). Avoid apps with excessive gamification, complex analytics, or social features that create pressure. The best habit tracker app makes tracking effortless and learning from patterns easy."
+    },
+    {
+      question: "How do I build habits that actually stick long-term?",
+      answer: "Long-term habit success comes from identity-based habits, not just outcome-based habits. Instead of 'I want to exercise,' become 'someone who exercises.' Build habits that: attach to existing triggers (after coffee, before bed), start ridiculously small (2-minute rule), have immediate satisfaction (tracking completion), fit your identity (match your self-image), and include flexibility (plan for imperfection). Also, focus on consistency over intensity—5 minutes daily is better than 1 hour weekly. The key is making the habit easier than skipping it, especially on busy or low-motivation days."
+    },
+    {
+      question: "Can habit tracking help with ADHD or executive function challenges?",
+      answer: "Habit tracking can be particularly helpful for ADHD or executive function challenges because it provides external structure and reduces cognitive load. Look for apps with: clear visual progress (immediate feedback), simple interface (minimal decision fatigue), flexible scheduling (adapt to variable energy), gentle reminders (external prompts), and pattern insights (understanding what works). The app serves as an external brain—remembering habits, providing prompts, and tracking progress when internal executive functions are challenged. However, remember that an app is a support tool, not a replacement for comprehensive ADHD management strategies."
+    },
+    {
+      question: "Why does GoalPlanner help with consistency and habit building?",
+      answer: "GoalPlanner is designed specifically for the messy reality of habit building. Unlike rigid habit trackers that create guilt, it features: flexible scheduling (adapt when life happens), weekly consistency focus (not daily perfection), integration with goals (habits serve bigger purposes), simple tracking (one-tap completion), and pattern insights (learn what works). It recognizes that some weeks are for building new habits, others for maintaining existing ones. The app reduces friction and provides the external structure needed for consistency without creating pressure or shame around imperfect days."
     }
   ];
 
@@ -264,6 +292,303 @@ const HabitTrackerApp = () => {
           </div>
         </section>
 
+        {/* Best Habit Tracker App Section */}
+        <section className="space-y-6" id="best-habit-tracker-app">
+          <h2 className="text-3xl font-bold text-gray-900">Best Habit Tracker App: What Actually Helps</h2>
+          <p className="text-lg text-gray-600">When searching for the best habit tracker app, focus on features that support consistency, not just tracking.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">🎯 Essential Features That Build Consistency</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">One-Tap Tracking</p>
+                    <p className="text-gray-600 text-sm">Mark completion with a single tap, no complex forms</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Flexible Scheduling</p>
+                    <p className="text-gray-600 text-sm">Daily, weekly, or custom patterns that fit your life</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Pattern Insights</p>
+                    <p className="text-gray-600 text-sm">See what works, not just whether you did it</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Gentle Reminders</p>
+                    <p className="text-gray-600 text-sm">Helpful nudges, not constant notifications</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">⚠️ Features That Often Create Pressure</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Excessive Gamification</p>
+                    <p className="text-gray-600 text-sm">Points, badges, and leaderboards that create pressure</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Social Pressure Features</p>
+                    <p className="text-gray-600 text-sm">Public sharing and comparison that create shame</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Perfect Streak Emphasis</p>
+                    <p className="text-gray-600 text-sm">All-or-nothing thinking that leads to quitting</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Complex Analytics</p>
+                    <p className="text-gray-600 text-sm">Overwhelming data that doesn't drive action</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Habits Matter Section */}
+        <section className="space-y-6" id="why-habits-matter">
+          <h2 className="text-3xl font-bold text-gray-900">Why Habits Matter More Than Motivation</h2>
+          <p className="text-lg text-gray-600">Motivation is unreliable. Habits are the systems that work when motivation fades.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-orange-200 bg-orange-50">
+              <CardHeader>
+                <CardTitle className="text-orange-900">🔥 Motivation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-orange-800">
+                  <p>• Unstable and unpredictable</p>
+                  <p>• Depends on mood, energy, circumstances</p>
+                  <p>• High at start, fades with difficulty</p>
+                  <p>• Creates pressure to "feel motivated"</p>
+                  <p>• Leads to all-or-nothing thinking</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-900">⚙️ Habits</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-green-800">
+                  <p>• Consistent and reliable</p>
+                  <p>• Work regardless of mood or energy</p>
+                  <p>• Build momentum over time</p>
+                  <p>• Reduce decision fatigue</p>
+                  <p>• Create automatic progress</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700 text-center">
+              <strong>The truth:</strong> Successful people don't have more motivation. They have better habits and systems that work when motivation disappears.
+            </p>
+          </div>
+        </section>
+
+        {/* Habit Tracker vs Routine Planner */}
+        <section className="space-y-6" id="habit-tracker-vs-routine">
+          <h2 className="text-3xl font-bold text-gray-900">Habit Tracker App vs Routine Planner</h2>
+          <p className="text-lg text-gray-600">Understanding the difference helps you choose the right approach for your needs.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-purple-200 bg-purple-50">
+              <CardHeader>
+                <CardTitle className="text-purple-900 flex items-center gap-2">
+                  <span className="text-2xl">✅</span> Habit Tracker Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-purple-800">
+                  <p><strong>Best for:</strong> Individual behaviors, consistency tracking, building new routines</p>
+                  <p><strong>Key features:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Daily completion tracking</li>
+                    <li>• Streak and pattern visualization</li>
+                    <li>• Flexible scheduling options</li>
+                    <li>• Progress insights and trends</li>
+                    <li>• Simple reminder system</li>
+                  </ul>
+                  <p><strong>When to use:</strong> When you're building specific behaviors and need to track consistency over time</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="text-blue-900 flex items-center gap-2">
+                  <span className="text-2xl">🔄</span> Routine Planners
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-blue-800">
+                  <p><strong>Best for:</strong> Sequencing actions, time-based routines, morning/evening schedules</p>
+                  <p><strong>Key features:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Time-based scheduling</li>
+                    <li>• Action sequencing</li>
+                    <li>• Routine templates</li>
+                    <li>• Duration tracking</li>
+                    <li>• Checklist completion</li>
+                  </ul>
+                  <p><strong>When to use:</strong> When you need to organize multiple actions into structured time blocks</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700 text-center">
+              <strong>Pro tip:</strong> Many successful people use both—habit trackers for consistency, routine planners for structure.
+            </p>
+          </div>
+        </section>
+
+        {/* How to Build Habits Section */}
+        <section className="space-y-6" id="build-habits">
+          <h2 className="text-3xl font-bold text-gray-900">How to Build Habits That Actually Stick</h2>
+          <p className="text-lg text-gray-600">The secret to habit building isn't willpower—it's design. Design habits that are easier than skipping them.</p>
+          <div className="space-y-6">
+            <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100">
+              <h3 className="text-xl font-semibold text-purple-900 mb-6">The Habit Design Framework</h3>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Start Identity-Based</h4>
+                    <p className="text-purple-700">Instead of "I want to exercise," become "someone who exercises." Identity drives long-term consistency.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Make It Ridiculously Small</h4>
+                    <p className="text-purple-700">2-minute rule: shrink habits until they're impossible to fail. "Read one page" not "read for 30 minutes."</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Attach to Existing Triggers</h4>
+                    <p className="text-purple-700">Link new habits to things you already do: after coffee, before bed, during lunch break.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Design the Environment</h4>
+                    <p className="text-purple-700">Make good habits easy and visible, bad habits hard and invisible. Remove friction, add convenience.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                  <div>
+                    <h4 className="font-semibold text-purple-900">Plan for Imperfection</h4>
+                    <p className="text-purple-700">Build in flexibility for busy days, low motivation, unexpected obstacles. Never miss twice.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Clear Definition</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Define exactly what counts as completion. "Exercise" becomes "20 minutes walking or workout video."</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">⏰ Time Anchoring</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Attach habits to specific times or existing routines for automatic triggers.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">📊 Track Patterns</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Focus on weekly consistency and learning from misses, not perfect daily streaks.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Tracking Without Obsession */}
+        <section className="space-y-6" id="tracking-without-obsession">
+          <h2 className="text-3xl font-bold text-gray-900">How to Track Habits Without Obsessing Over Streaks</h2>
+          <p className="text-lg text-gray-600">Healthy habit tracking supports growth without creating pressure or shame around imperfection.</p>
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🔄 Weekly Consistency Focus</h3>
+                <div className="space-y-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Instead of Daily Perfection</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-1 text-gray-600">
+                        <li>• Aim for 80% consistency (4-5 days/week)</li>
+                        <li>• Focus on trends, not individual days</li>
+                        <li>• Plan for maintenance days</li>
+                        <li>• Celebrate weekly patterns</li>
+                        <li>• Learn from misses without shame</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">⚡ The "Never Miss Twice" Rule</h3>
+                <div className="space-y-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Sustainable Mindset</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-1 text-gray-600">
+                        <li>• One miss is normal, two is a pattern</li>
+                        <li>• Get back on track immediately</li>
+                        <li>• Analyze what caused the miss</li>
+                        <li>• Adjust the habit if needed</li>
+                        <li>• Focus on long-term consistency</li>
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </div>
+            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
+              <p className="text-green-800">
+                <strong>The psychology:</strong> Weekly consistency feels achievable and forgiving while still driving results. It prevents the all-or-nothing thinking that makes people quit after one missed day.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Breaking Bad Habits */}
         <section className="space-y-6" id="breaking-bad-habits">
           <h2 className="text-3xl font-bold text-gray-900">Breaking Bad Habits (Without Shame)</h2>
@@ -303,17 +628,149 @@ const HabitTrackerApp = () => {
           </div>
         </section>
 
+        {/* Habits Connect to Goals Section */}
+        <section className="space-y-6" id="habits-goals-connection">
+          <h2 className="text-3xl font-bold text-gray-900">How Habits Connect to Goals and Daily Planning</h2>
+          <p className="text-lg text-gray-600">The most effective systems connect habits to your bigger picture and daily execution.</p>
+          <div className="space-y-6">
+            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+              <h3 className="text-xl font-semibold text-blue-900 mb-4">The Connection Triangle</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-3">🎯 Goals Set Direction</h4>
+                  <p className="text-blue-700 text-sm">Goals provide the "why" - the destination you're working toward. They give habits purpose and meaning.</p>
+                  <p className="text-blue-600 text-sm mt-2">Example: "Run marathon" → "Exercise 3x weekly"</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-3">✅ Habits Create Consistency</h4>
+                  <p className="text-blue-700 text-sm">Habits are the daily actions that accumulate into goal achievement. They turn intentions into automatic progress.</p>
+                  <p className="text-blue-600 text-sm mt-2">Example: "Morning run" becomes automatic routine</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-blue-800 mb-3">📅 Planning Ensures Execution</h4>
+                  <p className="text-blue-700 text-sm">Daily planning protects time for habits and adjusts when life happens.</p>
+                  <p className="text-blue-600 text-sm mt-2">Example: Schedule 6am run, protect from conflicts</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🔄 Weekly Review</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Review how habits supported goals this week and adjust next week's plan.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Identity Alignment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Choose habits that match the person you want to become.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">⚡ Energy Matching</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Schedule habits when you have the energy and motivation for them.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Why GoalPlanner Section */}
+        <section className="space-y-6" id="why-goalplanner-habits">
+          <h2 className="text-3xl font-bold text-gray-900">Why GoalPlanner Helps with Consistency</h2>
+          <p className="text-lg text-gray-600">GoalPlanner is designed specifically for the messy reality of building and maintaining habits.</p>
+          <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🔄 Flexible by Design</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Adapt schedules when life gets busy</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Weekly consistency focus, not daily perfection</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">No guilt or shame around missed days</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🎯 Purpose-Driven</h3>
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Connect habits to meaningful goals</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">See how daily actions create bigger outcomes</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-gray-700">Build identity-based habits that last</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
+              <h3 className="text-xl font-semibold text-purple-900 mb-4">The GoalPlanner Difference for Habit Building</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-medium text-purple-800 mb-2">✅ Simple Tracking</h4>
+                  <p className="text-purple-700 text-sm">One-tap completion that disappears into your routine</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-purple-800 mb-2">📊 Pattern Insights</h4>
+                  <p className="text-purple-700 text-sm">Learn what works without overwhelming data</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-purple-800 mb-2">🔗 Connected System</h4>
+                  <p className="text-purple-700 text-sm">Habits link to goals and daily planning for full context</p>
+                </div>
+              </div>
+              <p className="text-purple-900 mt-6 text-center font-medium">
+                GoalPlanner works because it's built for real habit building, not perfect tracking fantasies.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Mid-Page CTA */}
+        <section className="space-y-6" id="mid-cta">
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Build Habits That Last?</h2>
+            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+              Try Goal Planner – LifePlans for habit tracking that adapts to your real life. Start with just one small habit today.
+            </p>
+            <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
+              <Link to="/auth">Start Building Habits Free</Link>
+            </Button>
+          </div>
+        </section>
+
         {/* Internal Links */}
         <section className="space-y-6" id="related-topics">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Full System</h2>
-          <p className="text-lg text-gray-600">Habits stick better when they have direction and support.</p>
-          <div className="grid md:grid-cols-3 gap-4">
+          <h2 className="text-3xl font-bold text-gray-900">Build Your Complete Habit System</h2>
+          <p className="text-lg text-gray-600">Habit building works best when connected to your goals and daily structure.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Goal Planning</CardTitle>
+                <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Give your habits purpose by connecting them to meaningful goals</p>
+                <p className="text-gray-600 mb-4">Set meaningful goals that give your habits purpose and direction</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner App →</Link>
                 </Button>
@@ -321,10 +778,10 @@ const HabitTrackerApp = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Daily Planning</CardTitle>
+                <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Schedule habits into your day so they actually happen</p>
+                <p className="text-gray-600 mb-4">Schedule and protect time for your habits to ensure consistency</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner App →</Link>
                 </Button>
@@ -332,10 +789,21 @@ const HabitTrackerApp = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>All-in-One System</CardTitle>
+                <CardTitle className="text-lg">📝 Daily Reflection</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Goals + tasks + habits + reflections in one place</p>
+                <p className="text-gray-600 mb-4">Review habit progress and learn from your patterns with journaling</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/daily-journal-app">Daily Journal App →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🔄 All-in-One System</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Combine habits, goals, planning, and reflection in one place</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/productivity-app">Productivity App →</Link>
                 </Button>
