@@ -10,23 +10,51 @@ const ProductivityApp = () => {
   const faqData = [
     {
       question: "What makes a productivity app actually effective?",
-      answer: "An effective productivity app supports the full loop: plan, execute, track consistency, and review. Tools that only store tasks often increase overwhelm instead of reducing it."
+      answer: "An effective productivity app supports the full loop: plan, execute, track consistency, and review. Most apps only store tasks, which increases overwhelm. The best productivity apps help you: prioritize what matters, protect time for deep work, build consistent routines, track meaningful progress, and learn from patterns. The key is reducing mental overhead while increasing focus on what actually moves you forward."
     },
     {
       question: "Do I need an all-in-one productivity app?",
-      answer: "Not always—but many people benefit from one system for goals, tasks, habits, and reflection because it reduces context switching and helps you stay consistent."
+      answer: "Not always, but many people benefit from one system for goals, tasks, habits, and reflection. The benefits include: reduced context switching between apps, better visibility of how different areas connect, fewer things to maintain and update, and integrated progress tracking. However, if you already have systems that work well, the cost of switching might outweigh the benefits. The key is whether your current tools create friction or flow in your daily work."
     },
     {
-      question: "How can a productivity app help with focus?",
-      answer: "Focus improves when the app supports time blocking, clear next actions, and reminders that protect deep work—not constant notifications."
+      question: "How can a productivity app help with focus and deep work?",
+      answer: "Productivity apps help focus by: supporting time blocking (protecting blocks for deep work), limiting daily priorities (preventing overwhelm), providing gentle check-ins (not constant notifications), helping you say no to non-essential tasks, and tracking energy patterns (schedule deep work during peak focus times). The most effective focus features protect your attention rather than fragment it with excessive alerts and notifications."
     },
     {
       question: "What's the difference between a productivity app and a task management app?",
-      answer: "Task management apps organize tasks. Productivity apps help you make progress by connecting tasks to priorities, goals, and consistent routines—plus review."
+      answer: "Task management apps organize and track tasks. Productivity apps help you make consistent progress on what matters most. Task apps answer 'what needs to be done?' while productivity apps answer 'what should I focus on and how should I structure my day?' Productivity apps typically include: goal connection, time blocking, habit tracking, energy management, and weekly review—features that help you execute consistently rather than just organize tasks."
     },
     {
       question: "How do I avoid burnout with productivity tools?",
-      answer: "Use fewer priorities, plan realistically, maintain a small baseline habit, and review weekly. Productivity is about sustainable progress, not intensity."
+      answer: "Focus on sustainable progress rather than perfect productivity. Use fewer priorities (1-3 per day), plan realistic time blocks, maintain a small baseline habit (even on busy days), schedule weekly reviews to adjust, and protect recovery time. The best productivity apps support sustainable rhythms rather than constant intensity. Remember: productivity is about consistent progress, not heroic effort that leads to burnout."
+    },
+    {
+      question: "What features should I look for in a simple productivity app?",
+      answer: "For effective productivity management, look for: daily planning with priority setting, time blocking for focus work, habit tracking for consistency, goal connection for purpose, weekly review for improvement, simple task organization (not overwhelming lists), and minimal notifications (protect focus). Avoid apps with excessive analytics, complex project management, or constant alerts that fragment attention."
+    },
+    {
+      question: "Can a productivity app help with work-life balance?",
+      answer: "Yes, when designed intentionally. Look for apps that: support life area categorization (work, health, family, learning), help you schedule personal activities with the same seriousness as work, provide energy tracking (avoid scheduling deep work when you're tired), and include recovery time in your daily plans. The best productivity apps help you allocate time to all life domains, not just work tasks."
+    },
+    {
+      question: "How do productivity systems reduce mental overload?",
+      answer: "Productivity systems reduce mental load by: externalizing tasks and commitments (freeing working memory), creating structure and predictability (reducing decision fatigue), providing trusted systems (so you don't have to remember everything), building automatic routines (reducing willpower needs), and offering closure mechanisms (completing planned items feels satisfying). When you trust your system, your brain stops constantly scanning for unfinished tasks."
+    },
+    {
+      question: "What's the best way to organize tasks in a productivity app?",
+      answer: "Organize by priority and context, not just urgency. Use: daily priorities (1-3 most important), time blocks (when you'll work on them), energy matching (high-focus tasks during peak energy), context grouping (similar tasks together), and weekly themes (focus areas for the week). Avoid long, overwhelming task lists. The best organization helps you see what matters most without creating anxiety about everything else."
+    },
+    {
+      question: "How do productivity apps help with procrastination?",
+      answer: "Productivity apps help procrastination by: making tasks smaller and more specific (reducing activation energy), scheduling exact times (removing decision-making), creating accountability (through tracking and review), building momentum (with small wins), and identifying patterns (when and why you procrastinate). The key is making starting easier than avoiding, which good productivity systems do through structure and accountability."
+    },
+    {
+      question: "Should I use a productivity app for team or personal productivity?",
+      answer: "Personal productivity apps focus on individual effectiveness: personal goals, habits, energy management, and life balance. Team productivity apps focus on collaboration: shared projects, deadlines, communication, and resource allocation. While some apps try to serve both, most people work best with separate systems—one for personal organization, another for team collaboration. The key is using the right tool for the right context rather than forcing one app to serve all needs."
+    },
+    {
+      question: "Why does GoalPlanner work as a simple productivity system?",
+      answer: "GoalPlanner is designed specifically for sustainable personal productivity. Unlike complex systems that create overwhelm, it features: daily planning with realistic priorities, time blocking that adapts to real life, habit tracking for consistency, goal connection for purpose, simple weekly reviews, and minimal notifications. It recognizes that productivity is about consistent progress, not perfect execution. The app reduces friction while providing the structure needed for meaningful daily progress."
     }
   ];
 

@@ -10,23 +10,51 @@ const DailyJournalApp = () => {
   const faqData = [
     {
       question: "What's the best daily journal app?",
-      answer: "The best daily journal app is the one you'll use consistently. Look for low-friction writing, optional prompts, reminders you control, and the ability to review entries over time."
+      answer: "The best daily journal app is the one you'll actually use consistently. Look for: low-friction writing (start typing immediately), optional prompts (when you don't know what to write), reminders you control (gentle nudges, not pressure), easy review and search (find patterns over time), privacy-first design (your thoughts stay private), and cross-device sync (journal anywhere). The goal is building a reflection habit, not creating another task. Many people abandon journal apps that feel like work—choose one that disappears into your routine."
     },
     {
       question: "How long should I journal each day?",
-      answer: "3–10 minutes is enough for most people. Consistency matters more than long entries."
+      answer: "3-10 minutes is ideal for most people. Consistency matters more than length. The key is making journaling feel like a gift to yourself, not another obligation. Some people prefer 3-minute 'pattern check-ins' (what worked, what didn't, what's next), while others enjoy 10-minute deeper reflections. Start small (3-5 minutes) and increase only if it feels natural. Remember: a daily 3-minute journal is infinitely better than a weekly 30-minute journal that never happens."
     },
     {
       question: "What should I write about if my day felt 'boring'?",
-      answer: "Write about patterns, not events: what drained you, what energized you, what you avoided, and what you want tomorrow to feel like."
+      answer: "Boring days often reveal the most important patterns. Instead of focusing on events, focus on energy and awareness: What drained your energy today? What gave you energy? When did you feel most focused? When did you feel distracted? What did you avoid and why? What do you want tomorrow to feel like? These 'boring' insights often lead to the biggest breakthroughs because they reveal your patterns, triggers, and natural rhythms."
     },
     {
       question: "Can journaling help with goals and habits?",
-      answer: "Yes. Journaling improves awareness, helps you learn from setbacks, and makes the next action clearer—especially when connected to your goal and habit system."
+      answer: "Absolutely. Journaling connects goals and habits to reality. For goals: Track progress, identify obstacles, celebrate small wins, and adjust your approach. For habits: Notice what triggers good habits and what derails them, identify patterns that support consistency, and learn from slips without shame. The most powerful approach is connecting journal entries to your actual daily experiences with your goals and habits—this creates feedback loops that accelerate improvement."
     },
     {
-      question: "Is digital journaling safe?",
-      answer: "It depends on the app and your habits. Use strong passwords and be mindful about storing highly sensitive information. Choose tools that respect privacy."
+      question: "Is digital journaling safe and private?",
+      answer: "Digital journaling can be very secure if you choose the right tools. Look for: end-to-end encryption (only you can read your entries), strong password protection, two-factor authentication, clear privacy policy (no data selling), and local storage options (entries stored on your device). Avoid free apps that monetize through data mining. For sensitive topics, consider apps that offer local-only storage or encrypted cloud backup. Remember: if a service is free, you're often the product."
+    },
+    {
+      question: "What's the difference between a digital journal app and a paper journal?",
+      answer: "Digital journals offer searchability, accessibility (journal anywhere), easy editing, secure backups, and optional prompts. Paper journals provide tactile writing experience, no digital distractions, creative freedom (drawings, mind maps), and privacy through physical control. Many people use both: paper for deep reflection and creative work, digital for daily check-ins and pattern tracking. The choice depends on whether you value searchability and convenience over the tactile writing experience."
+    },
+    {
+      question: "How do I start a daily journaling habit?",
+      answer: "Start ridiculously small and attach it to an existing routine. The 2-minute rule works perfectly: 'After my morning coffee, write for 2 minutes.' Set a specific time and trigger (after coffee, before bed, during lunch). Use a simple template at first (one win, one challenge, one next step). Don't worry about quality—focus on consistency. Most importantly, forgive yourself for missed days and get back on track immediately. The habit is more important than any individual entry."
+    },
+    {
+      question: "What should I write in a daily journal?",
+      answer: "Use a flexible framework that adapts to your needs. Start with: 1) One highlight (what went well), 2) One challenge (what was hard), 3) One insight (what you learned), 4) One intention (what tomorrow needs). As you build the habit, add: energy levels, emotional patterns, goal progress, habit observations, gratitude, or creative ideas. The key is writing whatever helps you understand yourself better—there's no wrong way to journal."
+    },
+    {
+      question: "Can journaling help with anxiety and overthinking?",
+      answer: "Yes, journaling is one of the most effective tools for managing anxiety and overthinking. It works by: externalizing racing thoughts (getting them out of your head), creating distance from emotions (seeing them objectively), identifying thought patterns (recognizing anxiety loops), processing emotions instead of avoiding them, and finding solutions through structured thinking. The 'brain dump' technique—writing everything you're thinking without judgment—can immediately reduce mental overload and create clarity."
+    },
+    {
+      question: "How do I use journaling for self-awareness and personal growth?",
+      answer: "Focus on patterns over time rather than individual entries. Track: energy levels and what affects them, emotional triggers and responses, decision-making patterns, relationship dynamics, values in action vs. stated values, and growth areas. Weekly reviews are powerful: look back at your week's entries and identify themes, progress, and areas for improvement. The goal isn't perfect self-awareness but gentle, continuous growth through honest reflection."
+    },
+    {
+      question: "What features should I look for in a daily journal app?",
+      answer: "For effective daily journaling, look for: quick entry (start writing immediately), optional prompts (when you're stuck), flexible reminders (gentle nudges, not pressure), easy review and search (find patterns over time), privacy and security (your thoughts stay private), cross-device sync (journal anywhere), and simple organization (tags, categories, dates). Avoid apps with excessive features, social pressure, or complex organization that creates friction. The best journal app disappears into your routine."
+    },
+    {
+      question: "Why does GoalPlanner make daily reflection easier?",
+      answer: "GoalPlanner is designed specifically for sustainable daily reflection. Unlike complex journal apps that create pressure, it features: quick entry templates (start writing in seconds), optional guided prompts (when you need inspiration), connection to goals and habits (reflection with purpose), simple review tools (see patterns without overwhelm), privacy-first design (your thoughts stay private), and gentle reminders (build the habit without pressure). It recognizes that some days need deep reflection, others just a quick check-in—both are valuable."
     }
   ];
 
@@ -231,6 +259,442 @@ const DailyJournalApp = () => {
           </div>
         </section>
 
+        {/* Best Daily Journal App Section */}
+        <section className="space-y-6" id="best-daily-journal-app">
+          <h2 className="text-3xl font-bold text-gray-900">Best Daily Journal App: What to Look For</h2>
+          <p className="text-lg text-gray-600">When searching for the best daily journal app, focus on features that support consistent reflection, not just writing.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">🎯 Essential Features That Build Consistency</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Quick Entry</p>
+                    <p className="text-gray-600 text-sm">Start writing immediately without complex setup</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Optional Prompts</p>
+                    <p className="text-gray-600 text-sm">Guided questions when you don't know what to write</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Easy Review</p>
+                    <p className="text-gray-600 text-sm">Search and find patterns over time</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <div>
+                    <p className="font-medium">Privacy First</p>
+                    <p className="text-gray-600 text-sm">Your thoughts stay private and secure</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-gray-900">⚠️ Features That Often Create Pressure</h3>
+              <div className="space-y-3">
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Complex Organization</p>
+                    <p className="text-gray-600 text-sm">Too many tags, folders, and categories</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Social Pressure</p>
+                    <p className="text-gray-600 text-sm">Public sharing and comparison features</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Excessive Analytics</p>
+                    <p className="text-gray-600 text-sm">Word counts, sentiment analysis, mood tracking</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
+                  <div>
+                    <p className="font-medium">Gamification</p>
+                    <p className="text-gray-600 text-sm">Streaks, points, and achievement systems</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Why Journaling Helps Section */}
+        <section className="space-y-6" id="why-journaling-helps">
+          <h2 className="text-3xl font-bold text-gray-900">Why Journaling Helps with Clarity and Consistency</h2>
+          <p className="text-lg text-gray-600">Journaling isn't just writing—it's a tool for mental clarity and emotional intelligence.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="text-blue-900">🧠 Mental Clarity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-blue-800">
+                  <p>• Externalizes racing thoughts</p>
+                  <p>• Creates distance from emotions</p>
+                  <p>• Reduces mental overload</p>
+                  <p>• Organizes scattered ideas</p>
+                  <p>• Reveals thought patterns</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-900">🎯 Emotional Intelligence</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2 text-green-800">
+                  <p>• Processes emotions instead of avoiding them</p>
+                  <p>• Identifies emotional triggers</p>
+                  <p>• Builds self-awareness</p>
+                  <p>• Develops empathy for self</p>
+                  <p>• Creates emotional regulation</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700 text-center">
+              <strong>The science:</strong> Journaling activates the prefrontal cortex, helping you think more clearly and make better decisions. It's like a workout for your brain.
+            </p>
+          </div>
+        </section>
+
+        {/* Digital vs Paper Section */}
+        <section className="space-y-6" id="digital-vs-paper">
+          <h2 className="text-3xl font-bold text-gray-900">Digital Journal vs Paper Journal</h2>
+          <p className="text-lg text-gray-600">Both approaches work beautifully—the choice depends on your personality and goals.</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="border-purple-200 bg-purple-50">
+              <CardHeader>
+                <CardTitle className="text-purple-900 flex items-center gap-2">
+                  <span className="text-2xl">📱</span> Digital Journal Apps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-purple-800">
+                  <p><strong>Best for:</strong> Daily consistency, pattern tracking, accessibility</p>
+                  <p><strong>Key features:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Searchable entries and tags</li>
+                    <li>• Cross-device synchronization</li>
+                    <li>• Secure cloud backups</li>
+                    <li>• Optional guided prompts</li>
+                    <li>• Easy editing and organization</li>
+                    <li>• Pattern recognition tools</li>
+                  </ul>
+                  <p><strong>When to use:</strong> When you want to journal daily and track patterns over time</p>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="border-orange-200 bg-orange-50">
+              <CardHeader>
+                <CardTitle className="text-orange-900 flex items-center gap-2">
+                  <span className="text-2xl">📓</span> Paper Journals
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3 text-orange-800">
+                  <p><strong>Best for:</strong> Deep reflection, creative expression, tactile experience</p>
+                  <p><strong>Key features:</strong></p>
+                  <ul className="space-y-1 ml-4">
+                    <li>• Writing enhances memory and processing</li>
+                    <li>• No digital distractions</li>
+                    <li>• Creative freedom (drawings, mind maps)</li>
+                    <li>• Privacy through physical control</li>
+                    <li>• Tangible satisfaction</li>
+                    <li>• No battery or connectivity needed</li>
+                  </ul>
+                  <p><strong>When to use:</strong> When you want deeper reflection or enjoy the physical writing experience</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+            <p className="text-gray-700 text-center">
+              <strong>Hybrid approach:</strong> Many successful journalers use both—paper for deep work, digital for daily check-ins.
+            </p>
+          </div>
+        </section>
+
+        {/* Journaling for Goals Section */}
+        <section className="space-y-6" id="journaling-for-goals">
+          <h2 className="text-3xl font-bold text-gray-900">Journaling for Goals, Habits, and Personal Growth</h2>
+          <p className="text-lg text-gray-600">Journaling connects your daily experiences to your bigger aspirations and growth journey.</p>
+          <div className="space-y-6">
+            <div className="bg-indigo-50 rounded-2xl p-8 border border-indigo-100">
+              <h3 className="text-xl font-semibold text-indigo-900 mb-4">The Growth Connection Framework</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">🎯 Goals</h4>
+                  <p className="text-indigo-700 text-sm">Track progress, identify obstacles, celebrate wins, adjust strategies, maintain motivation through challenges.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "Today I worked on my goal for 25 minutes and realized I need to break it into smaller steps."</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">✅ Habits</h4>
+                  <p className="text-indigo-700 text-sm">Notice triggers and derailers, identify supportive patterns, learn from slips without shame, build consistency awareness.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "I skipped my morning habit because I stayed up too late—need to adjust bedtime routine."</p>
+                </div>
+                <div>
+                  <h4 className="font-medium text-indigo-800 mb-3">🌱 Growth</h4>
+                  <p className="text-indigo-700 text-sm">Recognize personal patterns, develop self-awareness, process emotions, make values-based decisions, continuous improvement.</p>
+                  <p className="text-indigo-600 text-sm mt-2">Example: "I noticed I get anxious when I don't plan my day—structure helps me feel calm."</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🔄 Weekly Review</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Look back at your week's entries to identify themes, progress, and areas for improvement.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Pattern Recognition</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Notice recurring thoughts, emotional triggers, and decision patterns over time.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">📊 Progress Tracking</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Connect daily actions to bigger outcomes and celebrate meaningful progress.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* What to Write Section */}
+        <section className="space-y-6" id="what-to-write">
+          <h2 className="text-3xl font-bold text-gray-900">What to Write in a Daily Journal</h2>
+          <p className="text-lg text-gray-600">A flexible framework that adapts to your needs makes journaling sustainable.</p>
+          <div className="space-y-6">
+            <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
+              <h3 className="text-xl font-semibold text-green-900 mb-4">The Daily Reflection Framework</h3>
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div>
+                    <h4 className="font-semibold text-green-900">One Highlight</h4>
+                    <p className="text-green-700">What went well today? What are you proud of or grateful for?</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div>
+                    <h4 className="font-semibold text-green-900">One Challenge</h4>
+                    <p className="text-green-700">What was difficult? What obstacle did you face or overcome?</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div>
+                    <h4 className="font-semibold text-green-900">One Insight</h4>
+                    <p className="text-green-700">What did you learn about yourself or your patterns?</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div>
+                    <h4 className="font-semibold text-green-900">One Intention</h4>
+                    <p className="text-green-700">What would make tomorrow better or easier?</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">⚡ Energy & Mood</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Track your energy levels and emotional state throughout the day.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Decision Making</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Note important decisions and your thought process behind them.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">💡 Creative Ideas</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Capture insights, solutions, and creative thoughts as they arise.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Daily Reflection Prompts */}
+        <section className="space-y-6" id="daily-reflection-prompts">
+          <h2 className="text-3xl font-bold text-gray-900">Daily Reflection Prompts for Real Life</h2>
+          <p className="text-lg text-gray-600">Use these prompts when you're stuck or want to deepen your reflection practice.</p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="text-blue-900">🌅 Morning Prompts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-blue-800 text-sm">
+                  <li>• What kind of day do I want to have?</li>
+                  <li>• What's my top priority today?</li>
+                  <li>• What would make today successful?</li>
+                  <li>• What am I grateful for this morning?</li>
+                  <li>• What do I need to let go of from yesterday?</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border-orange-200 bg-orange-50">
+              <CardHeader>
+                <CardTitle className="text-orange-900">🌆 Evening Prompts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-orange-800 text-sm">
+                  <li>• What was my biggest learning today?</li>
+                  <li>• When did I feel most like myself?</li>
+                  <li>• What drained my energy today?</li>
+                  <li>• What am I proud of accomplishing?</li>
+                  <li>• What do I want to carry into tomorrow?</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border-purple-200 bg-purple-50">
+              <CardHeader>
+                <CardTitle className="text-purple-900">🤔 Challenge Prompts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-purple-800 text-sm">
+                  <li>• What am I avoiding and why?</li>
+                  <li>• What belief is holding me back?</li>
+                  <li>• What would I do if I weren't afraid?</li>
+                  <li>• What pattern keeps repeating?</li>
+                  <li>• What do I need to forgive myself for?</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border-green-200 bg-green-50">
+              <CardHeader>
+                <CardTitle className="text-green-900">💼 Growth Prompts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-green-800 text-sm">
+                  <li>• How did I grow today?</li>
+                  <li>• What skill did I practice or improve?</li>
+                  <li>• How did I handle a difficult situation?</li>
+                  <li>• What boundary did I set or maintain?</li>
+                  <li>• What am I becoming through my daily choices?</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Journaling for Anxiety Section */}
+        <section className="space-y-6" id="journaling-for-anxiety">
+          <h2 className="text-3xl font-bold text-gray-900">Journaling for Overthinking, Focus, and Self-Awareness</h2>
+          <p className="text-lg text-gray-600">Journaling is one of the most effective tools for managing anxiety and breaking overthinking cycles.</p>
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">🧠 How Journaling Calms Anxiety</h3>
+                <div className="space-y-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">External Racing Thoughts</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Getting anxious thoughts out of your head and onto paper reduces their power over you.</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Creates Distance</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">Seeing worries written down helps you observe them objectively rather than being consumed by them.</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg text-gray-800">Identifies Patterns</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600">You can see what triggers your anxiety and prepare for those situations.</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-gray-900">⚡ The Brain Dump Technique</h3>
+                <div className="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
+                  <p className="text-yellow-800 mb-3">When overwhelmed, try this:</p>
+                  <ol className="space-y-2 text-yellow-700 ml-4">
+                    <li>Set a timer for 5-10 minutes</li>
+                    <li>Write everything you're thinking without judgment</li>
+                    <li>Don't worry about grammar or organization</li>
+                    <li>Keep writing until the timer goes off</li>
+                    <li>Read back and highlight any insights</li>
+                  </ol>
+                  <p className="text-yellow-800 mt-3">This immediately reduces mental overload and creates clarity.</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🔄 Worry Time</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Schedule 15 minutes to write down all your worries, then move on with your day.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">🎯 Solution Focus</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">After writing about a problem, write one small action you can take.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">📈 Progress Tracking</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600 text-sm">Note when anxiety decreases and what helped you manage it.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* Features Grid */}
         <section className="space-y-6" id="features">
           <h2 className="text-3xl font-bold text-gray-900">Key Features to Look For in the Best Daily Journal App</h2>
@@ -296,17 +760,30 @@ const DailyJournalApp = () => {
           </div>
         </section>
 
+        {/* Mid-Page CTA */}
+        <section className="space-y-6" id="mid-cta">
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 border border-indigo-100 text-center">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready for More Clarity and Growth?</h2>
+            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+              Try Goal Planner – LifePlans for daily reflection that connects to your goals and habits. Start with just 5 minutes of journaling today.
+            </p>
+            <Button asChild size="lg" className="rounded-full bg-indigo-600 hover:bg-indigo-700">
+              <Link to="/auth">Start Journaling Free</Link>
+            </Button>
+          </div>
+        </section>
+
         {/* Internal Links */}
         <section className="space-y-6" id="related-topics">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Full System</h2>
-          <p className="text-lg text-gray-600">Journaling works best when it's connected to action and consistency.</p>
-          <div className="grid md:grid-cols-3 gap-4">
+          <h2 className="text-3xl font-bold text-gray-900">Build Your Complete Reflection System</h2>
+          <p className="text-lg text-gray-600">Daily journaling works best when connected to your goals and daily structure.</p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
-                <CardTitle>Goal Planning</CardTitle>
+                <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Keep goals visible and learn from setbacks</p>
+                <p className="text-gray-600 mb-4">Set meaningful goals that give your journaling purpose and direction</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner App →</Link>
                 </Button>
@@ -314,10 +791,10 @@ const DailyJournalApp = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Daily Planning</CardTitle>
+                <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan your day with insights from your reflections</p>
+                <p className="text-gray-600 mb-4">Structure your day and protect time for reflection</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner App →</Link>
                 </Button>
@@ -325,12 +802,23 @@ const DailyJournalApp = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Consistency</CardTitle>
+                <CardTitle className="text-lg">✅ Habit Building</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build habits that support your growth</p>
+                <p className="text-gray-600 mb-4">Build routines that support your reflection practice</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/habit-tracker-app">Habit Tracker App →</Link>
+                </Button>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">🔄 All-in-One System</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 mb-4">Combine journaling, goals, planning, and habits in one place</p>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/productivity-app">Productivity App →</Link>
                 </Button>
               </CardContent>
             </Card>
