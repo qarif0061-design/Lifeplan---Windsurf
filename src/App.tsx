@@ -41,6 +41,9 @@ import Productivity from "./pages/Productivity";
 import Procrastination from "./pages/Procrastination";
 import ToDoList from "./pages/ToDoList";
 import StudentPlanner from "./pages/StudentPlanner";
+import SelfImprovement from "./pages/SelfImprovement";
+import FocusAndMentalClarity from "./pages/FocusAndMentalClarity";
+import DailyRoutinePlanner from "./pages/DailyRoutinePlanner";
 
 function App() {
   return (
@@ -62,6 +65,9 @@ function App() {
             <Route path="/procrastination" element={<Procrastination />} />
             <Route path="/to-do-list" element={<ToDoList />} />
             <Route path="/student-planner" element={<StudentPlanner />} />
+            <Route path="/self-improvement" element={<SelfImprovement />} />
+            <Route path="/focus-and-mental-clarity" element={<FocusAndMentalClarity />} />
+            <Route path="/daily-routine-planner" element={<DailyRoutinePlanner />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />
