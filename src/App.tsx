@@ -24,7 +24,7 @@ import Articles from "./pages/Articles";
 import ArticleDetails from "./pages/ArticleDetails";
 import Questions from "./pages/Questions";
 import NotFound from "./pages/NotFound";
-import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
+import GoalPlanner from "./pages/GoalPlanner";
 import DailyPlanner from "./pages/DailyPlanner";
 import DailyPlannerHistory from "./pages/DailyPlannerHistory";
 import About from "./pages/About";
@@ -34,6 +34,12 @@ import DailyPlannerApp from "./pages/DailyPlannerApp";
 import HabitTrackerApp from "./pages/HabitTrackerApp";
 import DailyJournalApp from "./pages/DailyJournalApp";
 import ProductivityApp from "./pages/ProductivityApp";
+import LifePlanning from "./pages/LifePlanning";
+import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
+import TimeManagementSeo from "./pages/TimeManagementSeo";
+import Productivity from "./pages/Productivity";
+import Procrastination from "./pages/Procrastination";
+import ToDoList from "./pages/ToDoList";
 
 function App() {
   return (
@@ -44,27 +50,16 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/goal-planner" element={<GoalPlanner />} />
             <Route
               path="/life-planning"
-              element={<Navigate to="/articles/how-to-set-goals-and-actually-achieve-them" replace />}
-            />
-            <Route
-              path="/getting-things-done"
-              element={<Navigate to="/articles/how-to-get-things-done-system-2026" replace />}
+              element={<LifePlanning />}
             />
             <Route path="/weekly-planning" element={<WeeklyPlanningSeo />} />
-            <Route
-              path="/time-management"
-              element={<Navigate to="/articles/time-management-tips-and-strategies-2026" replace />}
-            />
-            <Route
-              path="/smart-goals"
-              element={<Navigate to="/articles/smart-goals-template-and-examples-2026" replace />}
-            />
-            <Route
-              path="/motivation"
-              element={<Navigate to="/articles/best-motivational-quotes-2026" replace />}
-            />
+            <Route path="/time-management" element={<TimeManagementSeo />} />
+            <Route path="/productivity" element={<Productivity />} />
+            <Route path="/procrastination" element={<Procrastination />} />
+            <Route path="/to-do-list" element={<ToDoList />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />
