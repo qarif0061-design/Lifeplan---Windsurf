@@ -111,13 +111,13 @@ const Productivity = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Work Smarter, Not Harder</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Productivity Guide: Work Smarter, Not Harder</h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Master productivity with proven techniques that help you focus on what matters most, reduce mental overload, and achieve more without burnout.
+          Master sustainable productivity with proven techniques. Learn time blocking, energy management, and focus strategies that work without burnout. Join thousands who've transformed their productivity.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg" className="rounded-full bg-green-600 hover:bg-green-700">
-            <Link to="/auth">Boost Your Productivity</Link>
+            <Link to="/auth">Start Being Productive Free</Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#techniques">Learn Techniques</Link>
@@ -210,6 +210,152 @@ const Productivity = () => {
               </p>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Step-by-Step Productivity System */}
+      <section className="space-y-6" id="step-by-step">
+        <h2 className="text-3xl font-bold text-gray-900">Build Your Productivity System: Step-by-Step</h2>
+        <p className="text-lg text-gray-600">
+          Follow this process to create sustainable productivity that works for your specific situation.
+        </p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="border-blue-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">1</span>
+                Assess Current State
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Track your time for 1 week to understand where your time actually goes. Identify your peak energy periods and biggest time-wasters.</p>
+            </CardContent>
+          </Card>
+          <Card className="border-green-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">2</span>
+                Define Priorities
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Identify your 1-3 most important outcomes. Use GoalPlanner to connect daily tasks to these key priorities.</p>
+            </CardContent>
+          </Card>
+          <Card className="border-purple-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">3</span>
+                Implement Techniques
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Start with 1-2 techniques like time blocking and energy matching. Build consistency before adding more.</p>
+            </CardContent>
+          </Card>
+          <Card className="border-orange-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-orange-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">4</span>
+                Review & Refine
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Weekly reviews to see what's working. Adjust your system based on real results, not theory.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Productivity Best Practices */}
+      <section className="space-y-6" id="best-practices">
+        <h2 className="text-3xl font-bold text-gray-900">Productivity Best Practices</h2>
+        <p className="text-lg text-gray-600">
+          These proven strategies help maintain high productivity without burnout.
+        </p>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-900">🎯 Daily Habits</h3>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Plan Tomorrow Tonight</p>
+                  <p className="text-gray-600 text-sm">5-minute evening planning saves morning decision fatigue</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">First Things First</p>
+                  <p className="text-gray-600 text-sm">Tackle most important task during peak energy</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Protect Deep Work Time</p>
+                  <p className="text-gray-600 text-sm">Block 2-3 hour focus periods without interruptions</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-900">🛡️ Protection Strategies</h3>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Notification Management</p>
+                  <p className="text-gray-600 text-sm">Turn off notifications during focus blocks</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Boundary Setting</p>
+                  <p className="text-gray-600 text-sm">Communicate availability and protect your time</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Energy Recovery</p>
+                  <p className="text-gray-600 text-sm">Schedule breaks and recovery periods</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How GoalPlanner Helps */}
+      <section className="space-y-6" id="how-goalplanner-helps">
+        <h2 className="text-3xl font-bold text-gray-900">How GoalPlanner Boosts Your Productivity</h2>
+        <p className="text-lg text-gray-600">
+          GoalPlanner is specifically designed to eliminate productivity barriers and build systems for consistent progress.
+        </p>
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-green-900 mb-4">🚀 Eliminate Productivity Killers</h3>
+              <ul className="space-y-2 text-green-800">
+                <li>• <strong>Decision fatigue:</strong> Clear daily priorities eliminate constant choosing</li>
+                <li>• <strong>Context switching:</strong> Time blocking creates focused work periods</li>
+                <li>• <strong>Lost momentum:</strong> Progress tracking maintains motivation</li>
+                <li>• <strong>Scattered focus:</strong> Goal connection keeps priorities visible</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-blue-900 mb-4">⚡ Build Productive Systems</h3>
+              <ul className="space-y-2 text-blue-800">
+                <li>• <strong>Automatic prioritization:</strong> Goals drive daily task selection</li>
+                <li>• <strong>Energy matching:</strong> Schedule tasks to your energy levels</li>
+                <li>• <strong>Progress visualization:</strong> See your productivity patterns</li>
+                <li>• <strong>Habit integration:</strong> Productive behaviors become automatic</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -321,9 +467,9 @@ const Productivity = () => {
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Productivity Skills</h2>
+        <h2 className="text-3xl font-bold text-gray-900">Master Productivity & Related Skills</h2>
         <p className="text-lg text-gray-600">
-          Explore specific productivity techniques and strategies for different situations and challenges.
+          Explore specific productivity techniques and connect with goal planning systems that support sustained achievement.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
@@ -353,7 +499,7 @@ const Productivity = () => {
               <CardTitle className="text-lg">🔄 Daily Routines</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Build morning and evening routines for success</p>
+              <p className="text-gray-600 mb-4">Build routines that support productive work</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/daily-routine-planner">Daily Routines →</Link>
               </Button>
@@ -361,12 +507,56 @@ const Productivity = () => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">📱 Productivity Apps</CardTitle>
+              <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Tools and apps to support your productivity system</p>
+              <p className="text-gray-600 mb-4">Set meaningful goals that drive productive action</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/productivity-app">Productivity Apps →</Link>
+                <Link to="/goal-planner">Goal Planning →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">📝 To-Do Lists</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Organize tasks for maximum productivity</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/to-do-list">To-Do Lists →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">🧘 Self-Improvement</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Build personal skills that enhance productivity</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/self-improvement">Self-Improvement →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">🎓 Student Planning</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Productivity strategies for academic success</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/student-planner">Student Planning →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">🚫 Procrastination</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Overcome procrastination for better productivity</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/procrastination">Procrastination Help →</Link>
               </Button>
             </CardContent>
           </Card>

@@ -113,7 +113,7 @@ const GoalPlanner = () => {
       <section className="space-y-6 text-center py-12" id="hero">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Best Goal Planner for Achieving What Matters</h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-          Set meaningful goals, break them into daily actions, and track progress with a complete goal planning system that actually works.
+          Set meaningful goals, break them into daily actions, and track progress with a complete goal planning system that actually works. Join thousands who've achieved their goals with GoalPlanner.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
@@ -129,7 +129,7 @@ const GoalPlanner = () => {
       <section className="space-y-6" id="goal-setting">
         <h2 className="text-3xl font-bold text-gray-900">What Is a Goal Planner (And Why You Need One)</h2>
         <p className="text-lg text-gray-600">
-          A goal planner is more than a place to write down what you want to achieve—it's a complete system for turning aspirations into daily actions.
+          A goal planner is more than a place to write down what you want to achieve—it's a complete system for turning aspirations into daily actions. Unlike simple to-do lists, goal planning connects your big-picture vision to the small steps you take every day.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <Card className="border-blue-200 bg-blue-50">
@@ -138,7 +138,7 @@ const GoalPlanner = () => {
             </CardHeader>
             <CardContent>
               <p className="text-blue-800">
-                Define clear, meaningful goals that align with your values and current life context.
+                Define clear, meaningful goals that align with your values and current life context. GoalPlanner helps you identify what truly matters instead of chasing arbitrary objectives.
               </p>
             </CardContent>
           </Card>
@@ -148,7 +148,7 @@ const GoalPlanner = () => {
             </CardHeader>
             <CardContent>
               <p className="text-green-800">
-                Break big goals into specific, achievable steps you can take daily or weekly.
+                Break big goals into specific, achievable steps you can take daily or weekly. GoalPlanner automatically creates action plans from your goals.
               </p>
             </CardContent>
           </Card>
@@ -244,6 +244,152 @@ const GoalPlanner = () => {
               <p className="text-gray-600 text-center"><strong>Time-bound</strong><br/>Has a deadline</p>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      {/* Step-by-Step Guide */}
+      <section className="space-y-6" id="step-by-step">
+        <h2 className="text-3xl font-bold text-gray-900">How to Set and Achieve Goals: Step-by-Step</h2>
+        <p className="text-lg text-gray-600">
+          Follow this proven process to set goals you'll actually achieve with GoalPlanner.
+        </p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="border-blue-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">1</span>
+                Define Your Vision
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Start with your big-picture vision. What would make the biggest positive impact in your life right now? GoalPlanner helps you clarify what truly matters.</p>
+            </CardContent>
+          </Card>
+          <Card className="border-green-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">2</span>
+                Break Into Milestones
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Divide your big goal into quarterly and monthly milestones. GoalPlanner automatically breaks goals into manageable chunks.</p>
+            </CardContent>
+          </Card>
+          <Card className="border-purple-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">3</span>
+                Plan Weekly Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Set specific weekly actions that move you toward your milestones. GoalPlanner connects goals to your weekly planning.</p>
+            </CardContent>
+          </Card>
+          <Card className="border-orange-100">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <span className="w-8 h-8 bg-orange-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">4</span>
+                Track & Adjust
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Monitor progress weekly and adjust your approach. GoalPlanner shows what's working and what needs to change.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Best Practices */}
+      <section className="space-y-6" id="best-practices">
+        <h2 className="text-3xl font-bold text-gray-900">Goal Planning Best Practices</h2>
+        <p className="text-lg text-gray-600">
+          These proven strategies will help you set and achieve goals consistently.
+        </p>
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-900">🎯 Focus Strategies</h3>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">1-3 Active Goals Maximum</p>
+                  <p className="text-gray-600 text-sm">Focus your energy on what matters most</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Process Over Outcome</p>
+                  <p className="text-gray-600 text-sm">Focus on daily actions, not just results</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Weekly Reviews</p>
+                  <p className="text-gray-600 text-sm">Reflect and adjust your approach</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold text-gray-900">📈 Success Habits</h3>
+            <div className="space-y-3">
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Daily Check-ins</p>
+                  <p className="text-gray-600 text-sm">Review goals every morning for 2 minutes</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Celebrate Small Wins</p>
+                  <p className="text-gray-600 text-sm">Acknowledge progress, not just completion</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <div>
+                  <p className="font-medium">Habit Connection</p>
+                  <p className="text-gray-600 text-sm">Link daily habits to goal achievement</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How GoalPlanner Helps */}
+      <section className="space-y-6" id="how-goalplanner-helps">
+        <h2 className="text-3xl font-bold text-gray-900">How GoalPlanner Makes Goal Achievement Easier</h2>
+        <p className="text-lg text-gray-600">
+          GoalPlanner is designed specifically to help you overcome common goal-setting challenges and build momentum toward what matters most.
+        </p>
+        <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-8 border border-blue-100">
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-blue-900 mb-4">🚀 Overcome Common Barriers</h3>
+              <ul className="space-y-2 text-blue-800">
+                <li>• <strong>Analysis paralysis:</strong> Clear next actions eliminate overwhelm</li>
+                <li>• <strong>Lost motivation:</strong> Visual progress keeps you inspired</li>
+                <li>• <strong>Forgetting priorities:</strong> Daily reviews keep goals top of mind</li>
+                <li>• <strong>No accountability:</strong> Built-in tracking creates commitment</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-green-900 mb-4">⚡ Build Success Systems</h3>
+              <ul className="space-y-2 text-green-800">
+                <li>• <strong>Automatic action planning:</strong> Goals become daily tasks</li>
+                <li>• <strong>Progress visualization:</strong> See how far you've come</li>
+                <li>• <strong>Habit integration:</strong> Connect goals to daily routines</li>
+                <li>• <strong>Weekly insights:</strong> Learn what works for you</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -387,9 +533,9 @@ const GoalPlanner = () => {
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Goal Planning</h2>
+        <h2 className="text-3xl font-bold text-gray-900">Master Goal Planning & Related Skills</h2>
         <p className="text-lg text-gray-600">
-          Explore specific goal planning techniques and strategies to achieve different types of objectives.
+          Explore specific goal planning techniques and connect with productivity systems that support goal achievement.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card>
@@ -433,6 +579,50 @@ const GoalPlanner = () => {
               <p className="text-gray-600 mb-4">Create a comprehensive vision for your life and future</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/life-planning">Life Planning →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">⚡ Productivity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Build systems that support goal achievement</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/productivity">Productivity Methods →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">⏰ Time Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Protect time for working on important goals</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/time-management">Time Management →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">📝 To-Do Lists</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Organize daily tasks that support your goals</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/to-do-list">To-Do List Methods →</Link>
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">🧘 Self-Improvement</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">Build personal skills that support goal success</p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/self-improvement">Self-Improvement →</Link>
               </Button>
             </CardContent>
           </Card>
