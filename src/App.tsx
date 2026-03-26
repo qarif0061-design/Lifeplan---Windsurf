@@ -44,6 +44,9 @@ import StudentPlanner from "./pages/StudentPlanner";
 import SelfImprovement from "./pages/SelfImprovement";
 import FocusAndMentalClarity from "./pages/FocusAndMentalClarity";
 import DailyRoutinePlanner from "./pages/DailyRoutinePlanner";
+import TimeBlocking from "./pages/TimeBlocking";
+import PomodoroTechnique from "./pages/PomodoroTechnique";
+import EisenhowerMatrix from "./pages/EisenhowerMatrix";
 
 function App() {
   return (
@@ -68,6 +71,9 @@ function App() {
             <Route path="/self-improvement" element={<SelfImprovement />} />
             <Route path="/focus-and-mental-clarity" element={<FocusAndMentalClarity />} />
             <Route path="/daily-routine-planner" element={<DailyRoutinePlanner />} />
+            <Route path="/time-blocking" element={<TimeBlocking />} />
+            <Route path="/pomodoro-technique" element={<PomodoroTechnique />} />
+            <Route path="/eisenhower-matrix" element={<EisenhowerMatrix />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />
