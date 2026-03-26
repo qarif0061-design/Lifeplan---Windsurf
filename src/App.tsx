@@ -40,6 +40,7 @@ import TimeManagementSeo from "./pages/TimeManagementSeo";
 import Productivity from "./pages/Productivity";
 import Procrastination from "./pages/Procrastination";
 import ToDoList from "./pages/ToDoList";
+import StudentPlanner from "./pages/StudentPlanner";
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
             <Route path="/productivity" element={<Productivity />} />
             <Route path="/procrastination" element={<Procrastination />} />
             <Route path="/to-do-list" element={<ToDoList />} />
+            <Route path="/student-planner" element={<StudentPlanner />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />

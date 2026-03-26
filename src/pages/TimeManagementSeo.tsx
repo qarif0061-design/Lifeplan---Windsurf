@@ -1,88 +1,182 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
 
 const TimeManagementSeo = () => {
+  const faqData = [
+    {
+      question: "What's the difference between time management and productivity?",
+      answer: "Time management focuses on organizing and scheduling your time effectively. Productivity focuses on achieving meaningful outcomes with your time. Good time management creates the structure for productivity, but productivity also requires energy management, focus skills, and working on the right things. You can be well-organized but still unproductive if you're focusing on low-value tasks. The best approach combines both: manage your time well AND use it for high-impact work."
+    },
+    {
+      question: "How do I manage time when my schedule is unpredictable?",
+      answer: "Build flexibility into your time management system. Use time blocks with buffer periods, prioritize tasks by importance rather than strict timing, maintain a 'must-do' list of 1-3 critical items, and practice adaptive planning—review and adjust daily rather than weekly. Also identify your non-negotiable times (meetings, deep work blocks) and keep flexible time around them. The goal is structure that serves you, not rigid schedules that break when life happens."
+    },
+    {
+      question: "What's the most effective time management technique?",
+      answer: "The most effective technique is the one you'll actually use consistently. However, time blocking consistently ranks highest because it protects time for important work, reduces decision fatigue, and creates visible commitments. Time blocking works because it treats time as your most valuable resource and allocates it intentionally. Combine it with the 2-minute rule for small tasks and weekly reviews for planning, and you have a complete system."
+    },
+    {
+      question: "How do I stop procrastinating and manage my time better?",
+      answer: "Procrastination often happens when tasks feel overwhelming or unclear. Break tasks into specific 15-30 minute chunks, use the 2-minute rule for anything that takes less than 2 minutes, create time blocks for important work, and remove distractions during those blocks. Also identify what specifically triggers your procrastination—is it fear, boredom, or uncertainty? Address that root cause rather than just trying to force yourself to work."
+    },
+    {
+      question: "Can time management help with work-life balance?",
+      answer: "Yes, effective time management is essential for work-life balance. It helps you: schedule personal activities with the same seriousness as work, protect time for recovery and relationships, identify when you're overcommitted, create boundaries around work time, and ensure all important life areas get attention. Without good time management, work often expands to fill all available time, leaving little space for personal life."
+    },
+    {
+      question: "How do I manage time as a student with multiple classes?",
+      answer: "Student time management requires balancing classes, study, assignments, and personal life. Use: time blocking for study sessions around class schedules, the Pomodoro technique for focused study periods, weekly planning to map out assignment deadlines, and energy management (study difficult subjects during peak focus times). Also build in buffer time for unexpected study needs and protect sleep and recovery time."
+    },
+    {
+      question: "What time management tools actually work?",
+      answer: "Tools that reduce friction and provide structure work best: digital calendars for time blocking, simple to-do apps for task capture, time tracking apps to understand where time goes, and reminder systems for important commitments. Avoid tools that create complexity or require constant maintenance. Many people use a hybrid approach: digital for scheduling and reminders, paper for daily planning and reflection."
+    },
+    {
+      question: "How do I manage time when working from home?",
+      answer: "Home work requires intentional boundaries and structure. Create: dedicated work spaces, clear start/end times, time blocks for deep work, scheduled breaks to prevent burnout, and separation between work and personal areas. Also communicate your work hours to family/housemates and protect those boundaries. The key is creating structure that mimics office cues (commute, workspace, colleagues) even when you're at home."
+    },
+    {
+      question: "Should I multitask or focus on one thing at a time?",
+      answer: "Research consistently shows that single-tasking is more effective. Multitasking reduces productivity by up to 40%, increases errors, and creates mental fatigue. Instead, use time blocking to focus on one type of task at a time, batch similar tasks together, and protect deep work periods from interruptions. The only exception is combining low-focus tasks (like listening to podcasts while commuting) with activities that don't require full attention."
+    },
+    {
+      question: "How do I handle interruptions and protect my time?",
+      answer: "Protect your time with: clear communication of your availability and boundaries, specific office hours or focus times, buffering time between tasks for unexpected interruptions, systems for handling requests (email check times, message protocols), and physical or digital signals that you're in deep work mode. Also learn to say no politely but firmly to non-essential requests that conflict with your priorities."
+    }
+  ];
+
+  const techniques = [
+    {
+      title: "Time Blocking",
+      description: "Schedule specific blocks for focused work and protect that time.",
+      icon: "⏰"
+    },
+    {
+      title: "Pomodoro Technique",
+      description: "Work in 25-minute focused sprints with 5-minute breaks.",
+      icon: "🍅"
+    },
+    {
+      title: "Eisenhower Matrix",
+      description: "Organize tasks by urgency and importance to prioritize effectively.",
+      icon: "📊"
+    },
+    {
+      title: "Energy Management",
+      description: "Match task difficulty to your natural energy levels.",
+      icon: "⚡"
+    },
+    {
+      title: "Batch Processing",
+      description: "Group similar tasks together for efficiency.",
+      icon: "📦"
+    },
+    {
+      title: "Time Auditing",
+      description: "Track where your time actually goes to find patterns.",
+      icon: "🔍"
+    }
+  ];
+
   return (
     <PublicPageLayout>
       <Seo
-        title="Time Management: Time Blocking, Planning Tools, and Daily Routine | Lifeplans"
-        description="Time management that actually works: time blocking, Pomodoro, weekly planning, and daily planning templates. Use Lifeplans to stay organized, focus, and track progress."
+        title="Time Management Guide 2026 | Master Your Schedule & Focus | GoalPlanner"
+        description="Master time management with proven techniques. Learn time blocking, Pomodoro, and energy management. Organize your day, protect focus, and achieve more without stress."
         canonicalPath="/time-management"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Time Management",
           url: "https://goalplanner.io/time-management",
-          description: "Time management strategies including time blocking and Pomodoro.",
+          description: "Master time management with proven techniques and sustainable systems.",
+          mainEntity: {
+            "@type": "FAQPage",
+            mainEntity: faqData.map(faq => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer
+              }
+            }))
+          }
         }}
       />
 
-      <div className="space-y-10">
-        <header className="space-y-3">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900">Time management</h1>
-          <p className="text-gray-600 text-lg">
-            Time management is easier when you plan weekly and execute daily. Use time blocking and simple
-            routines to stay focused.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start time blocking</Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full">
-              <Link to="/weekly-planning">Weekly planning</Link>
-            </Button>
-          </div>
-        </header>
+      {/* Hero Section */}
+      <section className="space-y-6 text-center py-12" id="hero">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Master Your Time, Master Your Life</h1>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          Learn proven time management techniques that help you organize your day, protect your focus, and achieve what matters most without the stress and overwhelm.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button asChild size="lg" className="rounded-full bg-teal-600 hover:bg-teal-700">
+            <Link to="/auth">Master Your Time</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="rounded-full">
+            <Link to="#techniques">Learn Techniques</Link>
+          </Button>
+        </div>
+      </section>
 
-        <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Time blocking</h2>
-          <p className="text-gray-700 leading-relaxed">
-            Time blocking means scheduling your priorities before your day gets hijacked. It improves focus and
-            reduces decision fatigue.
-          </p>
-          <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm">
-            <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>Pick one outcome for the day</li>
-              <li>Block 1–2 focus sessions</li>
-              <li>Batch small tasks into one admin block</li>
-              <li>Leave buffer time so the plan survives reality</li>
-            </ul>
-          </div>
-        </section>
+      {/* Time Management Techniques */}
+      <section className="space-y-6" id="techniques">
+        <h2 className="text-3xl font-bold text-gray-900">Proven Time Management Techniques</h2>
+        <p className="text-lg text-gray-600">
+          These techniques work because they provide structure and reduce decision fatigue.
+        </p>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {techniques.map((technique, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">{technique.icon}</span>
+                  {technique.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">{technique.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
 
-        <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Pomodoro time management</h2>
-          <p className="text-gray-700 leading-relaxed">
-            Pomodoro helps when you feel unmotivated or distracted. Work in short sprints, then rest.
+      {/* CTA Section */}
+      <section className="space-y-6" id="cta">
+        <div className="bg-gradient-to-r from-teal-50 to-green-50 rounded-2xl p-8 border border-teal-100 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Master Your Time?</h2>
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            Start organizing your schedule with proven time management techniques. Protect your focus, achieve your priorities, and create balance with GoalPlanner.
           </p>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900">Default sprint</h3>
-              <p className="mt-2 text-gray-700">25 minutes work + 5 minutes break.</p>
-            </div>
-            <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900">For deep work</h3>
-              <p className="mt-2 text-gray-700">50 minutes work + 10 minutes break.</p>
-            </div>
-          </div>
-        </section>
+          <Button asChild size="lg" className="rounded-full bg-teal-600 hover:bg-teal-700">
+            <Link to="/auth">Start Time Management Free</Link>
+          </Button>
+        </div>
+      </section>
 
-        <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Keywords covered</h2>
-          <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm space-y-2">
-            <p className="text-gray-700">time management</p>
-            <p className="text-gray-700">time management tools</p>
-            <p className="text-gray-700">time management strategies</p>
-            <p className="text-gray-700">time management skills</p>
-            <p className="text-gray-700">time blocking</p>
-            <p className="text-gray-700">pomodoro time management</p>
-            <p className="text-gray-700">daily planning</p>
-            <p className="text-gray-700">daily routine</p>
-          </div>
-        </section>
-      </div>
+      {/* FAQ Section */}
+      <section className="space-y-6" id="faq">
+        <h2 className="text-3xl font-bold text-gray-900">Time Management FAQ</h2>
+        <Accordion type="single" collapsible className="w-full">
+          {faqData.map((faq, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger className="text-left">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent>
+                <p className="text-gray-600">{faq.answer}</p>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
     </PublicPageLayout>
   );
 };
