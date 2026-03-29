@@ -15,7 +15,6 @@ import {
   Lock,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 
 type SidebarProps = {
   collapsed: boolean;
@@ -32,7 +31,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
     navigate("/");
   };
 
-  const nav = useMemo(() => user
+  const nav = user
     ? [
         { to: "/dashboard", label: "Dashboard", icon: Home },
         { to: "/goals", label: "Goals", icon: Target },
@@ -44,7 +43,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         { to: "/questions", label: "Questions", icon: BookOpen },
         { to: "/download", label: "Download", icon: Download },
       ]
-    : [{ to: "/auth", label: "Sign In", icon: User }], [user]);
+    : [{ to: "/auth", label: "Sign In", icon: User }];
 
   return (
     <aside

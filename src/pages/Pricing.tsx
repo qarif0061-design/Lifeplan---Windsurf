@@ -33,9 +33,9 @@ const Pricing = () => {
     }
     if (planName === "Free") return;
 
-    if (planName === "Weekly") navigate(buildCheckoutUrl(checkoutLinks.weekly));
-    if (planName === "Monthly") navigate(buildCheckoutUrl(checkoutLinks.monthly));
-    if (planName === "Yearly") navigate(buildCheckoutUrl(checkoutLinks.yearly));
+    if (planName === "Weekly") window.location.assign(buildCheckoutUrl(checkoutLinks.weekly));
+    if (planName === "Monthly") window.location.assign(buildCheckoutUrl(checkoutLinks.monthly));
+    if (planName === "Yearly") window.location.assign(buildCheckoutUrl(checkoutLinks.yearly));
   };
 
   const plans = [

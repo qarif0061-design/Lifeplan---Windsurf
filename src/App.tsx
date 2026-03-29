@@ -47,6 +47,7 @@ import DailyRoutinePlanner from "./pages/DailyRoutinePlanner";
 import TimeBlocking from "./pages/TimeBlocking";
 import PomodoroTechnique from "./pages/PomodoroTechnique";
 import EisenhowerMatrix from "./pages/EisenhowerMatrix";
+import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
             <Route path="/time-blocking" element={<TimeBlocking />} />
             <Route path="/pomodoro-technique" element={<PomodoroTechnique />} />
             <Route path="/eisenhower-matrix" element={<EisenhowerMatrix />} />
+            <Route path="/admin" element={<AdminPanel />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/goals" element={<Goals />} />
