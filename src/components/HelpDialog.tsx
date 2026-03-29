@@ -24,7 +24,8 @@ const HelpDialog = ({ triggerText = "Contact Support", triggerVariant = "seconda
     const body = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
 
     const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
+    // Use window.open instead of location.href to avoid full page reload
+    window.open(mailto, '_blank');
   };
 
   return (

@@ -15,12 +15,15 @@ const RememberMeRedirect: React.FC<RememberMeRedirectProps> = ({ children }) => 
     if (loading) return;
     // Only apply logic on root path and not already on auth/dashboard
     if (location.pathname !== '/') return;
-    // If user is logged in and rememberMe was set, redirect to dashboard
-    if (user && localStorage.getItem('rememberMe') === 'true') {
-      const guardKey = "rememberMeRedirectedFromRoot";
-      if (sessionStorage.getItem(guardKey) === "true") return;
-      sessionStorage.setItem(guardKey, "true");
+    // Prevent redirect loop: only redirect if user exists, rememberMe is true, and not already redirected
+    if (user && localStorage.getItem('rememberMe') === 'true' && !sessionStorage.getItem('rememberMeRedirectedFromRoot')) {
+      sessionStorage.setItem('rememberMeRedirectedFromRoot', 'true');
       navigate('/dashboard', { replace: true });
+    }
+    
+    // Additional safeguard: Clear any stale redirect flags
+    if (sessionStorage.getItem('rememberMeRedirectedFromRoot') && !user) {
+      sessionStorage.removeItem('rememberMeRedirectedFromRoot');
     }
   }, [user, loading, location.pathname, navigate]);
 
