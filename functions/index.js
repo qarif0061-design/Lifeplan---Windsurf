@@ -11,7 +11,7 @@ exports.makeUserPremium = functions.https.onCall(async (data, context) => {
 
   // Check if the caller is an admin (you can implement your own admin check)
   const callerEmail = context.auth.token.email || '';
-  const adminEmails = ['shumailasahervu@gmail.com']; // Add your admin email(s)
+  const adminEmails = ['shumailasahervu@gmail.com', 'faranh31@gmail.com']; // Add your admin email(s)
   
   if (!adminEmails.includes(callerEmail)) {
     throw new functions.https.HttpsError('permission-denied', 'User is not authorized to perform this action.');
@@ -64,7 +64,7 @@ exports.removeUserPremium = functions.https.onCall(async (data, context) => {
 
   // Check if the caller is an admin
   const callerEmail = context.auth.token.email || '';
-  const adminEmails = ['shumailasahervu@gmail.com'];
+  const adminEmails = ['shumailasahervu@gmail.com', 'faranh31@gmail.com'];
   
   if (!adminEmails.includes(callerEmail)) {
     throw new functions.https.HttpsError('permission-denied', 'User is not authorized to perform this action.');
@@ -116,7 +116,7 @@ exports.getUserInfo = functions.https.onCall(async (data, context) => {
 
   // Check if the caller is an admin
   const callerEmail = context.auth.token.email || '';
-  const adminEmails = ['shumailasahervu@gmail.com'];
+  const adminEmails = ['shumailasahervu@gmail.com', 'faranh31@gmail.com'];
   
   if (!adminEmails.includes(callerEmail)) {
     throw new functions.https.HttpsError('permission-denied', 'User is not authorized to perform this action.');

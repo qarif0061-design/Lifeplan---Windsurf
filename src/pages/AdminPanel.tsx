@@ -207,6 +207,15 @@ const AdminPanel = () => {
                 >
                   📧 Pre-fill inertiaenergysolutions6@gmail.com
                 </button>
+                <button
+                  onClick={() => {
+                    setEmail('faranh31@gmail.com');
+                    setMessage('Email pre-filled. Click "Search" to find user.');
+                  }}
+                  className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-left"
+                >
+                  👤 Pre-fill faranh31@gmail.com (Admin)
+                </button>
               </div>
             </div>
           </div>
