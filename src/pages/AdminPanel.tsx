@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { doc, updateDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "@/firebase/config";
+import React, { useState } from 'react';
+import { httpsCallable } from 'firebase/functions';
+import { functions } from '@/firebase/config';
 import PublicPageLayout from "@/components/PublicPageLayout";
 
 const AdminPanel = () => {
@@ -20,22 +20,26 @@ const AdminPanel = () => {
     setUserFound(null);
 
     try {
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email));
-      const querySnapshot = await getDocs(q);
+      const getUserInfo = httpsCallable(functions, 'getUserInfo');
+      const result = await getUserInfo({ email });
+      
+      const data = result.data as any;
 
-      if (querySnapshot.empty) {
+      if (data.success) {
+        setUserFound(data.user);
+        setMessage(`User found: ${data.user.displayName || data.user.email}`);
+      } else {
+        setMessage('Error: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error: any) {
+      console.error('Error searching for user:', error);
+      if (error.code === 'permission-denied') {
+        setMessage('Permission denied. You must be an admin to perform this action.');
+      } else if (error.code === 'not-found') {
         setMessage('No user found with this email address');
       } else {
-        const userData = querySnapshot.docs[0].data();
-        setUserFound({
-          id: querySnapshot.docs[0].id,
-          ...userData
-        });
-        setMessage(`User found: ${userData.displayName || userData.email}`);
+        setMessage('Error searching for user: ' + (error.message || 'Unknown error'));
       }
-    } catch (error) {
-      setMessage('Error searching for user: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -49,18 +53,26 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      const userRef = doc(db, "users", userFound.id);
-      await updateDoc(userRef, {
-        isPremium: true,
-        premiumSince: new Date().toISOString(),
-        premiumSource: "admin_manual",
-        updatedAt: new Date().toISOString()
-      });
+      const makeUserPremium = httpsCallable(functions, 'makeUserPremium');
+      const result = await makeUserPremium({ email });
+      
+      const data = result.data as any;
 
-      setMessage(`Successfully made ${email} a premium user!`);
-      setUserFound(prev => ({ ...prev, isPremium: true }));
-    } catch (error) {
-      setMessage('Error making user premium: ' + error.message);
+      if (data.success) {
+        setMessage(`Successfully made ${email} a premium user!`);
+        setUserFound(prev => ({ ...prev, isPremium: true }));
+      } else {
+        setMessage('Error making user premium: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error: any) {
+      console.error('Error making user premium:', error);
+      if (error.code === 'permission-denied') {
+        setMessage('Permission denied. You must be an admin to perform this action.');
+      } else if (error.code === 'not-found') {
+        setMessage('User not found with this email address');
+      } else {
+        setMessage('Error making user premium: ' + (error.message || 'Unknown error'));
+      }
     } finally {
       setLoading(false);
     }
@@ -74,17 +86,26 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      const userRef = doc(db, "users", userFound.id);
-      await updateDoc(userRef, {
-        isPremium: false,
-        premiumSource: null,
-        updatedAt: new Date().toISOString()
-      });
+      const removeUserPremium = httpsCallable(functions, 'removeUserPremium');
+      const result = await removeUserPremium({ email });
+      
+      const data = result.data as any;
 
-      setMessage(`Successfully removed premium status from ${email}`);
-      setUserFound(prev => ({ ...prev, isPremium: false }));
-    } catch (error) {
-      setMessage('Error removing premium: ' + error.message);
+      if (data.success) {
+        setMessage(`Successfully removed premium status from ${email}`);
+        setUserFound(prev => ({ ...prev, isPremium: false }));
+      } else {
+        setMessage('Error removing premium: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error: any) {
+      console.error('Error removing premium:', error);
+      if (error.code === 'permission-denied') {
+        setMessage('Permission denied. You must be an admin to perform this action.');
+      } else if (error.code === 'not-found') {
+        setMessage('User not found with this email address');
+      } else {
+        setMessage('Error removing premium: ' + (error.message || 'Unknown error'));
+      }
     } finally {
       setLoading(false);
     }
@@ -141,7 +162,7 @@ const AdminPanel = () => {
                   </div>
                   <div>
                     <span className="text-sm text-gray-600">User ID:</span>
-                    <p className="font-medium text-sm">{userFound.id}</p>
+                    <p className="font-medium text-sm">{userFound.uid || userFound.id}</p>
                   </div>
                   <div>
                     <span className="text-sm text-gray-600">Premium Status:</span>

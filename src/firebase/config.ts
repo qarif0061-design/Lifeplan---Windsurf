@@ -2,6 +2,7 @@ import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
+import { getFunctions } from "firebase/functions";
 
 const envConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string | undefined,
@@ -29,6 +30,7 @@ const firebaseConfig = envConfig.projectId ? (envConfig as typeof fallbackConfig
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
 const db = getFirestore(app);
+const functions = getFunctions(app);
 let analytics: ReturnType<typeof getAnalytics> | null = null;
 if (typeof window !== "undefined") {
   try {
@@ -38,4 +40,4 @@ if (typeof window !== "undefined") {
   }
 }
 
-export { app, auth, db, analytics };
+export { app, auth, db, functions, analytics };
