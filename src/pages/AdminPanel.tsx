@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '@/firebase/config';
+import { doc, updateDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@/firebase/config";
 import PublicPageLayout from "@/components/PublicPageLayout";
 
 const AdminPanel = () => {
@@ -20,23 +20,36 @@ const AdminPanel = () => {
     setUserFound(null);
 
     try {
-      const getUserInfo = httpsCallable(functions, 'getUserInfo');
-      const result = await getUserInfo({ email });
-      
-      const data = result.data as any;
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
 
-      if (data.success) {
-        setUserFound(data.user);
-        setMessage(`User found: ${data.user.displayName || data.user.email}`);
+      if (querySnapshot.empty) {
+        setMessage('No user found with this email address');
       } else {
-        setMessage('Error: ' + (data.message || 'Unknown error'));
+        const userData = querySnapshot.docs[0].data();
+        setUserFound({
+          id: querySnapshot.docs[0].id,
+          ...userData
+        });
+        setMessage(`User found: ${userData.displayName || userData.email}`);
       }
     } catch (error: any) {
       console.error('Error searching for user:', error);
       if (error.code === 'permission-denied') {
-        setMessage('Permission denied. You must be an admin to perform this action.');
-      } else if (error.code === 'not-found') {
-        setMessage('No user found with this email address');
+        setMessage('🔧 Permission denied. Please update Firestore rules to allow admin access. See console for instructions.');
+        console.log(`
+        🔧 FIRESTORE RULES UPDATE NEEDED:
+        
+        Add these rules to your firestore.rules file:
+        
+        match /users/{userId} {
+          allow read: if signedIn() && (request.auth.uid == userId || request.auth.token.email == 'shumailasahervu@gmail.com' || request.auth.token.email == 'faranh31@gmail.com');
+          allow update: if signedIn() && (request.auth.uid == userId || request.auth.token.email == 'shumailasahervu@gmail.com' || request.auth.token.email == 'faranh31@gmail.com');
+        }
+        
+        Then deploy: firebase deploy --only firestore:rules
+        `);
       } else {
         setMessage('Error searching for user: ' + (error.message || 'Unknown error'));
       }
@@ -53,26 +66,19 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      const makeUserPremium = httpsCallable(functions, 'makeUserPremium');
-      const result = await makeUserPremium({ email });
-      
-      const data = result.data as any;
+      const userRef = doc(db, "users", userFound.id);
+      await updateDoc(userRef, {
+        isPremium: true,
+        premiumSince: new Date().toISOString(),
+        premiumSource: "admin_manual",
+        updatedAt: new Date().toISOString()
+      });
 
-      if (data.success) {
-        setMessage(`Successfully made ${email} a premium user!`);
-        setUserFound(prev => ({ ...prev, isPremium: true }));
-      } else {
-        setMessage('Error making user premium: ' + (data.message || 'Unknown error'));
-      }
+      setMessage(`Successfully made ${email} a premium user!`);
+      setUserFound(prev => ({ ...prev, isPremium: true }));
     } catch (error: any) {
       console.error('Error making user premium:', error);
-      if (error.code === 'permission-denied') {
-        setMessage('Permission denied. You must be an admin to perform this action.');
-      } else if (error.code === 'not-found') {
-        setMessage('User not found with this email address');
-      } else {
-        setMessage('Error making user premium: ' + (error.message || 'Unknown error'));
-      }
+      setMessage('Error making user premium: ' + (error.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -86,26 +92,18 @@ const AdminPanel = () => {
 
     setLoading(true);
     try {
-      const removeUserPremium = httpsCallable(functions, 'removeUserPremium');
-      const result = await removeUserPremium({ email });
-      
-      const data = result.data as any;
+      const userRef = doc(db, "users", userFound.id);
+      await updateDoc(userRef, {
+        isPremium: false,
+        premiumSource: null,
+        updatedAt: new Date().toISOString()
+      });
 
-      if (data.success) {
-        setMessage(`Successfully removed premium status from ${email}`);
-        setUserFound(prev => ({ ...prev, isPremium: false }));
-      } else {
-        setMessage('Error removing premium: ' + (data.message || 'Unknown error'));
-      }
+      setMessage(`Successfully removed premium status from ${email}`);
+      setUserFound(prev => ({ ...prev, isPremium: false }));
     } catch (error: any) {
       console.error('Error removing premium:', error);
-      if (error.code === 'permission-denied') {
-        setMessage('Permission denied. You must be an admin to perform this action.');
-      } else if (error.code === 'not-found') {
-        setMessage('User not found with this email address');
-      } else {
-        setMessage('Error removing premium: ' + (error.message || 'Unknown error'));
-      }
+      setMessage('Error removing premium: ' + (error.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -216,6 +214,22 @@ const AdminPanel = () => {
                 >
                   👤 Pre-fill faranh31@gmail.com (Admin)
                 </button>
+              </div>
+            </div>
+
+            {/* Instructions */}
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">🔧 Setup Instructions</h3>
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <p className="text-sm text-yellow-800">
+                  <strong>Important:</strong> To use this admin panel, you need to update your Firestore rules to allow admin access.
+                </p>
+                <ol className="mt-2 text-sm text-yellow-800 list-decimal list-inside">
+                  <li>Open <code className="bg-yellow-100 px-1 rounded">firestore.rules</code></li>
+                  <li>Add admin access rules (see console for details)</li>
+                  <li>Deploy: <code className="bg-yellow-100 px-1 rounded">firebase deploy --only firestore:rules</code></li>
+                  <li>Refresh this page and try again</li>
+                </ol>
               </div>
             </div>
           </div>

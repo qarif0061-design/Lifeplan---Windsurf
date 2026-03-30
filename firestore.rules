@@ -15,9 +15,9 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow read: if signedIn() && request.auth.uid == userId;
+      allow read: if signedIn() && (request.auth.uid == userId || request.auth.token.email == 'shumailasahervu@gmail.com' || request.auth.token.email == 'faranh31@gmail.com');
       allow create: if signedIn() && request.auth.uid == userId;
-      allow update: if signedIn() && request.auth.uid == userId;
+      allow update: if signedIn() && (request.auth.uid == userId || request.auth.token.email == 'shumailasahervu@gmail.com' || request.auth.token.email == 'faranh31@gmail.com');
       allow delete: if false;
     }
 
