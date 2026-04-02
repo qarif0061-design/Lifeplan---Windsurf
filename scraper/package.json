@@ -1,0 +1,26 @@
+{
+  "name": "tdp-community-scraper",
+  "version": "1.0.0",
+  "description": "Web scraper for TDP Community member emails",
+  "main": "simple-scraper.js",
+  "scripts": {
+    "start": "node simple-scraper.js",
+    "advanced": "node tdp-scraper.js",
+    "test": "node test-scraper.js",
+    "install-puppeteer": "npm install puppeteer"
+  },
+  "optionalDependencies": {
+    "puppeteer": "^21.0.0"
+  },
+  "keywords": [
+    "scraper",
+    "web-scraping",
+    "email-extraction",
+    "tdp-community"
+  ],
+  "author": "TDP Community Scraper",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
