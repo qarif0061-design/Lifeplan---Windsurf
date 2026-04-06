@@ -14,10 +14,13 @@ import {
   TrendingUp,
   Star,
   Crown,
-  Lock
+  Lock,
+  Plus,
+  CheckSquare,
+  Square
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
-import type { Goal, GoalCheckpoint, Priority } from "@/types";
+import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
 import { deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { useUser } from "@/contexts/UserContext";
 import { updateFeaturedGoalId } from "@/firebase/users";
@@ -223,6 +226,8 @@ const GoalDetails = () => {
   const [endDate, setEndDate] = useState("");
   const [checkpoints, setCheckpoints] = useState<GoalCheckpoint[]>([]);
   const [newCheckpointTitle, setNewCheckpointTitle] = useState("");
+  const [todos, setTodos] = useState<GoalTodo[]>([]);
+  const [newTodoTitle, setNewTodoTitle] = useState("");
 
   const isFeatured = Boolean(user?.featuredGoalId && goal?.id && user.featuredGoalId === goal.id);
 
@@ -294,6 +299,9 @@ const GoalDetails = () => {
           setPlanningObstacles(g.planning?.obstacles ?? "");
           setPlanningNextActions(g.planning?.nextActions ?? "");
           setPlanningAiPreview(g.planning?.aiPreview ?? "");
+
+          // Load todos
+          setTodos(g.todos || []);
         }
       })
       .catch((e: unknown) => {
@@ -632,6 +640,55 @@ const GoalDetails = () => {
     await persistCheckpoints(next);
   };
 
+  // Todo management functions
+  const persistTodos = async (nextTodos: GoalTodo[]) => {
+    if (!goal) return;
+    setIsSaving(true);
+    try {
+      await updateGoal(goal.id, { todos: nextTodos });
+      setGoal((prev) => prev ? { ...prev, todos: nextTodos } : null);
+      setTodos(nextTodos);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to update todos";
+      showError(message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleAddTodo = async () => {
+    const title = newTodoTitle.trim();
+    if (!goal) return;
+    if (!title) return;
+    
+    const now = new Date().toISOString();
+    const newTodo: GoalTodo = {
+      id: newId(),
+      title,
+      completed: false,
+      createdAt: now,
+      updatedAt: now,
+    };
+    
+    const nextTodos = [...todos, newTodo];
+    setNewTodoTitle("");
+    await persistTodos(nextTodos);
+  };
+
+  const handleToggleTodo = async (todoId: string) => {
+    const nextTodos = todos.map((todo) =>
+      todo.id === todoId
+        ? { ...todo, completed: !todo.completed, updatedAt: new Date().toISOString() }
+        : todo
+    );
+    await persistTodos(nextTodos);
+  };
+
+  const handleDeleteTodo = async (todoId: string) => {
+    const nextTodos = todos.filter((todo) => todo.id !== todoId);
+    await persistTodos(nextTodos);
+  };
+
   return (
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -966,8 +1023,99 @@ const GoalDetails = () => {
                   </CardContent>
                 </Card>
 
+                {/* Todos Section */}
+                <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-xl font-bold flex items-center justify-between">
+                      <span>To-Dos</span>
+                      <span className="text-sm font-medium text-gray-500">
+                        {todos.filter((t) => t.completed).length}/{todos.length}
+                      </span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-8 space-y-5">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Input
+                        value={newTodoTitle}
+                        onChange={(e) => setNewTodoTitle(e.target.value)}
+                        className="rounded-xl"
+                        placeholder="Add a new to-do..."
+                      />
+                      <Button
+                        onClick={handleAddTodo}
+                        disabled={isSaving || !newTodoTitle.trim()}
+                        className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add new to-do
+                      </Button>
+                    </div>
+
+                    {todos.length === 0 ? (
+                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                        Add to-dos to track specific action items for this goal.
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {todos.map((todo) => (
+                          <div key={todo.id} className="rounded-2xl border border-gray-100 bg-white p-3">
+                            <div className="flex items-center gap-3">
+                              <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
+                                {todo.completed ? (
+                                  <CheckSquare className="w-5 h-5 text-blue-600" />
+                                ) : (
+                                  <Square className="w-5 h-5 text-gray-400" />
+                                )}
+                              </button>
+                              <span
+                                className={`flex-1 text-sm ${
+                                  todo.completed ? "line-through text-gray-400" : "text-gray-900"
+                                }`}
+                              >
+                                {todo.title}
+                              </span>
+                              <Button
+                                variant="outline"
+                                className="rounded-xl text-rose-600 h-8 w-8 p-0"
+                                onClick={() => handleDeleteTodo(todo.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
                 <Card className="border-none shadow-sm rounded-[2.5rem]">
                   <CardContent className="space-y-6">
+                    {todos.length > 0 && (
+                      <div className="space-y-3">
+                        <div>
+                          <h4 className="text-lg font-bold text-gray-900">To-dos</h4>
+                          <p className="text-sm text-gray-500">Quick preview of your action items.</p>
+                        </div>
+                        <div className="space-y-2">
+                          {todos.slice(0, 6).map((t) => (
+                            <div key={t.id} className="flex items-center gap-2 text-sm">
+                              {t.completed ? (
+                                <CheckSquare className="w-4 h-4 text-blue-600" />
+                              ) : (
+                                <Square className="w-4 h-4 text-gray-400" />
+                              )}
+                              <span className={t.completed ? "line-through text-gray-400" : "text-gray-700"}>
+                                {t.title}
+                              </span>
+                            </div>
+                          ))}
+                          {todos.length > 6 && (
+                            <div className="text-xs font-semibold text-gray-500">+ {todos.length - 6} more</div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                     {!goal.strategy && !goal.planning ? (
                       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5">
                         <p className="font-semibold text-gray-900">No strategy or planning set for this goal yet.</p>
@@ -1036,73 +1184,73 @@ const GoalDetails = () => {
                     {editMode && (
                       <div className="space-y-6 pt-4 border-t">
                         {(editTarget === null || editTarget === "strategy") && (
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">Strategy</h4>
-                          <div className="space-y-3">
-                            <div className="grid gap-2">
-                              <Label>Why does this goal matter?</Label>
-                              <textarea
-                                value={strategyWhy}
-                                onChange={(e) => setStrategyWhy(e.target.value)}
-                                disabled={!editMode}
-                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <Label>Who benefits if you succeed?</Label>
-                              <textarea
-                                value={strategyWho}
-                                onChange={(e) => setStrategyWho(e.target.value)}
-                                disabled={!editMode}
-                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <Label>What will you say “No” to?</Label>
-                              <textarea
-                                value={strategyNo}
-                                onChange={(e) => setStrategyNo(e.target.value)}
-                                disabled={!editMode}
-                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                              />
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-3">Strategy</h4>
+                            <div className="space-y-3">
+                              <div className="grid gap-2">
+                                <Label>Why does this goal matter?</Label>
+                                <textarea
+                                  value={strategyWhy}
+                                  onChange={(e) => setStrategyWhy(e.target.value)}
+                                  disabled={!editMode}
+                                  className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <Label>Who benefits if you succeed?</Label>
+                                <textarea
+                                  value={strategyWho}
+                                  onChange={(e) => setStrategyWho(e.target.value)}
+                                  disabled={!editMode}
+                                  className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <Label>What will you say “No” to?</Label>
+                                <textarea
+                                  value={strategyNo}
+                                  onChange={(e) => setStrategyNo(e.target.value)}
+                                  disabled={!editMode}
+                                  className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
                         )}
 
                         {(editTarget === null || editTarget === "planning") && (
-                        <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">Planning</h4>
-                          <div className="space-y-3">
-                            <div className="grid gap-2">
-                              <Label>Common obstacles</Label>
-                              <textarea
-                                value={planningObstacles}
-                                onChange={(e) => setPlanningObstacles(e.target.value)}
-                                disabled={!editMode}
-                                className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <Label>Next actions for this week</Label>
-                              <textarea
-                                value={planningNextActions}
-                                onChange={(e) => setPlanningNextActions(e.target.value)}
-                                disabled={!editMode}
-                                className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                              />
-                            </div>
-                            <div className="grid gap-2">
-                              <Label>AI-style preview (local)</Label>
-                              <textarea
-                                value={planningAiPreview}
-                                onChange={(e) => setPlanningAiPreview(e.target.value)}
-                                disabled={!editMode}
-                                className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                              />
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-3">Planning</h4>
+                            <div className="space-y-3">
+                              <div className="grid gap-2">
+                                <Label>Common obstacles</Label>
+                                <textarea
+                                  value={planningObstacles}
+                                  onChange={(e) => setPlanningObstacles(e.target.value)}
+                                  disabled={!editMode}
+                                  className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <Label>Next actions for this week</Label>
+                                <textarea
+                                  value={planningNextActions}
+                                  onChange={(e) => setPlanningNextActions(e.target.value)}
+                                  disabled={!editMode}
+                                  className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                                />
+                              </div>
+                              <div className="grid gap-2">
+                                <Label>AI-style preview (local)</Label>
+                                <textarea
+                                  value={planningAiPreview}
+                                  onChange={(e) => setPlanningAiPreview(e.target.value)}
+                                  disabled={!editMode}
+                                  className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
                         )}
                       </div>
                     )}
@@ -1112,11 +1260,6 @@ const GoalDetails = () => {
                       <Button
                         variant="outline"
                         onClick={() => {
-                          if (!isPremium) {
-                            showError("Strategy is a Premium feature. Upgrade to add/edit strategy.");
-                            navigate("/pricing");
-                            return;
-                          }
                           setEditMode(true);
                           setEditTarget("strategy");
                         }}
@@ -1128,11 +1271,6 @@ const GoalDetails = () => {
                       <Button
                         variant="outline"
                         onClick={() => {
-                          if (!isPremium) {
-                            showError("Planning is a Premium feature. Upgrade to add/edit planning.");
-                            navigate("/pricing");
-                            return;
-                          }
                           setEditMode(true);
                           setEditTarget("planning");
                         }}

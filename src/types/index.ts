@@ -3,6 +3,14 @@ export type GoalStatus = 'active' | 'completed' | 'paused' | 'not-started';
 export type Priority = 'low' | 'medium' | 'high';
 export type EnergyLevel = 'low' | 'medium' | 'high';
 
+export type GoalTodo = {
+  id: string;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type GoalCheckpoint = {
   id: string;
   title: string;
@@ -56,6 +64,7 @@ export interface Goal {
     nextActions?: string;
     aiPreview?: string;
   };
+  todos?: GoalTodo[];
   successMetric: {
     type: 'number' | 'yes-no';
     target?: number;
