@@ -17,7 +17,8 @@ import {
   Lock,
   Plus,
   CheckSquare,
-  Square
+  Square,
+  FileText
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
@@ -212,6 +213,7 @@ const GoalDetails = () => {
   const [goal, setGoal] = useState<Goal | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editTarget, setEditTarget] = useState<"strategy" | "planning" | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -740,6 +742,168 @@ const GoalDetails = () => {
                   <Star className={`w-4 h-4 mr-2 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-500"}`} />
                   {goal.isFavorite ? "Favorited" : "Favorite"}
                 </Button>
+
+                <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="rounded-full">
+                      <FileText className="w-4 h-4 mr-2" /> Summary
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[760px] rounded-[2rem]">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl font-bold">Goal Summary</DialogTitle>
+                      <DialogDescription>Complete view of this goal.</DialogDescription>
+                    </DialogHeader>
+
+                    <div className="space-y-6 py-2 max-h-[70vh] overflow-auto pr-1">
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="text-lg font-bold text-gray-900">{goal.name}</div>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                              goal.status === "completed"
+                                ? "bg-emerald-100 text-emerald-700"
+                                : "bg-blue-100 text-blue-700"
+                            }`}
+                          >
+                            {goal.status}
+                          </span>
+                          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-slate-100 text-slate-700">
+                            {derivedProgress}%
+                          </span>
+                        </div>
+                        {goal.description ? <div className="text-sm text-gray-600">{goal.description}</div> : null}
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
+                          <div className="text-sm font-semibold text-gray-900">Details</div>
+                          <div className="mt-2 space-y-2 text-sm text-gray-600">
+                            <div className="flex justify-between gap-3">
+                              <span className="font-medium text-gray-500">Category</span>
+                              <span className="text-gray-900">{goal.category}</span>
+                            </div>
+                            <div className="flex justify-between gap-3">
+                              <span className="font-medium text-gray-500">Priority</span>
+                              <span className="text-gray-900">{goal.priority}</span>
+                            </div>
+                            <div className="flex justify-between gap-3">
+                              <span className="font-medium text-gray-500">Start</span>
+                              <span className="text-gray-900">{goal.startDate?.trim() ? goal.startDate : "No date set"}</span>
+                            </div>
+                            <div className="flex justify-between gap-3">
+                              <span className="font-medium text-gray-500">End</span>
+                              <span className="text-gray-900">{goal.endDate?.trim() ? goal.endDate : "No date set"}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
+                          <div className="text-sm font-semibold text-gray-900">Success Metric</div>
+                          <div className="mt-2 text-sm text-gray-600">
+                            {goal.successMetric.type === "number" ? (
+                              <div>
+                                Reach {goal.successMetric.target ?? 0}
+                                {goal.successMetric.unit ? ` ${goal.successMetric.unit}` : ""}
+                              </div>
+                            ) : (
+                              <div>Complete goal</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl border border-gray-100 bg-white p-4">
+                        <div className="text-sm font-semibold text-gray-900">Checkpoints</div>
+                        <div className="mt-3 space-y-2">
+                          {checkpoints.length === 0 ? (
+                            <div className="text-sm text-gray-600">No checkpoints yet.</div>
+                          ) : (
+                            checkpoints.map((c) => (
+                              <div key={c.id} className="flex items-start gap-2 text-sm">
+                                {c.kind === "number" ? (
+                                  <span className="text-gray-500">
+                                    {Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1) ? "[x]" : "[ ]"}
+                                  </span>
+                                ) : (
+                                  <span className="text-gray-500">{c.completed ? "[x]" : "[ ]"}</span>
+                                )}
+                                <div className="flex-1">
+                                  <div className="text-gray-900">{c.title}</div>
+                                  {c.kind === "number" ? (
+                                    <div className="text-xs text-gray-500">
+                                      {Math.max(0, c.current ?? 0)}/{Math.max(1, c.target ?? 1)}
+                                    </div>
+                                  ) : null}
+                                </div>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl border border-gray-100 bg-white p-4">
+                        <div className="text-sm font-semibold text-gray-900">To-dos</div>
+                        <div className="mt-3 space-y-2">
+                          {todos.length === 0 ? (
+                            <div className="text-sm text-gray-600">No to-dos yet.</div>
+                          ) : (
+                            todos.map((t) => (
+                              <div key={t.id} className="flex items-center gap-2 text-sm">
+                                <span className="text-gray-500">{t.completed ? "[x]" : "[ ]"}</span>
+                                <span className={t.completed ? "line-through text-gray-400" : "text-gray-900"}>{t.title}</span>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
+                          <div className="text-sm font-semibold text-gray-900">Strategy</div>
+                          <div className="mt-3 space-y-2 text-sm text-gray-600">
+                            {goal.strategy ? (
+                              <>
+                                <div>
+                                  <span className="font-medium text-gray-500">Why:</span> {goal.strategy.whyMatters}
+                                </div>
+                                <div>
+                                  <span className="font-medium text-gray-500">Who benefits:</span> {goal.strategy.whoBenefits}
+                                </div>
+                                <div>
+                                  <span className="font-medium text-gray-500">Say no to:</span> {goal.strategy.sayNoTo}
+                                </div>
+                              </>
+                            ) : (
+                              <div>No strategy set.</div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
+                          <div className="text-sm font-semibold text-gray-900">Planning</div>
+                          <div className="mt-3 space-y-2 text-sm text-gray-600">
+                            {goal.planning ? (
+                              <>
+                                {goal.planning.obstacles ? <div><span className="font-medium text-gray-500">Obstacles:</span> {goal.planning.obstacles}</div> : null}
+                                {goal.planning.nextActions ? <div><span className="font-medium text-gray-500">Next actions:</span> {goal.planning.nextActions}</div> : null}
+                                {goal.planning.aiPreview ? <div><span className="font-medium text-gray-500">AI preview:</span> {goal.planning.aiPreview}</div> : null}
+                              </>
+                            ) : (
+                              <div>No planning set.</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <DialogFooter>
+                      <Button variant="outline" onClick={() => setIsSummaryOpen(false)} className="rounded-xl">
+                        Close
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
 
                 <Button
                   variant="outline"
