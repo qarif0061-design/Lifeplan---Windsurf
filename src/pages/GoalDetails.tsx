@@ -18,7 +18,8 @@ import {
   Plus,
   CheckSquare,
   Square,
-  FileText
+  FileText,
+  GripVertical
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
@@ -1068,20 +1069,31 @@ const GoalDetails = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-8 space-y-5">
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="space-y-3">
                       <Input
                         value={newCheckpointTitle}
                         onChange={(e) => setNewCheckpointTitle(e.target.value)}
-                        className="rounded-xl"
+                        className="rounded-xl resize-none min-h-[44px]"
                         placeholder="Add a checkpoint (e.g., Week 1 complete)"
                       />
-                      <Button
-                        onClick={handleAddCheckpoint}
-                        disabled={isSaving || !newCheckpointTitle.trim()}
-                        className="rounded-xl bg-blue-600 hover:bg-blue-700"
-                      >
-                        Add
-                      </Button>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Select defaultValue="boolean">
+                          <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
+                            <SelectValue placeholder="Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="boolean">Checkpoint</SelectItem>
+                            <SelectItem value="number">Number</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          onClick={handleAddCheckpoint}
+                          disabled={isSaving || !newCheckpointTitle.trim()}
+                          className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                        >
+                          Add
+                        </Button>
+                      </div>
                     </div>
 
                     {checkpoints.length === 0 ? (
@@ -1090,96 +1102,103 @@ const GoalDetails = () => {
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        {checkpoints.map((c) => (
+                        {checkpoints.map((c, index) => (
                           <div key={c.id} className="rounded-2xl border border-gray-100 bg-white p-3">
-                            <div className="flex flex-col lg:flex-row lg:items-center gap-3">
-                              <div className="flex items-center gap-3 min-w-0 flex-1">
-                                <input
-                                  type="checkbox"
-                                  checked={
-                                    c.kind === "number"
-                                      ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1)
-                                      : c.completed
-                                  }
-                                  onChange={() => handleToggleCheckpoint(c.id)}
-                                  className="h-4 w-4"
-                                />
-                                <Input
-                                  value={c.title}
-                                  onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
-                                  onBlur={handleCommitRenameCheckpoint}
-                                  className="rounded-xl"
-                                />
-                              </div>
+                            <div className="flex items-start gap-2">
+                              <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
+                                <GripVertical className="w-4 h-4" />
+                              </button>
+                              <div className="flex-1">
+                                <div className="flex flex-col gap-3">
+                                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                                    <input
+                                      type="checkbox"
+                                      checked={
+                                        c.kind === "number"
+                                          ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1)
+                                          : c.completed
+                                      }
+                                      onChange={() => handleToggleCheckpoint(c.id)}
+                                      className="h-4 w-4"
+                                    />
+                                    <Input
+                                      value={c.title}
+                                      onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
+                                      onBlur={handleCommitRenameCheckpoint}
+                                      className="rounded-xl resize-none min-h-[44px]"
+                                    />
+                                  </div>
 
-                              <div className="flex items-center gap-3 justify-between lg:justify-end">
-                                <Select
-                                  value={c.kind ?? "boolean"}
-                                  onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
-                                >
-                                  <SelectTrigger className="w-[150px] rounded-xl">
-                                    <SelectValue placeholder="Type" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="boolean">Checkpoint</SelectItem>
-                                    <SelectItem value="number">Number</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                    <Select
+                                      value={c.kind ?? "boolean"}
+                                      onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
+                                    >
+                                      <SelectTrigger className="w-full sm:w-[150px] rounded-xl">
+                                        <SelectValue placeholder="Type" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="boolean">Checkpoint</SelectItem>
+                                        <SelectItem value="number">Number</SelectItem>
+                                      </SelectContent>
+                                    </Select>
 
-                                <Button
-                                  variant="outline"
-                                  className="rounded-xl text-rose-600"
-                                  onClick={() => handleDeleteCheckpoint(c.id)}
-                                >
-                                  Delete
-                                </Button>
+                                    <Button
+                                      variant="outline"
+                                      className="rounded-xl text-rose-600"
+                                      onClick={() => handleDeleteCheckpoint(c.id)}
+                                    >
+                                      Delete
+                                    </Button>
+                                  </div>
+                                </div>
+
+                                {c.kind === "number" && (
+                                  <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
+                                    <div className="flex items-center gap-2">
+                                      <Input
+                                        type="number"
+                                        inputMode="numeric"
+                                        value={c.current ?? 0}
+                                        onChange={(e) =>
+                                          handleSetCheckpointLocalNumbers(c.id, {
+                                            current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
+                                          })
+                                        }
+                                        onBlur={() =>
+                                          handleUpdateCheckpointNumbers(c.id, {
+                                            current: c.current ?? 0,
+                                            target: c.target ?? 1,
+                                          })
+                                        }
+                                        className="w-full sm:w-[120px] rounded-xl"
+                                      />
+                                      <span className="text-sm text-gray-500">/</span>
+                                      <Input
+                                        type="number"
+                                        inputMode="numeric"
+                                        value={c.target ?? 1}
+                                        onChange={(e) =>
+                                          handleSetCheckpointLocalNumbers(c.id, {
+                                            target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
+                                          })
+                                        }
+                                        onBlur={() =>
+                                          handleUpdateCheckpointNumbers(c.id, {
+                                            current: c.current ?? 0,
+                                            target: c.target ?? 1,
+                                          })
+                                        }
+                                        className="w-full sm:w-[120px] rounded-xl"
+                                      />
+                                    </div>
+                                    <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
+                                      {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             </div>
-
-                            {c.kind === "number" && (
-                              <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
-                                <div className="flex items-center gap-2">
-                                  <Input
-                                    type="number"
-                                    inputMode="numeric"
-                                    value={c.current ?? 0}
-                                    onChange={(e) =>
-                                      handleSetCheckpointLocalNumbers(c.id, {
-                                        current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
-                                      })
-                                    }
-                                    onBlur={() =>
-                                      handleUpdateCheckpointNumbers(c.id, {
-                                        current: c.current ?? 0,
-                                        target: c.target ?? 1,
-                                      })
-                                    }
-                                    className="w-full sm:w-[120px] rounded-xl"
-                                  />
-                                  <span className="text-sm text-gray-500">/</span>
-                                  <Input
-                                    type="number"
-                                    inputMode="numeric"
-                                    value={c.target ?? 1}
-                                    onChange={(e) =>
-                                      handleSetCheckpointLocalNumbers(c.id, {
-                                        target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
-                                      })
-                                    }
-                                    onBlur={() =>
-                                      handleUpdateCheckpointNumbers(c.id, {
-                                        current: c.current ?? 0,
-                                        target: c.target ?? 1,
-                                      })
-                                    }
-                                    className="w-full sm:w-[120px] rounded-xl"
-                                  />
-                                </div>
-                                <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
-                                  {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
-                                </div>
-                              </div>
-                            )}
                           </div>
                         ))}
                       </div>
@@ -1221,30 +1240,37 @@ const GoalDetails = () => {
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        {todos.map((todo) => (
+                        {todos.map((todo, index) => (
                           <div key={todo.id} className="rounded-2xl border border-gray-100 bg-white p-3">
-                            <div className="flex items-center gap-3">
-                              <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
-                                {todo.completed ? (
-                                  <CheckSquare className="w-5 h-5 text-blue-600" />
-                                ) : (
-                                  <Square className="w-5 h-5 text-gray-400" />
-                                )}
+                            <div className="flex items-start gap-2">
+                              <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
+                                <GripVertical className="w-4 h-4" />
                               </button>
-                              <span
-                                className={`flex-1 text-sm ${
-                                  todo.completed ? "line-through text-gray-400" : "text-gray-900"
-                                }`}
-                              >
-                                {todo.title}
-                              </span>
-                              <Button
-                                variant="outline"
-                                className="rounded-xl text-rose-600 h-8 w-8 p-0"
-                                onClick={() => handleDeleteTodo(todo.id)}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3">
+                                  <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
+                                    {todo.completed ? (
+                                      <CheckSquare className="w-5 h-5 text-blue-600" />
+                                    ) : (
+                                      <Square className="w-5 h-5 text-gray-400" />
+                                    )}
+                                  </button>
+                                  <span
+                                    className={`flex-1 text-sm ${
+                                      todo.completed ? "line-through text-gray-400" : "text-gray-900"
+                                    }`}
+                                  >
+                                    {todo.title}
+                                  </span>
+                                  <Button
+                                    variant="outline"
+                                    className="rounded-xl text-rose-600 h-8 w-8 p-0"
+                                    onClick={() => handleDeleteTodo(todo.id)}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ))}
