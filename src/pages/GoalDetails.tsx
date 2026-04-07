@@ -62,9 +62,41 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 
+import { CSS } from "@dnd-kit/utilities";
+
 const newId = (): string => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+};
+
+const SortableItem = ({
+  id,
+  children,
+}: {
+  id: string;
+  children: (props: {
+    setNodeRef: (node: HTMLElement | null) => void;
+    listeners: Record<string, unknown>;
+    attributes: Record<string, unknown>;
+    transform: unknown;
+    transition: string | undefined;
+    isDragging: boolean;
+  }) => React.ReactNode;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+
+  return (
+    <>
+      {children({
+        setNodeRef,
+        listeners,
+        attributes,
+        transform,
+        transition,
+        isDragging,
+      })}
+    </>
+  );
 };
 
 const getProgressIndicatorClass = (pct: number): string => {

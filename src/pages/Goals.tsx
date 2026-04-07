@@ -18,7 +18,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Crown,
-  Lock
+  Lock,
+  Copy
 } from "lucide-react";
 import {
   Dialog,
@@ -256,6 +257,42 @@ const Goals = () => {
       await updateGoal(g.id, { isFavorite: !g.isFavorite });
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : "Failed to update favorite";
+      showError(message);
+    }
+  };
+
+  const handleDuplicateGoal = async (g: Goal) => {
+    if (!user) {
+      showError("Please sign in to duplicate goals.");
+      return;
+    }
+
+    const now = new Date().toISOString();
+
+    try {
+      const newGoalId = await createGoal({
+        userId: g.userId ?? user.id,
+        name: `${g.name} (Copy)`,
+        category: g.category,
+        priority: g.priority,
+        startDate: g.startDate,
+        endDate: g.endDate,
+        description: g.description,
+        checkpoints: g.checkpoints ?? [],
+        todos: (g as unknown as { todos?: Goal["todos"] }).todos ?? [],
+        strategy: g.strategy,
+        planning: g.planning,
+        progress: g.progress,
+        status: g.status,
+        isFavorite: false,
+        createdAt: now,
+        updatedAt: now,
+      });
+
+      showSuccess("Goal duplicated!");
+      navigate(`/goals/${newGoalId}`);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to duplicate goal";
       showError(message);
     }
   };
@@ -719,6 +756,9 @@ const Goals = () => {
                           {goal.isFavorite ? "Remove favorite" : "Add to favorites"}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate(`/goals/${goal.id}`)}>View details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDuplicateGoal(goal)}>
+                          <Copy className="w-4 h-4 mr-2" /> Duplicate
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate(`/goals/${goal.id}`, { state: { openEdit: true } })}>
                           Edit
                         </DropdownMenuItem>
