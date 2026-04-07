@@ -43,6 +43,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragOverlay,
+  closestCorners,
+  arrayMove,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 const newId = (): string => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
@@ -705,6 +721,31 @@ const GoalDetails = () => {
     await persistTodos(nextTodos);
   };
 
+  const handleReorderCheckpoints = async (activeId: string | null, overId: string | null) => {
+    if (!activeId || !overId || activeId === overId) return;
+    const oldIndex = checkpoints.findIndex(c => c.id === activeId);
+    const newIndex = checkpoints.findIndex(c => c.id === overId);
+    if (oldIndex === -1 || newIndex === -1) return;
+    const reordered = arrayMove(checkpoints, oldIndex, newIndex);
+    setCheckpoints(reordered);
+    await persistCheckpoints(reordered);
+  };
+
+  const handleReorderTodos = async (activeId: string | null, overId: string | null) => {
+    if (!activeId || !overId || activeId === overId) return;
+    const oldIndex = todos.findIndex(t => t.id === activeId);
+    const newIndex = todos.findIndex(t => t.id === overId);
+    if (oldIndex === -1 || newIndex === -1) return;
+    const reordered = arrayMove(todos, oldIndex, newIndex);
+    setTodos(reordered);
+    await persistTodos(reordered);
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
   return (
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -1118,107 +1159,123 @@ const GoalDetails = () => {
                         Add checkpoints to automatically calculate progress.
                       </div>
                     ) : (
-                      <div className="space-y-3">
-                        {checkpoints.map((c, index) => (
-                          <div key={c.id} className="rounded-2xl border border-gray-100 bg-white p-3">
-                            <div className="flex items-start gap-2">
-                              <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
-                                <GripVertical className="w-4 h-4" />
-                              </button>
-                              <div className="flex-1">
-                                <div className="flex flex-col gap-3">
-                                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                                    <input
-                                      type="checkbox"
-                                      checked={
-                                        c.kind === "number"
-                                          ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1)
-                                          : c.completed
-                                      }
-                                      onChange={() => handleToggleCheckpoint(c.id)}
-                                      className="h-4 w-4"
-                                    />
-                                    <Input
-                                      value={c.title}
-                                      onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
-                                      onBlur={handleCommitRenameCheckpoint}
-                                      className="rounded-xl resize-none min-h-[44px]"
-                                    />
-                                  </div>
+                      <DndContext sensors={sensors} onDragEnd={handleReorderCheckpoints}>
+                        <SortableContext items={checkpoints} strategy={verticalListSortingStrategy}>
+                          {checkpoints.map((c, index) => (
+                            <SortableItem key={c.id} id={c.id}>
+                              {(dragProps) => (
+                                <div
+                                  ref={dragProps.setNodeRef}
+                                  {...dragProps.listeners}
+                                  {...dragProps.attributes}
+                                  className="rounded-2xl border border-gray-100 bg-white p-3"
+                                  style={{
+                                    transform: CSS.Transform.toString(dragProps.transform),
+                                    transition: dragProps.isDragging ? 'none' : undefined,
+                                    opacity: dragProps.isDragging ? 0.5 : 1,
+                                  }}
+                                >
+                                  <div className="flex items-start gap-2">
+                                    <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
+                                      <GripVertical className="w-4 h-4" />
+                                    </button>
+                                    <div className="flex-1">
+                                      <div className="flex flex-col gap-3">
+                                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                                          <input
+                                            type="checkbox"
+                                            checked={
+                                              c.kind === "number"
+                                                ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1)
+                                                : c.completed
+                                            }
+                                            onChange={() => handleToggleCheckpoint(c.id)}
+                                            className="h-4 w-4"
+                                          />
+                                          <Input
+                                            value={c.title}
+                                            onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
+                                            onBlur={handleCommitRenameCheckpoint}
+                                            className="rounded-xl resize-none min-h-[44px]"
+                                          />
+                                        </div>
 
-                                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                                    <Select
-                                      value={c.kind ?? "boolean"}
-                                      onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
-                                    >
-                                      <SelectTrigger className="w-full sm:w-[150px] rounded-xl">
-                                        <SelectValue placeholder="Type" />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="boolean">Checkpoint</SelectItem>
-                                        <SelectItem value="number">Number</SelectItem>
-                                      </SelectContent>
-                                    </Select>
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                          <Select
+                                            value={c.kind ?? "boolean"}
+                                            onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
+                                          >
+                                            <SelectTrigger className="w-full sm:w-[150px] rounded-xl">
+                                              <SelectValue placeholder="Type" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                              <SelectItem value="boolean">Checkpoint</SelectItem>
+                                              <SelectItem value="number">Number</SelectItem>
+                                            </SelectContent>
+                                          </Select>
 
-                                    <Button
-                                      variant="outline"
-                                      className="rounded-xl text-rose-600"
-                                      onClick={() => handleDeleteCheckpoint(c.id)}
-                                    >
-                                      Delete
-                                    </Button>
+                                          <Button
+                                            variant="outline"
+                                            className="rounded-xl text-rose-600"
+                                            onClick={() => handleDeleteCheckpoint(c.id)}
+                                          >
+                                            Delete
+                                          </Button>
+                                        </div>
+
+                                        {c.kind === "number" && (
+                                          <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
+                                            <div className="flex items-center gap-2">
+                                              <Input
+                                                type="number"
+                                                inputMode="numeric"
+                                                value={c.current ?? 0}
+                                                onChange={(e) =>
+                                                  handleSetCheckpointLocalNumbers(c.id, {
+                                                    current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
+                                                  })
+                                                }
+                                                onBlur={() =>
+                                                  handleUpdateCheckpointNumbers(c.id, {
+                                                    current: c.current ?? 0,
+                                                    target: c.target ?? 1,
+                                                  })
+                                                }
+                                                className="w-full sm:w-[120px] rounded-xl"
+                                              />
+                                              <span className="text-sm text-gray-500">/</span>
+                                              <Input
+                                                type="number"
+                                                inputMode="numeric"
+                                                value={c.target ?? 1}
+                                                onChange={(e) =>
+                                                  handleSetCheckpointLocalNumbers(c.id, {
+                                                    target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
+                                                  })
+                                                }
+                                                onBlur={() =>
+                                                  handleUpdateCheckpointNumbers(c.id, {
+                                                    current: c.current ?? 0,
+                                                    target: c.target ?? 1,
+                                                  })
+                                                }
+                                                className="w-full sm:w-[120px] rounded-xl"
+                                              />
+                                            </div>
+                                            <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
+                                              {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-
-                                {c.kind === "number" && (
-                                  <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
-                                    <div className="flex items-center gap-2">
-                                      <Input
-                                        type="number"
-                                        inputMode="numeric"
-                                        value={c.current ?? 0}
-                                        onChange={(e) =>
-                                          handleSetCheckpointLocalNumbers(c.id, {
-                                            current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
-                                          })
-                                        }
-                                        onBlur={() =>
-                                          handleUpdateCheckpointNumbers(c.id, {
-                                            current: c.current ?? 0,
-                                            target: c.target ?? 1,
-                                          })
-                                        }
-                                        className="w-full sm:w-[120px] rounded-xl"
-                                      />
-                                      <span className="text-sm text-gray-500">/</span>
-                                      <Input
-                                        type="number"
-                                        inputMode="numeric"
-                                        value={c.target ?? 1}
-                                        onChange={(e) =>
-                                          handleSetCheckpointLocalNumbers(c.id, {
-                                            target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
-                                          })
-                                        }
-                                        onBlur={() =>
-                                          handleUpdateCheckpointNumbers(c.id, {
-                                            current: c.current ?? 0,
-                                            target: c.target ?? 1,
-                                          })
-                                        }
-                                        className="w-full sm:w-[120px] rounded-xl"
-                                      />
-                                    </div>
-                                    <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
-                                      {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                              )}
+                            </SortableItem>
+                          ))}
+                        </SortableContext>
+                      </DndContext>
                     )}
                   </CardContent>
                 </Card>
@@ -1256,42 +1313,58 @@ const GoalDetails = () => {
                         Add notes/key points to track specific action items for this goal.
                       </div>
                     ) : (
-                      <div className="space-y-3">
-                        {todos.map((todo, index) => (
-                          <div key={todo.id} className="rounded-2xl border border-gray-100 bg-white p-3">
-                            <div className="flex items-start gap-2">
-                              <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
-                                <GripVertical className="w-4 h-4" />
-                              </button>
-                              <div className="flex-1">
-                                <div className="flex items-center gap-3">
-                                  <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
-                                    {todo.completed ? (
-                                      <CheckSquare className="w-5 h-5 text-blue-600" />
-                                    ) : (
-                                      <Square className="w-5 h-5 text-gray-400" />
-                                    )}
-                                  </button>
-                                  <span
-                                    className={`flex-1 text-sm ${
-                                      todo.completed ? "line-through text-gray-400" : "text-gray-900"
-                                    }`}
-                                  >
-                                    {todo.title}
-                                  </span>
-                                  <Button
-                                    variant="outline"
-                                    className="rounded-xl text-rose-600 h-8 w-8 p-0"
-                                    onClick={() => handleDeleteTodo(todo.id)}
-                                  >
-                                    <Trash2 className="w-4 h-4" />
-                                  </Button>
+                      <DndContext sensors={sensors}>
+                        <SortableContext items={todos} strategy={verticalListSortingStrategy}>
+                          {todos.map((todo, index) => (
+                            <SortableItem key={todo.id} id={todo.id}>
+                              {(dragProps) => (
+                                <div
+                                  ref={dragProps.setNodeRef}
+                                  {...dragProps.listeners}
+                                  {...dragProps.attributes}
+                                  className="rounded-2xl border border-gray-100 bg-white p-3"
+                                  style={{
+                                    transform: CSS.Transform.toString(dragProps.transform),
+                                    transition: dragProps.isDragging ? 'none' : undefined,
+                                    opacity: dragProps.isDragging ? 0.5 : 1,
+                                  }}
+                                >
+                                  <div className="flex items-start gap-2">
+                                    <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
+                                      <GripVertical className="w-4 h-4" />
+                                    </button>
+                                    <div className="flex-1">
+                                      <div className="flex items-center gap-3">
+                                        <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
+                                          {todo.completed ? (
+                                            <CheckSquare className="w-5 h-5 text-blue-600" />
+                                          ) : (
+                                            <Square className="w-5 h-5 text-gray-400" />
+                                          )}
+                                        </button>
+                                        <span
+                                          className={`flex-1 text-sm ${
+                                            todo.completed ? "line-through text-gray-400" : "text-gray-900"
+                                          }`}
+                                        >
+                                          {todo.title}
+                                        </span>
+                                        <Button
+                                          variant="outline"
+                                          className="rounded-xl text-rose-600 h-8 w-8 p-0"
+                                          onClick={() => handleDeleteTodo(todo.id)}
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                              )}
+                            </SortableItem>
+                          ))}
+                        </SortableContext>
+                      </DndContext>
                     )}
                   </CardContent>
                 </Card>
