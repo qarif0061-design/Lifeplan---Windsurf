@@ -52,12 +52,12 @@ import {
   useSensors,
   DragOverlay,
   closestCorners,
-  arrayMove,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
+  arrayMove,
 } from "@dnd-kit/sortable";
 
 const newId = (): string => {
