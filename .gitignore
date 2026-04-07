@@ -28,3 +28,5 @@ dist-ssr
 .dyad/
 .windsurf/
 src/seo/smart-goals-keywords.txt
+.vercel
+.env*.local
