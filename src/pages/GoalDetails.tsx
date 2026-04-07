@@ -65,6 +65,19 @@ const getProgressStroke = (pct: number): { from: string; to: string } => {
   return { from: "#22c55e", to: "#0ea5e9" };
 };
 
+const getDaysPassedText = (g: Goal): string => {
+  const startValue = (g as unknown as { startDate?: unknown }).startDate;
+  const start = typeof startValue === "string" ? startValue.trim() : "";
+  if (!start) return "No date set";
+  const parsedStart = new Date(start);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  parsedStart.setHours(0, 0, 0, 0);
+  const diffMs = today.getTime() - parsedStart.getTime();
+  const daysPassed = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+  return `${daysPassed} day${daysPassed === 1 ? "" : "s"} passed`;
+};
+
 const getRemainingDaysText = (g: Goal): string => {
   const endValue = (g as unknown as { endDate?: unknown }).endDate;
   const end = typeof endValue === "string" ? endValue.trim() : "";
@@ -787,6 +800,10 @@ const GoalDetails = () => {
                             <div className="flex justify-between gap-3">
                               <span className="font-medium text-gray-500">Priority</span>
                               <span className="text-gray-900">{goal.priority}</span>
+                            </div>
+                            <div className="flex justify-between gap-3">
+                              <span className="font-medium text-gray-500">Days Passed</span>
+                              <span className="text-gray-900">{getDaysPassedText(goal)}</span>
                             </div>
                             <div className="flex justify-between gap-3">
                               <span className="font-medium text-gray-500">Start</span>
@@ -1530,6 +1547,10 @@ const GoalDetails = () => {
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">Priority</span>
                       <span className="text-gray-900">{goal.priority}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-500">Days Passed</span>
+                      <span className="text-gray-900">{getDaysPassedText(goal)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">Start</span>
