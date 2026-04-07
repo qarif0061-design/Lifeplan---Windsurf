@@ -843,10 +843,10 @@ const GoalDetails = () => {
                       </div>
 
                       <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                        <div className="text-sm font-semibold text-gray-900">To-dos</div>
+                        <div className="text-sm font-semibold text-gray-900">Notes/Key Points</div>
                         <div className="mt-3 space-y-2">
                           {todos.length === 0 ? (
-                            <div className="text-sm text-gray-600">No to-dos yet.</div>
+                            <div className="text-sm text-gray-600">No notes yet.</div>
                           ) : (
                             todos.map((t) => (
                               <div key={t.id} className="flex items-center gap-2 text-sm">
@@ -1191,7 +1191,7 @@ const GoalDetails = () => {
                 <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-bold flex items-center justify-between">
-                      <span>To-Dos</span>
+                      <span>Notes/Key Points</span>
                       <span className="text-sm font-medium text-gray-500">
                         {todos.filter((t) => t.completed).length}/{todos.length}
                       </span>
@@ -1203,7 +1203,7 @@ const GoalDetails = () => {
                         value={newTodoTitle}
                         onChange={(e) => setNewTodoTitle(e.target.value)}
                         className="rounded-xl"
-                        placeholder="Add a new to-do..."
+                        placeholder="Add a new note/key point..."
                       />
                       <Button
                         onClick={handleAddTodo}
@@ -1211,13 +1211,13 @@ const GoalDetails = () => {
                         className="rounded-xl bg-blue-600 hover:bg-blue-700"
                       >
                         <Plus className="w-4 h-4 mr-2" />
-                        Add new to-do
+                        Add new note
                       </Button>
                     </div>
 
                     {todos.length === 0 ? (
                       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
-                        Add to-dos to track specific action items for this goal.
+                        Add notes/key points to track specific action items for this goal.
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -1257,8 +1257,8 @@ const GoalDetails = () => {
                     {todos.length > 0 && (
                       <div className="space-y-3">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-900">To-dos</h4>
-                          <p className="text-sm text-gray-500">Quick preview of your action items.</p>
+                          <h4 className="text-lg font-bold text-gray-900">Notes/Key Points</h4>
+                          <p className="text-sm text-gray-500">Quick preview of your notes.</p>
                         </div>
                         <div className="space-y-2">
                           {todos.slice(0, 6).map((t) => (
