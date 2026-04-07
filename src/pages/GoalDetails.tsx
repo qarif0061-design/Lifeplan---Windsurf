@@ -19,11 +19,12 @@ import {
   CheckSquare,
   Square,
   FileText,
-  GripVertical
+  GripVertical,
+  Copy
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
-import { deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
+import { deleteGoal, getGoalById, updateGoal, createGoal } from "@/firebase/goals";
 import { useUser } from "@/contexts/UserContext";
 import { updateFeaturedGoalId } from "@/firebase/users";
 import {
@@ -721,6 +722,25 @@ const GoalDetails = () => {
     await persistTodos(nextTodos);
   };
 
+  const handleDuplicateGoal = async () => {
+    if (!goal) return;
+    const now = new Date().toISOString();
+    const duplicate: Omit<Goal, "id" | "createdAt" | "updatedAt"> = {
+      ...goal,
+      name: `${goal.name} (Copy)`,
+      createdAt: now,
+      updatedAt: now,
+    };
+    try {
+      const newId = await createGoal(duplicate);
+      showSuccess("Goal duplicated!");
+      navigate(`/goals/${newId}`);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to duplicate goal";
+      showError(message);
+    }
+  };
+
   const handleReorderCheckpoints = async (activeId: string | null, overId: string | null) => {
     if (!activeId || !overId || activeId === overId) return;
     const oldIndex = checkpoints.findIndex(c => c.id === activeId);
@@ -971,6 +991,15 @@ const GoalDetails = () => {
                   disabled={isSaving || !user}
                 >
                   <Crown className="w-4 h-4 mr-2 text-amber-600" /> {isFeatured ? "Unfeature" : "Set Featured"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="rounded-full"
+                  onClick={handleDuplicateGoal}
+                  disabled={isSaving}
+                >
+                  <Copy className="w-4 h-4 mr-2" /> Duplicate
                 </Button>
 
                 <Button
