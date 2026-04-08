@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
-import { useId, useMemo, useState, useEffect, type ReactNode } from "react";
+import { useId, useMemo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -17,14 +17,11 @@ import {
   Lock,
   Plus,
   CheckSquare,
-  Square,
-  FileText,
-  GripVertical,
-  Copy
+  Square
 } from "lucide-react";
 import { showError, showSuccess } from "@/utils/toast";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
-import { deleteGoal, getGoalById, updateGoal, createGoal } from "@/firebase/goals";
+import { deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { useUser } from "@/contexts/UserContext";
 import { updateFeaturedGoalId } from "@/firebase/users";
 import {
@@ -44,60 +41,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-  closestCorners,
-  type DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-  sortableKeyboardCoordinates,
-  arrayMove,
-} from "@dnd-kit/sortable";
-
-import { CSS, type Transform } from "@dnd-kit/utilities";
 
 const newId = (): string => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
   return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
-};
-
-const SortableItem = ({
-  id,
-  children,
-}: {
-  id: string;
-  children: (props: {
-    setNodeRef: (node: HTMLElement | null) => void;
-    listeners: any;
-    attributes: any;
-    transform: Transform | null;
-    transition: string | undefined;
-    isDragging: boolean;
-  }) => ReactNode;
-}) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
-
-  return (
-    <>
-      {children({
-        setNodeRef,
-        listeners,
-        attributes,
-        transform,
-        transition,
-        isDragging,
-      })}
-    </>
-  );
 };
 
 const getProgressIndicatorClass = (pct: number): string => {
@@ -114,19 +61,6 @@ const getProgressStroke = (pct: number): { from: string; to: string } => {
   if (pct < 50) return { from: "#f59e0b", to: "#fde047" };
   if (pct < 80) return { from: "#0ea5e9", to: "#4f46e5" };
   return { from: "#22c55e", to: "#0ea5e9" };
-};
-
-const getDaysPassedText = (g: Goal): string => {
-  const startValue = (g as unknown as { startDate?: unknown }).startDate;
-  const start = typeof startValue === "string" ? startValue.trim() : "";
-  if (!start) return "No date set";
-  const parsedStart = new Date(start);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  parsedStart.setHours(0, 0, 0, 0);
-  const diffMs = today.getTime() - parsedStart.getTime();
-  const daysPassed = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
-  return `${daysPassed} day${daysPassed === 1 ? "" : "s"} passed`;
 };
 
 const getRemainingDaysText = (g: Goal): string => {
@@ -278,7 +212,6 @@ const GoalDetails = () => {
   const [goal, setGoal] = useState<Goal | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editTarget, setEditTarget] = useState<"strategy" | "planning" | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -756,67 +689,6 @@ const GoalDetails = () => {
     await persistTodos(nextTodos);
   };
 
-  const handleDuplicateGoal = async () => {
-    if (!goal) return;
-    try {
-      const newId = await createGoal({
-        userId: goal.userId,
-        name: `${goal.name} (Copy)`,
-        category: goal.category,
-        priority: goal.priority,
-        startDate: goal.startDate,
-        endDate: goal.endDate,
-        checkpoints: goal.checkpoints ?? [],
-        todos: todos,
-        description: goal.description,
-        strategy: goal.strategy,
-        planning: goal.planning,
-      });
-      showSuccess("Goal duplicated!");
-      navigate(`/goals/${newId}`);
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : "Failed to duplicate goal";
-      showError(message);
-    }
-  };
-
-  const handleReorderCheckpoints = async (activeId: string | null, overId: string | null) => {
-    if (!activeId || !overId || activeId === overId) return;
-    const oldIndex = checkpoints.findIndex(c => c.id === activeId);
-    const newIndex = checkpoints.findIndex(c => c.id === overId);
-    if (oldIndex === -1 || newIndex === -1) return;
-    const reordered = arrayMove(checkpoints, oldIndex, newIndex);
-    setCheckpoints(reordered);
-    await persistCheckpoints(reordered);
-  };
-
-  const handleReorderTodos = async (activeId: string | null, overId: string | null) => {
-    if (!activeId || !overId || activeId === overId) return;
-    const oldIndex = todos.findIndex(t => t.id === activeId);
-    const newIndex = todos.findIndex(t => t.id === overId);
-    if (oldIndex === -1 || newIndex === -1) return;
-    const reordered = arrayMove(todos, oldIndex, newIndex);
-    setTodos(reordered);
-    await persistTodos(reordered);
-  };
-
-  const handleDragEndCheckpoints = async (event: DragEndEvent) => {
-    const activeId = typeof event.active?.id === "string" ? event.active.id : null;
-    const overId = typeof event.over?.id === "string" ? event.over.id : null;
-    await handleReorderCheckpoints(activeId, overId);
-  };
-
-  const handleDragEndTodos = async (event: DragEndEvent) => {
-    const activeId = typeof event.active?.id === "string" ? event.active.id : null;
-    const overId = typeof event.over?.id === "string" ? event.over.id : null;
-    await handleReorderTodos(activeId, overId);
-  };
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-
   return (
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
@@ -869,172 +741,6 @@ const GoalDetails = () => {
                   {goal.isFavorite ? "Favorited" : "Favorite"}
                 </Button>
 
-                <Dialog open={isSummaryOpen} onOpenChange={setIsSummaryOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="rounded-full">
-                      <FileText className="w-4 h-4 mr-2" /> Summary
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[760px] rounded-[2rem]">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-bold">Goal Summary</DialogTitle>
-                      <DialogDescription>Complete view of this goal.</DialogDescription>
-                    </DialogHeader>
-
-                    <div className="space-y-6 py-2 max-h-[70vh] overflow-auto pr-1">
-                      <div className="space-y-2">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <div className="text-lg font-bold text-gray-900">{goal.name}</div>
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                              goal.status === "completed"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-blue-100 text-blue-700"
-                            }`}
-                          >
-                            {goal.status}
-                          </span>
-                          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-slate-100 text-slate-700">
-                            {derivedProgress}%
-                          </span>
-                        </div>
-                        {goal.description ? <div className="text-sm text-gray-600">{goal.description}</div> : null}
-                      </div>
-
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Details</div>
-                          <div className="mt-2 space-y-2 text-sm text-gray-600">
-                            <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Category</span>
-                              <span className="text-gray-900">{goal.category}</span>
-                            </div>
-                            <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Priority</span>
-                              <span className="text-gray-900">{goal.priority}</span>
-                            </div>
-                            <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Days Passed</span>
-                              <span className="text-gray-900">{getDaysPassedText(goal)}</span>
-                            </div>
-                            <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Start</span>
-                              <span className="text-gray-900">{goal.startDate?.trim() ? goal.startDate : "No date set"}</span>
-                            </div>
-                            <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">End</span>
-                              <span className="text-gray-900">{goal.endDate?.trim() ? goal.endDate : "No date set"}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Success Metric</div>
-                          <div className="mt-2 text-sm text-gray-600">
-                            {goal.successMetric.type === "number" ? (
-                              <div>
-                                Reach {goal.successMetric.target ?? 0}
-                                {goal.successMetric.unit ? ` ${goal.successMetric.unit}` : ""}
-                              </div>
-                            ) : (
-                              <div>Complete goal</div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                        <div className="text-sm font-semibold text-gray-900">Checkpoints</div>
-                        <div className="mt-3 space-y-2">
-                          {checkpoints.length === 0 ? (
-                            <div className="text-sm text-gray-600">No checkpoints yet.</div>
-                          ) : (
-                            checkpoints.map((c) => (
-                              <div key={c.id} className="flex items-start gap-2 text-sm">
-                                {c.kind === "number" ? (
-                                  <span className="text-gray-500">
-                                    {Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1) ? "[x]" : "[ ]"}
-                                  </span>
-                                ) : (
-                                  <span className="text-gray-500">{c.completed ? "[x]" : "[ ]"}</span>
-                                )}
-                                <div className="flex-1">
-                                  <div className="text-gray-900">{c.title}</div>
-                                  {c.kind === "number" ? (
-                                    <div className="text-xs text-gray-500">
-                                      {Math.max(0, c.current ?? 0)}/{Math.max(1, c.target ?? 1)}
-                                    </div>
-                                  ) : null}
-                                </div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                        <div className="text-sm font-semibold text-gray-900">Notes/Key Points</div>
-                        <div className="mt-3 space-y-2">
-                          {todos.length === 0 ? (
-                            <div className="text-sm text-gray-600">No notes yet.</div>
-                          ) : (
-                            todos.map((t) => (
-                              <div key={t.id} className="flex items-center gap-2 text-sm">
-                                <span className="text-gray-500">{t.completed ? "[x]" : "[ ]"}</span>
-                                <span className={t.completed ? "line-through text-gray-400" : "text-gray-900"}>{t.title}</span>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Strategy</div>
-                          <div className="mt-3 space-y-2 text-sm text-gray-600">
-                            {goal.strategy ? (
-                              <>
-                                <div>
-                                  <span className="font-medium text-gray-500">Why:</span> {goal.strategy.whyMatters}
-                                </div>
-                                <div>
-                                  <span className="font-medium text-gray-500">Who benefits:</span> {goal.strategy.whoBenefits}
-                                </div>
-                                <div>
-                                  <span className="font-medium text-gray-500">Say no to:</span> {goal.strategy.sayNoTo}
-                                </div>
-                              </>
-                            ) : (
-                              <div>No strategy set.</div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Planning</div>
-                          <div className="mt-3 space-y-2 text-sm text-gray-600">
-                            {goal.planning ? (
-                              <>
-                                {goal.planning.obstacles ? <div><span className="font-medium text-gray-500">Obstacles:</span> {goal.planning.obstacles}</div> : null}
-                                {goal.planning.nextActions ? <div><span className="font-medium text-gray-500">Next actions:</span> {goal.planning.nextActions}</div> : null}
-                                {goal.planning.aiPreview ? <div><span className="font-medium text-gray-500">AI preview:</span> {goal.planning.aiPreview}</div> : null}
-                              </>
-                            ) : (
-                              <div>No planning set.</div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsSummaryOpen(false)} className="rounded-xl">
-                        Close
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-
                 <Button
                   variant="outline"
                   className="rounded-full"
@@ -1042,15 +748,6 @@ const GoalDetails = () => {
                   disabled={isSaving || !user}
                 >
                   <Crown className="w-4 h-4 mr-2 text-amber-600" /> {isFeatured ? "Unfeature" : "Set Featured"}
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="rounded-full"
-                  onClick={handleDuplicateGoal}
-                  disabled={isSaving}
-                >
-                  <Copy className="w-4 h-4 mr-2" /> Duplicate
                 </Button>
 
                 <Button
@@ -1207,31 +904,20 @@ const GoalDetails = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-8 space-y-5">
-                    <div className="space-y-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
                       <Input
                         value={newCheckpointTitle}
                         onChange={(e) => setNewCheckpointTitle(e.target.value)}
-                        className="rounded-xl resize-none min-h-[44px]"
+                        className="rounded-xl"
                         placeholder="Add a checkpoint (e.g., Week 1 complete)"
                       />
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        <Select defaultValue="boolean">
-                          <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
-                            <SelectValue placeholder="Type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="boolean">Checkpoint</SelectItem>
-                            <SelectItem value="number">Number</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <Button
-                          onClick={handleAddCheckpoint}
-                          disabled={isSaving || !newCheckpointTitle.trim()}
-                          className="rounded-xl bg-blue-600 hover:bg-blue-700"
-                        >
-                          Add
-                        </Button>
-                      </div>
+                      <Button
+                        onClick={handleAddCheckpoint}
+                        disabled={isSaving || !newCheckpointTitle.trim()}
+                        className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                      >
+                        Add
+                      </Button>
                     </div>
 
                     {checkpoints.length === 0 ? (
@@ -1239,243 +925,106 @@ const GoalDetails = () => {
                         Add checkpoints to automatically calculate progress.
                       </div>
                     ) : (
-                      <DndContext sensors={sensors} onDragEnd={handleDragEndCheckpoints}>
-                        <SortableContext items={checkpoints.map((c) => c.id)} strategy={verticalListSortingStrategy}>
-                          {checkpoints.map((c, index) => (
-                            <SortableItem key={c.id} id={c.id}>
-                              {(dragProps) => (
-                                <div
-                                  ref={dragProps.setNodeRef}
-                                  {...dragProps.listeners}
-                                  {...dragProps.attributes}
-                                  className="rounded-2xl border border-gray-100 bg-white p-3"
-                                  style={{
-                                    transform: CSS.Transform.toString(dragProps.transform),
-                                    transition: dragProps.isDragging ? 'none' : undefined,
-                                    opacity: dragProps.isDragging ? 0.5 : 1,
-                                  }}
+                      <div className="space-y-3">
+                        {checkpoints.map((c) => (
+                          <div key={c.id} className="rounded-2xl border border-gray-100 bg-white p-3">
+                            <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+                              <div className="flex items-center gap-3 min-w-0 flex-1">
+                                <input
+                                  type="checkbox"
+                                  checked={
+                                    c.kind === "number"
+                                      ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1)
+                                      : c.completed
+                                  }
+                                  onChange={() => handleToggleCheckpoint(c.id)}
+                                  className="h-4 w-4"
+                                />
+                                <Input
+                                  value={c.title}
+                                  onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
+                                  onBlur={handleCommitRenameCheckpoint}
+                                  className="rounded-xl"
+                                />
+                              </div>
+
+                              <div className="flex items-center gap-3 justify-between lg:justify-end">
+                                <Select
+                                  value={c.kind ?? "boolean"}
+                                  onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
                                 >
-                                  <div className="flex items-start gap-2">
-                                    <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
-                                      <GripVertical className="w-4 h-4" />
-                                    </button>
-                                    <div className="flex-1">
-                                      <div className="flex flex-col gap-3">
-                                        <div className="flex items-center gap-3 min-w-0 flex-1">
-                                          <input
-                                            type="checkbox"
-                                            checked={
-                                              c.kind === "number"
-                                                ? Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1)
-                                                : c.completed
-                                            }
-                                            onChange={() => handleToggleCheckpoint(c.id)}
-                                            className="h-4 w-4"
-                                          />
-                                          <Input
-                                            value={c.title}
-                                            onChange={(e) => handleRenameCheckpoint(c.id, e.target.value)}
-                                            onBlur={handleCommitRenameCheckpoint}
-                                            className="rounded-xl resize-none min-h-[44px]"
-                                          />
-                                        </div>
+                                  <SelectTrigger className="w-[150px] rounded-xl">
+                                    <SelectValue placeholder="Type" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="boolean">Checkpoint</SelectItem>
+                                    <SelectItem value="number">Number</SelectItem>
+                                  </SelectContent>
+                                </Select>
 
-                                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                                          <Select
-                                            value={c.kind ?? "boolean"}
-                                            onValueChange={(v) => handleSetCheckpointKind(c.id, v as "boolean" | "number")}
-                                          >
-                                            <SelectTrigger className="w-full sm:w-[150px] rounded-xl">
-                                              <SelectValue placeholder="Type" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                              <SelectItem value="boolean">Checkpoint</SelectItem>
-                                              <SelectItem value="number">Number</SelectItem>
-                                            </SelectContent>
-                                          </Select>
+                                <Button
+                                  variant="outline"
+                                  className="rounded-xl text-rose-600"
+                                  onClick={() => handleDeleteCheckpoint(c.id)}
+                                >
+                                  Delete
+                                </Button>
+                              </div>
+                            </div>
 
-                                          <Button
-                                            variant="outline"
-                                            className="rounded-xl text-rose-600"
-                                            onClick={() => handleDeleteCheckpoint(c.id)}
-                                          >
-                                            Delete
-                                          </Button>
-                                        </div>
-
-                                        {c.kind === "number" && (
-                                          <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
-                                            <div className="flex items-center gap-2">
-                                              <Input
-                                                type="number"
-                                                inputMode="numeric"
-                                                value={c.current ?? 0}
-                                                onChange={(e) =>
-                                                  handleSetCheckpointLocalNumbers(c.id, {
-                                                    current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
-                                                  })
-                                                }
-                                                onBlur={() =>
-                                                  handleUpdateCheckpointNumbers(c.id, {
-                                                    current: c.current ?? 0,
-                                                    target: c.target ?? 1,
-                                                  })
-                                                }
-                                                className="w-full sm:w-[120px] rounded-xl"
-                                              />
-                                              <span className="text-sm text-gray-500">/</span>
-                                              <Input
-                                                type="number"
-                                                inputMode="numeric"
-                                                value={c.target ?? 1}
-                                                onChange={(e) =>
-                                                  handleSetCheckpointLocalNumbers(c.id, {
-                                                    target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
-                                                  })
-                                                }
-                                                onBlur={() =>
-                                                  handleUpdateCheckpointNumbers(c.id, {
-                                                    current: c.current ?? 0,
-                                                    target: c.target ?? 1,
-                                                  })
-                                                }
-                                                className="w-full sm:w-[120px] rounded-xl"
-                                              />
-                                            </div>
-                                            <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
-                                              {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
+                            {c.kind === "number" && (
+                              <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2">
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    type="number"
+                                    inputMode="numeric"
+                                    value={c.current ?? 0}
+                                    onChange={(e) =>
+                                      handleSetCheckpointLocalNumbers(c.id, {
+                                        current: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 0,
+                                      })
+                                    }
+                                    onBlur={() =>
+                                      handleUpdateCheckpointNumbers(c.id, {
+                                        current: c.current ?? 0,
+                                        target: c.target ?? 1,
+                                      })
+                                    }
+                                    className="w-full sm:w-[120px] rounded-xl"
+                                  />
+                                  <span className="text-sm text-gray-500">/</span>
+                                  <Input
+                                    type="number"
+                                    inputMode="numeric"
+                                    value={c.target ?? 1}
+                                    onChange={(e) =>
+                                      handleSetCheckpointLocalNumbers(c.id, {
+                                        target: Number.isFinite(Number(e.target.value)) ? Number(e.target.value) : 1,
+                                      })
+                                    }
+                                    onBlur={() =>
+                                      handleUpdateCheckpointNumbers(c.id, {
+                                        current: c.current ?? 0,
+                                        target: c.target ?? 1,
+                                      })
+                                    }
+                                    className="w-full sm:w-[120px] rounded-xl"
+                                  />
                                 </div>
-                              )}
-                            </SortableItem>
-                          ))}
-                        </SortableContext>
-                      </DndContext>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Todos Section */}
-                <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xl font-bold flex items-center justify-between">
-                      <span>Notes/Key Points</span>
-                      <span className="text-sm font-medium text-gray-500">
-                        {todos.filter((t) => t.completed).length}/{todos.length}
-                      </span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-8 space-y-5">
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <Input
-                        value={newTodoTitle}
-                        onChange={(e) => setNewTodoTitle(e.target.value)}
-                        className="rounded-xl"
-                        placeholder="Add a new note/key point..."
-                      />
-                      <Button
-                        onClick={handleAddTodo}
-                        disabled={isSaving || !newTodoTitle.trim()}
-                        className="rounded-xl bg-blue-600 hover:bg-blue-700"
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add new note
-                      </Button>
-                    </div>
-
-                    {todos.length === 0 ? (
-                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
-                        Add notes/key points to track specific action items for this goal.
+                                <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
+                                  {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    ) : (
-                      <DndContext sensors={sensors} onDragEnd={handleDragEndTodos}>
-                        <SortableContext items={todos.map((t) => t.id)} strategy={verticalListSortingStrategy}>
-                          {todos.map((todo, index) => (
-                            <SortableItem key={todo.id} id={todo.id}>
-                              {(dragProps) => (
-                                <div
-                                  ref={dragProps.setNodeRef}
-                                  {...dragProps.listeners}
-                                  {...dragProps.attributes}
-                                  className="rounded-2xl border border-gray-100 bg-white p-3"
-                                  style={{
-                                    transform: CSS.Transform.toString(dragProps.transform),
-                                    transition: dragProps.isDragging ? 'none' : undefined,
-                                    opacity: dragProps.isDragging ? 0.5 : 1,
-                                  }}
-                                >
-                                  <div className="flex items-start gap-2">
-                                    <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
-                                      <GripVertical className="w-4 h-4" />
-                                    </button>
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-3">
-                                        <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
-                                          {todo.completed ? (
-                                            <CheckSquare className="w-5 h-5 text-blue-600" />
-                                          ) : (
-                                            <Square className="w-5 h-5 text-gray-400" />
-                                          )}
-                                        </button>
-                                        <span
-                                          className={`flex-1 text-sm ${
-                                            todo.completed ? "line-through text-gray-400" : "text-gray-900"
-                                          }`}
-                                        >
-                                          {todo.title}
-                                        </span>
-                                        <Button
-                                          variant="outline"
-                                          className="rounded-xl text-rose-600 h-8 w-8 p-0"
-                                          onClick={() => handleDeleteTodo(todo.id)}
-                                        >
-                                          <Trash2 className="w-4 h-4" />
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </SortableItem>
-                          ))}
-                        </SortableContext>
-                      </DndContext>
                     )}
                   </CardContent>
                 </Card>
+
                 <Card className="border-none shadow-sm rounded-[2.5rem]">
                   <CardContent className="space-y-6">
-                    {todos.length > 0 && (
-                      <div className="space-y-3">
-                        <div>
-                          <h4 className="text-lg font-bold text-gray-900">Notes/Key Points</h4>
-                          <p className="text-sm text-gray-500">Quick preview of your notes.</p>
-                        </div>
-                        <div className="space-y-2">
-                          {todos.slice(0, 6).map((t) => (
-                            <div key={t.id} className="flex items-center gap-2 text-sm">
-                              {t.completed ? (
-                                <CheckSquare className="w-4 h-4 text-blue-600" />
-                              ) : (
-                                <Square className="w-4 h-4 text-gray-400" />
-                              )}
-                              <span className={t.completed ? "line-through text-gray-400" : "text-gray-700"}>
-                                {t.title}
-                              </span>
-                            </div>
-                          ))}
-                          {todos.length > 6 && (
-                            <div className="text-xs font-semibold text-gray-500">+ {todos.length - 6} more</div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
                     {!goal.strategy && !goal.planning ? (
                       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5">
                         <p className="font-semibold text-gray-900">No strategy or planning set for this goal yet.</p>
@@ -1544,73 +1093,73 @@ const GoalDetails = () => {
                     {editMode && (
                       <div className="space-y-6 pt-4 border-t">
                         {(editTarget === null || editTarget === "strategy") && (
-                          <div>
-                            <h4 className="font-semibold text-gray-900 mb-3">Strategy</h4>
-                            <div className="space-y-3">
-                              <div className="grid gap-2">
-                                <Label>Why does this goal matter?</Label>
-                                <textarea
-                                  value={strategyWhy}
-                                  onChange={(e) => setStrategyWhy(e.target.value)}
-                                  disabled={!editMode}
-                                  className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                                />
-                              </div>
-                              <div className="grid gap-2">
-                                <Label>Who benefits if you succeed?</Label>
-                                <textarea
-                                  value={strategyWho}
-                                  onChange={(e) => setStrategyWho(e.target.value)}
-                                  disabled={!editMode}
-                                  className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                                />
-                              </div>
-                              <div className="grid gap-2">
-                                <Label>What will you say “No” to?</Label>
-                                <textarea
-                                  value={strategyNo}
-                                  onChange={(e) => setStrategyNo(e.target.value)}
-                                  disabled={!editMode}
-                                  className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                                />
-                              </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-3">Strategy</h4>
+                          <div className="space-y-3">
+                            <div className="grid gap-2">
+                              <Label>Why does this goal matter?</Label>
+                              <textarea
+                                value={strategyWhy}
+                                onChange={(e) => setStrategyWhy(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>Who benefits if you succeed?</Label>
+                              <textarea
+                                value={strategyWho}
+                                onChange={(e) => setStrategyWho(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>What will you say “No” to?</Label>
+                              <textarea
+                                value={strategyNo}
+                                onChange={(e) => setStrategyNo(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
                             </div>
                           </div>
+                        </div>
                         )}
 
                         {(editTarget === null || editTarget === "planning") && (
-                          <div>
-                            <h4 className="font-semibold text-gray-900 mb-3">Planning</h4>
-                            <div className="space-y-3">
-                              <div className="grid gap-2">
-                                <Label>Common obstacles</Label>
-                                <textarea
-                                  value={planningObstacles}
-                                  onChange={(e) => setPlanningObstacles(e.target.value)}
-                                  disabled={!editMode}
-                                  className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                                />
-                              </div>
-                              <div className="grid gap-2">
-                                <Label>Next actions for this week</Label>
-                                <textarea
-                                  value={planningNextActions}
-                                  onChange={(e) => setPlanningNextActions(e.target.value)}
-                                  disabled={!editMode}
-                                  className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                                />
-                              </div>
-                              <div className="grid gap-2">
-                                <Label>AI-style preview (local)</Label>
-                                <textarea
-                                  value={planningAiPreview}
-                                  onChange={(e) => setPlanningAiPreview(e.target.value)}
-                                  disabled={!editMode}
-                                  className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                                />
-                              </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900 mb-3">Planning</h4>
+                          <div className="space-y-3">
+                            <div className="grid gap-2">
+                              <Label>Common obstacles</Label>
+                              <textarea
+                                value={planningObstacles}
+                                onChange={(e) => setPlanningObstacles(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>Next actions for this week</Label>
+                              <textarea
+                                value={planningNextActions}
+                                onChange={(e) => setPlanningNextActions(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
+                            </div>
+                            <div className="grid gap-2">
+                              <Label>AI-style preview (local)</Label>
+                              <textarea
+                                value={planningAiPreview}
+                                onChange={(e) => setPlanningAiPreview(e.target.value)}
+                                disabled={!editMode}
+                                className="min-h-[120px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                              />
                             </div>
                           </div>
+                        </div>
                         )}
                       </div>
                     )}
@@ -1620,6 +1169,11 @@ const GoalDetails = () => {
                       <Button
                         variant="outline"
                         onClick={() => {
+                          if (!isPremium) {
+                            showError("Strategy is a Premium feature. Upgrade to add/edit strategy.");
+                            navigate("/pricing");
+                            return;
+                          }
                           setEditMode(true);
                           setEditTarget("strategy");
                         }}
@@ -1631,6 +1185,11 @@ const GoalDetails = () => {
                       <Button
                         variant="outline"
                         onClick={() => {
+                          if (!isPremium) {
+                            showError("Planning is a Premium feature. Upgrade to add/edit planning.");
+                            navigate("/pricing");
+                            return;
+                          }
                           setEditMode(true);
                           setEditTarget("planning");
                         }}
@@ -1700,10 +1259,6 @@ const GoalDetails = () => {
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">Priority</span>
                       <span className="text-gray-900">{goal.priority}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">Days Passed</span>
-                      <span className="text-gray-900">{getDaysPassedText(goal)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="font-medium text-gray-500">Start</span>
