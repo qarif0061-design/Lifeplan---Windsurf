@@ -12,6 +12,7 @@ import { updateUserStreak } from "@/firebase/users";
 import { useCheckIns, computeStreakFromDates } from "@/hooks/useCheckIns";
 import { Lock } from "lucide-react";
 import { Link } from "react-router-dom";
+import PremiumPopup from "@/components/PremiumPopup";
 
 const toDateKeyLocal = (d: Date): string => {
   const yyyy = d.getFullYear();
@@ -32,6 +33,8 @@ const CheckIn = () => {
   const [exercise, setExercise] = useState<boolean>(todayExisting?.exercise ?? false);
   const [notes, setNotes] = useState<string>(todayExisting?.notes ?? "");
   const [saving, setSaving] = useState(false);
+  const [showPremiumPopup, setShowPremiumPopup] = useState(false);
+  const [premiumFeature, setPremiumFeature] = useState("");
 
   useEffect(() => {
     setHydration(todayExisting?.hydration ?? false);
@@ -40,7 +43,18 @@ const CheckIn = () => {
     setNotes(todayExisting?.notes ?? "");
   }, [todayExisting]);
 
+  const handlePremiumCheck = (feature: string) => {
+    if (!isPremium) {
+      setPremiumFeature(feature);
+      setShowPremiumPopup(true);
+      return true; // blocked
+    }
+    return false; // not blocked
+  };
+
   const handleSave = async () => {
+    if (handlePremiumCheck("saving daily check-ins")) return;
+    
     if (!user) {
       showError("Please sign in to save your check-in.");
       return;
@@ -74,10 +88,18 @@ const CheckIn = () => {
     }
   };
 
+  const handleCheckboxChange = (feature: string) => {
+    if (handlePremiumCheck("checking off daily habits")) return;
+  };
+
+  const handleNotesChange = (value: string) => {
+    if (handlePremiumCheck("adding notes to check-ins")) return;
+  };
+
   return (
     <Layout>
       <div className="relative max-w-4xl mx-auto">
-        <div className={`space-y-8 animate-in fade-in duration-500 ${isPremium ? "" : "blur-sm select-none pointer-events-none"}`}>
+        <div className="space-y-8 animate-in fade-in duration-500">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Daily Check-in</h1>
             <p className="text-gray-500">Build consistency and keep your streak alive.</p>
@@ -111,22 +133,51 @@ const CheckIn = () => {
             <CardContent className="space-y-6">
               <div className="grid sm:grid-cols-3 gap-4">
                 <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <input type="checkbox" checked={hydration} onChange={(e) => setHydration(e.target.checked)} />
+                  <input 
+                    type="checkbox" 
+                    checked={hydration} 
+                    onChange={(e) => {
+                      if (handlePremiumCheck("checking off daily habits")) return;
+                      setHydration(e.target.checked);
+                    }} 
+                  />
                   <span className="font-medium text-gray-900">Hydration</span>
                 </label>
                 <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <input type="checkbox" checked={healthyEating} onChange={(e) => setHealthyEating(e.target.checked)} />
+                  <input 
+                    type="checkbox" 
+                    checked={healthyEating} 
+                    onChange={(e) => {
+                      if (handlePremiumCheck("checking off daily habits")) return;
+                      setHealthyEating(e.target.checked);
+                    }} 
+                  />
                   <span className="font-medium text-gray-900">Healthy Eating</span>
                 </label>
                 <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <input type="checkbox" checked={exercise} onChange={(e) => setExercise(e.target.checked)} />
+                  <input 
+                    type="checkbox" 
+                    checked={exercise} 
+                    onChange={(e) => {
+                      if (handlePremiumCheck("checking off daily habits")) return;
+                      setExercise(e.target.checked);
+                    }} 
+                  />
                   <span className="font-medium text-gray-900">Exercise</span>
                 </label>
               </div>
 
               <div className="grid gap-2">
                 <Label htmlFor="checkin-notes">Notes (optional)</Label>
-                <Input id="checkin-notes" value={notes} onChange={(e) => setNotes(e.target.value)} className="rounded-xl" />
+                <Input 
+                  id="checkin-notes" 
+                  value={notes} 
+                  onChange={(e) => {
+                    if (handlePremiumCheck("adding notes to check-ins")) return;
+                    setNotes(e.target.value);
+                  }} 
+                  className="rounded-xl" 
+                />
               </div>
 
               <Button onClick={handleSave} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700">
@@ -136,25 +187,11 @@ const CheckIn = () => {
           </Card>
         </div>
 
-        {!isPremium && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="max-w-xl mx-auto bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-[2.5rem] p-8 text-center">
-              <div className="flex items-center justify-center gap-2 text-gray-900 mb-3">
-                <Lock className="w-5 h-5" />
-                <h2 className="text-xl font-bold">Premium feature</h2>
-              </div>
-              <p className="text-gray-600 mb-6">Upgrade to Premium to unlock Daily Check-ins, build streaks, and create unlimited Daily Planner tasks.</p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
-                  <Link to="/pricing">Upgrade to Premium</Link>
-                </Button>
-                <Button asChild variant="outline" className="rounded-full">
-                  <Link to="/dashboard">Back to Dashboard</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        <PremiumPopup 
+          isOpen={showPremiumPopup}
+          onClose={() => setShowPremiumPopup(false)}
+          feature={premiumFeature}
+        />
       </div>
     </Layout>
   );
