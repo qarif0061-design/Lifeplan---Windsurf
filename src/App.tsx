@@ -36,6 +36,7 @@ import DailyJournalApp from "./pages/DailyJournalApp";
 import ProductivityApp from "./pages/ProductivityApp";
 import LifePlanning from "./pages/LifePlanning";
 import WeeklyPlanningSeo from "./pages/WeeklyPlanningSeo";
+import WeeklyPlanner from "./pages/WeeklyPlanner";
 import TimeManagementSeo from "./pages/TimeManagementSeo";
 import Productivity from "./pages/Productivity";
 import Procrastination from "./pages/Procrastination";
@@ -90,6 +91,7 @@ function App() {
             <Route path="/goals/:id" element={<GoalDetails />} />
             <Route path="/check-in" element={<CheckIn />} />
             <Route path="/planning" element={<Planning />} />
+            <Route path="/weekly-planner" element={<WeeklyPlanner />} />
             <Route path="/strategy" element={<Strategy />} />
             <Route path="/social" element={<Social />} />
             <Route path="/download" element={<Download />} />

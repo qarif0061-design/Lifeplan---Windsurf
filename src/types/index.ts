@@ -22,6 +22,13 @@ export type GoalCheckpoint = {
   updatedAt: string;
 };
 
+export type GoalNote = {
+  id: string;
+  content: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -73,6 +80,7 @@ export interface Goal {
   status: GoalStatus;
   progress: number;
   checkpoints?: GoalCheckpoint[];
+  notes?: GoalNote[]; // Add notes field
   priority: Priority;
   category: string;
   description?: string;

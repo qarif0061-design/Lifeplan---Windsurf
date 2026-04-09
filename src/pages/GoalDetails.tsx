@@ -1,67 +1,62 @@
 import Layout from "@/components/Layout";
-import { useLocation, useNavigate, useParams, Link } from "react-router-dom";
-import { useId, useMemo, useState, useEffect, type ReactNode } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Input } from "@/components/ui/input";
-import { 
-  Target, 
-  ChevronLeft, 
-  Edit3, 
-  Trash2,
-  Trophy,
-  TrendingUp,
-  Star,
-  Crown,
-  Lock,
-  Plus,
-  CheckSquare,
-  Square,
-  FileText,
-  GripVertical,
-  Copy
-} from "lucide-react";
-import { showError, showSuccess } from "@/utils/toast";
-import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
-import { deleteGoal, getGoalById, updateGoal, createGoal } from "@/firebase/goals";
-import { useUser } from "@/contexts/UserContext";
-import { updateFeaturedGoalId } from "@/firebase/users";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
+import { useUser } from "@/contexts/UserContext";
+import { createGoal, deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
+import { updateFeaturedGoalId } from "@/firebase/users";
+import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
+import { showError, showSuccess } from "@/utils/toast";
 import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragOverlay,
-  closestCorners,
-  type DragEndEvent,
+    DndContext,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    type DragEndEvent
 } from "@dnd-kit/core";
 import {
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-  sortableKeyboardCoordinates,
-  arrayMove,
+    SortableContext,
+    arrayMove,
+    sortableKeyboardCoordinates,
+    useSortable,
+    verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import {
+    ChevronLeft,
+    Copy,
+    Crown,
+    Edit3,
+    FileText,
+    GripVertical,
+    Lock,
+    Plus,
+    Star,
+    Target,
+    Trash2,
+    TrendingUp,
+    Trophy
+} from "lucide-react";
+import { useEffect, useId, useMemo, useState, type ReactNode } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { CSS, type Transform } from "@dnd-kit/utilities";
 
@@ -295,6 +290,8 @@ const GoalDetails = () => {
   const [newCheckpointTitle, setNewCheckpointTitle] = useState("");
   const [todos, setTodos] = useState<GoalTodo[]>([]);
   const [newTodoTitle, setNewTodoTitle] = useState("");
+  const [notes, setNotes] = useState<GoalNote[]>([]);
+  const [newNoteContent, setNewNoteContent] = useState("");
 
   const isFeatured = Boolean(user?.featuredGoalId && goal?.id && user.featuredGoalId === goal.id);
 
@@ -369,6 +366,8 @@ const GoalDetails = () => {
 
           // Load todos
           setTodos(g.todos || []);
+          // Load notes
+          setNotes(g.notes || []);
         }
       })
       .catch((e: unknown) => {
@@ -428,6 +427,12 @@ const GoalDetails = () => {
         startDate: startDate.trim() ? startDate.trim() : undefined,
         endDate: endDate.trim() ? endDate.trim() : undefined,
         checkpoints: sanitizedCheckpoints,
+        notes: notes.map((n, idx) => ({
+          ...n,
+          id: n.id || `note_${Date.now()}_${idx}`,
+          createdAt: n.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })),
         progress: computedProgress,
         status: computedStatus,
       });
@@ -705,6 +710,58 @@ const GoalDetails = () => {
   const handleDeleteCheckpoint = async (checkpointId: string) => {
     const next = checkpoints.filter((c) => c.id !== checkpointId);
     await persistCheckpoints(next);
+  };
+
+  // Notes handlers
+  const handleAddNote = async () => {
+    const content = newNoteContent.trim();
+    if (!goal) return;
+    if (!content) return;
+    const now = new Date().toISOString();
+    const next: GoalNote[] = [
+      ...notes,
+      { id: newId(), content, createdAt: now, updatedAt: now },
+    ];
+    setNewNoteContent("");
+    setNotes(next);
+    try {
+      await updateGoal(goal.id, { notes: next });
+      showSuccess("Note added!");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to add note";
+      showError(message);
+      setNotes(notes); // Revert on error
+    }
+  };
+
+  const handleDeleteNote = async (noteId: string) => {
+    if (!goal) return;
+    const next = notes.filter((n) => n.id !== noteId);
+    setNotes(next);
+    try {
+      await updateGoal(goal.id, { notes: next });
+      showSuccess("Note deleted!");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Failed to delete note";
+      showError(message);
+      setNotes(notes); // Revert on error
+    }
+  };
+
+  const handleDragEndNotes = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = notes.findIndex((n) => n.id === active.id);
+    const newIndex = notes.findIndex((n) => n.id === over.id);
+    const reordered = arrayMove(notes, oldIndex, newIndex);
+    setNotes(reordered);
+    if (goal) {
+      updateGoal(goal.id, { notes: reordered }).catch((e) => {
+        const message = e instanceof Error ? e.message : "Failed to reorder notes";
+        showError(message);
+        setNotes(notes); // Revert on error
+      });
+    }
   };
 
   // Todo management functions
@@ -1360,27 +1417,27 @@ const GoalDetails = () => {
                   </CardContent>
                 </Card>
 
-                {/* Todos Section */}
+                {/* Notes Section */}
                 <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-bold flex items-center justify-between">
                       <span>Notes/Key Points</span>
                       <span className="text-sm font-medium text-gray-500">
-                        {todos.filter((t) => t.completed).length}/{todos.length}
+                        {notes.length} notes
                       </span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-8 space-y-5">
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Input
-                        value={newTodoTitle}
-                        onChange={(e) => setNewTodoTitle(e.target.value)}
+                        value={newNoteContent}
+                        onChange={(e) => setNewNoteContent(e.target.value)}
                         className="rounded-xl"
                         placeholder="Add a new note/key point..."
                       />
                       <Button
-                        onClick={handleAddTodo}
-                        disabled={isSaving || !newTodoTitle.trim()}
+                        onClick={handleAddNote}
+                        disabled={isSaving || !newNoteContent.trim()}
                         className="rounded-xl bg-blue-600 hover:bg-blue-700"
                       >
                         <Plus className="w-4 h-4 mr-2" />
@@ -1388,15 +1445,15 @@ const GoalDetails = () => {
                       </Button>
                     </div>
 
-                    {todos.length === 0 ? (
+                    {notes.length === 0 ? (
                       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
                         Add notes/key points to track specific action items for this goal.
                       </div>
                     ) : (
-                      <DndContext sensors={sensors} onDragEnd={handleDragEndTodos}>
-                        <SortableContext items={todos.map((t) => t.id)} strategy={verticalListSortingStrategy}>
-                          {todos.map((todo, index) => (
-                            <SortableItem key={todo.id} id={todo.id}>
+                      <DndContext sensors={sensors} onDragEnd={handleDragEndNotes}>
+                        <SortableContext items={notes.map((n) => n.id)} strategy={verticalListSortingStrategy}>
+                          {notes.map((note) => (
+                            <SortableItem key={note.id} id={note.id}>
                               {(dragProps) => (
                                 <div
                                   ref={dragProps.setNodeRef}
@@ -1415,24 +1472,13 @@ const GoalDetails = () => {
                                     </button>
                                     <div className="flex-1">
                                       <div className="flex items-center gap-3">
-                                        <button onClick={() => handleToggleTodo(todo.id)} className="flex-shrink-0">
-                                          {todo.completed ? (
-                                            <CheckSquare className="w-5 h-5 text-blue-600" />
-                                          ) : (
-                                            <Square className="w-5 h-5 text-gray-400" />
-                                          )}
-                                        </button>
-                                        <span
-                                          className={`flex-1 text-sm ${
-                                            todo.completed ? "line-through text-gray-400" : "text-gray-900"
-                                          }`}
-                                        >
-                                          {todo.title}
+                                        <span className="flex-1 text-sm text-gray-900">
+                                          {note.content}
                                         </span>
                                         <Button
                                           variant="outline"
                                           className="rounded-xl text-rose-600 h-8 w-8 p-0"
-                                          onClick={() => handleDeleteTodo(todo.id)}
+                                          onClick={() => handleDeleteNote(note.id)}
                                         >
                                           <Trash2 className="w-4 h-4" />
                                         </Button>
@@ -1450,27 +1496,21 @@ const GoalDetails = () => {
                 </Card>
                 <Card className="border-none shadow-sm rounded-[2.5rem]">
                   <CardContent className="space-y-6">
-                    {todos.length > 0 && (
+                    {notes.length > 0 && (
                       <div className="space-y-3">
                         <div>
                           <h4 className="text-lg font-bold text-gray-900">Notes/Key Points</h4>
                           <p className="text-sm text-gray-500">Quick preview of your notes.</p>
                         </div>
                         <div className="space-y-2">
-                          {todos.slice(0, 6).map((t) => (
-                            <div key={t.id} className="flex items-center gap-2 text-sm">
-                              {t.completed ? (
-                                <CheckSquare className="w-4 h-4 text-blue-600" />
-                              ) : (
-                                <Square className="w-4 h-4 text-gray-400" />
-                              )}
-                              <span className={t.completed ? "line-through text-gray-400" : "text-gray-700"}>
-                                {t.title}
-                              </span>
+                          {notes.slice(0, 6).map((note) => (
+                            <div key={note.id} className="flex items-start gap-2 text-sm">
+                              <FileText className="w-4 h-4 text-gray-400 mt-0.5" />
+                              <span className="text-gray-700">{note.content}</span>
                             </div>
                           ))}
-                          {todos.length > 6 && (
-                            <div className="text-xs font-semibold text-gray-500">+ {todos.length - 6} more</div>
+                          {notes.length > 6 && (
+                            <div className="text-xs font-semibold text-gray-500">+ {notes.length - 6} more</div>
                           )}
                         </div>
                       </div>
