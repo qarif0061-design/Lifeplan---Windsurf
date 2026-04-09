@@ -16,7 +16,6 @@ import Profile from "./pages/Profile";
 import BillingSuccess from "./pages/BillingSuccess";
 import GoalDetails from "./pages/GoalDetails";
 import CheckIn from "./pages/CheckIn";
-import Planning from "./pages/Planning";
 import Strategy from "./pages/Strategy";
 import Social from "./pages/Social";
 import Download from "./pages/Download";
@@ -90,7 +89,7 @@ function App() {
             <Route path="/billing/success" element={<BillingSuccess />} />
             <Route path="/goals/:id" element={<GoalDetails />} />
             <Route path="/check-in" element={<CheckIn />} />
-            <Route path="/planning" element={<Planning />} />
+            <Route path="/planning" element={<Navigate to="/weekly-planner" replace />} />
             <Route path="/weekly-planner" element={<WeeklyPlanner />} />
             <Route path="/strategy" element={<Strategy />} />
             <Route path="/social" element={<Social />} />

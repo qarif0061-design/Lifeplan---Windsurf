@@ -48,5 +48,12 @@ service cloud.firestore {
       allow update: if isOwnerExisting();
       allow delete: if isOwnerExisting();
     }
+
+    match /weeklyPlanners/{plannerId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
+    }
   }
 }
