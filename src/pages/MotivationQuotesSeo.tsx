@@ -70,20 +70,66 @@ const MotivationQuotesSeo = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Keywords covered</h2>
-          <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm space-y-2">
-            <p className="text-gray-700">motivation</p>
-            <p className="text-gray-700">mindset</p>
-            <p className="text-gray-700">growth mindset</p>
-            <p className="text-gray-700">positive quotes</p>
-            <p className="text-gray-700">inspirational quotes about life</p>
-            <p className="text-gray-700">inspirational quotes for work</p>
-            <p className="text-gray-700">success quotes</p>
-            <p className="text-gray-700">thought of the day</p>
-            <p className="text-gray-700">good morning quotes inspirational</p>
-            <p className="text-gray-700">monday motivation</p>
-            <p className="text-gray-700">focus quotes</p>
-            <p className="text-gray-700">words of encouragement</p>
+          <h2 className="text-2xl font-bold text-gray-900">Building sustainable motivation through systems</h2>
+          <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm">
+            <p className="text-gray-700 leading-relaxed mb-4">
+              Motivation isn't something you wait for—it's something you build through consistent systems. 
+              While inspirational quotes can provide a momentary boost, lasting motivation comes from 
+              clarity, progress, and repeatable routines.
+            </p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">The motivation system framework</h3>
+            <div className="grid md:grid-cols-3 gap-6 mb-4">
+              <div className="space-y-2">
+                <h4 className="font-bold text-gray-900">1. Clarity</h4>
+                <p className="text-gray-700 text-sm">
+                  Know exactly what you're working toward and why it matters. Vague goals create vague motivation.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-bold text-gray-900">2. Progress</h4>
+                <p className="text-gray-700 text-sm">
+                  Nothing sustains motivation like seeing progress. Track your wins, no matter how small.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-bold text-gray-900">3. Routine</h4>
+                <p className="text-gray-700 text-sm">
+                  Motivation follows action, not the other way around. Build routines that make starting automatic.
+                </p>
+              </div>
+            </div>
+            <p className="text-gray-700 leading-relaxed">
+              When you have all three—clear goals, visible progress, and consistent routines—motivation 
+              becomes a byproduct rather than a prerequisite.
+            </p>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <h2 className="text-2xl font-bold text-gray-900">Growth mindset vs. fixed mindset in practice</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="rounded-[2rem] border border-red-100 bg-red-50 p-7 shadow-sm">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Fixed mindset patterns</h3>
+              <ul className="space-y-2 text-gray-700">
+                <li>"I'm just not good at this"</li>
+                <li>Avoiding challenges to prevent failure</li>
+                <li>Giving up when things get hard</li>
+                <li>Seeing effort as a sign of weakness</li>
+                <li>Ignoring useful feedback</li>
+                <li>Feeling threatened by others' success</li>
+              </ul>
+            </div>
+            <div className="rounded-[2rem] border border-emerald-100 bg-emerald-50 p-7 shadow-sm">
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Growth mindset patterns</h3>
+              <ul className="space-y-2 text-gray-700">
+                <li>"I can improve with practice"</li>
+                <li>Embracing challenges as opportunities</li>
+                <li>Persisting through setbacks</li>
+                <li>Seeing effort as the path to mastery</li>
+                <li>Learning from criticism and feedback</li>
+                <li>Being inspired by others' success</li>
+              </ul>
+            </div>
           </div>
         </section>
 
