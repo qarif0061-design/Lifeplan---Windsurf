@@ -54,6 +54,24 @@ export const generateWeekDays = (weekStart: Date): DayPlan[] => {
   const days: DayPlan[] = [];
   const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+  const example: Partial<Record<(typeof dayNames)[number], Pick<DayPlan, "priorities" | "tasks">>> = {
+    Monday: {
+      priorities: ["Review weekly goals", "Plan your top 3 priorities", "Schedule two focus blocks"],
+      tasks: [
+        { id: crypto.randomUUID(), title: "Write priorities for the week", completed: false },
+        { id: crypto.randomUUID(), title: "Time block 2 important tasks", completed: false },
+      ],
+    },
+    Tuesday: {
+      priorities: ["Execute one high-impact task"],
+      tasks: [{ id: crypto.randomUUID(), title: "Complete 1 focus session (25–50 min)", completed: false }],
+    },
+    Friday: {
+      priorities: ["Weekly review"],
+      tasks: [{ id: crypto.randomUUID(), title: "Review wins + plan next week", completed: false }],
+    },
+  };
+
   for (let i = 0; i < 7; i++) {
     const date = new Date(weekStart);
     date.setDate(weekStart.getDate() + i);
@@ -62,8 +80,8 @@ export const generateWeekDays = (weekStart: Date): DayPlan[] => {
     days.push({
       date: dateStr,
       dayName: dayNames[i],
-      priorities: [],
-      tasks: [],
+      priorities: example[dayNames[i]]?.priorities ?? [],
+      tasks: example[dayNames[i]]?.tasks ?? [],
     });
   }
 

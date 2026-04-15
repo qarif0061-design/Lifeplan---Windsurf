@@ -1303,8 +1303,6 @@ const GoalDetails = () => {
                               {(dragProps) => (
                                 <div
                                   ref={dragProps.setNodeRef}
-                                  {...dragProps.listeners}
-                                  {...dragProps.attributes}
                                   className="rounded-2xl border border-gray-100 bg-white p-3"
                                   style={{
                                     transform: CSS.Transform.toString(dragProps.transform),
@@ -1313,7 +1311,11 @@ const GoalDetails = () => {
                                   }}
                                 >
                                   <div className="flex items-start gap-2">
-                                    <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
+                                    <button
+                                      className="cursor-move p-1 text-gray-400 hover:text-gray-600"
+                                      {...dragProps.listeners}
+                                      {...dragProps.attributes}
+                                    >
                                       <GripVertical className="w-4 h-4" />
                                     </button>
                                     <div className="flex-1">
@@ -1457,8 +1459,6 @@ const GoalDetails = () => {
                               {(dragProps) => (
                                 <div
                                   ref={dragProps.setNodeRef}
-                                  {...dragProps.listeners}
-                                  {...dragProps.attributes}
                                   className="rounded-2xl border border-gray-100 bg-white p-3"
                                   style={{
                                     transform: CSS.Transform.toString(dragProps.transform),
@@ -1467,7 +1467,11 @@ const GoalDetails = () => {
                                   }}
                                 >
                                   <div className="flex items-start gap-2">
-                                    <button className="cursor-move p-1 text-gray-400 hover:text-gray-600">
+                                    <button
+                                      className="cursor-move p-1 text-gray-400 hover:text-gray-600"
+                                      {...dragProps.listeners}
+                                      {...dragProps.attributes}
+                                    >
                                       <GripVertical className="w-4 h-4" />
                                     </button>
                                     <div className="flex-1">
