@@ -31,12 +31,14 @@ import {
   type DayTask,
   getWeekStart,
   formatDate,
+  getWeeklyTemplateDays,
   subscribeWeeklyPlanner,
   getOrCreateWeeklyPlanner,
   updateDayPriorities,
   addTaskToDay,
   updateTaskInDay,
   deleteTaskFromDay,
+  updateWeeklyPlanner,
 } from "@/firebase/weeklyPlanner";
 
 const WeeklyPlannerPage = () => {
@@ -63,19 +65,40 @@ const WeeklyPlannerPage = () => {
     setLoading(true);
 
     // First get or create the planner
-    getOrCreateWeeklyPlanner(user.id, currentWeek).then((initialPlanner) => {
-      setPlanner(initialPlanner);
-      setLoading(false);
+    getOrCreateWeeklyPlanner(user.id, currentWeek)
+      .then(async (initialPlanner) => {
+        setPlanner(initialPlanner);
+        setLoading(false);
 
-      // Then subscribe to updates
-      const unsub = subscribeWeeklyPlanner(user.id, weekStartStr, (updatedPlanner) => {
-        if (updatedPlanner) {
-          setPlanner(updatedPlanner);
+        const isCurrentWeek = weekStartStr === getWeekStart().toISOString().split("T")[0];
+        const isEmpty =
+          (initialPlanner.days ?? []).every(
+            (d) => (d.priorities?.filter((p) => p.trim()).length ?? 0) === 0 && (d.tasks?.length ?? 0) === 0,
+          );
+
+        // Auto-apply template only for the CURRENT week and only if it's fully empty
+        if (isCurrentWeek && isEmpty) {
+          try {
+            await updateWeeklyPlanner(initialPlanner.id, {
+              days: getWeeklyTemplateDays(currentWeek),
+            });
+          } catch {
+            // Ignore (rules/offline). Planner UI will still render.
+          }
         }
-      });
 
-      return () => unsub();
-    });
+        // Then subscribe to updates
+        const unsub = subscribeWeeklyPlanner(user.id, weekStartStr, (updatedPlanner) => {
+          if (updatedPlanner) {
+            setPlanner(updatedPlanner);
+          }
+        });
+
+        return () => unsub();
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, [user, currentWeek, weekStartStr]);
 
   const navigateWeek = (direction: "prev" | "next") => {

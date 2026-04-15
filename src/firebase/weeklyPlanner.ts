@@ -41,20 +41,12 @@ export type WeeklyPlanner = {
 
 const weeklyPlannerCollection = collection(db, "weeklyPlanners");
 
-// Helper to get Monday of current week
-export const getWeekStart = (date: Date = new Date()): Date => {
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
-  return new Date(d.setDate(diff));
-};
+const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] as const;
 
-// Helper to generate 7 days from week start
-export const generateWeekDays = (weekStart: Date): DayPlan[] => {
-  const days: DayPlan[] = [];
-  const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-  const example: Partial<Record<(typeof dayNames)[number], Pick<DayPlan, "priorities" | "tasks">>> = {
+const buildWeeklyTemplate = (): Partial<
+  Record<(typeof dayNames)[number], Pick<DayPlan, "priorities" | "tasks">>
+> => {
+  return {
     Monday: {
       priorities: ["Review weekly goals", "Plan your top 3 priorities", "Schedule two focus blocks"],
       tasks: [
@@ -71,6 +63,11 @@ export const generateWeekDays = (weekStart: Date): DayPlan[] => {
       tasks: [{ id: crypto.randomUUID(), title: "Review wins + plan next week", completed: false }],
     },
   };
+};
+
+export const getWeeklyTemplateDays = (weekStart: Date): DayPlan[] => {
+  const template = buildWeeklyTemplate();
+  const days: DayPlan[] = [];
 
   for (let i = 0; i < 7; i++) {
     const date = new Date(weekStart);
@@ -80,8 +77,37 @@ export const generateWeekDays = (weekStart: Date): DayPlan[] => {
     days.push({
       date: dateStr,
       dayName: dayNames[i],
-      priorities: example[dayNames[i]]?.priorities ?? [],
-      tasks: example[dayNames[i]]?.tasks ?? [],
+      priorities: template[dayNames[i]]?.priorities ?? [],
+      tasks: template[dayNames[i]]?.tasks ?? [],
+    });
+  }
+
+  return days;
+};
+
+// Helper to get Monday of current week
+export const getWeekStart = (date: Date = new Date()): Date => {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+  return new Date(d.setDate(diff));
+};
+
+// Helper to generate 7 days from week start
+export const generateWeekDays = (weekStart: Date): DayPlan[] => {
+  const days: DayPlan[] = [];
+  const template = buildWeeklyTemplate();
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(weekStart);
+    date.setDate(weekStart.getDate() + i);
+    const dateStr = date.toISOString().split("T")[0];
+
+    days.push({
+      date: dateStr,
+      dayName: dayNames[i],
+      priorities: template[dayNames[i]]?.priorities ?? [],
+      tasks: template[dayNames[i]]?.tasks ?? [],
     });
   }
 
