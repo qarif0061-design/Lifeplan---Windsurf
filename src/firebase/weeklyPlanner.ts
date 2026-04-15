@@ -58,9 +58,40 @@ const buildWeeklyTemplate = (): Partial<
       priorities: ["Execute one high-impact task"],
       tasks: [{ id: crypto.randomUUID(), title: "Complete 1 focus session (25–50 min)", completed: false }],
     },
+    Wednesday: {
+      priorities: ["Make progress on main project", "Handle admin/emails"],
+      tasks: [
+        { id: crypto.randomUUID(), title: "Work on main goal project (45–60 min)", completed: false },
+        { id: crypto.randomUUID(), title: "Clear inbox and respond to messages", completed: false },
+      ],
+    },
+    Thursday: {
+      priorities: ["Focus block for deep work", "Review progress mid-week"],
+      tasks: [
+        { id: crypto.randomUUID(), title: "Deep work session (60–90 min)", completed: false },
+        { id: crypto.randomUUID(), title: "Check progress on weekly priorities", completed: false },
+      ],
+    },
     Friday: {
-      priorities: ["Weekly review"],
-      tasks: [{ id: crypto.randomUUID(), title: "Review wins + plan next week", completed: false }],
+      priorities: ["Weekly review", "Plan next week"],
+      tasks: [
+        { id: crypto.randomUUID(), title: "Review wins + plan next week", completed: false },
+        { id: crypto.randomUUID(), title: "Celebrate completed tasks", completed: false },
+      ],
+    },
+    Saturday: {
+      priorities: ["Personal development", "Rest and recharge"],
+      tasks: [
+        { id: crypto.randomUUID(), title: "Read or learn something new", completed: false },
+        { id: crypto.randomUUID(), title: "Light activity or hobby", completed: false },
+      ],
+    },
+    Sunday: {
+      priorities: ["Prepare for the week ahead", "Family time or self-care"],
+      tasks: [
+        { id: crypto.randomUUID(), title: "Review calendar and set intentions", completed: false },
+        { id: crypto.randomUUID(), title: "Meal prep or household tasks", completed: false },
+      ],
     },
   };
 };
