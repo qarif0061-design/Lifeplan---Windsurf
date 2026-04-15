@@ -71,13 +71,9 @@ const WeeklyPlannerPage = () => {
         setLoading(false);
 
         const isCurrentWeek = weekStartStr === getWeekStart().toISOString().split("T")[0];
-        const isEmpty =
-          (initialPlanner.days ?? []).every(
-            (d) => (d.priorities?.filter((p) => p.trim()).length ?? 0) === 0 && (d.tasks?.length ?? 0) === 0,
-          );
 
-        // Auto-apply template only for the CURRENT week and only if it's fully empty
-        if (isCurrentWeek && isEmpty) {
+        // Auto-apply template for the CURRENT week (overwrite existing content)
+        if (isCurrentWeek) {
           try {
             await updateWeeklyPlanner(initialPlanner.id, {
               days: getWeeklyTemplateDays(currentWeek),
