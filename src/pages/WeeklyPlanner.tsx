@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import {
   CheckCircle2,
   Circle,
   X,
+  Save,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
@@ -47,13 +48,27 @@ const WeeklyPlannerPage = () => {
   const [planner, setPlanner] = useState<WeeklyPlanner | null>(null);
   const [loading, setLoading] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // Local state for editing
   const [editingPriorities, setEditingPriorities] = useState<Record<number, string[]>>({});
   const [newTaskInputs, setNewTaskInputs] = useState<Record<number, string>>({});
   const [editingTasks, setEditingTasks] = useState<Record<string, string>>({});
 
+  // Debounce timeouts
+  const prioritiesDebounceRef = useRef<Record<number, NodeJS.Timeout>>({});
+  const tasksDebounceRef = useRef<Record<string, NodeJS.Timeout>>({});
+
   const weekStartStr = useMemo(() => currentWeek.toISOString().split("T")[0], [currentWeek]);
+
+  // Cleanup debounce timeouts on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(prioritiesDebounceRef.current).forEach(clearTimeout);
+      Object.values(tasksDebounceRef.current).forEach(clearTimeout);
+    };
+  }, []);
 
   // Subscribe to weekly planner
   useEffect(() => {
@@ -116,6 +131,30 @@ const WeeklyPlannerPage = () => {
     const updatedPriorities = [...currentPriorities];
     updatedPriorities[priorityIndex] = value;
     setEditingPriorities({ ...editingPriorities, [dayIndex]: updatedPriorities });
+
+    // Clear existing debounce for this day
+    if (prioritiesDebounceRef.current[dayIndex]) {
+      clearTimeout(prioritiesDebounceRef.current[dayIndex]);
+    }
+
+    // Set new debounce to autosave after 1.5 seconds
+    prioritiesDebounceRef.current[dayIndex] = setTimeout(async () => {
+      if (!planner || !user) return;
+      setIsSaving(true);
+      const nonEmptyPriorities = updatedPriorities.filter((p) => p.trim() !== "");
+      try {
+        await updateDayPriorities(planner.id, dayIndex, nonEmptyPriorities);
+        setLastSaved(new Date());
+        // Clear editing state
+        const newEditing = { ...editingPriorities };
+        delete newEditing[dayIndex];
+        setEditingPriorities(newEditing);
+      } catch (error) {
+        showError("Failed to save priorities");
+      } finally {
+        setIsSaving(false);
+      }
+    }, 1500);
   };
 
   const savePriorities = async (dayIndex: number) => {
@@ -188,6 +227,36 @@ const WeeklyPlannerPage = () => {
     setEditingTasks({ ...editingTasks, [taskId]: currentTitle });
   };
 
+  const handleTaskEditChange = (taskId: string, dayIndex: number, value: string) => {
+    setEditingTasks({ ...editingTasks, [taskId]: value });
+
+    // Clear existing debounce for this task
+    if (tasksDebounceRef.current[taskId]) {
+      clearTimeout(tasksDebounceRef.current[taskId]);
+    }
+
+    // Set new debounce to autosave after 1.5 seconds
+    tasksDebounceRef.current[taskId] = setTimeout(async () => {
+      if (!planner || !user) return;
+      const newTitle = value.trim();
+      if (!newTitle) return;
+      setIsSaving(true);
+      try {
+        await updateTaskInDay(planner.id, dayIndex, taskId, {
+          title: newTitle,
+        });
+        setLastSaved(new Date());
+        const newEditing = { ...editingTasks };
+        delete newEditing[taskId];
+        setEditingTasks(newEditing);
+      } catch (error) {
+        showError("Failed to update task");
+      } finally {
+        setIsSaving(false);
+      }
+    }, 1500);
+  };
+
   const handleSaveTaskEdit = async (dayIndex: number, taskId: string) => {
     if (!planner || !user) return;
 
@@ -247,6 +316,18 @@ const WeeklyPlannerPage = () => {
               <Calendar className="w-8 h-8 text-blue-600" />
               Weekly Planner
             </h1>
+            {isSaving && (
+              <div className="flex items-center gap-2 text-sm text-blue-600 mt-1">
+                <Save className="w-4 h-4 animate-pulse" />
+                Saving...
+              </div>
+            )}
+            {!isSaving && lastSaved && (
+              <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                <Save className="w-4 h-4" />
+                Saved at {lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </div>
+            )}
             <p className="text-gray-500 mt-1">
               Plan your week day by day with priorities and tasks
             </p>
@@ -414,7 +495,7 @@ const WeeklyPlannerPage = () => {
                             <Input
                               value={editingTasks[task.id]}
                               onChange={(e) =>
-                                setEditingTasks({ ...editingTasks, [task.id]: e.target.value })
+                                handleTaskEditChange(task.id, dayIndex, e.target.value)
                               }
                               onBlur={() => handleSaveTaskEdit(dayIndex, task.id)}
                               onKeyDown={(e) => {
