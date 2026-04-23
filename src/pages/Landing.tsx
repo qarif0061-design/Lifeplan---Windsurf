@@ -104,20 +104,20 @@ const Landing = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
-            <span>Now available on Web</span>
+            <span>Your goal system on web + mobile</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-            Master Your Life with <span className="text-blue-600">Goal Planner - Lifeplans</span>
+            Plan your goals. Organize your week. Win your day.
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-            Goal planning, weekly routines, and a daily planner/journal to help you take action, stay consistent, and track progress.
+            Lifeplans is a simple planning app that helps you turn goals into weekly priorities and daily tasks so you can stay consistent.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
             <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-14 text-lg font-semibold shadow-lg shadow-blue-200">
               <Link to="/auth">Start Planning Free <ArrowRight className="ml-2 w-5 h-5" /></Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full px-8 h-14 text-lg font-semibold border-gray-200">
-              <Link to="/pricing">View Premium Plans</Link>
+              <Link to="/pricing">See pricing</Link>
             </Button>
           </div>
 
@@ -165,6 +165,64 @@ const Landing = () => {
                     </Button>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">How Lifeplans works (3 steps)</h2>
+            <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+              Start simple. Create one goal, plan the week, then execute one day at a time.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm">
+              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-5">
+                <Target className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">1) Create a goal</h3>
+              <p className="text-gray-600 mt-2 leading-relaxed">
+                Write one clear goal and add checkpoints so progress is measurable.
+              </p>
+              <div className="mt-6">
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/goals">Open Goals</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm">
+              <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mb-5">
+                <Zap className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">2) Plan your week</h3>
+              <p className="text-gray-600 mt-2 leading-relaxed">
+                Choose 1-3 weekly priorities and break them into startable tasks.
+              </p>
+              <div className="mt-6">
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/weekly-planner">Open Weekly Planner</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm">
+              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-5">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900">3) Run your day</h3>
+              <p className="text-gray-600 mt-2 leading-relaxed">
+                Use the Daily Planner to focus on today's schedule and tasks.
+              </p>
+              <div className="mt-6">
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/daily-planner">Open Daily Planner</Link>
+                </Button>
               </div>
             </div>
           </div>
