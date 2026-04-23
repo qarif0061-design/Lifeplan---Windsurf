@@ -55,20 +55,12 @@ const Landing = () => {
 
   const faqs = [
     {
-      question: "Is LifePlan free to use?",
-      answer: "Yes! We offer a free tier that includes up to 1 active goal and basic planning tools. You can upgrade to Premium for unlimited access."
-    },
-    {
       question: "How does the Strategy System work?",
       answer: "The Strategy System helps you define your 'Why', identify beneficiaries, and decide what to say 'No' to, creating a solid foundation for your goals."
     },
     {
       question: "Can I use LifePlan on my phone?",
       answer: "Yes. LifePlan works on mobile web, and we also offer native mobile app versions in the iOS App Store and Google Play Store."
-    },
-    {
-      question: "What’s included in Premium?",
-      answer: "Premium unlocks unlimited active goals, full Strategy System access, advanced weekly reviews, and richer analytics so you can stay consistent long-term."
     },
     {
       question: "How do weekly plans help me hit long-term goals?",
@@ -116,14 +108,7 @@ const Landing = () => {
             <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8 h-14 text-lg font-semibold shadow-lg shadow-blue-200">
               <Link to="/auth">Start Planning Free <ArrowRight className="ml-2 w-5 h-5" /></Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="rounded-full px-8 h-14 text-lg font-semibold border-gray-200">
-              <Link to="/pricing">See pricing</Link>
-            </Button>
           </div>
-
-          <p className="mt-4 text-sm text-gray-500 animate-in fade-in duration-700 delay-400">
-            Free includes Daily Planner tasks for up to 3 days. Upgrade to Premium for unlimited daily tasks.
-          </p>
 
           <div className="mt-10 max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
             <div className="rounded-[2.5rem] bg-gradient-to-r from-blue-600 to-purple-600 p-[1px] shadow-xl shadow-blue-200/40">
@@ -378,52 +363,6 @@ const Landing = () => {
               </AccordionItem>
             ))}
           </Accordion>
-        </div>
-      </section>
-
-      {/* Pricing Preview */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-blue-600 rounded-[3rem] p-8 md:p-16 text-white overflow-hidden relative">
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
-              <div className="max-w-xl">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6">Unlock your full potential with Premium</h2>
-                <ul className="space-y-4 mb-8">
-                  {[
-                    "Unlimited active goals",
-                    "AI-powered Smart Planning",
-                    "Full Strategy System access",
-                    "Advanced PDCA weekly reviews",
-                    "Detailed progress analytics"
-                  ].map((item, i) => (
-                    <li key={i} className="flex items-center space-x-3">
-                      <CheckCircle2 className="w-5 h-5 text-blue-200" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button asChild variant="secondary" size="lg" className="bg-white text-blue-600 hover:bg-blue-50 rounded-full px-8">
-                  <Link to="/pricing">View Pricing</Link>
-                </Button>
-              </div>
-              <div className="bg-white/10 backdrop-blur-lg p-8 rounded-3xl border border-white/20 w-full md:w-80">
-                <div className="text-center">
-                  <span className="text-blue-200 font-medium uppercase tracking-wider text-sm">Most Popular</span>
-                  <div className="mt-2 mb-4">
-                    <span className="text-4xl font-bold">$4.99</span>
-                    <span className="text-blue-200">/month</span>
-                  </div>
-                  <p className="text-sm text-blue-100 mb-6">Perfect for individuals committed to long-term growth.</p>
-                  <Button asChild className="w-full bg-white text-blue-600 hover:bg-blue-50 rounded-full">
-                    <Link to="/pricing">Get Started</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-            {/* Decorative circles */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500 rounded-full opacity-50 blur-3xl"></div>
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-700 rounded-full opacity-50 blur-3xl"></div>
-          </div>
         </div>
       </section>
 
