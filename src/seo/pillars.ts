@@ -15,7 +15,7 @@ export type PillarArticle = {
   relatedSlugs: readonly string[];
 };
 
-const SITE = "https://www.goalplanner.io";
+const SITE = "https://goalplanner.io";
 
 const slugify = (input: string): string =>
   input

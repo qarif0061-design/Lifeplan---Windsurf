@@ -1231,7 +1231,7 @@ const ArticleDetails = () => {
         ) : (
           <>
             {(() => {
-              const url = `https://www.goalplanner.io${canonicalPath}`;
+              const url = `https://goalplanner.io${canonicalPath}`;
               const articleJsonLd = {
                 "@context": "https://schema.org",
                 "@type": "Article",

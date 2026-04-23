@@ -12,7 +12,7 @@ type SeoProps = {
   noIndex?: boolean;
 };
 
-const SITE_URL = "https://www.goalplanner.io";
+const SITE_URL = "https://goalplanner.io";
 
 const upsertMeta = (selector: string, attrs: Record<string, string>) => {
   let el = document.head.querySelector(selector) as HTMLMetaElement | null;

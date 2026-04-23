@@ -2,11 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = path.resolve(process.cwd());
-const SITE = "https://www.goalplanner.io";
+const SITE = "https://goalplanner.io";
 
-const readPillarSlugs = () => {
-  const pillarsPath = path.join(ROOT, "src", "seo", "pillars.ts");
-  const raw = fs.readFileSync(pillarsPath, "utf8");
+const readStaticArticleSlugs = () => {
+  const articlesPath = path.join(ROOT, "src", "pages", "Articles.tsx");
+  const raw = fs.readFileSync(articlesPath, "utf8");
 
   const slugs = [];
   const re = /\bslug:\s*"([a-z0-9-]+)"/g;
@@ -46,18 +46,19 @@ const main = () => {
     `${SITE}/refund`,
     `${SITE}/articles`,
     `${SITE}/questions`,
-    `${SITE}/auth`,
     `${SITE}/download`,
+    `${SITE}/about`,
+    `${SITE}/contact`,
   ];
 
-  const pillarSlugs = readPillarSlugs();
-  const articleUrls = pillarSlugs.map((s) => `${SITE}/articles/${s}`);
+  const staticSlugs = readStaticArticleSlugs();
+  const articleUrls = staticSlugs.map((s) => `${SITE}/articles/${s}`);
 
   const xml = buildUrlset([...basePages, ...articleUrls]);
   const outPath = path.join(ROOT, "public", "sitemap.xml");
   fs.writeFileSync(outPath, xml, "utf8");
   process.stdout.write(
-    `Generated sitemap with ${new Set([...basePages, ...articleUrls]).size} URLs (pillars only) -> public/sitemap.xml\n`,
+    `Generated sitemap with ${new Set([...basePages, ...articleUrls]).size} URLs (base + static articles) -> public/sitemap.xml\n`,
   );
 };
 

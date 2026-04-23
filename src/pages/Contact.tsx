@@ -12,7 +12,7 @@ const Contact = () => {
           "@context": "https://schema.org",
           "@type": "ContactPage",
           name: "Contact Goal Planner Lifeplans",
-          url: "https://www.goalplanner.io/contact",
+          url: "https://goalplanner.io/contact",
           description: "Contact Goal Planner – Lifeplans for support and inquiries.",
         }}
       />

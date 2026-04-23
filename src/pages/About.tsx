@@ -12,7 +12,7 @@ const About = () => {
           "@context": "https://schema.org",
           "@type": "AboutPage",
           name: "About Lifeplans",
-          url: "https://www.goalplanner.io/about",
+          url: "https://goalplanner.io/about",
           description:
             "About Lifeplans (Goal Planner): a practical goal planning and weekly planning system for staying consistent and tracking progress.",
         }}
