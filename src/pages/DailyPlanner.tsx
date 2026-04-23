@@ -20,7 +20,7 @@ import {
   type DailyPriorityItem,
 } from "@/firebase/dailyTasks";
 import { showError, showSuccess } from "@/utils/toast";
-import { Calendar as CalendarIcon, Eye, History, RotateCcw } from "lucide-react";
+import { Calendar as CalendarIcon, Eye, History, RotateCcw, Copy } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
@@ -109,6 +109,88 @@ const DailyPlanner = () => {
     return `Free users can add daily tasks for up to ${freeLimit} days. Upgrade to Premium for unlimited daily tasks.`;
   }, [isPremium, canWriteToSelectedDate, freeLimit]);
 
+  const duplicateToNextDay = async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) {
+      showError("Please sign in to manage your daily planner.");
+      return;
+    }
+
+    // If current date is not writable (free limit), duplication shouldn't be allowed either.
+    if (!canWriteToSelectedDate) {
+      showError(limitMessage ?? "Upgrade to Premium to add more daily tasks.");
+      return;
+    }
+
+    const [yyyy, mm, dd] = selectedDateKey.split("-").map(Number);
+    const next = new Date(yyyy, mm - 1, dd);
+    next.setDate(next.getDate() + 1);
+    const nextKey = toDateKeyLocal(next);
+
+    // Free limit: if next date doesn't exist yet, ensure user can create it
+    if (!isPremium && !distinctDates.includes(nextKey) && !canCreateNewDate) {
+      showError(`Free users can add daily tasks for up to ${freeLimit} days. Upgrade to Premium for unlimited daily tasks.`);
+      return;
+    }
+
+    const nowIso = new Date().toISOString();
+    const remapId = () => newTaskId();
+
+    const nextPriorities = (priorities ?? []).map((p) => ({
+      ...p,
+      id: remapId(),
+      completed: false,
+      createdAt: nowIso,
+      updatedAt: nowIso,
+    }));
+
+    const nextCallEmail = (callEmail ?? []).map((c) => ({
+      ...c,
+      id: remapId(),
+      completed: false,
+      createdAt: nowIso,
+      updatedAt: nowIso,
+    }));
+
+    const nextTasks = (selectedDay?.tasks ?? []).map((t) => ({
+      ...t,
+      id: remapId(),
+      completed: false,
+      createdAt: nowIso,
+      updatedAt: nowIso,
+    }));
+
+    setSaving(true);
+    try {
+      await updateDailyTaskDay(uid, nextKey, {
+        schedule,
+        priorities: nextPriorities,
+        tasks: nextTasks,
+        reminder: reminder.trim() ? reminder.trim() : "",
+        callEmail: nextCallEmail,
+        forTomorrow: forTomorrow.trim() ? forTomorrow.trim() : "",
+        affirmation: affirmation.trim() ? affirmation.trim() : "",
+        notes: notes.trim() ? notes.trim() : "",
+      });
+
+      showSuccess("Duplicated to next day.");
+      setSelectedDateKey(nextKey);
+      setSearchParams((prev) => {
+        const sp = new URLSearchParams(prev);
+        sp.set("date", nextKey);
+        return sp;
+      });
+    } catch (e: unknown) {
+      const raw = e instanceof Error ? e.message : "Failed to duplicate daily planner";
+      const message = raw.toLowerCase().includes("insufficient permissions")
+        ? "Missing or insufficient permissions. Update your Firestore rules to allow authenticated users to write their own daily tasks."
+        : raw;
+      showError(message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const persistDay = async () => {
     const uid = auth.currentUser?.uid;
     if (!uid) {
@@ -195,6 +277,16 @@ const DailyPlanner = () => {
               <Link to="/daily-planner/history">
                 <History className="w-4 h-4 mr-2" /> History
               </Link>
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full"
+              onClick={duplicateToNextDay}
+              disabled={saving}
+            >
+              <Copy className="w-4 h-4 mr-2" /> Duplicate to next day
             </Button>
 
             <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>

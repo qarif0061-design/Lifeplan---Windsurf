@@ -23,6 +23,7 @@ import {
   Circle,
   X,
   Save,
+  Copy,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
@@ -59,6 +60,17 @@ const WeeklyPlannerPage = () => {
   // Debounce timeouts
   const prioritiesDebounceRef = useRef<Record<number, NodeJS.Timeout>>({});
   const tasksDebounceRef = useRef<Record<string, NodeJS.Timeout>>({});
+
+  const plannerRef = useRef<WeeklyPlanner | null>(null);
+  const userIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    plannerRef.current = planner;
+  }, [planner]);
+
+  useEffect(() => {
+    userIdRef.current = user?.id ?? null;
+  }, [user?.id]);
 
   const weekStartStr = useMemo(() => currentWeek.toISOString().split("T")[0], [currentWeek]);
 
@@ -139,16 +151,20 @@ const WeeklyPlannerPage = () => {
 
     // Set new debounce to autosave after 1.5 seconds
     prioritiesDebounceRef.current[dayIndex] = setTimeout(async () => {
-      if (!planner || !user) return;
+      const p = plannerRef.current;
+      const uid = userIdRef.current;
+      if (!p || !uid) return;
       setIsSaving(true);
       const nonEmptyPriorities = updatedPriorities.filter((p) => p.trim() !== "");
       try {
-        await updateDayPriorities(planner.id, dayIndex, nonEmptyPriorities);
+        await updateDayPriorities(p.id, dayIndex, nonEmptyPriorities);
         setLastSaved(new Date());
         // Clear editing state
-        const newEditing = { ...editingPriorities };
-        delete newEditing[dayIndex];
-        setEditingPriorities(newEditing);
+        setEditingPriorities((prev) => {
+          const next = { ...prev };
+          delete next[dayIndex];
+          return next;
+        });
       } catch (error) {
         showError("Failed to save priorities");
       } finally {
@@ -200,14 +216,18 @@ const WeeklyPlannerPage = () => {
     if (!title) return;
 
     try {
+      setIsSaving(true);
       await addTaskToDay(planner.id, dayIndex, {
         title,
         completed: false,
       });
       setNewTaskInputs({ ...newTaskInputs, [dayIndex]: "" });
+      setLastSaved(new Date());
       showSuccess("Task added!");
     } catch (error) {
       showError("Failed to add task");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -215,11 +235,15 @@ const WeeklyPlannerPage = () => {
     if (!planner || !user) return;
 
     try {
+      setIsSaving(true);
       await updateTaskInDay(planner.id, dayIndex, task.id, {
         completed: !task.completed,
       });
+      setLastSaved(new Date());
     } catch (error) {
       showError("Failed to update task");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -237,18 +261,22 @@ const WeeklyPlannerPage = () => {
 
     // Set new debounce to autosave after 1.5 seconds
     tasksDebounceRef.current[taskId] = setTimeout(async () => {
-      if (!planner || !user) return;
+      const p = plannerRef.current;
+      const uid = userIdRef.current;
+      if (!p || !uid) return;
       const newTitle = value.trim();
       if (!newTitle) return;
       setIsSaving(true);
       try {
-        await updateTaskInDay(planner.id, dayIndex, taskId, {
+        await updateTaskInDay(p.id, dayIndex, taskId, {
           title: newTitle,
         });
         setLastSaved(new Date());
-        const newEditing = { ...editingTasks };
-        delete newEditing[taskId];
-        setEditingTasks(newEditing);
+        setEditingTasks((prev) => {
+          const next = { ...prev };
+          delete next[taskId];
+          return next;
+        });
       } catch (error) {
         showError("Failed to update task");
       } finally {
@@ -280,10 +308,49 @@ const WeeklyPlannerPage = () => {
     if (!planner || !user) return;
 
     try {
+      setIsSaving(true);
       await deleteTaskFromDay(planner.id, dayIndex, taskId);
+      setLastSaved(new Date());
       showSuccess("Task deleted!");
     } catch (error) {
       showError("Failed to delete task");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const cloneToNextWeek = async () => {
+    if (!planner || !user) return;
+    const nextWeek = new Date(currentWeek);
+    nextWeek.setDate(nextWeek.getDate() + 7);
+
+    setIsSaving(true);
+    try {
+      const nextPlanner = await getOrCreateWeeklyPlanner(user.id, nextWeek);
+      const nextDays = nextPlanner.days.map((d, idx) => {
+        const src = planner.days[idx];
+        const nowIso = new Date().toISOString();
+        return {
+          ...d,
+          priorities: (src?.priorities ?? []).slice(0, 3),
+          tasks: (src?.tasks ?? []).map((t) => ({
+            ...t,
+            id: crypto.randomUUID(),
+            completed: false,
+            createdAt: nowIso,
+            updatedAt: nowIso,
+          })),
+        };
+      });
+
+      await updateWeeklyPlanner(nextPlanner.id, { days: nextDays });
+      setLastSaved(new Date());
+      showSuccess("Cloned to next week!");
+      setCurrentWeek(nextWeek);
+    } catch (e) {
+      showError("Failed to clone to next week");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -366,14 +433,16 @@ const WeeklyPlannerPage = () => {
           <Badge variant="secondary" className="text-sm px-4 py-2 rounded-full">
             {formatDate(weekStartStr)} - {formatDate(planner?.weekEnd || weekStartStr)}
           </Badge>
-          <Button
-            onClick={() => setShowPreview(true)}
-            variant="outline"
-            className="rounded-full"
-          >
-            <Eye className="w-4 h-4 mr-2" />
-            Preview Week
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={cloneToNextWeek} variant="outline" className="rounded-full" disabled={isSaving}>
+              <Copy className="w-4 h-4 mr-2" />
+              Clone to next week
+            </Button>
+            <Button onClick={() => setShowPreview(true)} variant="outline" className="rounded-full">
+              <Eye className="w-4 h-4 mr-2" />
+              Preview Week
+            </Button>
+          </div>
         </div>
 
         {/* Loading State */}
