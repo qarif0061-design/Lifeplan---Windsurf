@@ -59,10 +59,22 @@ const STATIC_ARTICLES: Article[] = [
     topics: ["goal_planning", "strategy"],
   },
   {
+    slug: "daily-planner-template",
+    title: "Daily Planner Template: A Simple Day Plan You Can Repeat",
+    excerpt: "A practical daily planning template (schedule + priorities + tasks) with examples you can copy into Lifeplans.",
+    topics: ["daily_routines", "productivity"],
+  },
+  {
     slug: "weekly-planning-for-long-term-goals",
     title: "Weekly Planning for Long-Term Goals",
     excerpt: "Turn big goals into weekly actions you can actually complete.",
     topics: ["weekly_planning", "productivity"],
+  },
+  {
+    slug: "weekly-planner-template",
+    title: "Weekly Planner Template: Priorities, Tasks, and a Weekly Review",
+    excerpt: "A simple weekly planner template for turning goals into priorities, tasks, and time blocks (with a quick weekly review).",
+    topics: ["weekly_planning", "time_management"],
   },
   {
     slug: "how-to-build-a-daily-check-in-habit",

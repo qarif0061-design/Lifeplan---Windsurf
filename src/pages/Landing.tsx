@@ -171,6 +171,82 @@ const Landing = () => {
         </div>
       </section>
 
+      <section className="py-16 bg-gray-50 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-900">Examples you can copy</h2>
+            <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
+              If you’re new, use these as a starting point. Keep it simple and adjust as you go.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm">
+              <div className="text-xs font-bold uppercase tracking-widest text-blue-700">Sample Goal</div>
+              <h3 className="mt-2 text-xl font-bold text-gray-900">Improve fitness in 8 weeks</h3>
+              <div className="mt-4 rounded-2xl border border-gray-100 bg-gray-50 p-4 text-sm text-gray-700">
+                <div className="font-semibold text-gray-900 mb-2">Checkpoints</div>
+                <div className="space-y-1">
+                  <div>3 workouts/week</div>
+                  <div>8k steps/day (average)</div>
+                  <div>Meal plan 3 days/week</div>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                  <Link to="/auth">Create your goal</Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/articles/how-to-set-goals-that-stick">Read guide</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm">
+              <div className="text-xs font-bold uppercase tracking-widest text-amber-700">Sample Weekly Plan</div>
+              <h3 className="mt-2 text-xl font-bold text-gray-900">This week’s priorities</h3>
+              <div className="mt-4 rounded-2xl border border-gray-100 bg-gray-50 p-4 text-sm text-gray-700">
+                <div className="font-semibold text-gray-900 mb-2">Top 3 priorities</div>
+                <div className="space-y-1">
+                  <div>Finish one important task (deep work)</div>
+                  <div>Move the body 3x</div>
+                  <div>Plan the next week on Friday</div>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                  <Link to="/auth">Plan your week</Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/articles/weekly-planning-for-long-term-goals">Read guide</Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 shadow-sm">
+              <div className="text-xs font-bold uppercase tracking-widest text-emerald-700">Sample Daily Plan</div>
+              <h3 className="mt-2 text-xl font-bold text-gray-900">Today (30–60 minutes)</h3>
+              <div className="mt-4 rounded-2xl border border-gray-100 bg-gray-50 p-4 text-sm text-gray-700">
+                <div className="font-semibold text-gray-900 mb-2">Do this first</div>
+                <div className="space-y-1">
+                  <div>25–50 min focus session</div>
+                  <div>10 min admin / messages</div>
+                  <div>5 min prepare tomorrow</div>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                  <Link to="/auth">Open daily planner</Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/articles/daily-planner-template">Get template</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">

@@ -168,6 +168,49 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Daily check-in habit\n" +
       "- Strategy for obstacles\n",
   },
+  "daily-planner-template": {
+    title: "Daily Planner Template: A Simple Day Plan You Can Repeat",
+    body:
+      "A daily planner is not a long to-do list. It’s a short plan that helps you do the right thing first.\n\n" +
+      "Use this daily planner template when you feel busy but not productive. It works especially well when you also do weekly planning.\n\n" +
+      "## The daily planner template (5–10 minutes)\n" +
+      "### 1) Choose 1–3 top priorities\n" +
+      "Ask: *If I finish only three things today, what would make today a win?*\n\n" +
+      "Examples:\n" +
+      "- Finish the first draft of a report\n" +
+      "- 30-minute workout\n" +
+      "- Call the client and confirm next steps\n\n" +
+      "### 2) Write 3–7 small tasks\n" +
+      "Tasks should be startable. Replace vague items like ‘work on project’ with a clear next action.\n\n" +
+      "Examples:\n" +
+      "- Outline the report (15 min)\n" +
+      "- Write section 1 (25 min)\n" +
+      "- Send update email (5 min)\n\n" +
+      "### 3) Add one focus block to your schedule\n" +
+      "Protect a block of time for your most important task. Even 25 minutes is enough.\n\n" +
+      "Examples:\n" +
+      "- 09:00–09:50 deep work\n" +
+      "- 16:00–16:25 inbox cleanup\n\n" +
+      "### 4) Add a reminder\n" +
+      "One sentence that prevents mistakes.\n\n" +
+      "Examples:\n" +
+      "- Don’t accept new meetings before the focus block\n" +
+      "- Keep the plan small and finish it\n\n" +
+      "### 5) Write one line for tomorrow\n" +
+      "Your brain relaxes when tomorrow is captured.\n\n" +
+      "Example: ‘Tomorrow: schedule workouts + buy groceries.’\n\n" +
+      "## A filled example (copy/paste)\n" +
+      "Top priorities:\n" +
+      "- 1 focus session on main task\n" +
+      "- One health action (walk/workout)\n" +
+      "- Close the day with a quick review\n\n" +
+      "Tasks:\n" +
+      "- 25–50 min deep work\n" +
+      "- 10 min admin/messages\n" +
+      "- 5 min plan tomorrow\n\n" +
+      "## How to use this in Lifeplans\n" +
+      "Open the Daily Planner and fill: schedule, top 3 priorities, and tasks. Keep the rest optional. The goal is consistency, not perfection.\n",
+  },
   "weekly-planning-for-long-term-goals": {
     title: "Weekly Planning for Long-Term Goals",
     body:
@@ -1201,6 +1244,40 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Track one win\n" +
       "- Review weekly\n\n" +
       "Keywords: quotes about persistence and never giving up, persistence, never give up\n",
+  },
+  "weekly-planner-template": {
+    title: "Weekly Planner Template: Priorities, Tasks, and a Weekly Review",
+    body:
+      "Weekly planning works because it reduces decision fatigue. You decide once, then execute during the week.\n\n" +
+      "Use this weekly planner template when you want consistent progress without over-planning.\n\n" +
+      "## The weekly planner template (15–25 minutes)\n" +
+      "### 1) Choose 1–3 priorities\n" +
+      "Priorities are outcomes you want by the end of the week.\n\n" +
+      "Examples:\n" +
+      "- Publish one article\n" +
+      "- Exercise 3 times\n" +
+      "- Finish module 2 of a course\n\n" +
+      "### 2) Break priorities into tasks\n" +
+      "For each priority, write 2–5 tasks that are startable.\n\n" +
+      "Example (Publish one article):\n" +
+      "- Choose topic + outline\n" +
+      "- Write first draft\n" +
+      "- Edit + publish\n\n" +
+      "### 3) Schedule at least two focus blocks\n" +
+      "If it’s not scheduled, it’s optional. Put two blocks on your calendar for the hardest work.\n\n" +
+      "### 4) Assign a theme to each day\n" +
+      "A simple theme reduces context switching.\n\n" +
+      "Example:\n" +
+      "- Mon: plan + setup\n" +
+      "- Tue–Thu: execution\n" +
+      "- Fri: review + next week\n\n" +
+      "## Quick weekly review (5 minutes)\n" +
+      "Ask:\n" +
+      "- What did I finish?\n" +
+      "- What blocked me?\n" +
+      "- What’s the smallest improvement next week?\n\n" +
+      "## How to use this in Lifeplans\n" +
+      "Open Weekly Planner and fill each day’s priorities and tasks. Start with Monday and Friday if you’re busy. Then add 1–2 tasks per day.\n",
   },
 };
 
