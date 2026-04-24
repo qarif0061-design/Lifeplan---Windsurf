@@ -8,7 +8,10 @@
     "build": "node scripts/generate-sitemap.mjs && vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "eas:build:ios": "eas build --platform ios",
+    "eas:build:ios:preview": "eas build --platform ios --profile preview",
+    "eas:submit:ios": "eas submit --platform ios"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
