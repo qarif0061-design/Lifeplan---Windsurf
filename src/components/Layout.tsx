@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { useState } from "react";
 import TopHeader from "./TopHeader";
+import MonetagBanner from "./MonetagBanner";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -14,6 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="flex-1 flex flex-col">
           <TopHeader />
           <main className="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
+            <MonetagBanner className="mb-6" />
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
               <div className="rounded-[2.5rem] bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-white/40 shadow-sm">
                 <div className="p-6 sm:p-8">
@@ -21,6 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 </div>
               </div>
             </div>
+            <MonetagBanner className="mt-6" />
           </main>
           <Footer />
         </div>
