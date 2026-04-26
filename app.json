@@ -1,11 +1,8 @@
 {
   "expo": {
-    "name": "LifePlans",
-    "slug": "lifeplans-ios",
-    "owner": "shumaila_saher",
     "extra": {
       "eas": {
-        "projectId": "c41a58e9-1412-464e-9d95-a36035677dcc"
+        "projectId": "a7702ea3-6e00-4125-b8d2-feabe0cf52e1"
       }
     },
     "ios": {
