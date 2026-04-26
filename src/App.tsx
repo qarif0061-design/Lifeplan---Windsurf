@@ -52,12 +52,6 @@ import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   useEffect(() => {
-    // Monetag Onclick Popunder
-    (function(s: any) {
-      s.dataset.zone = '10926996';
-      s.src = 'https://al5sm.com/tag.min.js';
-    })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
-
     // Monetag In-Page Push (Banner)
     (function(s: any) {
       s.dataset.zone = '10927007';
