@@ -29,6 +29,15 @@ const Footer = () => {
                 {l.label}
               </a>
             ))}
+            {/* Monetag Direct Link Ad */}
+            <a 
+              href="https://omg10.com/4/10927013" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 transition-colors font-medium"
+            >
+              Sponsored
+            </a>
           </div>
         </div>
       </div>
