@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { Toaster } from "sonner";
 import { UserProvider } from "@/contexts/UserContext";
 import RememberMeRedirect from "@/components/RememberMeRedirect";
-import { useEffect } from "react";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Goals from "./pages/Goals";
@@ -51,20 +50,6 @@ import EisenhowerMatrix from "./pages/EisenhowerMatrix";
 import AdminPanel from "./pages/AdminPanel";
 
 function App() {
-  useEffect(() => {
-    // Monetag In-Page Push (Banner)
-    (function(s: any) {
-      s.dataset.zone = '10927007';
-      s.src = 'https://nap5k.com/tag.min.js';
-    })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
-
-    // Monetag Vignette banner
-    (function(s: any) {
-      s.dataset.zone = '10927011';
-      s.src = 'https://n6wxm.com/vignette.min.js';
-    })([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')));
-  }, []);
-
   return (
     <UserProvider>
       <Router>
