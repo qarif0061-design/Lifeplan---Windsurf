@@ -119,6 +119,42 @@ const STATIC_ARTICLES: Article[] = [
     topics: ["goal_planning", "targets"],
   },
   {
+    slug: "smart-goals-complete-guide",
+    title: "SMART Goals: The Complete Guide (2026)",
+    excerpt: "Master SMART goals: what they are, why they work, 50+ examples, and how to use them with GoalPath for real results.",
+    topics: ["goal_planning", "targets"],
+  },
+  {
+    slug: "smart-goals-project-managers",
+    title: "SMART Goals for Project Managers (50 Examples)",
+    excerpt: "50 proven SMART goal examples for project management, including objectives, deadlines, and KPIs you can use today.",
+    topics: ["goal_planning", "targets"],
+  },
+  {
+    slug: "best-goal-tracking-apps-2026",
+    title: "Best Goal Tracking Apps in 2026 (Ranked)",
+    excerpt: "Compare the top goal tracking apps of 2026. Features, pricing, and why GoalPath is the #1 choice for serious achievers.",
+    topics: ["goal_planning", "productivity"],
+  },
+  {
+    slug: "smart-marketing-goals-examples",
+    title: "SMART Marketing Goals: 40 Examples That Work",
+    excerpt: "40 actionable SMART marketing goal examples for campaigns, content, lead generation, and brand awareness.",
+    topics: ["goal_planning", "targets"],
+  },
+  {
+    slug: "short-term-smart-goals-students",
+    title: "Short Term SMART Goals: 100 Examples for Students",
+    excerpt: "100 short-term SMART goal examples for students covering study, fitness, productivity, and personal growth.",
+    topics: ["goal_planning", "targets"],
+  },
+  {
+    slug: "how-to-track-goals-online",
+    title: "How to Track Your Goals Online (Free Tools + Apps)",
+    excerpt: "Discover the best free tools and apps for online goal tracking, plus how GoalPath simplifies the entire process.",
+    topics: ["targets", "productivity"],
+  },
+  {
     slug: "track-progress-like-a-pro",
     title: "Track Progress Like a Pro: Metrics That Matter",
     excerpt: "Choose goal metrics, avoid vanity tracking, and create a simple progress score you can trust.",
