@@ -48,6 +48,7 @@ import TimeBlocking from "./pages/TimeBlocking";
 import PomodoroTechnique from "./pages/PomodoroTechnique";
 import EisenhowerMatrix from "./pages/EisenhowerMatrix";
 import AdminPanel from "./pages/AdminPanel";
+import OnlineGoalPlanner from "./pages/OnlineGoalPlanner";
 
 function App() {
   return (
@@ -75,6 +76,7 @@ function App() {
             <Route path="/time-blocking" element={<TimeBlocking />} />
             <Route path="/pomodoro-technique" element={<PomodoroTechnique />} />
             <Route path="/eisenhower-matrix" element={<EisenhowerMatrix />} />
+            <Route path="/online-goal-planner" element={<OnlineGoalPlanner />} />
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/dashboard" element={<Dashboard />} />
