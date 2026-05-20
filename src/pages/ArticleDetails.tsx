@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Seo from "@/components/Seo";
 import { getGeneratedArticleBySlug } from "@/seo/articles";
 import { getPillarBySlug, getPillarForKeyword, getPillarUrl } from "@/seo/pillars";
+import { SEO_ARTICLES } from "./seoArticles";
 
 const URL_RE = /(https?:\/\/[^\s)\]]+)/g;
 
@@ -1277,9 +1278,11 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- What blocked me?\n" +
       "- What’s the smallest improvement next week?\n\n" +
       "## How to use this in Lifeplans\n" +
-      "Open Weekly Planner and fill each day’s priorities and tasks. Start with Monday and Friday if you’re busy. Then add 1–2 tasks per day.\n",
+      "Open Weekly Planner and fill each day's priorities and tasks. Start with Monday and Friday if you're busy. Then add 1–2 tasks per day.\n",
   },
 };
+
+Object.assign(CONTENT, SEO_ARTICLES);
 
 const ArticleDetails = () => {
   const { slug } = useParams();
