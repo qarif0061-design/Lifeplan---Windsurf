@@ -988,7 +988,7 @@ const GoalDetails = () => {
                         <div className="rounded-2xl border border-gray-100 bg-white p-4">
                           <div className="text-sm font-semibold text-gray-900">Success Metric</div>
                           <div className="mt-2 text-sm text-gray-600">
-                            {goal.successMetric.type === "number" ? (
+                            {goal.successMetric?.type === "number" ? (
                               <div>
                                 Reach {goal.successMetric.target ?? 0}
                                 {goal.successMetric.unit ? ` ${goal.successMetric.unit}` : ""}
@@ -1724,7 +1724,7 @@ const GoalDetails = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-blue-50 leading-relaxed">
-                      {goal.successMetric.type === "number" ? "Reach target" : "Complete goal"}
+                      {goal.successMetric?.type === "number" ? "Reach target" : "Complete goal"}
                     </p>
                   </CardContent>
                 </Card>
