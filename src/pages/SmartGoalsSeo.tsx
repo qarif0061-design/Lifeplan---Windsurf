@@ -7,15 +7,15 @@ const SmartGoalsSeo = () => {
   return (
     <PublicPageLayout>
       <Seo
-        title="SMART Goals: Acronym, Examples, Templates, and Framework | Lifeplans"
-        description="SMART goals explained: SMART goals acronym, criteria, examples, templates, and a SMART framework for goal setting. Use Lifeplans to plan weekly and track progress."
+        title="SMART Goals: Free Template & Examples for 2026 | GoalPlanner"
+        description="Free SMART goals template with real examples for work, students, managers & more. Learn the SMART acronym and start setting goals you'll actually achieve."
         canonicalPath="/smart-goals"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "SMART Goals",
+          name: "SMART Goals: Free Template & Examples",
           url: "https://goalplanner.io/smart-goals",
-          description: "SMART goals acronym, examples, templates, and framework for goal setting.",
+          description: "Free SMART goals template with real examples for work, students, managers and more.",
         }}
       />
 

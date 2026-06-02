@@ -3,6 +3,7 @@ import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2, Star, Message
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import Seo from "@/components/Seo";
 
 const Landing = () => {
   const features = [
@@ -86,6 +87,19 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo
+        title="Goal Planner - Lifeplans: Free Goal Setting & Daily Planning App"
+        description="Plan your goals, build weekly plans, and track daily progress. Free goal planner app for iOS and Android. Trusted by students and professionals."
+        canonicalPath="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: "Goal Planner - Lifeplans",
+          url: "https://goalplanner.io/",
+          applicationCategory: "Productivity Application",
+          operatingSystem: "Web, iOS, Android",
+        }}
+      />
       <Navbar />
       
       {/* Hero Section */}

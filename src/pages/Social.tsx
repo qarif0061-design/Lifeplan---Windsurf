@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Seo from "@/components/Seo";
 
 const Social = () => {
   const links = [
@@ -12,6 +13,11 @@ const Social = () => {
 
   return (
     <Layout>
+      <Seo
+        title="Goal Planner Social Media | Follow Lifeplans on Facebook, Instagram & More"
+        description="Follow Goal Planner - Lifeplans on Facebook, Instagram, LinkedIn, YouTube, TikTok for daily motivation, productivity tips, and goal-setting advice."
+        canonicalPath="/social-media"
+      />
       <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Social Media</h1>

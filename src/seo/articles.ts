@@ -90,9 +90,11 @@ const buildBody = (keyword: string) => {
   const title = toTitle(keyword);
 
   return (
-    `${title} is easier when you turn the idea into a small, repeatable system. Use this guide as a simple checklist you can follow inside Lifeplans (Goal Planner) so you’re not relying on mood.\n\n` +
+    `Looking for practical advice on ${keyword}? This guide covers everything you need to know — from the core concepts to actionable steps you can take today. Use Lifeplans to put these ideas into practice.\n\n` +
+    `## What you need to know\n` +
+    `${title} is easier when you turn the idea into a small, repeatable system. Use this guide as a simple checklist you can follow inside Lifeplans (Goal Planner) so you're not relying on mood.\n\n` +
     `## The 3-step system\n` +
-    `- Clarify the outcome (what does “done” look like?)\n` +
+    `- Clarify the outcome (what does "done" look like?)\n` +
     `- Pick one next action you can start in 10–20 minutes\n` +
     `- Track it weekly and check in daily\n\n` +
     `## A practical routine you can copy\n` +
