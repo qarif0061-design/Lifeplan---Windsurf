@@ -53,6 +53,7 @@ const WeeklyPlannerPage = () => {
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   // Local state for editing
+  const [error, setError] = useState<string | null>(null);
   const [editingPriorities, setEditingPriorities] = useState<Record<number, string[]>>({});
   const [newTaskInputs, setNewTaskInputs] = useState<Record<number, string>>({});
   const [editingTasks, setEditingTasks] = useState<Record<string, string>>({});
@@ -63,6 +64,7 @@ const WeeklyPlannerPage = () => {
 
   const plannerRef = useRef<WeeklyPlanner | null>(null);
   const userIdRef = useRef<string | null>(null);
+  const unsubRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     plannerRef.current = planner;
@@ -90,6 +92,7 @@ const WeeklyPlannerPage = () => {
     }
 
     setLoading(true);
+    setError(null);
 
     // First get or create the planner
     getOrCreateWeeklyPlanner(user.id, currentWeek)
@@ -111,17 +114,21 @@ const WeeklyPlannerPage = () => {
         }
 
         // Then subscribe to updates
-        const unsub = subscribeWeeklyPlanner(user.id, weekStartStr, (updatedPlanner) => {
+        unsubRef.current = subscribeWeeklyPlanner(user.id, weekStartStr, (updatedPlanner) => {
           if (updatedPlanner) {
             setPlanner(updatedPlanner);
           }
         });
-
-        return () => unsub();
       })
-      .catch(() => {
+      .catch((err) => {
         setLoading(false);
+        setError(err instanceof Error ? err.message : "Failed to load planner");
       });
+
+    return () => {
+      unsubRef.current?.();
+      unsubRef.current = null;
+    };
   }, [user, currentWeek, weekStartStr]);
 
   const navigateWeek = (direction: "prev" | "next") => {
@@ -450,6 +457,20 @@ const WeeklyPlannerPage = () => {
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
             <p className="text-gray-500 mt-4">Loading your weekly planner...</p>
+          </div>
+        )}
+
+        {/* Error / Empty State */}
+        {!loading && !planner && user && (
+          <div className="text-center py-12">
+            <div className="rounded-full bg-red-100 p-4 w-16 h-16 mx-auto flex items-center justify-center mb-4">
+              <span className="text-2xl">!</span>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Could not load planner</h3>
+            <p className="text-gray-500 mb-4">{error || "An unexpected error occurred."}</p>
+            <Button onClick={() => window.location.reload()} className="rounded-full">
+              Try Again
+            </Button>
           </div>
         )}
 
