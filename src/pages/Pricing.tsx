@@ -12,11 +12,11 @@ const Pricing = () => {
 
   const checkoutLinks = {
     weekly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/f5f9e5b6-3642-4907-a462-b9a31c489932?enabled=1372523&trial_days=3",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/f5f9e5b6-3642-4907-a462-b9a31c489932?enabled=1372523",
     monthly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/3238ac26-b73d-418a-9dca-ac2b19e19e30?enabled=1372984&trial_days=7",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/3238ac26-b73d-418a-9dca-ac2b19e19e30?enabled=1372984",
     yearly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/eac8789a-88f9-48af-83a7-9478da85619a?enabled=1372982&trial_days=30",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/eac8789a-88f9-48af-83a7-9478da85619a?enabled=1372982",
   } as const;
 
   const buildCheckoutUrl = (base: string) => {
