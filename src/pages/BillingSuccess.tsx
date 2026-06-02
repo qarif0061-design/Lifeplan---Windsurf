@@ -1,8 +1,26 @@
+import { useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
 const BillingSuccess = () => {
+  useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion", {
+        send_to: "AW-18206119493/s9UUCLmm3bccEMWsrelD",
+        value: 1.0,
+        currency: "PKR",
+        transaction_id: "",
+      });
+    }
+  }, []);
+
   return (
     <Layout>
       <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in duration-500">
