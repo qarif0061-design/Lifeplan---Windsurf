@@ -235,7 +235,7 @@ export const updateWeeklyPlanner = async (
   const { id: _id, ...rest } = updates as WeeklyPlanner;
 
   await updateDoc(ref, {
-    days: updatedDays,
+    ...rest,
     updatedAt: serverTimestamp(),
   });
 };
