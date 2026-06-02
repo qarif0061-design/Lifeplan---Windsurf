@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Apple, ArrowLeft, Eye, EyeOff, Github, Mail, Smartphone } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { showSuccess, showError } from "@/utils/toast";
-import { signIn, signInWithApple, signInWithGithub, signInWithGoogle, signUp } from "@/firebase/auth";
+import { signIn, signInWithApple, signInWithGithub, signInWithGoogle, signUp, getOrCreateUserProfile, signInWithGoogleRedirect, signInWithGithubRedirect, signInWithAppleRedirect, getRedirectResult } from "@/firebase/auth";
+import { auth } from "@/firebase/config";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +18,21 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+
+  // Handle redirect-based sign-in result (user came back from OAuth provider)
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result?.user) {
+          await getOrCreateUserProfile(result.user);
+          showSuccess("Welcome back!");
+          navigate("/dashboard");
+        }
+      })
+      .catch(() => {
+        // User likely cancelled or there was a transient error — ignore
+      });
+  }, [navigate]);
 
   const handleProviderSignIn = async (provider: "google" | "github" | "apple") => {
     setIsLoading(true);
@@ -31,8 +47,31 @@ const Auth = () => {
       showSuccess("Welcome back!");
       navigate("/dashboard");
     } catch (error: unknown) {
+      // Fall back to redirect-based sign-in if popup was blocked
+      const err = error as { code?: string } | undefined;
+      const code = err?.code ?? "";
+      if (code === "auth/popup-blocked" || code === "auth/popup-closed-by-user") {
+        try {
+          if (provider === "google") {
+            await signInWithGoogleRedirect();
+          } else if (provider === "github") {
+            await signInWithGithubRedirect();
+          } else {
+            await signInWithAppleRedirect();
+          }
+          // After redirect the page will reload — no further action needed
+          return;
+        } catch {
+          // Redirect also failed — show the original error
+        }
+      }
       const message = error instanceof Error ? error.message : "Authentication failed";
-      showError(message);
+      showError(code === "auth/unauthorized-domain"
+        ? "This domain is not authorized for sign-in. Please contact support."
+        : code === "auth/operation-not-allowed"
+        ? "This sign-in method is not enabled. Please contact support."
+        : message
+      );
     } finally {
       setIsLoading(false);
     }

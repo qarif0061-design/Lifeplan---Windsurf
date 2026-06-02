@@ -1,6 +1,8 @@
 import { 
   createUserWithEmailAndPassword, 
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword, 
   signOut, 
   User as FirebaseUser,
@@ -35,7 +37,7 @@ const buildDefaultUserProfile = (firebaseUser: FirebaseUser, displayNameFallback
   };
 };
 
-const getOrCreateUserProfile = async (firebaseUser: FirebaseUser, displayNameFallback?: string): Promise<UserProfile> => {
+export const getOrCreateUserProfile = async (firebaseUser: FirebaseUser, displayNameFallback?: string): Promise<UserProfile> => {
   const ref = doc(db, "users", firebaseUser.uid);
   const snap = await getDoc(ref);
   if (snap.exists()) {
@@ -82,6 +84,24 @@ export const signInWithApple = async (): Promise<UserProfile> => {
   const userCredential = await signInWithPopup(auth, provider);
   return getOrCreateUserProfile(userCredential.user);
 };
+
+// Redirect-based sign-in (fallback when popup is blocked)
+export const signInWithGoogleRedirect = () => {
+  const provider = new GoogleAuthProvider();
+  return signInWithRedirect(auth, provider);
+};
+
+export const signInWithGithubRedirect = () => {
+  const provider = new GithubAuthProvider();
+  return signInWithRedirect(auth, provider);
+};
+
+export const signInWithAppleRedirect = () => {
+  const provider = new OAuthProvider("apple.com");
+  return signInWithRedirect(auth, provider);
+};
+
+export { getRedirectResult };
 
 export const logout = async (): Promise<void> => {
   await signOut(auth);
