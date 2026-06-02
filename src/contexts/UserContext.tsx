@@ -7,6 +7,7 @@ import { db } from "@/firebase/config";
 interface UserContextType {
   user: UserProfile | null;
   isPremium: boolean;
+  premiumExpiresAt: string | null;
   login: (name: string) => void;
   logout: () => Promise<void>;
   loading: boolean;
@@ -76,7 +77,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
-  const isPremium = user?.isPremium ?? false;
+  const premiumExpiresAt = user?.premiumExpiresAt ?? null;
+  const isPremium = (user?.isPremium ?? false) && (!premiumExpiresAt || new Date(premiumExpiresAt).getTime() > Date.now());
 
   const login = async (name: string) => {
     // This is now handled by Firebase auth
@@ -93,7 +95,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, isPremium, login, logout: handleLogout, loading }}>
+    <UserContext.Provider value={{ user, isPremium, premiumExpiresAt, login, logout: handleLogout, loading }}>
       {children}
     </UserContext.Provider>
   );

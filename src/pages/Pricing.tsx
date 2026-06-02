@@ -1,21 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { Check, Crown, Zap, Shield, Star } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Check, Crown, Sparkles, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { Badge } from "@/components/ui/badge";
 import HelpDialog from "@/components/HelpDialog";
 import Layout from "@/components/Layout";
 
 const Pricing = () => {
-  const { isPremium, user } = useUser();
+  const { isPremium, user, premiumExpiresAt } = useUser();
   const navigate = useNavigate();
 
   const checkoutLinks = {
     weekly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/f5f9e5b6-3642-4907-a462-b9a31c489932?enabled=1372523",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/f5f9e5b6-3642-4907-a462-b9a31c489932?enabled=1372523&trial_days=3",
     monthly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/3238ac26-b73d-418a-9dca-ac2b19e19e30?enabled=1372984",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/3238ac26-b73d-418a-9dca-ac2b19e19e30?enabled=1372984&trial_days=7",
     yearly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/eac8789a-88f9-48af-83a7-9478da85619a?enabled=1372982",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/eac8789a-88f9-48af-83a7-9478da85619a?enabled=1372982&trial_days=30",
   } as const;
 
   const buildCheckoutUrl = (base: string) => {
@@ -25,6 +26,12 @@ const Pricing = () => {
     url.searchParams.set("checkout[custom][user_id]", user.id);
     return url.toString();
   };
+
+  const trialEndDate = premiumExpiresAt ? new Date(premiumExpiresAt) : null;
+  const isOnTrial = isPremium && trialEndDate && trialEndDate.getTime() > Date.now();
+  const trialDaysLeft = isOnTrial && trialEndDate
+    ? Math.ceil((trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    : 0;
 
   const handleUpgrade = (planName: string) => {
     if (!user) {
@@ -54,10 +61,26 @@ const Pricing = () => {
       highlight: false,
     },
     {
+      name: "Weekly",
+      price: "$1.99",
+      period: "/week",
+      trialDays: 3,
+      description: "Try Premium free for 3 days, then $1.99/week.",
+      features: [
+        "Everything in Premium",
+        "Weekly billing",
+        "Priority email support",
+      ],
+      buttonText: isPremium ? "Current Plan" : "Start Free Trial",
+      buttonVariant: "outline" as const,
+      highlight: false,
+    },
+    {
       name: "Monthly",
       price: "$4.99",
       period: "/month",
-      description: "Full access to all Premium features. Cancel anytime.",
+      trialDays: 7,
+      description: "Try Premium free for 1 week, then $4.99/month.",
       features: [
         "Unlimited active goals",
         "Full Strategy System access",
@@ -68,36 +91,23 @@ const Pricing = () => {
         "Weekly planning history",
         "Priority Email Support",
       ],
-      buttonText: isPremium ? "Current Plan" : "Subscribe Monthly",
+      buttonText: isPremium ? "Current Plan" : "Start Free Trial",
       buttonVariant: (isPremium ? "outline" : "default") as "outline" | "default",
       highlight: true,
       icon: Crown,
     },
     {
-      name: "Weekly",
-      price: "$1.99",
-      period: "/week",
-      description: "Flexible weekly billing for full Premium access.",
-      features: [
-        "Everything in Premium",
-        "Weekly billing",
-        "Priority email support",
-      ],
-      buttonText: "Subscribe Weekly",
-      buttonVariant: "outline" as const,
-      highlight: false,
-    },
-    {
       name: "Yearly",
       price: "$49.99",
       period: "/year",
-      description: "Save with annual billing for full access to all Premium features.",
+      trialDays: 30,
+      description: "Try Premium free for 1 month, then $49.99/year.",
       features: [
         "Everything in Premium",
         "Annual billing",
         "Priority email support",
       ],
-      buttonText: "Subscribe Yearly",
+      buttonText: isPremium ? "Current Plan" : "Start Free Trial",
       buttonVariant: "outline" as const,
       highlight: false,
     },
@@ -129,7 +139,20 @@ const Pricing = () => {
                 )}
                 
                 <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
+                    {plan.trialDays && !isPremium && (
+                      <Badge variant="secondary" className="rounded-full text-xs bg-green-100 text-green-700 border-green-200">
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        {plan.trialDays}-day free trial
+                      </Badge>
+                    )}
+                    {isOnTrial && plan.name !== "Free" && (
+                      <Badge variant="secondary" className="rounded-full text-xs bg-amber-100 text-amber-700 border-amber-200">
+                        {trialDaysLeft} day{trialDaysLeft !== 1 ? "s" : ""} left
+                      </Badge>
+                    )}
+                  </div>
                   <div className="flex items-baseline gap-1 mb-4">
                     <span className="text-4xl font-extrabold text-gray-900">{plan.price}</span>
                     {plan.period && <span className="text-gray-500 font-medium">{plan.period}</span>}

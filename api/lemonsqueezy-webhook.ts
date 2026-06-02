@@ -111,12 +111,13 @@ export default async function handler(req: VercelReq, res: VercelRes) {
 
     const status = String(attributes.status ?? "");
     const isActive = status === "active";
+    const isOnTrial = status === "on_trial";
     const isCancelledLike = status === "cancelled" || status === "expired";
 
     let nextIsPremium: boolean | null = null;
 
     if (eventName.startsWith("subscription_")) {
-      if (isActive) nextIsPremium = true;
+      if (isActive || isOnTrial) nextIsPremium = true;
       else if (isCancelledLike) nextIsPremium = false;
     }
 
@@ -127,15 +128,28 @@ export default async function handler(req: VercelReq, res: VercelRes) {
       return;
     }
 
+    const trialEndsAt = isRecord(attributes.trial_ends_at)
+      ? null
+      : (attributes.trial_ends_at as string | null);
+    const endsAt = isRecord(attributes.ends_at)
+      ? null
+      : (attributes.ends_at as string | null);
+    const premiumExpiresAt = trialEndsAt || endsAt || null;
+
     ensureAdmin();
     const db = admin.firestore();
 
-    await db.collection("users").doc(userId).set(
-      {
-        isPremium: nextIsPremium,
-      },
-      { merge: true },
-    );
+    const updateData: Record<string, unknown> = {
+      isPremium: nextIsPremium,
+    };
+    if (premiumExpiresAt) {
+      updateData.premiumExpiresAt = premiumExpiresAt;
+    }
+    if (!nextIsPremium) {
+      updateData.premiumExpiresAt = null;
+    }
+
+    await db.collection("users").doc(userId).set(updateData, { merge: true });
 
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
