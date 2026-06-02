@@ -353,8 +353,8 @@ const WeeklyPlannerPage = () => {
       setShowResetConfirm(false);
       setLastSaved(new Date());
       showSuccess("Week reset successfully");
-    } catch {
-      showError("Failed to reset week");
+    } catch (err) {
+      showError(err instanceof Error ? err.message : "Failed to reset week");
     } finally {
       setIsSaving(false);
     }
