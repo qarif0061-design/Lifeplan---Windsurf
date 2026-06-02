@@ -155,27 +155,31 @@ export const formatDate = (dateStr: string): string => {
 export const subscribeWeeklyPlanner = (
   userId: string,
   weekStart: string,
-  callback: (planner: WeeklyPlanner | null) => void
+  callback: (planner: WeeklyPlanner | null) => void,
+  onError?: (error: Error) => void
 ): (() => void) => {
   const q = query(
     weeklyPlannerCollection,
-    where("userId", "==", userId),
-    where("weekStart", "==", weekStart)
+    where("userId", "==", userId)
   );
 
-  return onSnapshot(q, (snapshot) => {
-    if (snapshot.empty) {
-      callback(null);
-      return;
-    }
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const doc = snapshot.docs.find((d) => d.data().weekStart === weekStart);
+      if (!doc) {
+        callback(null);
+        return;
+      }
 
-    const doc = snapshot.docs[0];
-    const planner: WeeklyPlanner = {
-      id: doc.id,
-      ...(doc.data() as Omit<WeeklyPlanner, "id">),
-    };
-    callback(planner);
-  });
+      const planner: WeeklyPlanner = {
+        id: doc.id,
+        ...(doc.data() as Omit<WeeklyPlanner, "id">),
+      };
+      callback(planner);
+    },
+    onError
+  );
 };
 
 // Get or create weekly planner
@@ -191,17 +195,16 @@ export const getOrCreateWeeklyPlanner = async (
   // Check if planner exists
   const q = query(
     weeklyPlannerCollection,
-    where("userId", "==", userId),
-    where("weekStart", "==", weekStartStr)
+    where("userId", "==", userId)
   );
 
   const snapshot = await getDocs(q);
+  const existingDoc = snapshot.docs.find((d) => d.data().weekStart === weekStartStr);
 
-  if (!snapshot.empty) {
-    const doc = snapshot.docs[0];
+  if (existingDoc) {
     return {
-      id: doc.id,
-      ...(doc.data() as Omit<WeeklyPlanner, "id">),
+      id: existingDoc.id,
+      ...(existingDoc.data() as Omit<WeeklyPlanner, "id">),
     };
   }
 

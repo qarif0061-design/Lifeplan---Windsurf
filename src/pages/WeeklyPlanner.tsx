@@ -114,11 +114,18 @@ const WeeklyPlannerPage = () => {
         }
 
         // Then subscribe to updates
-        unsubRef.current = subscribeWeeklyPlanner(user.id, weekStartStr, (updatedPlanner) => {
-          if (updatedPlanner) {
-            setPlanner(updatedPlanner);
+        unsubRef.current = subscribeWeeklyPlanner(
+          user.id,
+          weekStartStr,
+          (updatedPlanner) => {
+            if (updatedPlanner) {
+              setPlanner(updatedPlanner);
+            }
+          },
+          (err) => {
+            setError(err.message);
           }
-        });
+        );
       })
       .catch((err) => {
         setLoading(false);
