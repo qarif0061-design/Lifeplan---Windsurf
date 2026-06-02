@@ -10,6 +10,7 @@ import {
   getDocs,
   setDoc,
   getDoc,
+  orderBy,
 } from "firebase/firestore";
 
 import { db } from "@/firebase/config";
@@ -235,9 +236,24 @@ export const updateWeeklyPlanner = async (
   const { id: _id, ...rest } = updates as WeeklyPlanner;
 
   await updateDoc(ref, {
-    ...rest,
+    days: updatedDays,
     updatedAt: serverTimestamp(),
   });
+};
+
+// Get all planners for a user, sorted by weekStart descending
+export const getAllPlanners = async (userId: string): Promise<WeeklyPlanner[]> => {
+  const q = query(
+    weeklyPlannerCollection,
+    where("userId", "==", userId),
+    orderBy("weekStart", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...(doc.data() as Omit<WeeklyPlanner, "id">),
+  }));
 };
 
 // Update a specific day in the planner

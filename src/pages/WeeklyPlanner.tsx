@@ -24,6 +24,7 @@ import {
   X,
   Save,
   Copy,
+  History,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
@@ -41,6 +42,7 @@ import {
   updateTaskInDay,
   deleteTaskFromDay,
   updateWeeklyPlanner,
+  getAllPlanners,
 } from "@/firebase/weeklyPlanner";
 
 const WeeklyPlannerPage = () => {
@@ -49,6 +51,9 @@ const WeeklyPlannerPage = () => {
   const [planner, setPlanner] = useState<WeeklyPlanner | null>(null);
   const [loading, setLoading] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [historyPlanners, setHistoryPlanners] = useState<WeeklyPlanner[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
@@ -368,6 +373,25 @@ const WeeklyPlannerPage = () => {
     }
   };
 
+  const loadHistory = async () => {
+    if (!user) return;
+    setLoadingHistory(true);
+    try {
+      const planners = await getAllPlanners(user.id);
+      setHistoryPlanners(planners);
+      setShowHistory(true);
+    } catch (err) {
+      showError("Failed to load history");
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  const navigateToWeek = (weekStart: string) => {
+    setCurrentWeek(new Date(weekStart));
+    setShowHistory(false);
+  };
+
   const isCurrentWeek = useMemo(() => {
     const today = getWeekStart();
     return weekStartStr === today.toISOString().split("T")[0];
@@ -455,6 +479,10 @@ const WeeklyPlannerPage = () => {
             <Button onClick={() => setShowPreview(true)} variant="outline" className="rounded-full">
               <Eye className="w-4 h-4 mr-2" />
               Preview Week
+            </Button>
+            <Button onClick={loadHistory} variant="outline" className="rounded-full" disabled={loadingHistory}>
+              <History className="w-4 h-4 mr-2" />
+              History
             </Button>
           </div>
         </div>
@@ -659,6 +687,69 @@ const WeeklyPlannerPage = () => {
             ))}
           </div>
         )}
+
+        {/* History Modal */}
+        <Dialog open={showHistory} onOpenChange={setShowHistory}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+                <History className="w-6 h-6 text-blue-600" />
+                Weekly History
+              </DialogTitle>
+              <DialogDescription>
+                Browse your past weekly plans
+              </DialogDescription>
+            </DialogHeader>
+
+            {loadingHistory ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="text-gray-500 mt-4">Loading history...</p>
+              </div>
+            ) : historyPlanners.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No past plans found.</p>
+              </div>
+            ) : (
+              <div className="space-y-3 mt-2">
+                {historyPlanners.map((wp) => {
+                  const totalTasks = wp.days.reduce((s, d) => s + d.tasks.length, 0);
+                  const completedTasks = wp.days.reduce((s, d) => s + d.tasks.filter((t) => t.completed).length, 0);
+                  const totalPriorities = wp.days.reduce((s, d) => s + d.priorities.length, 0);
+                  const isCurrent = wp.weekStart === weekStartStr;
+
+                  return (
+                    <button
+                      key={wp.id}
+                      onClick={() => navigateToWeek(wp.weekStart)}
+                      className={`w-full text-left p-4 rounded-2xl border transition-colors ${
+                        isCurrent
+                          ? "border-blue-300 bg-blue-50"
+                          : "border-gray-100 hover:border-blue-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-900">
+                            {formatDate(wp.weekStart)} – {formatDate(wp.weekEnd)}
+                          </p>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {totalPriorities > 0 ? `${totalPriorities} priorities` : "No priorities"}
+                            {" · "}
+                            {completedTasks}/{totalTasks} tasks done
+                          </p>
+                        </div>
+                        {isCurrent && (
+                          <Badge className="bg-blue-600 text-white rounded-full">Current</Badge>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
 
         {/* Preview Modal */}
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
