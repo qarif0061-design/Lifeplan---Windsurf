@@ -16,6 +16,7 @@ import {
   ChevronRight,
   Plus,
   Trash2,
+  RotateCcw,
   Eye,
   Calendar,
   Target,
@@ -54,6 +55,7 @@ const WeeklyPlannerPage = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [historyPlanners, setHistoryPlanners] = useState<WeeklyPlanner[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
@@ -338,6 +340,26 @@ const WeeklyPlannerPage = () => {
     }
   };
 
+  const handleResetWeek = async () => {
+    if (!planner || !user) return;
+    setIsSaving(true);
+    try {
+      const emptyDays = planner.days.map((d) => ({
+        ...d,
+        priorities: [],
+        tasks: [],
+      }));
+      await updateWeeklyPlanner(planner.id, { days: emptyDays });
+      setShowResetConfirm(false);
+      setLastSaved(new Date());
+      showSuccess("Week reset successfully");
+    } catch {
+      showError("Failed to reset week");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const cloneToNextWeek = async () => {
     if (!planner || !user) return;
     const nextWeek = new Date(currentWeek);
@@ -483,6 +505,10 @@ const WeeklyPlannerPage = () => {
             <Button onClick={loadHistory} variant="outline" className="rounded-full" disabled={loadingHistory}>
               <History className="w-4 h-4 mr-2" />
               History
+            </Button>
+            <Button onClick={() => setShowResetConfirm(true)} variant="outline" className="rounded-full text-red-600 hover:text-red-700 border-red-200 hover:border-red-300" disabled={isSaving}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset
             </Button>
           </div>
         </div>
@@ -748,6 +774,37 @@ const WeeklyPlannerPage = () => {
                 })}
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Reset Confirm Modal */}
+        <Dialog open={showResetConfirm} onOpenChange={setShowResetConfirm}>
+          <DialogContent className="max-w-md rounded-[2rem]">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold flex items-center gap-2 text-red-600">
+                <RotateCcw className="w-5 h-5" />
+                Reset Week
+              </DialogTitle>
+              <DialogDescription>
+                This will remove all priorities and tasks from every day of this week. This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end gap-3 mt-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowResetConfirm(false)}
+                className="rounded-full"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleResetWeek}
+                disabled={isSaving}
+                className="rounded-full bg-red-600 hover:bg-red-700 text-white"
+              >
+                {isSaving ? "Resetting..." : "Yes, Reset Week"}
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
 
