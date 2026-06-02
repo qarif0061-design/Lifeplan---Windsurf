@@ -35,7 +35,6 @@ import {
   type DayTask,
   getWeekStart,
   formatDate,
-  getWeeklyTemplateDays,
   subscribeWeeklyPlanner,
   getOrCreateWeeklyPlanner,
   updateDayPriorities,
@@ -106,19 +105,6 @@ const WeeklyPlannerPage = () => {
       .then(async (initialPlanner) => {
         setPlanner(initialPlanner);
         setLoading(false);
-
-        const isCurrentWeek = weekStartStr === getWeekStart().toISOString().split("T")[0];
-
-        // Auto-apply template for the CURRENT week (overwrite existing content)
-        if (isCurrentWeek) {
-          try {
-            await updateWeeklyPlanner(initialPlanner.id, {
-              days: getWeeklyTemplateDays(currentWeek),
-            });
-          } catch {
-            // Ignore (rules/offline). Planner UI will still render.
-          }
-        }
 
         // Then subscribe to updates
         unsubRef.current = subscribeWeeklyPlanner(
