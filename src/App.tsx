@@ -49,6 +49,38 @@ import PomodoroTechnique from "./pages/PomodoroTechnique";
 import EisenhowerMatrix from "./pages/EisenhowerMatrix";
 import AdminPanel from "./pages/AdminPanel";
 import OnlineGoalPlanner from "./pages/OnlineGoalPlanner";
+import ScheduleApp from "./pages/ScheduleApp";
+import ProgressTrackerApp from "./pages/ProgressTrackerApp";
+import GoalsCalendarApp from "./pages/GoalsCalendarApp";
+import CalendarPlannerApp from "./pages/CalendarPlannerApp";
+import GoalTrackerApp from "./pages/GoalTrackerApp";
+import DailyGoalsApp from "./pages/DailyGoalsApp";
+import DailyScheduleApp from "./pages/DailyScheduleApp";
+import BestHabitTrackerApp from "./pages/BestHabitTrackerApp";
+import RoutineCreatorApp from "./pages/RoutineCreatorApp";
+import AppForCalendarPlanning from "./pages/AppForCalendarPlanning";
+import StructuredDailyPlannerApp from "./pages/StructuredDailyPlannerApp";
+import AppForSchedulePlanning from "./pages/AppForSchedulePlanning";
+import AppToCheckOffDailyGoals from "./pages/AppToCheckOffDailyGoals";
+import AppsToMakeSchedules from "./pages/AppsToMakeSchedules";
+import DailyHabitTrackerApp from "./pages/DailyHabitTrackerApp";
+import DayOrganizerApp from "./pages/DayOrganizerApp";
+import GoodDayPlannerApps from "./pages/GoodDayPlannerApps";
+import HabitsApp from "./pages/HabitsApp";
+import OnlineDailyPlanner from "./pages/OnlineDailyPlanner";
+import RoutineApp from "./pages/RoutineApp";
+import WorkPlanner from "./pages/WorkPlanner";
+import AgendaPlanningApp from "./pages/AgendaPlanningApp";
+import AppsForDailyRoutine from "./pages/AppsForDailyRoutine";
+import AppsToHelpWithDailyRoutine from "./pages/AppsToHelpWithDailyRoutine";
+import BestDailyPlannerApp from "./pages/BestDailyPlannerApp";
+import BestHabitTrackers from "./pages/BestHabitTrackers";
+import DailyDigitalPlanner from "./pages/DailyDigitalPlanner";
+import DailyTrackerApp from "./pages/DailyTrackerApp";
+import DigitalDailyPlanner from "./pages/DigitalDailyPlanner";
+import DigitalPlannerApp from "./pages/DigitalPlannerApp";
+import GoalPlanners from "./pages/GoalPlanners";
+import PlannerApps from "./pages/PlannerApps";
 
 function App() {
   return (
@@ -106,6 +138,38 @@ function App() {
             <Route path="/habit-tracker-app" element={<HabitTrackerApp />} />
             <Route path="/daily-journal-app" element={<DailyJournalApp />} />
             <Route path="/productivity-app" element={<ProductivityApp />} />
+            <Route path="/schedule-app" element={<ScheduleApp />} />
+            <Route path="/progress-tracker-app" element={<ProgressTrackerApp />} />
+            <Route path="/goals-calendar-app" element={<GoalsCalendarApp />} />
+            <Route path="/calendar-planner-app" element={<CalendarPlannerApp />} />
+            <Route path="/goal-tracker-app" element={<GoalTrackerApp />} />
+            <Route path="/daily-goals-app" element={<DailyGoalsApp />} />
+            <Route path="/daily-schedule-app" element={<DailyScheduleApp />} />
+            <Route path="/best-habit-tracker-app" element={<BestHabitTrackerApp />} />
+            <Route path="/routine-creator-app" element={<RoutineCreatorApp />} />
+            <Route path="/app-for-calendar-planning" element={<AppForCalendarPlanning />} />
+            <Route path="/structured-daily-planner-app" element={<StructuredDailyPlannerApp />} />
+            <Route path="/app-for-schedule-planning" element={<AppForSchedulePlanning />} />
+            <Route path="/app-to-check-off-daily-goals" element={<AppToCheckOffDailyGoals />} />
+            <Route path="/apps-to-make-schedules" element={<AppsToMakeSchedules />} />
+            <Route path="/daily-habit-tracker-app" element={<DailyHabitTrackerApp />} />
+            <Route path="/day-organizer-app" element={<DayOrganizerApp />} />
+            <Route path="/good-day-planner-apps" element={<GoodDayPlannerApps />} />
+            <Route path="/habits-app" element={<HabitsApp />} />
+            <Route path="/online-daily-planner" element={<OnlineDailyPlanner />} />
+            <Route path="/routine-app" element={<RoutineApp />} />
+            <Route path="/work-planner" element={<WorkPlanner />} />
+            <Route path="/agenda-planning-app" element={<AgendaPlanningApp />} />
+            <Route path="/apps-for-daily-routine" element={<AppsForDailyRoutine />} />
+            <Route path="/apps-to-help-with-daily-routine" element={<AppsToHelpWithDailyRoutine />} />
+            <Route path="/best-daily-planner-app" element={<BestDailyPlannerApp />} />
+            <Route path="/best-habit-trackers" element={<BestHabitTrackers />} />
+            <Route path="/daily-digital-planner" element={<DailyDigitalPlanner />} />
+            <Route path="/daily-tracker-app" element={<DailyTrackerApp />} />
+            <Route path="/digital-daily-planner" element={<DigitalDailyPlanner />} />
+            <Route path="/digital-planner-app" element={<DigitalPlannerApp />} />
+            <Route path="/goal-planners" element={<GoalPlanners />} />
+            <Route path="/planner-apps" element={<PlannerApps />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
