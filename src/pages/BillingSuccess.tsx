@@ -13,7 +13,7 @@ const BillingSuccess = () => {
   useEffect(() => {
     if (typeof window.gtag === "function") {
       window.gtag("event", "conversion", {
-        send_to: "AW-18206119493/s9UUCLmm3bccEMWsrelD",
+        send_to: "AW-18206119493/Ae_mCOTb3bccEMWsrelD",
         value: 1.0,
         currency: "PKR",
         transaction_id: "",
