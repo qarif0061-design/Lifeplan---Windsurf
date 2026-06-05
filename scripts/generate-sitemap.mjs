@@ -119,6 +119,13 @@ const main = () => {
     `${SITE}/digital-planner-app`,
     `${SITE}/goal-planners`,
     `${SITE}/planner-apps`,
+    `${SITE}/custom-planner`,
+    `${SITE}/smart-goals`,
+    `${SITE}/vision-board`,
+    `${SITE}/goal-setting`,
+    `${SITE}/adhd-planner`,
+    `${SITE}/manifestation-planner`,
+    `${SITE}/goal-tracking-software`,
   ];
 
   const staticSlugs = readStaticArticleSlugs();

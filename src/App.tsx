@@ -82,6 +82,12 @@ import DigitalPlannerApp from "./pages/DigitalPlannerApp";
 import GoalPlanners from "./pages/GoalPlanners";
 import PlannerApps from "./pages/PlannerApps";
 import CustomPlanner from "./pages/CustomPlanner";
+import SmartGoalsSeo from "./pages/SmartGoalsSeo";
+import VisionBoardSeo from "./pages/VisionBoardSeo";
+import GoalSettingSeo from "./pages/GoalSettingSeo";
+import AdhdPlannerSeo from "./pages/AdhdPlannerSeo";
+import ManifestationPlannerSeo from "./pages/ManifestationPlannerSeo";
+import GoalTrackingSoftwareSeo from "./pages/GoalTrackingSoftwareSeo";
 
 function App() {
   return (
@@ -172,6 +178,12 @@ function App() {
             <Route path="/goal-planners" element={<GoalPlanners />} />
             <Route path="/planner-apps" element={<PlannerApps />} />
             <Route path="/custom-planner" element={<CustomPlanner />} />
+            <Route path="/smart-goals" element={<SmartGoalsSeo />} />
+            <Route path="/vision-board" element={<VisionBoardSeo />} />
+            <Route path="/goal-setting" element={<GoalSettingSeo />} />
+            <Route path="/adhd-planner" element={<AdhdPlannerSeo />} />
+            <Route path="/manifestation-planner" element={<ManifestationPlannerSeo />} />
+            <Route path="/goal-tracking-software" element={<GoalTrackingSoftwareSeo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
