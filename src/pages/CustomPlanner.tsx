@@ -127,7 +127,8 @@ const CustomPlannerPage = () => {
       setCreateTitle("");
       setCreatePreset("7");
       toast.success("Custom planner created!");
-    } catch {
+    } catch (e) {
+      console.error("createCustomPlanner failed:", e);
       toast.error("Failed to create planner");
     }
   }, [user?.id, createTitle, createPreset, createCustomDays]);
@@ -139,7 +140,8 @@ const CustomPlannerPage = () => {
       setSelectedPlanner(null);
       setShowDelete(false);
       toast.success("Planner deleted");
-    } catch {
+    } catch (e) {
+      console.error("deleteCustomPlanner failed:", e);
       toast.error("Failed to delete planner");
     }
   }, [selectedPlanner]);
@@ -149,7 +151,8 @@ const CustomPlannerPage = () => {
     try {
       await cloneCustomPlanner(selectedPlanner.id, user.id);
       toast.success("Planner cloned!");
-    } catch {
+    } catch (e) {
+      console.error("cloneCustomPlanner failed:", e);
       toast.error("Failed to clone planner");
     }
   }, [selectedPlanner, user?.id]);
@@ -160,7 +163,8 @@ const CustomPlannerPage = () => {
       await resetCustomPlanner(selectedPlanner.id);
       setShowReset(false);
       toast.success("Planner reset");
-    } catch {
+    } catch (e) {
+      console.error("resetCustomPlanner failed:", e);
       toast.error("Failed to reset planner");
     }
   }, [selectedPlanner]);
@@ -171,7 +175,8 @@ const CustomPlannerPage = () => {
       await updateCustomPlanner(selectedPlanner.id, { title: editTitleVal.trim() });
       setEditingTitle(false);
       toast.success("Title updated");
-    } catch {
+    } catch (e) {
+      console.error("saveTitle failed:", e);
       toast.error("Failed to update title");
     }
   }, [selectedPlanner, editTitleVal]);
@@ -182,7 +187,8 @@ const CustomPlannerPage = () => {
       await addDaysToPlanner(selectedPlanner.id, addDaysCount);
       setShowAddDays(false);
       toast.success(`Added ${addDaysCount} days`);
-    } catch {
+    } catch (e) {
+      console.error("addDaysToPlanner failed:", e);
       toast.error("Failed to add days");
     }
   }, [selectedPlanner, addDaysCount]);
@@ -193,7 +199,8 @@ const CustomPlannerPage = () => {
       await removeDaysFromPlanner(selectedPlanner.id, removeDaysCount);
       setShowRemoveDays(false);
       toast.success(`Removed ${removeDaysCount} days`);
-    } catch {
+    } catch (e) {
+      console.error("removeDaysFromPlanner failed:", e);
       toast.error("Failed to remove days");
     }
   }, [selectedPlanner, removeDaysCount]);
