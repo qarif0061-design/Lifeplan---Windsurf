@@ -81,6 +81,7 @@ import DigitalDailyPlanner from "./pages/DigitalDailyPlanner";
 import DigitalPlannerApp from "./pages/DigitalPlannerApp";
 import GoalPlanners from "./pages/GoalPlanners";
 import PlannerApps from "./pages/PlannerApps";
+import CustomPlanner from "./pages/CustomPlanner";
 
 function App() {
   return (
@@ -170,6 +171,7 @@ function App() {
             <Route path="/digital-planner-app" element={<DigitalPlannerApp />} />
             <Route path="/goal-planners" element={<GoalPlanners />} />
             <Route path="/planner-apps" element={<PlannerApps />} />
+            <Route path="/custom-planner" element={<CustomPlanner />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />

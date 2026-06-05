@@ -14,6 +14,7 @@ import {
   CheckSquare,
   Lock,
   CalendarDays,
+  PenSquare,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -39,6 +40,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         { to: "/daily-planner", label: "Daily Planner", icon: ListTodo },
         { to: "/check-in", label: "Daily Check-in", icon: CheckSquare, premiumOnly: true as const },
         { to: "/weekly-planner", label: "Weekly Planner", icon: CalendarDays },
+        { to: "/custom-planner", label: "Custom Planner", icon: PenSquare },
         { to: "/insights", label: "Insights", icon: Calendar, premiumOnly: true as const },
         { to: "/articles", label: "Articles", icon: BookOpen },
         { to: "/questions", label: "Questions", icon: BookOpen },
