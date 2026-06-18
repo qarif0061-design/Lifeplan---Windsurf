@@ -78,10 +78,29 @@ const fmtWeekStart = (ws: unknown): string => {
   return String(ws ?? "");
 };
 
+const fmtDisplay = (ws: unknown): string => {
+  let d: Date;
+  if (typeof ws === "string") {
+    d = new Date(ws + "T00:00:00");
+  } else if (ws && typeof ws === "object" && "seconds" in ws) {
+    d = new Date((ws as { seconds: number }).seconds * 1000);
+  } else {
+    return String(ws ?? "");
+  }
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
+
 const toCustomPlanner = (plan: WeeklyPlan): CustomPlanner => {
   const data = plan as Record<string, unknown>;
   const ws = fmtWeekStart(data.weekStart);
-  const title = (typeof data.title === "string" && data.title.trim()) || (typeof data.name === "string" && data.name.trim()) || `Week of ${ws}`;
+  const title =
+    (typeof data.title === "string" && data.title.trim()) ||
+    (typeof data.name === "string" && data.name.trim()) ||
+    (typeof data.planName === "string" && data.planName.trim()) ||
+    (typeof data.planTitle === "string" && data.planTitle.trim()) ||
+    (typeof data.plannerTitle === "string" && data.plannerTitle.trim()) ||
+    (typeof data.plan_name === "string" && data.plan_name.trim()) ||
+    `Plan - ${fmtDisplay(data.weekStart)}`;
   return {
     id: `${plan.id}__from_plans`,
     userId: plan.userId,
@@ -89,7 +108,7 @@ const toCustomPlanner = (plan: WeeklyPlan): CustomPlanner => {
     dayCount: 1,
     days: [{
       dayNumber: 1,
-      title: ws,
+      title: "Day 1",
       priorities: plan.priorities || [],
       tasks: (plan.tasks || []).map((t) => ({
         id: t.id,
