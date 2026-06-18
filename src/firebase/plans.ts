@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   onSnapshot,
   query,
@@ -68,6 +69,20 @@ export const updateWeeklyPlan = async (planId: string, patch: Partial<WeeklyPlan
   const { id: _id, ...rest } = patch as WeeklyPlan;
   await updateDoc(ref, {
     ...omitUndefined(rest),
+    updatedAt: serverTimestamp(),
+  });
+};
+
+export const deleteWeeklyPlan = async (planId: string): Promise<void> => {
+  const ref = doc(db, "plans", planId);
+  await deleteDoc(ref);
+};
+
+export const resetWeeklyPlan = async (planId: string): Promise<void> => {
+  const ref = doc(db, "plans", planId);
+  await updateDoc(ref, {
+    priorities: [],
+    tasks: [],
     updatedAt: serverTimestamp(),
   });
 };

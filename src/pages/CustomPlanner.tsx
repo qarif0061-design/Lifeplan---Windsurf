@@ -55,7 +55,7 @@ import {
   type CustomPlanner,
   type CustomPlannerDay,
 } from "@/firebase/customPlanner";
-import { type WeeklyPlan } from "@/firebase/plans";
+import { type WeeklyPlan, updateWeeklyPlan, deleteWeeklyPlan, resetWeeklyPlan } from "@/firebase/plans";
 import { toast } from "sonner";
 
 const DAY_PRESETS = [
@@ -207,12 +207,16 @@ const CustomPlannerPage = () => {
   const handleDelete = useCallback(async () => {
     if (!selectedPlanner) return;
     try {
-      await deleteCustomPlanner(selectedPlanner.id);
+      if (isFromPlans(selectedPlanner.id)) {
+        await deleteWeeklyPlan(originalPlanId(selectedPlanner.id));
+      } else {
+        await deleteCustomPlanner(selectedPlanner.id);
+      }
       setSelectedPlanner(null);
       setShowDelete(false);
       toast.success("Planner deleted");
     } catch (e) {
-      console.error("deleteCustomPlanner failed:", e);
+      console.error("delete failed:", e);
       toast.error("Failed to delete planner");
     }
   }, [selectedPlanner]);
@@ -231,11 +235,15 @@ const CustomPlannerPage = () => {
   const handleReset = useCallback(async () => {
     if (!selectedPlanner) return;
     try {
-      await resetCustomPlanner(selectedPlanner.id);
+      if (isFromPlans(selectedPlanner.id)) {
+        await resetWeeklyPlan(originalPlanId(selectedPlanner.id));
+      } else {
+        await resetCustomPlanner(selectedPlanner.id);
+      }
       setShowReset(false);
       toast.success("Planner reset");
     } catch (e) {
-      console.error("resetCustomPlanner failed:", e);
+      console.error("reset failed:", e);
       toast.error("Failed to reset planner");
     }
   }, [selectedPlanner]);
@@ -285,6 +293,8 @@ const CustomPlannerPage = () => {
     });
   };
 
+  const originalPlanId = (id: string) => id.replace("__from_plans", "");
+
   const handleAddTask = useCallback(
     async (dayIndex: number) => {
       if (!selectedPlanner) return;
@@ -293,7 +303,15 @@ const CustomPlannerPage = () => {
       if (!title) return;
 
       try {
-        await addTaskToDay(selectedPlanner.id, dayIndex, { title, completed: false });
+        if (isFromPlans(selectedPlanner.id)) {
+          const pid = originalPlanId(selectedPlanner.id);
+          const day = selectedPlanner.days[dayIndex];
+          if (!day) return;
+          const newTask = { id: crypto.randomUUID(), title, completed: false };
+          await updateWeeklyPlan(pid, { tasks: [...day.tasks, newTask] });
+        } else {
+          await addTaskToDay(selectedPlanner.id, dayIndex, { title, completed: false });
+        }
         setNewTaskInputs((prev) => ({ ...prev, [key]: "" }));
       } catch {
         toast.error("Failed to add task");
@@ -306,7 +324,18 @@ const CustomPlannerPage = () => {
     async (dayIndex: number, taskId: string, completed: boolean) => {
       if (!selectedPlanner) return;
       try {
-        await updateTaskInDay(selectedPlanner.id, dayIndex, taskId, { completed: !completed });
+        if (isFromPlans(selectedPlanner.id)) {
+          const pid = originalPlanId(selectedPlanner.id);
+          const day = selectedPlanner.days[dayIndex];
+          if (!day) return;
+          await updateWeeklyPlan(pid, {
+            tasks: day.tasks.map((t) =>
+              t.id === taskId ? { ...t, completed: !completed } : t
+            ),
+          });
+        } else {
+          await updateTaskInDay(selectedPlanner.id, dayIndex, taskId, { completed: !completed });
+        }
       } catch {
         toast.error("Failed to update task");
       }
@@ -318,7 +347,16 @@ const CustomPlannerPage = () => {
     async (dayIndex: number, taskId: string) => {
       if (!selectedPlanner) return;
       try {
-        await deleteTaskFromDay(selectedPlanner.id, dayIndex, taskId);
+        if (isFromPlans(selectedPlanner.id)) {
+          const pid = originalPlanId(selectedPlanner.id);
+          const day = selectedPlanner.days[dayIndex];
+          if (!day) return;
+          await updateWeeklyPlan(pid, {
+            tasks: day.tasks.filter((t) => t.id !== taskId),
+          });
+        } else {
+          await deleteTaskFromDay(selectedPlanner.id, dayIndex, taskId);
+        }
       } catch {
         toast.error("Failed to delete task");
       }
@@ -336,13 +374,18 @@ const CustomPlannerPage = () => {
       setSavingDay((prev) => ({ ...prev, [dayKey]: true }));
       try {
         const priorities = editingPriorities[dayKey] ?? day.priorities;
-        const notes = editingNotes[dayKey] ?? day.notes;
 
-        await updateCustomPlanner(selectedPlanner.id, {
-          days: selectedPlanner.days.map((d, i) =>
-            i === dayIndex ? { ...d, priorities: priorities.slice(0, 3), notes } : d
-          ),
-        });
+        if (isFromPlans(selectedPlanner.id)) {
+          const pid = originalPlanId(selectedPlanner.id);
+          await updateWeeklyPlan(pid, { priorities: priorities.slice(0, 3) });
+        } else {
+          const notes = editingNotes[dayKey] ?? day.notes;
+          await updateCustomPlanner(selectedPlanner.id, {
+            days: selectedPlanner.days.map((d, i) =>
+              i === dayIndex ? { ...d, priorities: priorities.slice(0, 3), notes } : d
+            ),
+          });
+        }
         toast.success("Day saved");
       } catch {
         toast.error("Failed to save day");
@@ -371,7 +414,7 @@ const CustomPlannerPage = () => {
 
   if (selectedPlanner) {
     const planner = selectedPlanner;
-    const readonly = isFromPlans(planner.id);
+    const fromMobile = isFromPlans(planner.id);
     const completedTasks = planner.days.reduce(
       (sum, d) => sum + d.tasks.filter((t) => t.completed).length,
       0
@@ -387,7 +430,7 @@ const CustomPlannerPage = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
 
-            {!readonly && editingTitle ? (
+            {!fromMobile && editingTitle ? (
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <Input
                   value={editTitleVal}
@@ -409,7 +452,7 @@ const CustomPlannerPage = () => {
             ) : (
               <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                 {planner.title}
-                {readonly && <Badge variant="secondary" className="text-xs">From Mobile App</Badge>}
+                {fromMobile && <Badge variant="secondary" className="text-xs">From Mobile App</Badge>}
               </h2>
             )}
 
@@ -426,31 +469,31 @@ const CustomPlannerPage = () => {
                 </Badge>
               )}
 
-              {readonly ? (
-                <Badge variant="secondary" className="text-xs">Read Only</Badge>
-              ) : (
-                <>
-                  <Button variant="outline" size="sm" onClick={() => setPreview(!preview)}>
-                    {preview ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-                    {preview ? "Edit" : "Preview"}
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={handleClone}>
-                    <Copy className="w-4 h-4 mr-1" /> Clone
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => setShowReset(true)}>
-                    <RotateCcw className="w-4 h-4 mr-1" /> Reset
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => setShowAddDays(true)}>
-                    <Plus className="w-4 h-4 mr-1" /> Add Days
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => setShowRemoveDays(true)}>
-                    <Minus className="w-4 h-4 mr-1" /> Remove Days
-                  </Button>
-                  <Button variant="destructive" size="sm" onClick={() => setShowDelete(true)}>
-                    <Trash2 className="w-4 h-4 mr-1" /> Delete
-                  </Button>
-                </>
-              )}
+              <>
+                <Button variant="outline" size="sm" onClick={() => setPreview(!preview)}>
+                  {preview ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
+                  {preview ? "Edit" : "Preview"}
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleClone}>
+                  <Copy className="w-4 h-4 mr-1" /> Clone
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setShowReset(true)}>
+                  <RotateCcw className="w-4 h-4 mr-1" /> Reset
+                </Button>
+                {!fromMobile && (
+                  <>
+                    <Button variant="outline" size="sm" onClick={() => setShowAddDays(true)}>
+                      <Plus className="w-4 h-4 mr-1" /> Add Days
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setShowRemoveDays(true)}>
+                      <Minus className="w-4 h-4 mr-1" /> Remove Days
+                    </Button>
+                  </>
+                )}
+                <Button variant="destructive" size="sm" onClick={() => setShowDelete(true)}>
+                  <Trash2 className="w-4 h-4 mr-1" /> Delete
+                </Button>
+              </>
             </div>
           </div>
 
@@ -612,20 +655,22 @@ const CustomPlannerPage = () => {
                           )}
                         </div>
 
-                        <div>
-                          <label className="text-xs font-medium text-slate-500 mb-1 block">
-                            Notes
-                          </label>
-                          <Textarea
-                            placeholder="Notes for this day..."
-                            value={notes}
-                            onChange={(e) =>
-                              setEditingNotes((prev) => ({ ...prev, [dayKey]: e.target.value }))
-                            }
-                            className="text-sm min-h-[60px]"
-                            disabled={preview}
-                          />
-                        </div>
+                        {!fromMobile && (
+                          <div>
+                            <label className="text-xs font-medium text-slate-500 mb-1 block">
+                              Notes
+                            </label>
+                            <Textarea
+                              placeholder="Notes for this day..."
+                              value={notes}
+                              onChange={(e) =>
+                                setEditingNotes((prev) => ({ ...prev, [dayKey]: e.target.value }))
+                              }
+                              className="text-sm min-h-[60px]"
+                              disabled={preview}
+                            />
+                          </div>
+                        )}
 
                         {!preview && (
                           <div className="flex justify-end">
@@ -800,10 +845,7 @@ const CustomPlannerPage = () => {
                 <Card
                   key={planner.id}
                   className="bg-white/50 cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => {
-                    setSelectedPlanner(planner);
-                    if (isFromPlans(planner.id)) setPreview(true);
-                  }}
+                  onClick={() => setSelectedPlanner(planner)}
                 >
                   <CardHeader className="p-5 pb-3">
                     <CardTitle className="text-base font-semibold text-slate-800 truncate">
