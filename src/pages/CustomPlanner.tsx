@@ -39,6 +39,7 @@ import {
   Minus,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { useWeeklyPlans } from "@/hooks/useWeeklyPlans";
 import {
   subscribeCustomPlanners,
   createCustomPlanner,
@@ -54,6 +55,7 @@ import {
   type CustomPlanner,
   type CustomPlannerDay,
 } from "@/firebase/customPlanner";
+import { type WeeklyPlan } from "@/firebase/plans";
 import { toast } from "sonner";
 
 const DAY_PRESETS = [
@@ -64,12 +66,35 @@ const DAY_PRESETS = [
   { label: "Custom", value: -1 },
 ];
 
+const toCustomPlanner = (plan: WeeklyPlan): CustomPlanner => ({
+  id: `${plan.id}__from_plans`,
+  userId: plan.userId,
+  title: `Week of ${plan.weekStart}`,
+  dayCount: 1,
+  days: [{
+    dayNumber: 1,
+    title: `Week of ${plan.weekStart}`,
+    priorities: plan.priorities || [],
+    tasks: (plan.tasks || []).map((t) => ({
+      id: t.id,
+      title: t.title,
+      completed: t.completed,
+    })),
+    notes: "",
+  }],
+  createdAt: plan.createdAt,
+  updatedAt: plan.updatedAt,
+});
+
 const CustomPlannerPage = () => {
   const { user } = useUser();
+  const { plans: weeklyPlans, loading: weeklyPlansLoading } = useWeeklyPlans();
   const [planners, setPlanners] = useState<CustomPlanner[]>([]);
   const [selectedPlanner, setSelectedPlanner] = useState<CustomPlanner | null>(null);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(false);
+
+  const isFromPlans = (id: string) => id.endsWith("__from_plans");
 
   const [showCreate, setShowCreate] = useState(false);
   const [createTitle, setCreateTitle] = useState("");
@@ -109,12 +134,27 @@ const CustomPlannerPage = () => {
     return unsub;
   }, [user?.id]);
 
+  const convertedPlans = useMemo(
+    () => weeklyPlans.map(toCustomPlanner),
+    [weeklyPlans]
+  );
+
+  const allPlanners = useMemo(() => {
+    const merged = [...planners, ...convertedPlans];
+    merged.sort((a, b) => {
+      const aTime = (a.createdAt as any)?.toMillis?.() ?? 0;
+      const bTime = (b.createdAt as any)?.toMillis?.() ?? 0;
+      return bTime - aTime;
+    });
+    return merged;
+  }, [planners, convertedPlans]);
+
   useEffect(() => {
     if (selectedPlanner) {
-      const updated = planners.find((p) => p.id === selectedPlanner.id);
+      const updated = allPlanners.find((p) => p.id === selectedPlanner.id);
       if (updated) setSelectedPlanner(updated);
     }
-  }, [planners]);
+  }, [allPlanners]);
 
   const handleCreate = useCallback(async () => {
     if (!user?.id || !createTitle.trim()) return;
@@ -290,7 +330,7 @@ const CustomPlannerPage = () => {
     );
   }
 
-  if (loading) {
+  if (loading || weeklyPlansLoading) {
     return (
       <Layout>
         <div className="text-center py-12 text-slate-500">Loading planners...</div>
@@ -300,6 +340,7 @@ const CustomPlannerPage = () => {
 
   if (selectedPlanner) {
     const planner = selectedPlanner;
+    const readonly = isFromPlans(planner.id);
     const completedTasks = planner.days.reduce(
       (sum, d) => sum + d.tasks.filter((t) => t.completed).length,
       0
@@ -315,7 +356,7 @@ const CustomPlannerPage = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
 
-            {editingTitle ? (
+            {!readonly && editingTitle ? (
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <Input
                   value={editTitleVal}
@@ -335,15 +376,9 @@ const CustomPlannerPage = () => {
                 </Button>
               </div>
             ) : (
-              <h2
-                className="text-2xl font-bold text-slate-800 cursor-pointer hover:text-blue-600 flex items-center gap-2"
-                onClick={() => {
-                  setEditTitleVal(planner.title);
-                  setEditingTitle(true);
-                }}
-              >
+              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
                 {planner.title}
-                <Pencil className="w-4 h-4 text-slate-400" />
+                {readonly && <Badge variant="secondary" className="text-xs">From Mobile App</Badge>}
               </h2>
             )}
 
@@ -360,25 +395,31 @@ const CustomPlannerPage = () => {
                 </Badge>
               )}
 
-              <Button variant="outline" size="sm" onClick={() => setPreview(!preview)}>
-                {preview ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
-                {preview ? "Edit" : "Preview"}
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleClone}>
-                <Copy className="w-4 h-4 mr-1" /> Clone
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowReset(true)}>
-                <RotateCcw className="w-4 h-4 mr-1" /> Reset
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowAddDays(true)}>
-                <Plus className="w-4 h-4 mr-1" /> Add Days
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowRemoveDays(true)}>
-                <Minus className="w-4 h-4 mr-1" /> Remove Days
-              </Button>
-              <Button variant="destructive" size="sm" onClick={() => setShowDelete(true)}>
-                <Trash2 className="w-4 h-4 mr-1" /> Delete
-              </Button>
+              {readonly ? (
+                <Badge variant="secondary" className="text-xs">Read Only</Badge>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" onClick={() => setPreview(!preview)}>
+                    {preview ? <EyeOff className="w-4 h-4 mr-1" /> : <Eye className="w-4 h-4 mr-1" />}
+                    {preview ? "Edit" : "Preview"}
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleClone}>
+                    <Copy className="w-4 h-4 mr-1" /> Clone
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setShowReset(true)}>
+                    <RotateCcw className="w-4 h-4 mr-1" /> Reset
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setShowAddDays(true)}>
+                    <Plus className="w-4 h-4 mr-1" /> Add Days
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => setShowRemoveDays(true)}>
+                    <Minus className="w-4 h-4 mr-1" /> Remove Days
+                  </Button>
+                  <Button variant="destructive" size="sm" onClick={() => setShowDelete(true)}>
+                    <Trash2 className="w-4 h-4 mr-1" /> Delete
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -701,7 +742,7 @@ const CustomPlannerPage = () => {
           </Button>
         </div>
 
-        {planners.length === 0 ? (
+        {allPlanners.length === 0 ? (
           <Card className="bg-white/50">
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <CalendarDays className="w-12 h-12 text-slate-300 mb-4" />
@@ -716,7 +757,7 @@ const CustomPlannerPage = () => {
           </Card>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {planners.map((planner) => {
+            {allPlanners.map((planner) => {
               const completed = planner.days.reduce(
                 (s, d) => s + d.tasks.filter((t) => t.completed).length,
                 0
@@ -728,7 +769,10 @@ const CustomPlannerPage = () => {
                 <Card
                   key={planner.id}
                   className="bg-white/50 cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => setSelectedPlanner(planner)}
+                  onClick={() => {
+                    setSelectedPlanner(planner);
+                    if (isFromPlans(planner.id)) setPreview(true);
+                  }}
                 >
                   <CardHeader className="p-5 pb-3">
                     <CardTitle className="text-base font-semibold text-slate-800 truncate">
