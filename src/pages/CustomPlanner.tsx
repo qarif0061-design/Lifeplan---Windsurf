@@ -66,25 +66,42 @@ const DAY_PRESETS = [
   { label: "Custom", value: -1 },
 ];
 
-const toCustomPlanner = (plan: WeeklyPlan): CustomPlanner => ({
-  id: `${plan.id}__from_plans`,
-  userId: plan.userId,
-  title: `Week of ${plan.weekStart}`,
-  dayCount: 1,
-  days: [{
-    dayNumber: 1,
-    title: `Week of ${plan.weekStart}`,
-    priorities: plan.priorities || [],
-    tasks: (plan.tasks || []).map((t) => ({
-      id: t.id,
-      title: t.title,
-      completed: t.completed,
-    })),
-    notes: "",
-  }],
-  createdAt: plan.createdAt,
-  updatedAt: plan.updatedAt,
-});
+const fmtWeekStart = (ws: unknown): string => {
+  if (typeof ws === "string") return ws;
+  if (ws && typeof ws === "object" && "seconds" in ws) {
+    const d = new Date((ws as { seconds: number }).seconds * 1000);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+  return String(ws ?? "");
+};
+
+const toCustomPlanner = (plan: WeeklyPlan): CustomPlanner => {
+  const data = plan as Record<string, unknown>;
+  const ws = fmtWeekStart(data.weekStart);
+  const title = (typeof data.title === "string" && data.title.trim()) || (typeof data.name === "string" && data.name.trim()) || `Week of ${ws}`;
+  return {
+    id: `${plan.id}__from_plans`,
+    userId: plan.userId,
+    title,
+    dayCount: 1,
+    days: [{
+      dayNumber: 1,
+      title: ws,
+      priorities: plan.priorities || [],
+      tasks: (plan.tasks || []).map((t) => ({
+        id: t.id,
+        title: t.title,
+        completed: t.completed,
+      })),
+      notes: "",
+    }],
+    createdAt: plan.createdAt,
+    updatedAt: plan.updatedAt,
+  };
+};
 
 const CustomPlannerPage = () => {
   const { user } = useUser();
@@ -134,10 +151,24 @@ const CustomPlannerPage = () => {
     return unsub;
   }, [user?.id]);
 
-  const convertedPlans = useMemo(
-    () => weeklyPlans.map(toCustomPlanner),
-    [weeklyPlans]
-  );
+  const convertedPlans = useMemo(() => {
+    const seen = new Map<string, CustomPlanner>();
+    for (const plan of weeklyPlans) {
+      const cp = toCustomPlanner(plan);
+      const key = cp.days[0].title;
+      const existing = seen.get(key);
+      if (!existing) {
+        seen.set(key, cp);
+      } else {
+        const existingTasks = existing.days[0].tasks.length;
+        const newTasks = cp.days[0].tasks.length;
+        if (newTasks > existingTasks) {
+          seen.set(key, cp);
+        }
+      }
+    }
+    return Array.from(seen.values());
+  }, [weeklyPlans]);
 
   const allPlanners = useMemo(() => {
     const merged = [...planners, ...convertedPlans];
