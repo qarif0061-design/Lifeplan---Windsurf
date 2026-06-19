@@ -218,8 +218,9 @@ const CustomPlannerPage = () => {
       setCreatePreset("7");
       toast.success("Custom planner created!");
     } catch (e) {
-      console.error("createCustomPlanner failed:", e);
-      toast.error("Failed to create planner");
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error("createCustomPlanner failed:", msg);
+      toast.error(`Failed to create planner: ${msg}`);
     }
   }, [user?.id, createTitle, createPreset, createCustomDays]);
 
