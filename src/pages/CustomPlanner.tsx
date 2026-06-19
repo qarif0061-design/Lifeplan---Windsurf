@@ -209,6 +209,7 @@ const CustomPlannerPage = () => {
   const handleCreate = useCallback(async () => {
     if (!user?.id || !createTitle.trim()) return;
     const dayCount = createPreset === "-1" ? createCustomDays : parseInt(createPreset);
+    console.log("[handleCreate] user.id:", user.id, "title:", createTitle.trim(), "dayCount:", dayCount);
     try {
       const planner = await createCustomPlanner(user.id, createTitle.trim(), dayCount);
       setPlanners((prev) => [planner, ...prev]);
