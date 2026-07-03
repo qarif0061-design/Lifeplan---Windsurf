@@ -62,5 +62,26 @@ service cloud.firestore {
       allow update: if signedIn();
       allow delete: if signedIn();
     }
+
+    match /referrals/{referralId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if false;
+    }
+
+    match /templates/{templateId} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.authorId == request.auth.uid;
+      allow update: if signedIn() && resource.data.authorId == request.auth.uid;
+      allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+    }
+
+    match /accountabilities/{accId} {
+      allow read: if signedIn() && (resource.data.inviterId == request.auth.uid || resource.data.partnerEmail == request.auth.token.email || resource.data.partnerId == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.inviterId == request.auth.uid;
+      allow update: if signedIn() && (resource.data.inviterId == request.auth.uid || resource.data.partnerEmail == request.auth.token.email || resource.data.partnerId == request.auth.uid);
+      allow delete: if signedIn() && (resource.data.inviterId == request.auth.uid || resource.data.partnerId == request.auth.uid);
+    }
   }
 }
