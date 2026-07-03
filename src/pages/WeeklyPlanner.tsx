@@ -26,9 +26,11 @@ import {
   Save,
   Copy,
   History,
+  Share2,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
+import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
 import {
   type WeeklyPlanner,
   type DayPlan,
@@ -346,6 +348,24 @@ const WeeklyPlannerPage = () => {
     }
   };
 
+  const sharePlanCard = async () => {
+    if (!planner || !user) return;
+    try {
+      const taskCount = planner.days.reduce((s, d) => s + d.tasks.length, 0);
+      const doneCount = planner.days.reduce((s, d) => s + d.tasks.filter((t) => t.completed).length, 0);
+      const data: CardData = {
+        type: "plan",
+        title: "Weekly Plan",
+        subtitle: `${formatDate(planner.weekStart)} - ${formatDate(planner.weekEnd)}`,
+        value: `${doneCount}/${taskCount}`,
+        metric: "tasks completed",
+        userName: user.displayName || user.email,
+      };
+      const blob = await generateShareCard(data);
+      await shareImage(blob, `weekly-plan-${planner.weekStart}.png`);
+    } catch {}
+  };
+
   const cloneToNextWeek = async () => {
     if (!planner || !user) return;
     const nextWeek = new Date(currentWeek);
@@ -483,6 +503,10 @@ const WeeklyPlannerPage = () => {
             <Button onClick={cloneToNextWeek} variant="outline" className="rounded-full" disabled={isSaving}>
               <Copy className="w-4 h-4 mr-2" />
               Clone to next week
+            </Button>
+            <Button onClick={sharePlanCard} variant="outline" className="rounded-full">
+              <Share2 className="w-4 h-4 mr-2" />
+              Share
             </Button>
             <Button onClick={() => setShowPreview(true)} variant="outline" className="rounded-full">
               <Eye className="w-4 h-4 mr-2" />

@@ -24,7 +24,7 @@ const TopHeader = () => {
   const showBack = location.pathname !== "/" && !location.pathname.startsWith("/dashboard");
 
   return (
-    <header className="border-b border-gray-100 bg-white">
+    <header className="border-b border-gray-100 dark:border-slate-700/50 bg-white dark:bg-slate-900/90 backdrop-blur-xl transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
           <div>
@@ -46,14 +46,14 @@ const TopHeader = () => {
                 alt="Goal Planner - Lifeplans"
                 className="w-9 h-9 rounded-xl"
               />
-              <div className="text-2xl font-extrabold text-gray-900">Goal Planner - Lifeplans</div>
+              <div className="text-2xl font-extrabold text-gray-900 dark:text-white">Goal Planner - Lifeplans</div>
             </div>
-            <div className="text-sm text-gray-600">Plan smarter. Stay consistent. Achieve more.</div>
+            <div className="text-sm text-gray-600 dark:text-slate-400">Plan smarter. Stay consistent. Achieve more.</div>
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 dark:text-slate-400">
             {greetingName ? (
               <span>
-                Hi, <span className="font-semibold text-gray-900">{greetingName}</span> — {title}
+                Hi, <span className="font-semibold text-gray-900 dark:text-white">{greetingName}</span> — {title}
               </span>
             ) : (
               <span>{title}</span>

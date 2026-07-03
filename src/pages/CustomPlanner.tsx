@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -20,6 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
+import { publishTemplate, unpublishTemplate, getUserTemplates, type PublishedTemplate } from "@/firebase/templates";
+import { createInvite, getPendingInvites, subscribePendingInvites, type Accountability } from "@/firebase/accountability";
 import {
   Plus,
   Trash2,
@@ -37,6 +41,9 @@ import {
   X,
   FilePlus,
   Minus,
+  Share2,
+  Globe,
+  UserPlus,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { useWeeklyPlans } from "@/hooks/useWeeklyPlans";
@@ -251,6 +258,67 @@ const CustomPlannerPage = () => {
       toast.error("Failed to clone planner");
     }
   }, [selectedPlanner, user?.id]);
+
+  const [publishOpen, setPublishOpen] = useState(false);
+  const [publishDesc, setPublishDesc] = useState("");
+  const [publishCategory, setPublishCategory] = useState("");
+  const [publishTags, setPublishTags] = useState("");
+  const [publishing, setPublishing] = useState(false);
+
+  const handlePublishTemplate = useCallback(async () => {
+    if (!selectedPlanner || !user) return;
+    setPublishing(true);
+    try {
+      const tags = publishTags.split(",").map((t) => t.trim()).filter(Boolean);
+      await publishTemplate(user.id, user.displayName || user.email, selectedPlanner, publishDesc, publishCategory || "General", tags);
+      toast.success("Template published!");
+      setPublishOpen(false);
+      setPublishDesc("");
+      setPublishCategory("");
+      setPublishTags("");
+    } catch (e) {
+      toast.error("Failed to publish template");
+    } finally {
+      setPublishing(false);
+    }
+  }, [selectedPlanner, user, publishDesc, publishCategory, publishTags]);
+
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
+
+  const handleInvitePartner = useCallback(async () => {
+    if (!selectedPlanner || !user || !inviteEmail.trim()) return;
+    setInviting(true);
+    try {
+      await createInvite(selectedPlanner.id, "custom", selectedPlanner.title, user.id, user.displayName || user.email, inviteEmail.trim());
+      toast.success("Invite sent!");
+      setInviteOpen(false);
+      setInviteEmail("");
+    } catch (e) {
+      toast.error("Failed to send invite");
+    } finally {
+      setInviting(false);
+    }
+  }, [selectedPlanner, user, inviteEmail]);
+
+  const sharePlanCard = useCallback(async () => {
+    if (!selectedPlanner || !user) return;
+    try {
+      const totalTasks = selectedPlanner.days.reduce((s, d) => s + d.tasks.length, 0);
+      const doneTasks = selectedPlanner.days.reduce((s, d) => s + d.tasks.filter((t) => t.completed).length, 0);
+      const data: CardData = {
+        type: "plan",
+        title: selectedPlanner.title,
+        subtitle: `${selectedPlanner.dayCount}-day plan`,
+        value: `${doneTasks}/${totalTasks}`,
+        metric: "tasks done",
+        userName: user.displayName || user.email,
+      };
+      const blob = await generateShareCard(data);
+      await shareImage(blob, `plan-${selectedPlanner.id}.png`);
+    } catch {}
+  }, [selectedPlanner, user]);
 
   const handleReset = useCallback(async () => {
     if (!selectedPlanner) return;
@@ -497,6 +565,15 @@ const CustomPlannerPage = () => {
                 <Button variant="outline" size="sm" onClick={handleClone}>
                   <Copy className="w-4 h-4 mr-1" /> Clone
                 </Button>
+                <Button variant="outline" size="sm" onClick={sharePlanCard}>
+                  <Share2 className="w-4 h-4 mr-1" /> Share
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setPublishOpen(true)}>
+                  <Globe className="w-4 h-4 mr-1" /> Publish
+                </Button>
+                <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>
+                  <UserPlus className="w-4 h-4 mr-1" /> Partner
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => setShowReset(true)}>
                   <RotateCcw className="w-4 h-4 mr-1" /> Reset
                 </Button>
@@ -711,6 +788,82 @@ const CustomPlannerPage = () => {
             </div>
           )}
         </div>
+
+        <Dialog open={publishOpen} onOpenChange={setPublishOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Publish as Template</DialogTitle>
+              <DialogDescription>Share this plan with the community. Others can browse and clone it.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-2">
+              <div className="grid gap-2">
+                <Label htmlFor="pub-cat">Category</Label>
+                <Input
+                  id="pub-cat"
+                  value={publishCategory}
+                  onChange={(e) => setPublishCategory(e.target.value)}
+                  placeholder="e.g. Fitness, Productivity, Learning"
+                  className="rounded-xl"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="pub-desc">Description</Label>
+                <Textarea
+                  id="pub-desc"
+                  value={publishDesc}
+                  onChange={(e) => setPublishDesc(e.target.value)}
+                  placeholder="What is this plan about?"
+                  className="rounded-xl"
+                  rows={3}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="pub-tags">Tags (comma separated)</Label>
+                <Input
+                  id="pub-tags"
+                  value={publishTags}
+                  onChange={(e) => setPublishTags(e.target.value)}
+                  placeholder="fasting, challenge, 40-days"
+                  className="rounded-xl"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setPublishOpen(false)}>Cancel</Button>
+              <Button onClick={handlePublishTemplate} disabled={publishing}>
+                {publishing ? "Publishing..." : "Publish"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Invite Accountability Partner</DialogTitle>
+              <DialogDescription>Invite someone by email to do this plan together.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-2">
+              <div className="grid gap-2">
+                <Label htmlFor="inv-email">Partner's Email</Label>
+                <Input
+                  id="inv-email"
+                  type="email"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  placeholder="partner@example.com"
+                  className="rounded-xl"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setInviteOpen(false)}>Cancel</Button>
+              <Button onClick={handleInvitePartner} disabled={inviting}>
+                {inviting ? "Inviting..." : "Send Invite"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         <Dialog open={showDelete} onOpenChange={setShowDelete}>
           <DialogContent>

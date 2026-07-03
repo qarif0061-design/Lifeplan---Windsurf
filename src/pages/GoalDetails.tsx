@@ -23,6 +23,7 @@ import {
 import { useUser } from "@/contexts/UserContext";
 import { createGoal, deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { updateFeaturedGoalId } from "@/firebase/users";
+import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
 import { showError, showSuccess } from "@/utils/toast";
 import {
@@ -49,6 +50,7 @@ import {
     GripVertical,
     Lock,
     Plus,
+    Share2,
     Star,
     Target,
     Trash2,
@@ -813,6 +815,22 @@ const GoalDetails = () => {
     await persistTodos(nextTodos);
   };
 
+  const shareGoalCard = async () => {
+    if (!goal || !user) return;
+    try {
+      const data: CardData = {
+        type: "goal",
+        title: goal.name,
+        subtitle: goal.category,
+        value: `${goal.progress}%`,
+        metric: "complete",
+        userName: user.displayName || user.email,
+      };
+      const blob = await generateShareCard(data);
+      await shareImage(blob, `goal-${goal.id}.png`);
+    } catch {}
+  };
+
   const handleDuplicateGoal = async () => {
     if (!goal) return;
     try {
@@ -1108,6 +1126,10 @@ const GoalDetails = () => {
                   disabled={isSaving}
                 >
                   <Copy className="w-4 h-4 mr-2" /> Duplicate
+                </Button>
+
+                <Button variant="outline" className="rounded-full" onClick={shareGoalCard}>
+                  <Share2 className="w-4 h-4 mr-2" /> Share
                 </Button>
 
                 <Button

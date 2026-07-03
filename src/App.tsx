@@ -82,6 +82,7 @@ import DigitalPlannerApp from "./pages/DigitalPlannerApp";
 import GoalPlanners from "./pages/GoalPlanners";
 import PlannerApps from "./pages/PlannerApps";
 import CustomPlanner from "./pages/CustomPlanner";
+import Templates from "./pages/Templates";
 import SmartGoalsSeo from "./pages/SmartGoalsSeo";
 import VisionBoardSeo from "./pages/VisionBoardSeo";
 import GoalSettingSeo from "./pages/GoalSettingSeo";
@@ -178,6 +179,7 @@ function App() {
             <Route path="/goal-planners" element={<GoalPlanners />} />
             <Route path="/planner-apps" element={<PlannerApps />} />
             <Route path="/custom-planner" element={<CustomPlanner />} />
+            <Route path="/templates" element={<Templates />} />
             <Route path="/smart-goals" element={<SmartGoalsSeo />} />
             <Route path="/vision-board" element={<VisionBoardSeo />} />
             <Route path="/goal-setting" element={<GoalSettingSeo />} />

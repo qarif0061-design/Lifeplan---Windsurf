@@ -49,7 +49,7 @@ export const getOrCreateUserProfile = async (firebaseUser: FirebaseUser, display
   return profile;
 };
 
-export const signUp = async (email: string, password: string, displayName: string): Promise<UserProfile> => {
+export const signUp = async (email: string, password: string, displayName: string, referralCode?: string): Promise<UserProfile> => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const firebaseUser = userCredential.user;
   
@@ -57,6 +57,28 @@ export const signUp = async (email: string, password: string, displayName: strin
   const userProfile: UserProfile = buildDefaultUserProfile(firebaseUser, displayName);
   
   await setDoc(doc(db, "users", firebaseUser.uid), userProfile);
+
+  // Handle referral
+  if (referralCode) {
+    try {
+      const { getReferralByCode, incrementReferralSignups, grantReferrerPremium } = await import("@/firebase/referrals");
+      const referral = await getReferralByCode(referralCode);
+      if (referral && referral.userId !== firebaseUser.uid) {
+        await incrementReferralSignups(referral.id);
+        await grantReferrerPremium(referral.id);
+        // Give the new user 7 days premium too
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+        await import("firebase/firestore").then(({ updateDoc }) =>
+          updateDoc(doc(db, "users", firebaseUser.uid), {
+            isPremium: true,
+            premiumExpiresAt: expiresAt,
+            premiumSource: "referral-signup",
+          })
+        );
+      }
+    } catch {}
+  }
+
   return userProfile;
 };
 

@@ -1,7 +1,16 @@
 import { createRoot } from "react-dom/client";
+import { ThemeProvider } from "next-themes";
 import App from "./App.tsx";
 import "./globals.css";
 
 createRoot(document.getElementById("root")!).render(
-  <App />,
+  <ThemeProvider
+    attribute="class"
+    defaultTheme="light"
+    enableSystem={false}
+    storageKey="theme"
+    disableTransitionOnChange={false}
+  >
+    <App />
+  </ThemeProvider>,
 );
