@@ -30,13 +30,9 @@ const JOBS = [
     location: "Remote",
     type: "Full-time",
     description:
-      "We are seeking a skilled app developer to build and maintain mobile and web applications. You will be responsible for developing new features, optimizing performance, and ensuring a seamless user experience across platforms.",
+      "We are looking for an app developer who is comfortable using a laptop and mobile device. No prior coding experience required — we will train the right candidate.",
     requirements: [
-      "Experience with React, React Native, or similar frameworks",
-      "Proficiency in JavaScript / TypeScript",
-      "Familiarity with Firebase or similar backend services",
-      "Understanding of REST APIs and mobile UI/UX best practices",
-      "Problem-solving mindset and team collaboration skills",
+      "Proficient in using a laptop and mobile device",
     ],
   },
 ];
