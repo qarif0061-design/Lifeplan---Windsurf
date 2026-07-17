@@ -194,10 +194,14 @@ const Career = () => {
                           className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
                         />
                       </div>
-                      <DialogFooter>
-                        <Button type="submit" className="rounded-xl bg-blue-600 hover:bg-blue-700">
+                      <DialogFooter className="flex-col gap-2">
+                        <Button type="submit" className="rounded-xl bg-blue-600 hover:bg-blue-700 w-full">
                           Submit Application
                         </Button>
+                        <p className="text-xs text-center text-slate-400 dark:text-slate-500">
+                          Having issues? Email us directly at{' '}
+                          <a href="mailto:info@goalplanner.io" className="text-blue-600 dark:text-blue-400 underline">info@goalplanner.io</a>
+                        </p>
                       </DialogFooter>
                     </form>
                   </DialogContent>
