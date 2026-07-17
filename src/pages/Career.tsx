@@ -76,9 +76,9 @@ const Career = () => {
 
       showSuccess("Application submitted successfully! We'll get back to you soon.");
       setDialogJob(null);
-    } catch (err) {
+    } catch (err: any) {
       console.error("EmailJS error:", err);
-      showError("Failed to send application. Please try again or email us directly at info@goalplanner.io.");
+      showError(`Failed to send application: ${err?.text || err?.message || "Unknown error"}. Please try again or email us directly at info@goalplanner.io.`);
     }
   };
 
