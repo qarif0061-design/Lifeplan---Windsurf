@@ -14,6 +14,7 @@ const Footer = () => {
           <div className="text-sm text-gray-500 dark:text-slate-400">© {new Date().getFullYear()} Lifeplans</div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             <a href="/about" className="text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+            <a href="/career" className="text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Careers</a>
             <a href="/contact" className="text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
             <a href="/terms" className="text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Terms of Service</a>
             <a href="/privacy" className="text-gray-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Privacy Policy</a>

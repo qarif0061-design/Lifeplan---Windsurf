@@ -11,7 +11,8 @@ import {
   AlertCircle,
   Crown,
   Lock,
-  ListTodo
+  ListTodo,
+  TrendingUp
 } from "lucide-react";
 import { Apple, Smartphone, Share2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -292,24 +293,35 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="space-y-8 animate-in fade-in duration-500">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-500">Track your progress and stay on top of your goals.</p>
-          </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
-                onClick={() => {
-                  openCreateGoalDialog();
-                }}
-              >
-                <Plus className="w-4 h-4 mr-2" /> Create New Goal
-              </Button>
-            </DialogTrigger>
+      <div className="space-y-6 animate-fade-in">
+        {/* Hero Section */}
+        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:from-blue-700 dark:via-indigo-800 dark:to-purple-900 p-8 md:p-10 text-white shadow-2xl shadow-blue-500/20 dark:shadow-blue-900/30">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+          <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-blue-200 text-sm font-medium">
+                <span className="w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse-soft" />
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              </div>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+                {greetingName ? `Good ${new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}, ${greetingName}` : 'Welcome to Goal Planner'}
+              </h1>
+              <p className="text-blue-100/80 text-lg max-w-xl">
+                {effectiveFeaturedGoal
+                  ? `Focus on "${effectiveFeaturedGoal.name}" — ${getDerivedProgress(effectiveFeaturedGoal)}% complete`
+                  : 'Set your goals, track your progress, achieve more.'}
+              </p>
+            </div>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  className="bg-white text-blue-700 hover:bg-blue-50 rounded-full px-8 h-12 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 shrink-0"
+                  onClick={() => openCreateGoalDialog()}
+                >
+                  <Plus className="w-5 h-5 mr-2" /> New Goal
+                </Button>
+              </DialogTrigger>
             <DialogContent className="w-[92vw] sm:max-w-[520px] md:w-[50vw] md:max-w-[720px] rounded-[2rem]">
               <DialogHeader>
                 <DialogTitle className="text-2xl font-bold">Create New Goal</DialogTitle>
@@ -552,78 +564,126 @@ const Dashboard = () => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
 
-        <div className="rounded-[2.5rem] border border-gray-100 dark:border-slate-700/50 bg-white dark:bg-slate-900/80 p-8 shadow-sm dark:shadow-slate-900/50 transition-colors duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Get the mobile app</h2>
-            <p className="text-gray-600 dark:text-slate-400">Plan and check-in from anywhere.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full md:w-auto">
-            <Button asChild className="rounded-2xl bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-700 text-white h-12 justify-start transition-all duration-200 hover:scale-105">
-              <a
-                href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
-                target="_blank"
-                rel="noopener noreferrer"
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/goals?status=active")}
+            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/40 dark:to-blue-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{stats.activeCount}</div>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Active</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/goals?status=completed")}
+            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/40 dark:to-emerald-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Star className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{stats.completedCount}</div>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Completed</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/goals?status=failed")}
+            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100/50 dark:from-rose-950/40 dark:to-rose-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 bg-rose-100 dark:bg-rose-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400" />
+              </div>
+              <div className="text-2xl font-extrabold text-rose-600 dark:text-rose-400">{stats.failedCount}</div>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Failed</p>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/check-in")}
+            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/40 dark:to-purple-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <CardContent className="p-5 text-center relative">
+              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <span className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">🔥</span>
+              </div>
+              <div className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">{daysStreak}</div>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Day Streak</p>
+              <button
+                onClick={(e) => { e.stopPropagation(); shareStreakCard(); }}
+                className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/50 transition"
+                title="Share streak"
               >
-                <Apple className="w-5 h-5 mr-3" />
-                <span className="flex flex-col items-start leading-none">
-                  <span className="text-[11px] opacity-80">Download on the</span>
-                  <span className="text-sm font-bold">App Store</span>
-                </span>
-              </a>
-            </Button>
-            <Button asChild className="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 h-12 justify-start hover:bg-gray-50 dark:hover:bg-slate-700 transition-all duration-200 hover:scale-105">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.faran.lifeplans"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center"
-              >
-                <Smartphone className="w-5 h-5 mr-3" />
-                <span className="flex flex-col items-start leading-none">
-                  <span className="text-[11px] text-gray-500 dark:text-slate-400">Google Play</span>
-                  <span className="text-sm font-bold">Download on Google Play</span>
-                </span>
-              </a>
-            </Button>
-          </div>
+                <Share2 className="w-3.5 h-3.5 text-purple-400 dark:text-purple-300" />
+              </button>
+            </CardContent>
+          </Card>
+          <Card
+            role="button"
+            tabIndex={0}
+            onClick={() => navigate("/insights")}
+            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/40 dark:to-amber-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <CardContent className="p-5 text-center">
+              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <TrendingUp className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">{stats.avgProgress}%</div>
+              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Avg Progress</p>
+            </CardContent>
+          </Card>
         </div>
 
         {effectiveFeaturedGoal && (
-          <Card className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] mb-8 overflow-hidden animate-fade-up">
-            <CardContent className="p-8 bg-gradient-to-br from-amber-50 via-white to-blue-50 dark:from-slate-800 dark:via-slate-900 dark:to-slate-800 border border-amber-100 dark:border-slate-700/50 rounded-[2.5rem] transition-colors duration-300">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 text-amber-800 dark:text-amber-400">
-                    <Crown className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                    <div className="text-xs font-extrabold uppercase tracking-wider">Featured Goal</div>
-                    {!user?.featuredGoalId && (
-                      <div className="text-xs font-semibold text-gray-500 dark:text-slate-400">(auto)</div>
+          <Card className="border-0 shadow-lg dark:shadow-slate-900/40 rounded-3xl overflow-hidden animate-fade-up">
+            <CardContent className="p-0">
+              <div className="relative bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 dark:from-amber-600 dark:via-orange-700 dark:to-rose-800 p-8 md:p-10">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
+                <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 text-amber-100">
+                      <Crown className="w-4 h-4" />
+                      <div className="text-xs font-extrabold uppercase tracking-widest">Featured Goal</div>
+                      {!user?.featuredGoalId && (
+                        <div className="text-xs font-semibold text-amber-200/70">(auto)</div>
+                      )}
+                    </div>
+                    <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                      <div className="text-3xl font-black text-white truncate drop-shadow-sm">{effectiveFeaturedGoal.name}</div>
+                      <div
+                        className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
+                          effectiveFeaturedGoal,
+                        )}`}
+                      >
+                        {getRemainingDaysText(effectiveFeaturedGoal)}
+                      </div>
+                    </div>
+                    <div className="mt-1 text-sm font-medium text-amber-100/80 truncate">{effectiveFeaturedGoal.category}</div>
+                    {(effectiveFeaturedGoal.startDate || effectiveFeaturedGoal.endDate) && (
+                      <div className="mt-3 text-sm text-amber-100/70">
+                        <span className="font-semibold text-amber-100">Dates:</span>{" "}
+                        {effectiveFeaturedGoal.startDate ?? ""} → {effectiveFeaturedGoal.endDate ?? ""}
+                      </div>
                     )}
-                  </div>
-                  <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
-                    <div className="text-3xl font-black text-gray-900 dark:text-white truncate">{effectiveFeaturedGoal.name}</div>
-                    <div
-                      className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
-                        effectiveFeaturedGoal,
-                      )}`}
-                    >
-                      {getRemainingDaysText(effectiveFeaturedGoal)}
-                    </div>
-                  </div>
-                  <div className="mt-1 text-sm font-medium text-gray-600 dark:text-slate-400 truncate">{effectiveFeaturedGoal.category}</div>
-                  {(effectiveFeaturedGoal.startDate || effectiveFeaturedGoal.endDate) && (
-                    <div className="mt-3 text-sm text-gray-600 dark:text-slate-400">
-                      <span className="font-semibold text-gray-700 dark:text-slate-300">Dates:</span>{" "}
-                      {effectiveFeaturedGoal.startDate ?? ""} → {effectiveFeaturedGoal.endDate ?? ""}
-                    </div>
-                  )}
-
-                  <div className="mt-6 space-y-3">
-                    <div className="flex items-center justify-between text-sm font-semibold">
-                      <span className="text-gray-700 dark:text-slate-300">Progress</span>
-                      <span className="text-gray-900 dark:text-white">
+                    <div className="mt-6 space-y-2">
+                      <div className="flex items-center justify-between text-sm font-semibold">
+                        <span className="text-amber-100">Progress</span>
+                        <span className="text-white">
                         {(() => {
                           const cps = effectiveFeaturedGoal.checkpoints ?? [];
                           if (cps.length === 0) return `${getDerivedProgress(effectiveFeaturedGoal)}%`;
@@ -666,88 +726,42 @@ const Dashboard = () => {
                   <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={198} />
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
         )}
 
-        {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/goals?status=active")}
-            className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-800/30 cursor-pointer hover:shadow-md dark:hover:shadow-blue-900/30 hover:scale-[1.02] transition-all duration-200"
-          >
-            <CardContent className="p-6 text-center relative">
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-3 top-3 h-9 w-9 rounded-full hover:bg-blue-100 dark:hover:bg-blue-800/50"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  openCreateGoalDialog();
-                }}
-                aria-label="Add new goal"
+        {/* Mobile App */}
+        <div className="rounded-2xl border border-slate-200/60 dark:border-slate-700/40 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800/80 p-6 md:p-8 shadow-sm dark:shadow-slate-900/30 transition-colors duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20">
+              <Smartphone className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Get the mobile app</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Plan and check-in from anywhere.</p>
+            </div>
+          </div>
+          <div className="flex gap-3 w-full md:w-auto">
+            <Button asChild className="rounded-xl bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-700 text-white h-11 px-5 text-sm transition-all duration-200 hover:scale-105 flex-1 md:flex-none">
+              <a
+                href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Plus className="w-4 h-4" />
-              </Button>
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">{stats.activeCount}</div>
-              <p className="text-sm font-medium text-gray-500 dark:text-slate-400">Active Goals</p>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/goals?status=completed")}
-            className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-800/30 cursor-pointer hover:shadow-md dark:hover:shadow-emerald-900/30 hover:scale-[1.02] transition-all duration-200"
-          >
-            <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">{stats.completedCount}</div>
-              <p className="text-sm font-medium text-gray-500 dark:text-slate-400">Completed Goals</p>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/goals?status=failed")}
-            className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] bg-rose-50 dark:bg-rose-950/40 border border-rose-100 dark:border-rose-800/30 cursor-pointer hover:shadow-md dark:hover:shadow-rose-900/30 hover:scale-[1.02] transition-all duration-200"
-          >
-            <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-rose-600 dark:text-rose-400 mb-2">{stats.failedCount}</div>
-              <p className="text-sm font-medium text-gray-500 dark:text-slate-400">Failed Goals</p>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/check-in")}
-            className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-800/30 cursor-pointer hover:shadow-md dark:hover:shadow-purple-900/30 hover:scale-[1.02] transition-all duration-200"
-          >
-            <CardContent className="p-6 text-center relative">
-              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-2">{daysStreak}</div>
-              <p className="text-sm font-medium text-gray-500 dark:text-slate-400">Days Streak</p>
-              <button
-                onClick={(e) => { e.stopPropagation(); shareStreakCard(); }}
-                className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/50 transition"
-                title="Share streak"
+                <Apple className="w-4 h-4 mr-2" /> App Store
+              </a>
+            </Button>
+            <Button asChild className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 h-11 px-5 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-200 hover:scale-105 flex-1 md:flex-none">
+              <a
+                href="https://play.google.com/store/apps/details?id=com.faran.lifeplans"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Share2 className="w-3.5 h-3.5 text-purple-400 dark:text-purple-300" />
-              </button>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/insights")}
-            className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/30 cursor-pointer hover:shadow-md dark:hover:shadow-amber-900/30 hover:scale-[1.02] transition-all duration-200"
-          >
-            <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-amber-600 dark:text-amber-400 mb-2">{stats.avgProgress}%</div>
-              <p className="text-sm font-medium text-gray-500 dark:text-slate-400">Avg. Progress</p>
-            </CardContent>
-          </Card>
+                <Smartphone className="w-4 h-4 mr-2" /> Google Play
+              </a>
+            </Button>
+          </div>
         </div>
 
         {/* Goals Overview */}
@@ -788,66 +802,60 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {dashboardGoals.map((goal) => (
-            <Card key={goal.id} className="border-none shadow-sm dark:shadow-slate-900/50 hover:shadow-md dark:hover:shadow-slate-800/50 transition-all duration-300 rounded-[2rem] overflow-hidden animate-fade-up">
-              <CardContent className="p-6 bg-white dark:bg-slate-900 transition-colors duration-300">
-                <div className="flex justify-between items-start mb-4">
-                  <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+            <Card key={goal.id} className="border-0 shadow-sm dark:shadow-slate-900/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 rounded-2xl bg-white dark:bg-slate-900 overflow-hidden group">
+              <CardContent className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
                     goal.status === 'completed' ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
                   }`}>
                     {goal.status}
                   </div>
                   <div className="flex items-center gap-2">
-                    {goal.isFavorite && <Star className="w-4 h-4 text-amber-400 fill-amber-400" />}
+                    {goal.isFavorite && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white min-w-0 truncate">{goal.name}</h3>
-                  <div
-                    className={`shrink-0 inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
-                      goal,
-                    )}`}
-                  >
-                    {getRemainingDaysText(goal)}
-                  </div>
-                </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{goal.name}</h3>
 
-                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mb-6">
+                <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex items-center gap-1">
-                    <Target className="w-4 h-4" />
+                    <Target className="w-3 h-3" />
                     <span>{goal.category}</span>
                   </div>
+                  <span className="text-slate-300 dark:text-slate-600">·</span>
+                  <span className={getRemainingDaysBadgeClass(goal).split(' ').slice(0, 2).join(' ')}>
+                    {getRemainingDaysText(goal)}
+                  </span>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm font-medium">
-                    <span className="text-gray-500 dark:text-slate-400">Progress</span>
-                    <span className="text-gray-900 dark:text-white">{getDerivedProgress(goal)}%</span>
+                <div className="mt-4">
+                  <div className="flex justify-between text-xs font-medium mb-1.5">
+                    <span className="text-slate-500 dark:text-slate-400">Progress</span>
+                    <span className="text-gray-900 dark:text-white font-semibold">{getDerivedProgress(goal)}%</span>
                   </div>
                   <Progress
                     value={getDerivedProgress(goal)}
-                    className={`h-2 bg-gray-100 dark:bg-slate-700 ${getProgressIndicatorClass(getDerivedProgress(goal))}`}
+                    className={`h-1.5 bg-gray-100 dark:bg-slate-700 ${getProgressIndicatorClass(getDerivedProgress(goal))}`}
                   />
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-slate-700/50 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {goal.priority === 'high' && (
-                      <div className="flex items-center gap-1 text-rose-600 dark:text-rose-400 text-xs font-bold">
-                        <AlertCircle className="w-3 h-3" /> High Priority
-                      </div>
-                    )}
-                  </div>
-                  <Button asChild variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-full transition-all duration-200">
-                    <Link to={`/goals/${goal.id}`}>View Details</Link>
+                <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  {goal.priority === 'high' ? (
+                    <div className="flex items-center gap-1 text-rose-600 dark:text-rose-400 text-xs font-semibold">
+                      <AlertCircle className="w-3 h-3" /> High
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                  <Button asChild variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-lg text-xs h-8 px-3 transition-all">
+                    <Link to={`/goals/${goal.id}`}>View →</Link>
                   </Button>
                 </div>
               </CardContent>
             </Card>
           ))}
-
           {/* Empty State Card */}
           <Card
             onClick={() => openCreateGoalDialog()}
@@ -869,35 +877,33 @@ const Dashboard = () => {
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Failed Goals</h2>
               <span className="text-sm text-gray-500 dark:text-slate-400">Overdue goals that weren't completed in time</span>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {stats.failed.map((goal) => (
-                <Card key={goal.id} className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2rem] overflow-hidden">
-                  <CardContent className="p-6 bg-white dark:bg-slate-900 transition-colors duration-300">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300">
+                <Card key={goal.id} className="border-0 shadow-sm dark:shadow-slate-900/40 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                  <CardContent className="p-5">
+                    <div className="flex items-center mb-3">
+                      <div className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300">
                         failed
                       </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{goal.name}</h3>
-                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mb-6">
-                      <div className="flex items-center gap-1">
-                        <Target className="w-4 h-4" />
-                        <span>{goal.category}</span>
-                      </div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{goal.name}</h3>
+                    <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mb-4">
+                      <Target className="w-3 h-3" />
+                      <span>{goal.category}</span>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm font-medium">
-                        <span className="text-gray-500 dark:text-slate-400">Progress</span>
-                        <span className="text-gray-900 dark:text-white">{getDerivedProgress(goal)}%</span>
+                    <div>
+                      <div className="flex justify-between text-xs font-medium mb-1.5">
+                        <span className="text-slate-500 dark:text-slate-400">Progress</span>
+                        <span className="text-gray-900 dark:text-white font-semibold">{getDerivedProgress(goal)}%</span>
                       </div>
                       <Progress
                         value={getDerivedProgress(goal)}
-                        className={`h-2 bg-gray-100 dark:bg-slate-700 ${getProgressIndicatorClass(getDerivedProgress(goal))}`}
+                        className={`h-1.5 bg-gray-100 dark:bg-slate-700 ${getProgressIndicatorClass(getDerivedProgress(goal))}`}
                       />
                     </div>
-                    <div className="mt-6 pt-6 border-t border-gray-50 dark:border-slate-700/50 flex items-center justify-end">
-                      <Button asChild variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-full transition-all duration-200">
-                        <Link to={`/goals/${goal.id}`}>View Details</Link>
+                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+                      <Button asChild variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-lg text-xs h-8 px-3">
+                        <Link to={`/goals/${goal.id}`}>View →</Link>
                       </Button>
                     </div>
                   </CardContent>

@@ -27,6 +27,7 @@ import GoalPlanner from "./pages/GoalPlanner";
 import DailyPlanner from "./pages/DailyPlanner";
 import DailyPlannerHistory from "./pages/DailyPlannerHistory";
 import About from "./pages/About";
+import Career from "./pages/Career";
 import Contact from "./pages/Contact";
 import GoalPlannerApp from "./pages/GoalPlannerApp";
 import DailyPlannerApp from "./pages/DailyPlannerApp";
@@ -99,6 +100,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/career" element={<Career />} />
             <Route path="/goal-planner" element={<GoalPlanner />} />
             <Route
               path="/life-planning"
