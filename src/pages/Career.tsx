@@ -12,7 +12,7 @@ const JOBS = [
   {
     id: "graphic-designer",
     title: "Simple Graphic Designer",
-    location: "Remote",
+    location: "Remote / Office-based",
     type: "Full-time",
     description:
       "We're looking for a creative graphic designer to craft visual assets for our brand, social media, and marketing campaigns. You will work closely with our team to maintain a consistent and appealing visual identity across all platforms.",
@@ -27,12 +27,16 @@ const JOBS = [
   {
     id: "app-developer",
     title: "App Developer",
-    location: "Remote",
+    location: "Remote / Office-based",
     type: "Full-time",
     description:
       "We are looking for an app developer who is comfortable using a laptop and mobile device. No prior coding experience required — we will train the right candidate.",
     requirements: [
       "Proficient in using a laptop and mobile device",
+      "Willingness to learn new tools and technologies",
+      "Good problem-solving attitude",
+      "Basic understanding of how websites and apps work",
+      "Strong communication and teamwork skills",
     ],
   },
 ];
