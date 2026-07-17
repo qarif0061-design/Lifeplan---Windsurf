@@ -10,6 +10,10 @@ import { Label } from "@/components/ui/label";
 import { Briefcase, MapPin, Clock } from "lucide-react";
 import { showSuccess, showError } from "@/utils/toast";
 
+const EMAILJS_SERVICE_ID = "service_0rynluv";
+const EMAILJS_TEMPLATE_ID = "template_r5wd29c";
+const EMAILJS_PUBLIC_KEY = "tkbgpS1hIp5eMXjU9";
+
 const JOBS = [
   {
     id: "graphic-designer",
@@ -58,8 +62,8 @@ const Career = () => {
 
     try {
       await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
         {
           job_title: job.title,
           name,
@@ -67,7 +71,7 @@ const Career = () => {
           phone: phone || "N/A",
           cover_letter: coverLetter,
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+        EMAILJS_PUBLIC_KEY,
       );
 
       showSuccess("Application submitted successfully! We'll get back to you soon.");
