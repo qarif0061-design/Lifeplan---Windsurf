@@ -1,4 +1,5 @@
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Briefcase, MapPin, Clock } from "lucide-react";
+import { showSuccess, showError } from "@/utils/toast";
 
 const JOBS = [
   {
@@ -48,22 +50,31 @@ const Career = () => {
   const [phone, setPhone] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!dialogJob) return;
     const job = JOBS.find((j) => j.id === dialogJob);
     if (!job) return;
 
-    const subject = `Application for ${job.title} - ${name}`;
-    const body = `Position: ${job.title}
-Name: ${name}
-Email: ${email}
-Phone: ${phone || "N/A"}
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          job_title: job.title,
+          name,
+          email,
+          phone: phone || "N/A",
+          cover_letter: coverLetter,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      );
 
-Cover Letter:
-${coverLetter}`;
-
-    window.location.href = `mailto:info@goalplanner.io?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      showSuccess("Application submitted successfully! We'll get back to you soon.");
+      setDialogJob(null);
+    } catch {
+      showError("Failed to send application. Please try again or email us directly at info@goalplanner.io.");
+    }
   };
 
   return (
