@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Briefcase, MapPin, Clock } from "lucide-react";
 import { showSuccess, showError } from "@/utils/toast";
 
+emailjs.init("tkbgpS1hIp5eMXjU9");
+
 const EMAILJS_SERVICE_ID = "service_0rynluv";
 const EMAILJS_TEMPLATE_ID = "template_r5wd29c";
 const EMAILJS_PUBLIC_KEY = "tkbgpS1hIp5eMXjU9";
@@ -71,14 +73,14 @@ const Career = () => {
           phone: phone || "N/A",
           cover_letter: coverLetter,
         },
-        EMAILJS_PUBLIC_KEY,
       );
 
       showSuccess("Application submitted successfully! We'll get back to you soon.");
       setDialogJob(null);
     } catch (err: any) {
       console.error("EmailJS error:", err);
-      showError(`Failed to send application: ${err?.text || err?.message || "Unknown error"}. Please try again or email us directly at info@goalplanner.io.`);
+      const msg = err?.text || err?.message || "Unknown error";
+      showError(`Failed to send: ${msg}. You can also email us directly at info@goalplanner.io.`);
     }
   };
 
