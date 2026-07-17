@@ -13,7 +13,7 @@ import { showSuccess, showError } from "@/utils/toast";
 emailjs.init("tkbgpS1hIp5eMXjU9");
 
 const EMAILJS_SERVICE_ID = "service_0rynluv";
-const EMAILJS_TEMPLATE_ID = "template_r5wd29c";
+const EMAILJS_TEMPLATE_ID = "template_hjx5cwj";
 const EMAILJS_PUBLIC_KEY = "tkbgpS1hIp5eMXjU9";
 
 const JOBS = [
