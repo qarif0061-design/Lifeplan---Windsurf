@@ -148,6 +148,7 @@ const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }
 
 const Dashboard = () => {
   const { user, isPremium } = useUser();
+  const greetingName = user?.displayName?.trim() ? user.displayName.trim() : "";
   const { goals, stats } = useGoals();
   const { days: dailyTaskDays } = useDailyTasks();
   const navigate = useNavigate();
