@@ -48,14 +48,6 @@ const Career = () => {
   const [phone, setPhone] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
 
-  const openApply = (jobId: string) => {
-    setDialogJob(jobId);
-    setName("");
-    setEmail("");
-    setPhone("");
-    setCoverLetter("");
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!dialogJob) return;
@@ -144,12 +136,12 @@ ${coverLetter}`;
                 </ul>
               </CardContent>
               <CardFooter className="pt-0">
-                <Dialog open={dialogJob === job.id} onOpenChange={(open) => !open && setDialogJob(null)}>
+                <Dialog open={dialogJob === job.id} onOpenChange={(open) => {
+                  if (open) { setName(""); setEmail(""); setPhone(""); setCoverLetter(""); setDialogJob(job.id); }
+                  else setDialogJob(null);
+                }}>
                   <DialogTrigger asChild>
-                    <Button
-                      onClick={() => openApply(job.id)}
-                      className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white"
-                    >
+                    <Button className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white">
                       Apply Now
                     </Button>
                   </DialogTrigger>
