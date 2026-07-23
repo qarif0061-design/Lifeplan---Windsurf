@@ -1,22 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { Check, Crown, Sparkles, Star } from "lucide-react";
+import { Check, Crown, Minus, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
-import { Badge } from "@/components/ui/badge";
 import HelpDialog from "@/components/HelpDialog";
 import Layout from "@/components/Layout";
 
 const Pricing = () => {
-  const { isPremium, user, premiumExpiresAt } = useUser();
+  const { isPremium, user } = useUser();
   const navigate = useNavigate();
 
   const checkoutLinks = {
-    weekly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/f5f9e5b6-3642-4907-a462-b9a31c489932?enabled=1372523",
     monthly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/3238ac26-b73d-418a-9dca-ac2b19e19e30?enabled=1372984",
-    yearly:
-      "https://goalplanner.lemonsqueezy.com/checkout/buy/eac8789a-88f9-48af-83a7-9478da85619a?enabled=1372982",
+      "https://goalplanner.lemonsqueezy.com/checkout/buy/1941520?enabled=1242156",
   } as const;
 
   const buildCheckoutUrl = (base: string) => {
@@ -27,23 +22,26 @@ const Pricing = () => {
     return url.toString();
   };
 
-  const trialEndDate = premiumExpiresAt ? new Date(premiumExpiresAt) : null;
-  const isOnTrial = isPremium && trialEndDate && trialEndDate.getTime() > Date.now();
-  const trialDaysLeft = isOnTrial && trialEndDate
-    ? Math.ceil((trialEndDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
-    : 0;
-
-  const handleUpgrade = (planName: string) => {
+  const handleUpgrade = () => {
     if (!user) {
       navigate("/auth");
       return;
     }
-    if (planName === "Free") return;
-
-    if (planName === "Weekly") window.location.assign(buildCheckoutUrl(checkoutLinks.weekly));
-    if (planName === "Monthly") window.location.assign(buildCheckoutUrl(checkoutLinks.monthly));
-    if (planName === "Yearly") window.location.assign(buildCheckoutUrl(checkoutLinks.yearly));
+    if (isPremium) return;
+    window.location.assign(buildCheckoutUrl(checkoutLinks.monthly));
   };
+
+  const comparisonFeatures = [
+    { label: "Active Goals", free: "1", premium: "Unlimited" },
+    { label: "Weekly Planning", free: true, premium: true },
+    { label: "Goal Strategy & Planning", free: "Limited", premium: "Full Access" },
+    { label: "Daily Planner Tasks", free: "Up to 3 days", premium: "Unlimited" },
+    { label: "Daily Check-ins", free: false, premium: true },
+    { label: "Insights & Analytics", free: false, premium: true },
+    { label: "Weekly Planning History", free: false, premium: true },
+    { label: "Strategy System", free: false, premium: true },
+    { label: "Priority Email Support", free: false, premium: true },
+  ];
 
   const plans = [
     {
@@ -61,26 +59,10 @@ const Pricing = () => {
       highlight: false,
     },
     {
-      name: "Weekly",
-      price: "$1.99",
-      period: "/week",
-      trialDays: 3,
-      description: "Try Premium free for 3 days, then $1.99/week.",
-      features: [
-        "Everything in Premium",
-        "Weekly billing",
-        "Priority email support",
-      ],
-      buttonText: isPremium ? "Current Plan" : "Start Free Trial",
-      buttonVariant: "outline" as const,
-      highlight: false,
-    },
-    {
-      name: "Monthly",
-      price: "$4.99",
+      name: "Premium",
+      price: "$0.99",
       period: "/month",
-      trialDays: 7,
-      description: "Try Premium free for 1 week, then $4.99/month.",
+      description: "Unlock unlimited goals, full strategy access, and everything you need to succeed.",
       features: [
         "Unlimited active goals",
         "Full Strategy System access",
@@ -91,25 +73,10 @@ const Pricing = () => {
         "Weekly planning history",
         "Priority Email Support",
       ],
-      buttonText: isPremium ? "Current Plan" : "Start Free Trial",
+      buttonText: isPremium ? "Current Plan" : "Get Premium",
       buttonVariant: (isPremium ? "outline" : "default") as "outline" | "default",
       highlight: true,
       icon: Crown,
-    },
-    {
-      name: "Yearly",
-      price: "$49.99",
-      period: "/year",
-      trialDays: 30,
-      description: "Try Premium free for 1 month, then $49.99/year.",
-      features: [
-        "Everything in Premium",
-        "Annual billing",
-        "Priority email support",
-      ],
-      buttonText: isPremium ? "Current Plan" : "Start Free Trial",
-      buttonVariant: "outline" as const,
-      highlight: false,
     },
   ];
 
@@ -124,7 +91,7 @@ const Pricing = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {plans.map((plan, index) => (
               <div 
                 key={index} 
@@ -141,17 +108,6 @@ const Pricing = () => {
                 <div className="mb-8">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
-                    {plan.trialDays && !isPremium && (
-                      <Badge variant="secondary" className="rounded-full text-xs bg-green-100 text-green-700 border-green-200">
-                        <Sparkles className="w-3 h-3 mr-1" />
-                        {plan.trialDays}-day free trial
-                      </Badge>
-                    )}
-                    {isOnTrial && plan.name !== "Free" && (
-                      <Badge variant="secondary" className="rounded-full text-xs bg-amber-100 text-amber-700 border-amber-200">
-                        {trialDaysLeft} day{trialDaysLeft !== 1 ? "s" : ""} left
-                      </Badge>
-                    )}
                   </div>
                   <div className="flex items-baseline gap-1 mb-4">
                     <span className="text-4xl font-extrabold text-gray-900">{plan.price}</span>
@@ -172,7 +128,7 @@ const Pricing = () => {
                 </ul>
 
                 <Button 
-                  onClick={() => handleUpgrade(plan.name)}
+                  onClick={() => handleUpgrade()}
                   variant={plan.buttonVariant} 
                   className={`w-full rounded-2xl h-12 text-lg font-bold ${
                     plan.highlight && !isPremium ? 'bg-blue-600 hover:bg-blue-700' : ''
@@ -182,6 +138,50 @@ const Pricing = () => {
                 </Button>
               </div>
             ))}
+          </div>
+
+          <div className="mt-20 max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">Compare Plans</h2>
+            <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-100">
+                    <th className="text-left py-4 px-6 font-semibold text-gray-900">Feature</th>
+                    <th className="text-center py-4 px-6 font-semibold text-gray-900">Free</th>
+                    <th className="text-center py-4 px-6 font-semibold text-blue-600">Premium</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisonFeatures.map((feature, i) => (
+                    <tr key={i} className={`border-b border-gray-50 last:border-0 ${i % 2 === 0 ? 'bg-gray-50/50' : ''}`}>
+                      <td className="py-3.5 px-6 text-gray-700">{feature.label}</td>
+                      <td className="py-3.5 px-6 text-center">
+                        {typeof feature.free === 'boolean' ? (
+                          feature.free ? (
+                            <Check className="w-4 h-4 text-green-500 mx-auto" />
+                          ) : (
+                            <Minus className="w-4 h-4 text-gray-300 mx-auto" />
+                          )
+                        ) : (
+                          <span className="text-gray-600">{feature.free}</span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-6 text-center">
+                        {typeof feature.premium === 'boolean' ? (
+                          feature.premium ? (
+                            <Check className="w-4 h-4 text-blue-500 mx-auto" />
+                          ) : (
+                            <Minus className="w-4 h-4 text-gray-300 mx-auto" />
+                          )
+                        ) : (
+                          <span className="text-blue-600 font-medium">{feature.premium}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="mt-20 bg-blue-600 rounded-[3rem] p-12 text-white text-center relative overflow-hidden">
