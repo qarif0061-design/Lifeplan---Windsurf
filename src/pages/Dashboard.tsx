@@ -197,6 +197,7 @@ const Dashboard = () => {
   const openCreateGoalDialog = () => {
     if (!isPremium && goals.length >= 1) {
       showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+      navigate("/pricing");
       return;
     }
     setIsDialogOpen(true);
@@ -225,6 +226,7 @@ const Dashboard = () => {
     }
     if (!isPremium && goals.length >= 1) {
       showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+      navigate("/pricing");
       return;
     }
     if (!goalName.trim() || !goalCategory.trim()) {

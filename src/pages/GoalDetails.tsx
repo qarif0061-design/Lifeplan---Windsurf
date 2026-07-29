@@ -473,6 +473,7 @@ const GoalDetails = () => {
     if (!goal) return;
     if (!isPremium) {
       showError("Strategy is a Premium feature. Upgrade to edit strategy.");
+      navigate("/pricing");
       return;
     }
     setIsSavingStrategy(true);
@@ -520,6 +521,7 @@ const GoalDetails = () => {
     if (!goal) return;
     if (!isPremium) {
       showError("Planning is a Premium feature. Upgrade to edit planning.");
+      navigate("/pricing");
       return;
     }
     setIsSavingPlanning(true);

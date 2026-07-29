@@ -21,7 +21,7 @@ import {
 } from "@/firebase/dailyTasks";
 import { showError, showSuccess } from "@/utils/toast";
 import { Calendar as CalendarIcon, Eye, History, RotateCcw, Copy } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
 const toDateKeyLocal = (d: Date): string => {
@@ -65,6 +65,7 @@ const normalizeCallEmail3 = (items?: DailyCallEmailItem[]): DailyCallEmailItem[]
 
 const DailyPlanner = () => {
   const { user, isPremium } = useUser();
+  const navigate = useNavigate();
   const { days, distinctDates, freeLimit, canCreateNewDate } = useDailyTasks();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -119,6 +120,7 @@ const DailyPlanner = () => {
     // If current date is not writable (free limit), duplication shouldn't be allowed either.
     if (!canWriteToSelectedDate) {
       showError(limitMessage ?? "Upgrade to Premium to add more daily tasks.");
+      navigate("/pricing");
       return;
     }
 
@@ -130,6 +132,7 @@ const DailyPlanner = () => {
     // Free limit: if next date doesn't exist yet, ensure user can create it
     if (!isPremium && !distinctDates.includes(nextKey) && !canCreateNewDate) {
       showError(`Free users can add daily tasks for up to ${freeLimit} days. Upgrade to Premium for unlimited daily tasks.`);
+      navigate("/pricing");
       return;
     }
 

@@ -11,8 +11,7 @@ import { upsertDailyCheckIn } from "@/firebase/checkins";
 import { updateUserStreak } from "@/firebase/users";
 import { useCheckIns, computeStreakFromDates } from "@/hooks/useCheckIns";
 import { Lock } from "lucide-react";
-import { Link } from "react-router-dom";
-import PremiumPopup from "@/components/PremiumPopup";
+import { Link, useNavigate } from "react-router-dom";
 
 const toDateKeyLocal = (d: Date): string => {
   const yyyy = d.getFullYear();
@@ -23,6 +22,7 @@ const toDateKeyLocal = (d: Date): string => {
 
 const CheckIn = () => {
   const { user, isPremium } = useUser();
+  const navigate = useNavigate();
   const { checkIns, stats } = useCheckIns();
 
   const todayKey = useMemo(() => toDateKeyLocal(new Date()), []);
@@ -33,8 +33,6 @@ const CheckIn = () => {
   const [exercise, setExercise] = useState<boolean>(todayExisting?.exercise ?? false);
   const [notes, setNotes] = useState<string>(todayExisting?.notes ?? "");
   const [saving, setSaving] = useState(false);
-  const [showPremiumPopup, setShowPremiumPopup] = useState(false);
-  const [premiumFeature, setPremiumFeature] = useState("");
 
   useEffect(() => {
     setHydration(todayExisting?.hydration ?? false);
@@ -45,8 +43,7 @@ const CheckIn = () => {
 
   const handlePremiumCheck = (feature: string) => {
     if (!isPremium) {
-      setPremiumFeature(feature);
-      setShowPremiumPopup(true);
+      navigate("/pricing");
       return true; // blocked
     }
     return false; // not blocked
@@ -187,11 +184,6 @@ const CheckIn = () => {
           </Card>
         </div>
 
-        <PremiumPopup 
-          isOpen={showPremiumPopup}
-          onClose={() => setShowPremiumPopup(false)}
-          feature={premiumFeature}
-        />
       </div>
     </Layout>
   );
