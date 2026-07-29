@@ -1,11 +1,11 @@
 import Layout from "@/components/Layout";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useGoals } from "@/hooks/useGoals";
 import { useCheckIns } from "@/hooks/useCheckIns";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { Lock } from "lucide-react";
 
@@ -17,9 +17,16 @@ const toDateKeyLocal = (d: Date): string => {
 };
 
 const Insights = () => {
-  const { isPremium } = useUser();
+  const { isPremium, loading } = useUser();
+  const navigate = useNavigate();
   const { goals, stats } = useGoals();
   const { checkIns, stats: checkInStats } = useCheckIns();
+
+  useEffect(() => {
+    if (!loading && !isPremium) {
+      navigate("/pricing");
+    }
+  }, [loading, isPremium, navigate]);
 
   const last7 = useMemo(() => {
     const keys: string[] = [];
