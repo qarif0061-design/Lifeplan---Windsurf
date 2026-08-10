@@ -90,6 +90,9 @@ import GoalSettingSeo from "./pages/GoalSettingSeo";
 import AdhdPlannerSeo from "./pages/AdhdPlannerSeo";
 import ManifestationPlannerSeo from "./pages/ManifestationPlannerSeo";
 import GoalTrackingSoftwareSeo from "./pages/GoalTrackingSoftwareSeo";
+import GoogleKeepAlternatives from "./pages/GoogleKeepAlternatives";
+import TodoistAlternatives from "./pages/TodoistAlternatives";
+import NotionAlternatives from "./pages/NotionAlternatives";
 
 function App() {
   return (
@@ -188,6 +191,9 @@ function App() {
             <Route path="/adhd-planner" element={<AdhdPlannerSeo />} />
             <Route path="/manifestation-planner" element={<ManifestationPlannerSeo />} />
             <Route path="/goal-tracking-software" element={<GoalTrackingSoftwareSeo />} />
+            <Route path="/google-keep-alternatives" element={<GoogleKeepAlternatives />} />
+            <Route path="/todoist-alternatives" element={<TodoistAlternatives />} />
+            <Route path="/notion-alternatives" element={<NotionAlternatives />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
