@@ -17,6 +17,11 @@ export interface Accountability {
   partnerId?: string;
   partnerName?: string;
   status: AccountabilityStatus;
+  // Progress % (0-100) the inviter self-reports for the shared planner. Partners only
+  // ever see this number — never the planner's private tasks/notes — since the
+  // customPlanners/weeklyPlanners collections are read-locked to their owner.
+  progressPercent?: number;
+  progressUpdatedAt?: unknown;
   createdAt: unknown;
 }
 
@@ -84,6 +89,50 @@ export async function getAccountabilities(userId: string): Promise<Accountabilit
 
 export async function removeAccountability(id: string): Promise<void> {
   await deleteDoc(doc(accCol, id));
+}
+
+// Invites the current user sent that haven't been responded to yet.
+export async function getSentInvites(inviterId: string): Promise<Accountability[]> {
+  const q = query(
+    accCol,
+    where("inviterId", "==", inviterId),
+    where("status", "==", "pending")
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as Accountability));
+}
+
+export const subscribeSentInvites = (
+  inviterId: string,
+  callback: (invites: Accountability[]) => void
+) => {
+  const q = query(
+    accCol,
+    where("inviterId", "==", inviterId),
+    where("status", "==", "pending")
+  );
+  return import("firebase/firestore").then(({ onSnapshot }) =>
+    onSnapshot(q, (snap) => {
+      const results = snap.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      })) as Accountability[];
+      callback(results);
+    })
+  );
+};
+
+// The inviter self-reports progress on the shared planner so their partner can see a
+// percentage without needing read access to the (owner-locked) planner document.
+export async function updateAccountabilityProgress(
+  id: string,
+  progressPercent: number
+): Promise<void> {
+  const ref = doc(accCol, id);
+  await updateDoc(ref, {
+    progressPercent: Math.max(0, Math.min(100, Math.round(progressPercent))),
+    progressUpdatedAt: serverTimestamp(),
+  });
 }
 
 export const subscribePendingInvites = (

@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useGoals } from "@/hooks/useGoals";
@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { Lock } from "lucide-react";
+import { getWeekStart, subscribeWeeklyPlanner, type WeeklyPlanner } from "@/firebase/weeklyPlanner";
+import { computeWeeklyExecution, buildExecutionInsights, projectGoalPace } from "@/utils/adaptiveExecution";
 
 const toDateKeyLocal = (d: Date): string => {
   const yyyy = d.getFullYear();
@@ -17,16 +19,41 @@ const toDateKeyLocal = (d: Date): string => {
 };
 
 const Insights = () => {
-  const { isPremium, loading } = useUser();
+  const { user, isPremium, loading } = useUser();
   const navigate = useNavigate();
   const { goals, stats } = useGoals();
   const { checkIns, stats: checkInStats } = useCheckIns();
+  const [weekPlanner, setWeekPlanner] = useState<WeeklyPlanner | null>(null);
 
   useEffect(() => {
     if (!loading && !isPremium) {
       navigate("/pricing");
     }
   }, [loading, isPremium, navigate]);
+
+  useEffect(() => {
+    if (!user) {
+      setWeekPlanner(null);
+      return;
+    }
+    const weekStartStr = getWeekStart().toISOString().split("T")[0];
+    const unsub = subscribeWeeklyPlanner(user.id, weekStartStr, setWeekPlanner);
+    return () => unsub();
+  }, [user]);
+
+  const weeklyExecutionInsights = useMemo(() => {
+    const summary = computeWeeklyExecution(weekPlanner?.days.flatMap((d) => d.tasks) ?? []);
+    return buildExecutionInsights(summary);
+  }, [weekPlanner]);
+
+  const goalPaceProjections = useMemo(
+    () =>
+      stats.active.map((g) => ({
+        goal: g,
+        pace: projectGoalPace(g.checkpoints, g.createdAt, g.dueAt ?? g.endDate ?? null),
+      })),
+    [stats.active],
+  );
 
   const last7 = useMemo(() => {
     const keys: string[] = [];
@@ -55,45 +82,105 @@ const Insights = () => {
           }`}
         >
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Insights</h1>
-            <p className="text-gray-500">Real-time stats from your goals and daily check-ins.</p>
+            <h1 className="text-3xl font-bold text-foreground">Insights</h1>
+            <p className="text-muted-foreground">Real-time stats from your goals and daily check-ins.</p>
           </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-blue-600 mb-1">{stats.activeCount}</div>
-              <div className="text-sm text-gray-500">Active Goals</div>
+              <div className="text-2xl font-bold text-primary mb-1">{stats.activeCount}</div>
+              <div className="text-sm text-muted-foreground">Active Goals</div>
             </CardContent>
           </Card>
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-emerald-600 mb-1">{stats.completedCount}</div>
-              <div className="text-sm text-gray-500">Completed Goals</div>
+              <div className="text-2xl font-bold text-momentum mb-1">{stats.completedCount}</div>
+              <div className="text-sm text-muted-foreground">Completed Goals</div>
             </CardContent>
           </Card>
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-6 text-center">
               <div className="text-2xl font-bold text-rose-600 mb-1">{stats.failedCount}</div>
-              <div className="text-sm text-gray-500">Failed Goals</div>
+              <div className="text-sm text-muted-foreground">Failed Goals</div>
             </CardContent>
           </Card>
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-amber-600 mb-1">{stats.avgProgress}%</div>
-              <div className="text-sm text-gray-500">Avg Goal Progress</div>
+              <div className="text-2xl font-bold text-ember mb-1">{stats.avgProgress}%</div>
+              <div className="text-sm text-muted-foreground">Avg Goal Progress</div>
             </CardContent>
           </Card>
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-6 text-center">
               <div className="text-2xl font-bold text-purple-600 mb-1">{checkInStats.streak}</div>
-              <div className="text-sm text-gray-500">Check-in Streak</div>
+              <div className="text-sm text-muted-foreground">Check-in Streak</div>
             </CardContent>
           </Card>
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-6 text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-1">{checkInStats.avgLast7CompletionPct}%</div>
-              <div className="text-sm text-gray-500">Last 7 Days Completion</div>
+              <div className="text-2xl font-bold text-foreground mb-1">{checkInStats.avgLast7CompletionPct}%</div>
+              <div className="text-sm text-muted-foreground">Last 7 Days Completion</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          <Card className="border-none shadow-sm rounded-[2.5rem]">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">This Week's Execution</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {weekPlanner ? (
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                  {weeklyExecutionInsights.map((line) => (
+                    <span key={line}>
+                      {line.split(/(\d+%?)/).map((part, i) =>
+                        /^\d+%?$/.test(part) ? (
+                          <span key={i} className="font-mono font-semibold text-foreground">
+                            {part}
+                          </span>
+                        ) : (
+                          <span key={i}>{part}</span>
+                        ),
+                      )}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-muted-foreground">No weekly plan set yet.</div>
+              )}
+              <Button asChild variant="outline" className="rounded-full">
+                <Link to="/weekly-planner">Open Weekly Planner</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border-none shadow-sm rounded-[2.5rem]">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">Goal Pace</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {goalPaceProjections.length === 0 ? (
+                <div className="text-sm text-muted-foreground">No active goals yet.</div>
+              ) : (
+                goalPaceProjections.map(({ goal, pace }) => (
+                  <div key={goal.id} className="rounded-2xl border border-border bg-card p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <Link to={`/goals/${goal.id}`} className="font-bold text-foreground hover:underline">
+                        {goal.name}
+                      </Link>
+                    </div>
+                    <p
+                      className={`text-sm mt-1 ${
+                        pace.status === "at-risk" ? "text-amber-600" : "text-muted-foreground"
+                      }`}
+                    >
+                      {pace.message}
+                    </p>
+                  </div>
+                ))
+              )}
             </CardContent>
           </Card>
         </div>
@@ -107,10 +194,10 @@ const Insights = () => {
               <div className="grid grid-cols-7 gap-2 items-end">
                 {last7.map((d) => (
                   <div key={d.date} className="flex flex-col items-center gap-2">
-                    <div className="w-full rounded-xl bg-gray-100 overflow-hidden h-24">
-                      <div className="bg-blue-600 w-full" style={{ height: `${d.pct}%` }} />
+                    <div className="w-full rounded-xl bg-secondary overflow-hidden h-24">
+                      <div className="bg-primary w-full" style={{ height: `${d.pct}%` }} />
                     </div>
-                    <div className="text-[10px] text-gray-500">{d.date.slice(5)}</div>
+                    <div className="text-[10px] text-muted-foreground">{d.date.slice(5)}</div>
                   </div>
                 ))}
               </div>
@@ -126,12 +213,12 @@ const Insights = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               {stats.failedCount === 0 ? (
-                <div className="text-sm text-gray-500">No failed goals. Keep going.</div>
+                <div className="text-sm text-muted-foreground">No failed goals. Keep going.</div>
               ) : (
                 stats.failed.slice(0, 6).map((g) => (
-                  <div key={g.id} className="rounded-2xl border border-gray-100 bg-white p-4">
+                  <div key={g.id} className="rounded-2xl border border-border bg-card p-4">
                     <div className="flex items-center justify-between gap-4">
-                      <div className="font-bold text-gray-900">{g.name}</div>
+                      <div className="font-bold text-foreground">{g.name}</div>
                       <Button asChild variant="ghost" className="rounded-full">
                         <Link to={`/goals/${g.id}`}>View</Link>
                       </Button>
@@ -139,7 +226,7 @@ const Insights = () => {
                     <div className="mt-2">
                       <Progress
                         value={g.progress}
-                        className={`h-2 bg-gray-100 ${
+                        className={`h-2 bg-secondary ${
                           g.progress >= 100
                             ? "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-emerald-400 [&>div]:to-lime-400"
                             : g.progress < 20
@@ -162,14 +249,14 @@ const Insights = () => {
 
         {!isPremium && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="max-w-xl mx-auto bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-[2.5rem] p-8 text-center">
-              <div className="flex items-center justify-center gap-2 text-gray-900 mb-3">
+            <div className="max-w-xl mx-auto bg-card/80 backdrop-blur-md border border-border shadow-lg rounded-[2.5rem] p-8 text-center">
+              <div className="flex items-center justify-center gap-2 text-foreground mb-3">
                 <Lock className="w-5 h-5" />
                 <h2 className="text-xl font-bold">Premium feature</h2>
               </div>
-              <p className="text-gray-600 mb-6">Upgrade to Premium to unlock full Insights and analytics.</p>
+              <p className="text-muted-foreground mb-6">Upgrade to Premium to unlock full Insights and analytics.</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                <Button asChild className="rounded-full bg-primary hover:bg-primary/90">
                   <Link to="/pricing">Upgrade to Premium</Link>
                 </Button>
                 <Button asChild variant="outline" className="rounded-full">

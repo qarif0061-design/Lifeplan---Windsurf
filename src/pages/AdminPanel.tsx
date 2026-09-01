@@ -111,34 +111,34 @@ const AdminPanel = () => {
 
   return (
     <PublicPageLayout>
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6">Admin Panel - Premium User Management</h1>
-          
+      <div className="min-h-screen bg-secondary/40 py-8">
+        <div className="max-w-2xl mx-auto bg-card rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold text-foreground mb-6">Admin Panel - Premium User Management</h1>
+
           <div className="space-y-6">
             {/* Search Section */}
             <div className="border-b pb-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Search User</h2>
+              <h2 className="text-lg font-semibold text-foreground mb-4">Search User</h2>
               <div className="flex gap-4">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter user email"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
                 <button
                   onClick={searchUser}
                   disabled={loading}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50"
                 >
                   {loading ? 'Searching...' : 'Search'}
                 </button>
               </div>
-              
+
               {message && (
                 <div className={`mt-4 p-4 rounded-lg ${
-                  message.includes('Successfully') ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+                  message.includes('Successfully') ? 'bg-momentum/10 text-momentum' : 'bg-red-50 text-red-800'
                 }`}>
                   {message}
                 </div>
@@ -147,24 +147,24 @@ const AdminPanel = () => {
 
             {/* User Info & Actions */}
             {userFound && (
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">User Information</h3>
+              <div className="bg-secondary/40 p-6 rounded-lg">
+                <h3 className="text-lg font-semibold text-foreground mb-4">User Information</h3>
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <span className="text-sm text-gray-600">Name:</span>
+                    <span className="text-sm text-muted-foreground">Name:</span>
                     <p className="font-medium">{userFound.displayName || 'N/A'}</p>
                   </div>
                   <div>
-                    <span className="text-sm text-gray-600">Email:</span>
+                    <span className="text-sm text-muted-foreground">Email:</span>
                     <p className="font-medium">{userFound.email}</p>
                   </div>
                   <div>
-                    <span className="text-sm text-gray-600">User ID:</span>
+                    <span className="text-sm text-muted-foreground">User ID:</span>
                     <p className="font-medium text-sm">{userFound.uid || userFound.id}</p>
                   </div>
                   <div>
-                    <span className="text-sm text-gray-600">Premium Status:</span>
-                    <p className={`font-medium ${userFound.isPremium ? 'text-green-600' : 'text-gray-600'}`}>
+                    <span className="text-sm text-muted-foreground">Premium Status:</span>
+                    <p className={`font-medium ${userFound.isPremium ? 'text-momentum' : 'text-muted-foreground'}`}>
                       {userFound.isPremium ? 'Premium ✅' : 'Free'}
                     </p>
                   </div>
@@ -175,7 +175,7 @@ const AdminPanel = () => {
                     <button
                       onClick={makePremium}
                       disabled={loading}
-                      className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                      className="px-6 py-3 bg-momentum text-momentum-foreground rounded-lg hover:bg-momentum/90 disabled:opacity-50"
                     >
                       {loading ? 'Processing...' : 'Make Premium'}
                     </button>
@@ -194,14 +194,14 @@ const AdminPanel = () => {
 
             {/* Quick Actions */}
             <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
               <div className="space-y-3">
                 <button
                   onClick={() => {
                     setEmail('inertiaenergysolutions6@gmail.com');
                     setMessage('Email pre-filled. Click "Search" to find user.');
                   }}
-                  className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-left"
+                  className="w-full px-4 py-2 bg-secondary text-foreground/80 rounded-lg hover:bg-secondary/70 text-left"
                 >
                   📧 Pre-fill inertiaenergysolutions6@gmail.com
                 </button>
@@ -210,7 +210,7 @@ const AdminPanel = () => {
                     setEmail('faranh31@gmail.com');
                     setMessage('Email pre-filled. Click "Search" to find user.');
                   }}
-                  className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-left"
+                  className="w-full px-4 py-2 bg-secondary text-foreground/80 rounded-lg hover:bg-secondary/70 text-left"
                 >
                   👤 Pre-fill faranh31@gmail.com (Admin)
                 </button>
@@ -219,7 +219,7 @@ const AdminPanel = () => {
 
             {/* Instructions */}
             <div className="border-t pt-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">🔧 Setup Instructions</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-4">🔧 Setup Instructions</h3>
               <div className="bg-yellow-50 p-4 rounded-lg">
                 <p className="text-sm text-yellow-800">
                   <strong>Important:</strong> To use this admin panel, you need to update your Firestore rules to allow admin access.

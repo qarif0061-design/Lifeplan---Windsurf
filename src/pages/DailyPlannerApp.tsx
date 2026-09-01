@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const DailyPlannerApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between a daily planner and to-do list app?",
@@ -114,26 +116,26 @@ const DailyPlannerApp = () => {
         <header className="space-y-6" id="hero">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Daily Planning Made Simple</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Daily Planner App: Plan Your Day With Less Stress (and Actually Finish What Matters)
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               A lot of people don't need "more productivity." They need a day that feels <strong>intentional</strong> instead of reactive.
             </p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Your Day</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Your Day
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
             </Button>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-            <p className="text-lg font-medium text-gray-900 mb-2">What a daily planner app should help you do</p>
-            <ul className="space-y-2 text-gray-700">
+          <div className="bg-secondary/40 rounded-2xl p-8 border border-border">
+            <p className="text-lg font-medium text-foreground mb-2">What a daily planner app should help you do</p>
+            <ul className="space-y-2 text-foreground/80">
               <li>• quick task capture (so tasks stop living in your head)</li>
               <li>• prioritization (so everything isn't "urgent")</li>
               <li>• simple scheduling / time blocks</li>
@@ -147,18 +149,18 @@ const DailyPlannerApp = () => {
         {/* Screenshot Placeholder */}
         <section className="space-y-6" id="app-preview">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">See Daily Planning in Action</h2>
-            <div className="bg-gray-100 rounded-2xl p-12 border-2 border-dashed border-gray-300">
-              <p className="text-gray-500 text-lg">📱 App Screenshot Placeholder</p>
-              <p className="text-gray-400 text-sm mt-2">Daily planning screen with priorities and time blocks</p>
+            <h2 className="text-3xl font-bold text-foreground mb-4">See Daily Planning in Action</h2>
+            <div className="bg-secondary rounded-2xl p-12 border-2 border-dashed border-border">
+              <p className="text-muted-foreground text-lg">📱 App Screenshot Placeholder</p>
+              <p className="text-muted-foreground/70 text-sm mt-2">Daily planning screen with priorities and time blocks</p>
             </div>
           </div>
         </section>
 
         {/* What Is Section */}
         <section className="space-y-6" id="what-is">
-          <h2 className="text-3xl font-bold text-gray-900">What Is a Daily Planner App?</h2>
-          <div className="prose prose-lg max-w-none text-gray-700">
+          <h2 className="text-3xl font-bold text-foreground">What Is a Daily Planner App?</h2>
+          <div className="prose prose-lg max-w-none text-foreground/80">
             <p>
               A <strong>daily planner app</strong> (also called a day planner app, daily organizer app, or plan-your-day app) helps you build a workable plan for one day at a time.
             </p>
@@ -181,7 +183,7 @@ const DailyPlannerApp = () => {
 
         {/* Why Daily Planning Works */}
         <section className="space-y-6" id="why-it-works">
-          <h2 className="text-3xl font-bold text-gray-900">Why Daily Planning Works (Even If You're Busy)</h2>
+          <h2 className="text-3xl font-bold text-foreground">Why Daily Planning Works (Even If You're Busy)</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -228,7 +230,7 @@ const DailyPlannerApp = () => {
 
         {/* Features Grid */}
         <section className="space-y-6" id="features">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features to Look For in the Best Daily Planner App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Key Features to Look For in the Best Daily Planner App</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -239,7 +241,7 @@ const DailyPlannerApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -248,71 +250,71 @@ const DailyPlannerApp = () => {
 
         {/* Best Daily Planner App Section */}
         <section className="space-y-6" id="best-daily-planner-app">
-          <h2 className="text-3xl font-bold text-gray-900">Best Daily Planner App: What to Look For</h2>
-          <p className="text-lg text-gray-600">When searching for the best daily planner app, focus on features that actually help you execute, not just organize.</p>
+          <h2 className="text-3xl font-bold text-foreground">Best Daily Planner App: What to Look For</h2>
+          <p className="text-lg text-muted-foreground">When searching for the best daily planner app, focus on features that actually help you execute, not just organize.</p>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">🎯 Essential Features That Drive Results</h3>
+              <h3 className="text-xl font-display font-semibold text-foreground">🎯 Essential Features That Drive Results</h3>
               <div className="space-y-3">
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Quick Task Capture</p>
-                    <p className="text-gray-600 text-sm">Get tasks out of your head in seconds, not minutes</p>
+                    <p className="text-muted-foreground text-sm">Get tasks out of your head in seconds, not minutes</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Priority Setting Tools</p>
-                    <p className="text-gray-600 text-sm">Visual ways to mark 1-3 most important tasks</p>
+                    <p className="text-muted-foreground text-sm">Visual ways to mark 1-3 most important tasks</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Time Blocking</p>
-                    <p className="text-gray-600 text-sm">Protect focus time with scheduled blocks</p>
+                    <p className="text-muted-foreground text-sm">Protect focus time with scheduled blocks</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Daily Review</p>
-                    <p className="text-gray-600 text-sm">Quick evening wrap-up to close loops</p>
+                    <p className="text-muted-foreground text-sm">Quick evening wrap-up to close loops</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">⚠️ Features That Often Distract</h3>
+              <h3 className="text-xl font-display font-semibold text-foreground">⚠️ Features That Often Distract</h3>
               <div className="space-y-3">
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Over-Complicated Analytics</p>
-                    <p className="text-gray-600 text-sm">Charts and metrics that don't drive action</p>
+                    <p className="text-muted-foreground text-sm">Charts and metrics that don't drive action</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Excessive Notifications</p>
-                    <p className="text-gray-600 text-sm">Constant alerts that fragment attention</p>
+                    <p className="text-muted-foreground text-sm">Constant alerts that fragment attention</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Complex Project Management</p>
-                    <p className="text-gray-600 text-sm">Features better suited for team tools</p>
+                    <p className="text-muted-foreground text-sm">Features better suited for team tools</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Gamification Elements</p>
-                    <p className="text-gray-600 text-sm">Points and badges that replace real progress</p>
+                    <p className="text-muted-foreground text-sm">Points and badges that replace real progress</p>
                   </div>
                 </div>
               </div>
@@ -322,15 +324,15 @@ const DailyPlannerApp = () => {
 
         {/* Why Daily Planning Works Section */}
         <section className="space-y-6" id="why-daily-planning-works">
-          <h2 className="text-3xl font-bold text-gray-900">Why Daily Planning Works Better Than Random To-Do Lists</h2>
-          <p className="text-lg text-gray-600">The difference between a planned day and a reactive day isn't just productivity—it's mental clarity and reduced stress.</p>
+          <h2 className="text-3xl font-bold text-foreground">Why Daily Planning Works Better Than Random To-Do Lists</h2>
+          <p className="text-lg text-muted-foreground">The difference between a planned day and a reactive day isn't just productivity—it's mental clarity and reduced stress.</p>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900">📋 Random To-Do Lists</CardTitle>
+                <CardTitle className="text-foreground">📋 Random To-Do Lists</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 text-green-800">
+                <div className="space-y-2 text-foreground/80">
                   <p>• Create urgency without priority</p>
                   <p>• No time allocation or structure</p>
                   <p>• Easy to add, hard to complete</p>
@@ -339,12 +341,12 @@ const DailyPlannerApp = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900">📅 Daily Planning</CardTitle>
+                <CardTitle className="text-foreground">📅 Daily Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 text-blue-800">
+                <div className="space-y-2 text-foreground/80">
                   <p>• Creates intention and focus</p>
                   <p>• Allocates time realistically</p>
                   <p>• Protects important work from interruptions</p>
@@ -354,8 +356,8 @@ const DailyPlannerApp = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <p className="text-gray-700 text-center">
+          <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+            <p className="text-foreground/80 text-center">
               <strong>The key insight:</strong> To-do lists tell you what to do. Daily planning tells you when and how to do it, which makes execution dramatically more likely.
             </p>
           </div>
@@ -363,8 +365,8 @@ const DailyPlannerApp = () => {
 
         {/* How to Plan Without Overplanning */}
         <section className="space-y-6" id="plan-without-overplanning">
-          <h2 className="text-3xl font-bold text-gray-900">How to Plan Your Day Without Overplanning</h2>
-          <p className="text-lg text-gray-600">Overplanning creates rigidity that breaks when life happens. Here's how to plan effectively without creating a fragile schedule.</p>
+          <h2 className="text-3xl font-bold text-foreground">How to Plan Your Day Without Overplanning</h2>
+          <p className="text-lg text-muted-foreground">Overplanning creates rigidity that breaks when life happens. Here's how to plan effectively without creating a fragile schedule.</p>
           <div className="space-y-6">
             <div className="bg-orange-50 rounded-2xl p-8 border border-orange-100">
               <h3 className="text-xl font-semibold text-orange-900 mb-4">The Flexible Planning Framework</h3>
@@ -397,7 +399,7 @@ const DailyPlannerApp = () => {
                   <CardTitle className="text-lg">⏰ Time Blocking</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Schedule 2-3 focus blocks per day, leaving gaps between them for flexibility and overflow.</p>
+                  <p className="text-muted-foreground text-sm">Schedule 2-3 focus blocks per day, leaving gaps between them for flexibility and overflow.</p>
                 </CardContent>
               </Card>
               <Card>
@@ -405,7 +407,7 @@ const DailyPlannerApp = () => {
                   <CardTitle className="text-lg">🎯 Priority Limits</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Never have more than 3 priorities. Everything else is optional or can wait.</p>
+                  <p className="text-muted-foreground text-sm">Never have more than 3 priorities. Everything else is optional or can wait.</p>
                 </CardContent>
               </Card>
               <Card>
@@ -413,7 +415,7 @@ const DailyPlannerApp = () => {
                   <CardTitle className="text-lg">🔄 Daily Reset</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">End each day by reviewing what worked and adjusting tomorrow's plan based on reality.</p>
+                  <p className="text-muted-foreground text-sm">End each day by reviewing what worked and adjusting tomorrow's plan based on reality.</p>
                 </CardContent>
               </Card>
             </div>
@@ -422,8 +424,8 @@ const DailyPlannerApp = () => {
 
         {/* Daily Planner for Different Life Areas */}
         <section className="space-y-6" id="daily-planner-life-areas">
-          <h2 className="text-3xl font-bold text-gray-900">Daily Planner App for Work, Study, and Personal Life</h2>
-          <p className="text-lg text-gray-600">Different life areas need different planning approaches. Here's how daily planning adapts to various contexts.</p>
+          <h2 className="text-3xl font-bold text-foreground">Daily Planner App for Work, Study, and Personal Life</h2>
+          <p className="text-lg text-muted-foreground">Different life areas need different planning approaches. Here's how daily planning adapts to various contexts.</p>
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -475,8 +477,8 @@ const DailyPlannerApp = () => {
 
         {/* Prioritization Section */}
         <section className="space-y-6" id="prioritization">
-          <h2 className="text-3xl font-bold text-gray-900">How to Prioritize Tasks Without Feeling Overwhelmed</h2>
-          <p className="text-lg text-gray-600">Good prioritization isn't about doing more—it's about doing what matters most, consistently.</p>
+          <h2 className="text-3xl font-bold text-foreground">How to Prioritize Tasks Without Feeling Overwhelmed</h2>
+          <p className="text-lg text-muted-foreground">Good prioritization isn't about doing more—it's about doing what matters most, consistently.</p>
           <div className="space-y-6">
             <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100">
               <h3 className="text-xl font-semibold text-purple-900 mb-4">Simple Prioritization Methods That Work</h3>
@@ -510,7 +512,7 @@ const DailyPlannerApp = () => {
                   <CardTitle className="text-lg">⚡ Energy-Based Prioritization</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Match tasks to your energy levels: high-energy work during peak hours, low-energy tasks when tired.</p>
+                  <p className="text-muted-foreground text-sm">Match tasks to your energy levels: high-energy work during peak hours, low-energy tasks when tired.</p>
                 </CardContent>
               </Card>
               <Card>
@@ -518,7 +520,7 @@ const DailyPlannerApp = () => {
                   <CardTitle className="text-lg">🕐 Time-Based Prioritization</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Estimate time requirements and prioritize tasks that fit available time blocks.</p>
+                  <p className="text-muted-foreground text-sm">Estimate time requirements and prioritize tasks that fit available time blocks.</p>
                 </CardContent>
               </Card>
             </div>
@@ -527,17 +529,17 @@ const DailyPlannerApp = () => {
 
         {/* Daily Planner vs To-Do List */}
         <section className="space-y-6" id="daily-planner-vs-todo">
-          <h2 className="text-3xl font-bold text-gray-900">Daily Planner App vs To-Do List App</h2>
-          <p className="text-lg text-gray-600">Understanding the difference helps you choose the right tool for the right job.</p>
+          <h2 className="text-3xl font-bold text-foreground">Daily Planner App vs To-Do List App</h2>
+          <p className="text-lg text-muted-foreground">Understanding the difference helps you choose the right tool for the right job.</p>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900 flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <span className="text-2xl">📅</span> Daily Planner App
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 text-blue-800">
+                <div className="space-y-3 text-foreground/80">
                   <p><strong>Best for:</strong> Structuring your day, protecting focus time, building routines</p>
                   <p><strong>Key features:</strong></p>
                   <ul className="space-y-1 ml-4">
@@ -573,8 +575,8 @@ const DailyPlannerApp = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <p className="text-gray-700 text-center">
+          <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+            <p className="text-foreground/80 text-center">
               <strong>Pro tip:</strong> Many successful people use both—capture tasks in a to-do list, then plan them in a daily planner.
             </p>
           </div>
@@ -582,19 +584,19 @@ const DailyPlannerApp = () => {
 
         {/* Mental Clutter Section */}
         <section className="space-y-6" id="mental-clutter">
-          <h2 className="text-3xl font-bold text-gray-900">How Daily Planning Reduces Mental Clutter</h2>
-          <p className="text-lg text-gray-600">The mental freedom from daily planning comes from trusting your system instead of carrying everything in your head.</p>
+          <h2 className="text-3xl font-bold text-foreground">How Daily Planning Reduces Mental Clutter</h2>
+          <p className="text-lg text-muted-foreground">The mental freedom from daily planning comes from trusting your system instead of carrying everything in your head.</p>
           <div className="space-y-6">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🧠 The Mental Load Problem</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground">🧠 The Mental Load Problem</h3>
                 <div className="space-y-3">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg text-gray-800">Before Daily Planning</CardTitle>
+                      <CardTitle className="text-lg text-foreground">Before Daily Planning</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-1 text-gray-600">
+                      <ul className="space-y-1 text-muted-foreground">
                         <li>• Constant mental scanning for forgotten tasks</li>
                         <li>• Decision fatigue from constant prioritizing</li>
                         <li>• Anxiety about dropping important commitments</li>
@@ -606,14 +608,14 @@ const DailyPlannerApp = () => {
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">✨ The Mental Freedom Solution</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground">✨ The Mental Freedom Solution</h3>
                 <div className="space-y-3">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg text-gray-800">After Daily Planning</CardTitle>
+                      <CardTitle className="text-lg text-foreground">After Daily Planning</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-1 text-gray-600">
+                      <ul className="space-y-1 text-muted-foreground">
                         <li>• Trust that important tasks won't be forgotten</li>
                         <li>• Clear priorities reduce decision-making</li>
                         <li>• Structure creates calm predictability</li>
@@ -625,8 +627,8 @@ const DailyPlannerApp = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-              <p className="text-green-800">
+            <div className="bg-momentum/10 rounded-xl p-6 border border-momentum/20">
+              <p className="text-foreground/80">
                 <strong>The science:</strong> When you externalize tasks and create a trusted system, your brain stops the "background processing" that consumes mental energy. This is why people often feel less stressed after implementing daily planning—even when their workload hasn't changed.
               </p>
             </div>
@@ -635,63 +637,63 @@ const DailyPlannerApp = () => {
 
         {/* Why GoalPlanner Section */}
         <section className="space-y-6" id="why-goalplanner-daily">
-          <h2 className="text-3xl font-bold text-gray-900">Why GoalPlanner Works for Busy Days</h2>
-          <p className="text-lg text-gray-600">GoalPlanner is designed for real days—the ones with unexpected meetings, sick kids, and last-minute changes.</p>
+          <h2 className="text-3xl font-bold text-foreground">Why GoalPlanner Works for Busy Days</h2>
+          <p className="text-lg text-muted-foreground">GoalPlanner is designed for real days—the ones with unexpected meetings, sick kids, and last-minute changes.</p>
           <div className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🔄 Built for Flexibility</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground">🔄 Built for Flexibility</h3>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Time blocks that can be reshuffled when plans change</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Time blocks that can be reshuffled when plans change</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Priority-based planning (focus on what matters most)</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Priority-based planning (focus on what matters most)</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Buffer blocks built into every day's schedule</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Buffer blocks built into every day's schedule</p>
                   </div>
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">⚡ Designed for Speed</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground">⚡ Designed for Speed</h3>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Daily planning takes 5-10 minutes, not hours</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Daily planning takes 5-10 minutes, not hours</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Quick task capture from anywhere (phone, desktop)</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Quick task capture from anywhere (phone, desktop)</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Templates for common daily routines</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Templates for common daily routines</p>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-8 border border-blue-100">
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">The GoalPlanner Difference for Daily Planning</h3>
+            <div className="bg-gradient-to-r from-primary/5 to-momentum/5 rounded-2xl p-8 border border-primary/10">
+              <h3 className="text-xl font-display font-semibold text-foreground mb-4">The GoalPlanner Difference for Daily Planning</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-2">🎯 Priority-First Design</h4>
-                  <p className="text-blue-700 text-sm">Focus on what matters most, not completing the longest list</p>
+                  <h4 className="font-medium text-foreground mb-2">🎯 Priority-First Design</h4>
+                  <p className="text-foreground/80 text-sm">Focus on what matters most, not completing the longest list</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-2">🔄 Adaptive Planning</h4>
-                  <p className="text-blue-700 text-sm">Easily reshuffle when life happens without starting over</p>
+                  <h4 className="font-medium text-foreground mb-2">🔄 Adaptive Planning</h4>
+                  <p className="text-foreground/80 text-sm">Easily reshuffle when life happens without starting over</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-2">🔗 Connected System</h4>
-                  <p className="text-blue-700 text-sm">Daily tasks connect to goals and habits for bigger context</p>
+                  <h4 className="font-medium text-foreground mb-2">🔗 Connected System</h4>
+                  <p className="text-foreground/80 text-sm">Daily tasks connect to goals and habits for bigger context</p>
                 </div>
               </div>
-              <p className="text-blue-900 mt-6 text-center font-medium">
+              <p className="text-foreground mt-6 text-center font-medium">
                 GoalPlanner works because it's built for imperfect days, not perfect productivity fantasies.
               </p>
             </div>
@@ -700,43 +702,43 @@ const DailyPlannerApp = () => {
 
         {/* Calm Day Method */}
         <section className="space-y-6" id="calm-day-method">
-          <h2 className="text-3xl font-bold text-gray-900">The "Calm Day" Method: How to Plan Your Day in 10 Minutes</h2>
-          <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
-            <p className="text-green-800 mb-6">Use this method daily or on weekdays. It's designed for real life.</p>
+          <h2 className="text-3xl font-bold text-foreground">The "Calm Day" Method: How to Plan Your Day in 10 Minutes</h2>
+          <div className="bg-momentum/10 rounded-2xl p-8 border border-momentum/20">
+            <p className="text-foreground/80 mb-6">Use this method daily or on weekdays. It's designed for real life.</p>
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-momentum text-momentum-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Capture tasks fast (2 minutes)</h4>
-                  <p className="text-green-700">Dump everything you're carrying: work tasks, personal errands, calls/messages, "don't forget" items.</p>
+                  <h4 className="font-semibold text-foreground">Capture tasks fast (2 minutes)</h4>
+                  <p className="text-foreground/80">Dump everything you're carrying: work tasks, personal errands, calls/messages, "don't forget" items.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-momentum text-momentum-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Choose 1–3 priorities (2 minutes)</h4>
-                  <p className="text-green-700">Ask: "If I finish only three things today, what would make today a win?"</p>
+                  <h4 className="font-semibold text-foreground">Choose 1–3 priorities (2 minutes)</h4>
+                  <p className="text-foreground/80">Ask: "If I finish only three things today, what would make today a win?"</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-momentum text-momentum-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Define next actions (2 minutes)</h4>
-                  <p className="text-green-700">Turn "big tasks" into startable steps: "Finish proposal" → "Draft outline + 5 bullets"</p>
+                  <h4 className="font-semibold text-foreground">Define next actions (2 minutes)</h4>
+                  <p className="text-foreground/80">Turn "big tasks" into startable steps: "Finish proposal" → "Draft outline + 5 bullets"</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-momentum text-momentum-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Add one focus block (2 minutes)</h4>
-                  <p className="text-green-700">Pick a block: 25 minutes (quick win) or 50 minutes (deep work). Put it somewhere you can protect.</p>
+                  <h4 className="font-semibold text-foreground">Add one focus block (2 minutes)</h4>
+                  <p className="text-foreground/80">Pick a block: 25 minutes (quick win) or 50 minutes (deep work). Put it somewhere you can protect.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-momentum text-momentum-foreground rounded-full flex items-center justify-center font-semibold">5</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Add buffers + a reset point (2 minutes)</h4>
-                  <p className="text-green-700">Reality needs space. Add a buffer block (for the unexpected) and a mid-day check-in (to adjust the plan).</p>
+                  <h4 className="font-semibold text-foreground">Add buffers + a reset point (2 minutes)</h4>
+                  <p className="text-foreground/80">Reality needs space. Add a buffer block (for the unexpected) and a mid-day check-in (to adjust the plan).</p>
                 </div>
               </div>
             </div>
@@ -745,14 +747,14 @@ const DailyPlannerApp = () => {
 
         {/* Prioritization Rules */}
         <section className="space-y-6" id="prioritization">
-          <h2 className="text-3xl font-bold text-gray-900">Prioritization That Doesn't Feel Like a Productivity Lecture</h2>
+          <h2 className="text-3xl font-bold text-foreground">Prioritization That Doesn't Feel Like a Productivity Lecture</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900">🎯 The "one hard thing early" rule</CardTitle>
+                <CardTitle className="text-foreground">🎯 The "one hard thing early" rule</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-blue-800">If your schedule allows, do one meaningful task early. It reduces background stress all day.</p>
+                <p className="text-foreground/80">If your schedule allows, do one meaningful task early. It reduces background stress all day.</p>
               </CardContent>
             </Card>
             <Card className="border-purple-200 bg-purple-50">
@@ -768,28 +770,28 @@ const DailyPlannerApp = () => {
 
         {/* Mid-Page CTA */}
         <section className="space-y-6" id="mid-cta">
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Plan Your Day With Less Stress?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-gradient-to-r from-momentum/5 to-primary/5 rounded-2xl p-8 border border-momentum/10 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Plan Your Day With Less Stress?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans for quick daily planning that adapts to your real life. Start with just 5 minutes in the morning.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-green-600 hover:bg-green-700">
-              <Link to="/auth">Try Daily Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Try Daily Planning Free
             </Button>
           </div>
         </section>
 
         {/* Internal Links */}
         <section className="space-y-6" id="related-topics">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Complete Daily System</h2>
-          <p className="text-lg text-gray-600">Daily planning works best when connected to your bigger picture and supporting routines.</p>
+          <h2 className="text-3xl font-bold text-foreground">Build Your Complete Daily System</h2>
+          <p className="text-lg text-muted-foreground">Daily planning works best when connected to your bigger picture and supporting routines.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set clear goals that give your daily planning direction and purpose</p>
+                <p className="text-muted-foreground mb-4">Set clear goals that give your daily planning direction and purpose</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner App →</Link>
                 </Button>
@@ -800,7 +802,7 @@ const DailyPlannerApp = () => {
                 <CardTitle className="text-lg">✅ Habit Building</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build routines that make daily planning automatic and effortless</p>
+                <p className="text-muted-foreground mb-4">Build routines that make daily planning automatic and effortless</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/habit-tracker-app">Habit Tracker App →</Link>
                 </Button>
@@ -811,7 +813,7 @@ const DailyPlannerApp = () => {
                 <CardTitle className="text-lg">📝 Daily Reflection</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Review your day and improve tomorrow's planning with journaling</p>
+                <p className="text-muted-foreground mb-4">Review your day and improve tomorrow's planning with journaling</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-journal-app">Daily Journal App →</Link>
                 </Button>
@@ -822,7 +824,7 @@ const DailyPlannerApp = () => {
                 <CardTitle className="text-lg">🔄 All-in-One System</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Combine planning, goals, habits, and reflection in one place</p>
+                <p className="text-muted-foreground mb-4">Combine planning, goals, habits, and reflection in one place</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/productivity-app">Productivity App →</Link>
                 </Button>
@@ -833,14 +835,14 @@ const DailyPlannerApp = () => {
 
         {/* CTA Section */}
         <section className="space-y-6" id="get-started">
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Want Your Day to Feel More Intentional?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-gradient-to-r from-momentum/5 to-primary/5 rounded-2xl p-8 border border-momentum/10 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Want Your Day to Feel More Intentional?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans to plan your day, pick priorities, protect focus time, and build simple routines—available on web and mobile.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Start Planning Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Planning Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -851,14 +853,14 @@ const DailyPlannerApp = () => {
 
         {/* FAQ Section */}
         <section className="space-y-6" id="faq">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-600">
+                <AccordionContent className="text-muted-foreground">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

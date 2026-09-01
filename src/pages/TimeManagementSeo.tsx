@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const TimeManagementSeo = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between time management and productivity?",
@@ -111,13 +113,13 @@ const TimeManagementSeo = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Master Your Time, Master Your Life</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground">Master Your Time, Master Your Life</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Learn proven time management techniques that help you organize your day, protect your focus, and achieve what matters most without the stress and overwhelm.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-teal-600 hover:bg-teal-700">
-            <Link to="/auth">Master Your Time</Link>
+          <Button size="lg" className="rounded-full bg-teal-600 hover:bg-teal-700" onClick={() => openAuthModal({ intent: "signup" })}>
+            Master Your Time
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#techniques">Learn Techniques</Link>
@@ -127,8 +129,8 @@ const TimeManagementSeo = () => {
 
       {/* Time Management Techniques */}
       <section className="space-y-6" id="techniques">
-        <h2 className="text-3xl font-bold text-gray-900">Proven Time Management Techniques</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Proven Time Management Techniques</h2>
+        <p className="text-lg text-muted-foreground">
           These techniques work because they provide structure and reduce decision fatigue.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -141,7 +143,7 @@ const TimeManagementSeo = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{technique.description}</p>
+                <p className="text-muted-foreground">{technique.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -151,19 +153,19 @@ const TimeManagementSeo = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-teal-50 to-green-50 rounded-2xl p-8 border border-teal-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Master Your Time?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-display font-bold text-foreground mb-4">Ready to Master Your Time?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start organizing your schedule with proven time management techniques. Protect your focus, achieve your priorities, and create balance with GoalPlanner.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-teal-600 hover:bg-teal-700">
-            <Link to="/auth">Start Time Management Free</Link>
+          <Button size="lg" className="rounded-full bg-teal-600 hover:bg-teal-700" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Time Management Free
           </Button>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Time Management FAQ</h2>
+        <h2 className="text-3xl font-display font-bold text-foreground">Time Management FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -171,7 +173,7 @@ const TimeManagementSeo = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

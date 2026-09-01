@@ -243,7 +243,7 @@ export const SEO_ARTICLES = {
       "- Web, iOS, and Android apps\n" +
       "- Free tier available\n\n" +
       "**Best for:** Students, professionals, and anyone serious about achieving long-term goals\n\n" +
-      "**Pricing:** Free tier available, premium plans start at $0.99/month\n\n" +
+      "**Pricing:** Free tier available, premium plans start at $4.99/month (or $79.99 one-time for lifetime access)\n\n" +
       "**Download:** App Store and Google Play\n\n" +
       "## #2 App Name - Best for Simple Tracking\n\n" +
       "**Key Features:**\n" +

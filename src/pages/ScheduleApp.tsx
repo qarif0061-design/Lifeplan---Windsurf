@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const ScheduleApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What is a schedule app?",
@@ -97,17 +99,17 @@ const ScheduleApp = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Plan Your Time Better</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-display font-extrabold text-foreground leading-tight">
               Schedule App: Plan Your Day Without Overcomplicating It
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               The best schedule app doesn't just show you a calendar—it helps you plan priorities, build routines, and track what actually gets done. Simple enough for daily use, powerful enough for your goals.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
@@ -116,8 +118,8 @@ const ScheduleApp = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">What Makes a Great Schedule App?</h2>
-          <p className="text-lg text-gray-600">Not all schedule apps are created equal. The best ones help you plan realistically and adapt when life changes.</p>
+          <h2 className="text-3xl font-display font-bold text-foreground">What Makes a Great Schedule App?</h2>
+          <p className="text-lg text-muted-foreground">Not all schedule apps are created equal. The best ones help you plan realistically and adapt when life changes.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -128,7 +130,7 @@ const ScheduleApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -136,36 +138,36 @@ const ScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Build a Schedule That Actually Works</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">How to Build a Schedule That Actually Works</h2>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Start with priorities, not tasks</h4>
-                    <p className="text-blue-700">Before adding anything to your schedule, identify the 1-3 things that matter most today. Everything else is secondary.</p>
+                    <h4 className="font-semibold text-primary">Start with priorities, not tasks</h4>
+                    <p className="text-primary/80">Before adding anything to your schedule, identify the 1-3 things that matter most today. Everything else is secondary.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Time-block your priorities</h4>
-                    <p className="text-blue-700">Assign specific time slots to your priorities. A task without a time slot is just a wish. Block time during your peak energy hours.</p>
+                    <h4 className="font-semibold text-primary">Time-block your priorities</h4>
+                    <p className="text-primary/80">Assign specific time slots to your priorities. A task without a time slot is just a wish. Block time during your peak energy hours.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Add buffer time</h4>
-                    <p className="text-blue-700">Realistic schedules leave 20-30% of time unscheduled for interruptions, delays, and rest. Overpacked schedules fail consistently.</p>
+                    <h4 className="font-semibold text-primary">Add buffer time</h4>
+                    <p className="text-primary/80">Realistic schedules leave 20-30% of time unscheduled for interruptions, delays, and rest. Overpacked schedules fail consistently.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Review and adjust daily</h4>
-                    <p className="text-blue-700">Spend 5 minutes at the end of each day reviewing what worked and adjusting tomorrow's plan. This turns scheduling from a static plan into a dynamic system.</p>
+                    <h4 className="font-semibold text-primary">Review and adjust daily</h4>
+                    <p className="text-primary/80">Spend 5 minutes at the end of each day reviewing what worked and adjusting tomorrow's plan. This turns scheduling from a static plan into a dynamic system.</p>
                   </div>
                 </div>
               </div>
@@ -174,27 +176,27 @@ const ScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Schedule App vs Daily Planner vs Calendar</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">Schedule App vs Daily Planner vs Calendar</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900 flex items-center gap-2">
+                <CardTitle className="text-primary flex items-center gap-2">
                   <span className="text-2xl">📅</span> Schedule App
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-blue-800 space-y-2">
+              <CardContent className="text-primary/80 space-y-2">
                 <p><strong>Best for:</strong> Planning tasks, blocking time, building routines</p>
                 <p><strong>Key features:</strong> Time blocking, priorities, recurring schedules, habit tracking, goal connection</p>
                 <p><strong>Use when:</strong> You need to plan what to do and when, and track what actually gets done</p>
               </CardContent>
             </Card>
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900 flex items-center gap-2">
+                <CardTitle className="text-momentum flex items-center gap-2">
                   <span className="text-2xl">📋</span> Daily Planner
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-green-800 space-y-2">
+              <CardContent className="text-momentum/80 space-y-2">
                 <p><strong>Best for:</strong> Detailed daily task management and tracking</p>
                 <p><strong>Key features:</strong> Task lists, priorities, notes, daily reflection</p>
                 <p><strong>Use when:</strong> You want a focused daily plan without the complexity of full scheduling</p>
@@ -217,25 +219,25 @@ const ScheduleApp = () => {
 
         <section className="space-y-6">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Take Control of Your Schedule?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            <h2 className="text-2xl font-display font-bold text-foreground mb-4">Ready to Take Control of Your Schedule?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans for scheduling that connects your daily plan to your bigger goals. Start free on web and mobile.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">More Tools for Better Planning</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">More Tools for Better Planning</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">📅 Daily Planner</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan each day with tasks, priorities, and reflection</p>
+                <p className="text-muted-foreground mb-4">Plan each day with tasks, priorities, and reflection</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner →</Link>
                 </Button>
@@ -246,7 +248,7 @@ const ScheduleApp = () => {
                 <CardTitle className="text-lg">🔄 Routine Planner</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build morning, evening, and weekly routines</p>
+                <p className="text-muted-foreground mb-4">Build morning, evening, and weekly routines</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-routine-planner">Routine Planner →</Link>
                 </Button>
@@ -257,7 +259,7 @@ const ScheduleApp = () => {
                 <CardTitle className="text-lg">⏰ Time Blocking</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Structure your day with focused time blocks</p>
+                <p className="text-muted-foreground mb-4">Structure your day with focused time blocks</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/time-blocking">Time Blocking →</Link>
                 </Button>
@@ -268,7 +270,7 @@ const ScheduleApp = () => {
                 <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set goals that your daily schedule serves</p>
+                <p className="text-muted-foreground mb-4">Set goals that your daily schedule serves</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner →</Link>
                 </Button>
@@ -279,13 +281,13 @@ const ScheduleApp = () => {
 
         <section className="space-y-6">
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Schedule Smarter, Not Harder</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-display font-bold text-foreground mb-4">Schedule Smarter, Not Harder</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               The right schedule app adapts to your life, not the other way around. Try Goal Planner – LifePlans free today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Start Planning Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Planning Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -295,12 +297,12 @@ const ScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

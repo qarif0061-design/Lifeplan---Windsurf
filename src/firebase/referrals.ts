@@ -52,6 +52,12 @@ export async function getReferralByCode(code: string): Promise<Referral | null> 
   return { id: d.id, ...d.data() } as Referral;
 }
 
+/**
+ * Called from the NEW user's own session right after they sign up with someone
+ * else's referral code. Only bumps totalSignups — nothing else. Firestore rules
+ * only allow a non-owner to touch that one field (see firestore.rules), because
+ * this session's auth.uid is the new user, not the referral's owner.
+ */
 export async function incrementReferralSignups(referralId: string): Promise<void> {
   const ref = doc(referralsCol, referralId);
   const snap = await getDoc(ref);
@@ -60,26 +66,42 @@ export async function incrementReferralSignups(referralId: string): Promise<void
   await updateDoc(ref, { totalSignups: current + 1 });
 }
 
-export async function grantReferrerPremium(referralId: string): Promise<void> {
-  const ref = doc(referralsCol, referralId);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) return;
-  const data = snap.data();
-  const referrerId = data.userId;
+/**
+ * Grant any REFERRAL_TIERS rewards the signed-in user has newly qualified for, based
+ * on their own referral doc's totalSignups vs. the highest tier already rewarded
+ * (`premiumGranted`, which stores the highest tier threshold granted so far).
+ *
+ * Must be called with the current user's own uid — it only ever writes to the
+ * caller's own `users/{uid}` and `referrals/{their doc}`, both owner-permitted.
+ * Deliberately NOT called from signUp() for the *referrer's* side: a new signee's
+ * session can never write another user's `users/{uid}` doc, so this has to run in
+ * the referrer's own session instead (e.g. when they open the Referrals page).
+ */
+export async function checkAndGrantReferralRewards(userId: string): Promise<void> {
+  const q = query(referralsCol, where("userId", "==", userId));
+  const snap = await getDocs(q);
+  if (snap.empty) return;
+  const referralDoc = snap.docs[0];
+  const data = referralDoc.data();
+  const totalSignups: number = data.totalSignups ?? 0;
+  const premiumGranted: number = data.premiumGranted ?? 0;
 
-  // Grant 30 days premium to referrer
-  const userRef = doc(db, "users", referrerId);
+  const { REFERRAL_TIERS } = await import("@/constants/product");
+  const nextTier = REFERRAL_TIERS
+    .filter((t): t is typeof t & { days: number } => "days" in t && !!t.days && t.referrals > premiumGranted && totalSignups >= t.referrals)
+    .sort((a, b) => b.referrals - a.referrals)[0];
+  if (!nextTier) return;
+
+  const userRef = doc(db, "users", userId);
   const userSnap = await getDoc(userRef);
   if (!userSnap.exists()) return;
 
   const user = userSnap.data();
   const now = new Date();
-  const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const expiresAt = new Date(now.getTime() + nextTier.days * 24 * 60 * 60 * 1000).toISOString();
   const existingExpiry = user.premiumExpiresAt ? new Date(user.premiumExpiresAt) : null;
-
-  // Extend existing premium or set new
   const finalExpiry = existingExpiry && existingExpiry > now
-    ? new Date(existingExpiry.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
+    ? new Date(existingExpiry.getTime() + nextTier.days * 24 * 60 * 60 * 1000).toISOString()
     : expiresAt;
 
   await updateDoc(userRef, {
@@ -87,9 +109,10 @@ export async function grantReferrerPremium(referralId: string): Promise<void> {
     premiumExpiresAt: finalExpiry,
     premiumSource: "referral",
   });
+  await updateDoc(referralDoc.ref, { premiumGranted: nextTier.referrals });
 
-  const currentGranted = data.premiumGranted ?? 0;
-  await updateDoc(ref, { premiumGranted: currentGranted + 1 });
+  const { trackReferralRewardEarned } = await import("@/utils/analytics");
+  trackReferralRewardEarned(userId, nextTier.days);
 }
 
 export const subscribeReferral = (

@@ -135,8 +135,8 @@ const Career = () => {
 
         {/* Open Positions */}
         <div className="space-y-3">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Open Positions</h2>
-          <p className="text-gray-500 dark:text-slate-400">
+          <h2 className="text-2xl font-bold text-foreground">Open Positions</h2>
+          <p className="text-muted-foreground">
             Currently we have two open roles. We'd love to hear from you.
           </p>
         </div>
@@ -145,14 +145,14 @@ const Career = () => {
           {JOBS.map((job) => {
             const alreadySubmitted = submitted.has(job.id);
             return (
-            <Card key={job.id} className="border-0 shadow-sm dark:shadow-slate-900/40 rounded-2xl bg-white dark:bg-slate-900 overflow-hidden flex flex-col">
+            <Card key={job.id} className="border-0 shadow-sm rounded-2xl bg-card overflow-hidden flex flex-col">
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-blue-500/20 shrink-0">
-                    <Briefcase className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center mb-3 shadow-lg shadow-primary/20 shrink-0">
+                    <Briefcase className="w-6 h-6 text-primary-foreground" />
                   </div>
                   {!isPastDeadline && (
-                    <Badge variant="secondary" className="shrink-0 text-xs flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border-0">
+                    <Badge variant="secondary" className="shrink-0 text-xs flex items-center gap-1.5 px-3 py-1 rounded-full bg-ember/10 text-ember border-0">
                       <CalendarDays className="w-3 h-3" />
                       {remainingDays} {remainingDays === 1 ? "day" : "days"} left
                     </Badge>
@@ -163,27 +163,27 @@ const Career = () => {
                     </Badge>
                   )}
                 </div>
-                <CardTitle className="text-xl text-gray-900 dark:text-white">{job.title}</CardTitle>
+                <CardTitle className="text-xl text-foreground">{job.title}</CardTitle>
                 <div className="flex flex-wrap gap-3 mt-1">
-                  <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <MapPin className="w-3.5 h-3.5" />
                     {job.location}
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Clock className="w-3.5 h-3.5" />
                     {job.type}
                   </div>
                 </div>
-                <CardDescription className="text-sm text-slate-600 dark:text-slate-300 mt-2">
+                <CardDescription className="text-sm text-foreground/80 mt-2">
                   {job.description}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
-                <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-2">Requirements</h4>
+                <h4 className="text-sm font-bold text-foreground mb-2">Requirements</h4>
                 <ul className="space-y-1.5">
                   {job.requirements.map((req, i) => (
-                    <li key={i} className="text-sm text-slate-600 dark:text-slate-300 flex items-start gap-2">
-                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                    <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                       {req}
                     </li>
                   ))}
@@ -191,11 +191,11 @@ const Career = () => {
               </CardContent>
               <CardFooter className="pt-0">
                 {alreadySubmitted ? (
-                  <Button disabled className="w-full rounded-xl bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-0 cursor-default">
+                  <Button disabled className="w-full rounded-xl bg-momentum/10 text-momentum border-0 cursor-default">
                     <CheckCircle2 className="w-4 h-4 mr-2" /> Application Submitted
                   </Button>
                 ) : isPastDeadline ? (
-                  <Button disabled className="w-full rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-0 cursor-default">
+                  <Button disabled className="w-full rounded-xl bg-secondary text-muted-foreground border-0 cursor-default">
                     Applications Closed
                   </Button>
                 ) : (
@@ -204,7 +204,7 @@ const Career = () => {
                     else setDialogJob(null);
                   }}>
                     <DialogTrigger asChild>
-                      <Button className="w-full rounded-xl bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white">
+                      <Button className="w-full rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground">
                         Apply Now
                       </Button>
                     </DialogTrigger>
@@ -240,12 +240,12 @@ const Career = () => {
                           />
                         </div>
                         <DialogFooter className="flex-col gap-2">
-                          <Button type="submit" disabled={submitting} className="rounded-xl bg-blue-600 hover:bg-blue-700 w-full">
+                          <Button type="submit" disabled={submitting} className="rounded-xl bg-primary hover:bg-primary/90 w-full">
                             {submitting ? "Sending..." : "Submit Application"}
                           </Button>
-                          <p className="text-xs text-center text-slate-400 dark:text-slate-500">
+                          <p className="text-xs text-center text-muted-foreground">
                             Having issues? Email us directly at{' '}
-                            <a href="mailto:info@goalplanner.io" className="text-blue-600 dark:text-blue-400 underline">info@goalplanner.io</a>
+                            <a href="mailto:info@goalplanner.io" className="text-primary underline">info@goalplanner.io</a>
                           </p>
                         </DialogFooter>
                       </form>
@@ -262,18 +262,18 @@ const Career = () => {
         <Dialog open={showSuccess} onOpenChange={(open) => { if (!open) setShowSuccess(false); }}>
           <DialogContent className="sm:max-w-md">
             <div className="flex flex-col items-center py-6 space-y-4 animate-fade-in">
-              <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center animate-scale-in">
-                <CheckCircle2 className="w-10 h-10 text-green-600 dark:text-green-400" />
+              <div className="w-20 h-20 rounded-full bg-momentum/10 flex items-center justify-center animate-scale-in">
+                <CheckCircle2 className="w-10 h-10 text-momentum" />
               </div>
-              <DialogTitle className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+              <DialogTitle className="text-2xl font-bold text-center text-foreground">
                 Application Sent!
               </DialogTitle>
-              <p className="text-center text-gray-600 dark:text-slate-300 max-w-sm">
+              <p className="text-center text-muted-foreground max-w-sm">
                 Thank you for applying for the <strong>{successJob}</strong> position. We'll review your application and get back to you soon.
               </p>
               <Button
                 onClick={() => setShowSuccess(false)}
-                className="rounded-xl bg-blue-600 hover:bg-blue-700 px-8 mt-2"
+                className="rounded-xl bg-primary hover:bg-primary/90 px-8 mt-2"
               >
                 Done
               </Button>
@@ -282,42 +282,42 @@ const Career = () => {
         </Dialog>
 
         {/* Why Join Us */}
-        <div className="rounded-2xl border border-slate-200/60 dark:border-slate-700/40 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800/80 p-8 shadow-sm dark:shadow-slate-900/30 space-y-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Why Join Lifeplans?</h2>
-          <div className="grid sm:grid-cols-2 gap-4 text-sm text-slate-600 dark:text-slate-300">
+        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm space-y-4">
+          <h2 className="text-xl font-bold text-foreground">Why Join Lifeplans?</h2>
+          <div className="grid sm:grid-cols-2 gap-4 text-sm text-foreground/80">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/50 rounded-xl flex items-center justify-center shrink-0">
-                <span className="text-green-600 dark:text-green-400 text-lg font-bold">✓</span>
+              <div className="w-8 h-8 bg-momentum/10 rounded-xl flex items-center justify-center shrink-0">
+                <span className="text-momentum text-lg font-bold">✓</span>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Remote-first</p>
+                <p className="font-semibold text-foreground">Remote-first</p>
                 <p>Work from anywhere in the world.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/50 rounded-xl flex items-center justify-center shrink-0">
-                <span className="text-green-600 dark:text-green-400 text-lg font-bold">✓</span>
+              <div className="w-8 h-8 bg-momentum/10 rounded-xl flex items-center justify-center shrink-0">
+                <span className="text-momentum text-lg font-bold">✓</span>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Growth Opportunities</p>
+                <p className="font-semibold text-foreground">Growth Opportunities</p>
                 <p>Learn, experiment, and advance your career.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/50 rounded-xl flex items-center justify-center shrink-0">
-                <span className="text-green-600 dark:text-green-400 text-lg font-bold">✓</span>
+              <div className="w-8 h-8 bg-momentum/10 rounded-xl flex items-center justify-center shrink-0">
+                <span className="text-momentum text-lg font-bold">✓</span>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Impactful Work</p>
+                <p className="font-semibold text-foreground">Impactful Work</p>
                 <p>Help thousands of users achieve their goals.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-green-100 dark:bg-green-900/50 rounded-xl flex items-center justify-center shrink-0">
-                <span className="text-green-600 dark:text-green-400 text-lg font-bold">✓</span>
+              <div className="w-8 h-8 bg-momentum/10 rounded-xl flex items-center justify-center shrink-0">
+                <span className="text-momentum text-lg font-bold">✓</span>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white">Great Culture</p>
+                <p className="font-semibold text-foreground">Great Culture</p>
                 <p>Collaborative, supportive, and innovative team.</p>
               </div>
             </div>

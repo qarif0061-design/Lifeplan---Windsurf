@@ -43,6 +43,8 @@ import { showError, showSuccess } from "@/utils/toast";
 import { useGoals } from "@/hooks/useGoals";
 import { createGoal, deleteGoal, updateGoal } from "@/firebase/goals";
 import { updateFeaturedGoalId } from "@/firebase/users";
+import { FREE_GOAL_LIMIT } from "@/constants/product";
+import { calculateProgress } from "@/utils/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -97,21 +99,7 @@ const getRemainingDaysBadgeClass = (g: Goal, pct: number): string => {
 };
 
 const getDerivedProgress = (g: Goal): number => {
-  const cps = g.checkpoints ?? [];
-  if (cps.length > 0) {
-    const per = cps.map((c) => {
-      if (c.kind === "number") {
-        const target = Math.max(0, c.target ?? 0);
-        const current = Math.max(0, c.current ?? 0);
-        if (target <= 0) return 0;
-        return Math.min(1, current / target);
-      }
-      return c.completed ? 1 : 0;
-    });
-    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
-    return Math.round(avg * 100);
-  }
-  return g.progress ?? 0;
+  return calculateProgress(g.checkpoints, g.progress);
 };
 
 const CircularProgress = ({ value, size = 54 }: { value: number; size?: number }) => {
@@ -136,7 +124,7 @@ const CircularProgress = ({ value, size = 54 }: { value: number; size?: number }
           cy={size / 2}
           r={radius}
           strokeWidth={stroke}
-          className="text-gray-100"
+          className="text-secondary"
           stroke="currentColor"
           fill="transparent"
         />
@@ -151,7 +139,7 @@ const CircularProgress = ({ value, size = 54 }: { value: number; size?: number }
           strokeLinecap="round"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-900">
+      <div className="absolute inset-0 flex items-center justify-center text-xs font-bold text-foreground">
         {pct}%
       </div>
     </div>
@@ -192,8 +180,8 @@ const Goals = () => {
       showError("Please sign in to create goals.");
       return;
     }
-    if (!isPremium && goals.length >= 1) {
-      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+    if (!isPremium && goals.length >= FREE_GOAL_LIMIT) {
+      showError(`Free users can only create ${FREE_GOAL_LIMIT} goals. Upgrade to Premium for unlimited goals.`);
       navigate("/pricing");
       return;
     }
@@ -354,8 +342,8 @@ const Goals = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Goals</h1>
-            <p className="text-gray-500">Track and manage your long-term objectives.</p>
+            <h1 className="text-3xl font-bold text-foreground">My Goals</h1>
+            <p className="text-muted-foreground">Track and manage your long-term objectives.</p>
           </div>
           <div className="flex items-center gap-3">
             <Select
@@ -378,10 +366,10 @@ const Goals = () => {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button
-                  className="bg-blue-600 hover:bg-blue-700 rounded-full px-6"
+                  className="bg-primary hover:bg-primary/90 rounded-full px-6"
                   onClick={() => {
-                    if (!isPremium && goals.length >= 1) {
-                      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+                    if (!isPremium && goals.length >= FREE_GOAL_LIMIT) {
+                      showError(`Free users can only create ${FREE_GOAL_LIMIT} goals. Upgrade to Premium for unlimited goals.`);
                       navigate("/pricing");
                       return;
                     }
@@ -482,7 +470,7 @@ const Goals = () => {
                   ) : (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-gray-900">Strategy</h4>
+                        <h4 className="font-semibold text-foreground">Strategy</h4>
                         <Button
                           type="button"
                           variant="ghost"
@@ -550,7 +538,7 @@ const Goals = () => {
                   ) : (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-gray-900">Planning</h4>
+                        <h4 className="font-semibold text-foreground">Planning</h4>
                         <Button
                           type="button"
                           variant="ghost"
@@ -627,7 +615,7 @@ const Goals = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleCreateGoal} disabled={isCreating} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">
+                <Button onClick={handleCreateGoal} disabled={isCreating} className="w-full bg-primary hover:bg-primary/90 rounded-xl h-12">
                   {isCreating ? "Creating..." : "Create Goal"}
                 </Button>
               </DialogFooter>
@@ -637,22 +625,22 @@ const Goals = () => {
         </div>
 
         {featuredGoal && (
-          <div className="rounded-[2.5rem] border border-amber-100 bg-amber-50 p-6 shadow-sm">
+          <div className="rounded-[2.5rem] border border-ember/20 bg-ember/10 p-6 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <Crown className="w-4 h-4 text-amber-600" />
-                  <div className="text-sm font-bold text-amber-800">Featured Goal</div>
+                  <Crown className="w-4 h-4 text-ember" />
+                  <div className="text-sm font-bold text-ember">Featured Goal</div>
                 </div>
-                <div className="mt-2 text-xl font-extrabold text-gray-900 truncate">{featuredGoal.name}</div>
-                <div className="text-sm text-gray-600 truncate">{featuredGoal.category}</div>
+                <div className="mt-2 text-xl font-extrabold text-foreground truncate">{featuredGoal.name}</div>
+                <div className="text-sm text-muted-foreground truncate">{featuredGoal.category}</div>
               </div>
               <div className="flex items-center gap-3">
                 <CircularProgress value={getDerivedProgress(featuredGoal)} size={64} />
                 <Button variant="outline" className="rounded-full" onClick={() => handleSetFeatured(undefined)}>
                   Clear
                 </Button>
-                <Button className="rounded-full bg-blue-600 hover:bg-blue-700" onClick={() => navigate(`/goals/${featuredGoal.id}`)}>
+                <Button className="rounded-full bg-primary hover:bg-primary/90" onClick={() => navigate(`/goals/${featuredGoal.id}`)}>
                   View
                 </Button>
               </div>
@@ -663,8 +651,8 @@ const Goals = () => {
         {favoriteGoals.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-gray-900">Favorites</h2>
-              <div className="text-sm text-gray-500">{favoriteGoals.length}</div>
+              <h2 className="text-xl font-bold text-foreground">Favorites</h2>
+              <div className="text-sm text-muted-foreground">{favoriteGoals.length}</div>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {favoriteGoals.map((goal) => {
@@ -677,12 +665,12 @@ const Goals = () => {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <button type="button" onClick={() => handleToggleFavorite(goal)} aria-label="Toggle favorite">
-                              <Star className={`w-4 h-4 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-300"}`} />
+                              <Star className={`w-4 h-4 ${goal.isFavorite ? "text-ember fill-ember" : "text-muted-foreground/50"}`} />
                             </button>
-                            <h3 className="text-lg font-bold text-gray-900 truncate">{goal.name}</h3>
-                            {isFeatured && <Crown className="w-4 h-4 text-amber-600" />}
+                            <h3 className="text-lg font-bold text-foreground truncate">{goal.name}</h3>
+                            {isFeatured && <Crown className="w-4 h-4 text-ember" />}
                           </div>
-                          <div className="text-sm text-gray-500 truncate">{goal.category}</div>
+                          <div className="text-sm text-muted-foreground truncate">{goal.category}</div>
                           <div
                             className={`mt-3 inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
                               goal,
@@ -698,7 +686,7 @@ const Goals = () => {
                         <Button variant="outline" className="rounded-full" onClick={() => handleSetFeatured(isFeatured ? undefined : goal.id)}>
                           <Crown className="w-4 h-4 mr-2" /> {isFeatured ? "Unfeature" : "Feature"}
                         </Button>
-                        <Button className="rounded-full bg-blue-600 hover:bg-blue-700" onClick={() => navigate(`/goals/${goal.id}`)}>
+                        <Button className="rounded-full bg-primary hover:bg-primary/90" onClick={() => navigate(`/goals/${goal.id}`)}>
                           View
                         </Button>
                       </div>
@@ -713,15 +701,15 @@ const Goals = () => {
         {/* Filters & Search */}
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
             <Input 
               placeholder="Search goals..." 
-              className="pl-10 rounded-2xl bg-white border-gray-100"
+              className="pl-10 rounded-2xl bg-card border-border"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button variant="outline" className="rounded-2xl border-gray-100 bg-white">
+          <Button variant="outline" className="rounded-2xl border-border bg-card">
             <Filter className="w-4 h-4 mr-2" /> Filter
           </Button>
         </div>
@@ -736,17 +724,17 @@ const Goals = () => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                    goal.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+                    goal.status === 'completed' ? 'bg-momentum/10 text-momentum' : 'bg-primary/10 text-primary'
                   }`}>
                     {goal.status}
                   </div>
                   <div className="flex items-center gap-2">
                     <button type="button" onClick={() => handleToggleFavorite(goal)} aria-label="Toggle favorite">
-                      <Star className={`w-4 h-4 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-300"}`} />
+                      <Star className={`w-4 h-4 ${goal.isFavorite ? "text-ember fill-ember" : "text-muted-foreground/50"}`} />
                     </button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button className="text-gray-400 hover:text-gray-600" aria-label="Goal actions">
+                        <button className="text-muted-foreground/70 hover:text-foreground" aria-label="Goal actions">
                           <MoreVertical className="w-5 h-5" />
                         </button>
                       </DropdownMenuTrigger>
@@ -777,7 +765,7 @@ const Goals = () => {
                 </div>
 
                 <div className="flex items-center justify-between gap-3 mb-2">
-                  <h3 className="text-xl font-bold text-gray-900 min-w-0 truncate group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-xl font-bold text-foreground min-w-0 truncate group-hover:text-primary transition-colors">
                     {goal.name}
                   </h3>
                   <div
@@ -790,7 +778,7 @@ const Goals = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                   <div className="flex items-center gap-1">
                     <Target className="w-4 h-4" />
                     <span>{goal.category}</span>
@@ -799,13 +787,13 @@ const Goals = () => {
 
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm font-medium">
-                    <span className="text-gray-500">Progress</span>
-                    <span className="text-gray-900">{prog}%</span>
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="text-foreground">{prog}%</span>
                   </div>
-                  <Progress value={prog} className={`h-2 bg-gray-100 ${getProgressIndicatorClass(prog)}`} />
+                  <Progress value={prog} className={`h-2 bg-secondary ${getProgressIndicatorClass(prog)}`} />
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-gray-50 flex items-center justify-between">
+                <div className="mt-6 pt-6 border-t border-border flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {goal.priority === 'high' && (
                       <div className="flex items-center gap-1 text-rose-600 text-xs font-bold">
@@ -814,9 +802,9 @@ const Goals = () => {
                     )}
                   </div>
                   <div className="flex items-center gap-2">
-                    {isFeatured && <Crown className="w-4 h-4 text-amber-600" />}
+                    {isFeatured && <Crown className="w-4 h-4 text-ember" />}
                     <CircularProgress value={prog} />
-                    <Button asChild variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-full">
+                    <Button asChild variant="ghost" size="sm" className="text-primary hover:text-primary/90 hover:bg-primary/10 rounded-full">
                       <Link to={`/goals/${goal.id}`}>View Details</Link>
                     </Button>
                   </div>
@@ -829,35 +817,35 @@ const Goals = () => {
           {/* Empty State / Add New Card */}
           <button 
             onClick={() => {
-              if (!isPremium && goals.length >= 1) {
-                showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+              if (!isPremium && goals.length >= FREE_GOAL_LIMIT) {
+                showError(`Free users can only create ${FREE_GOAL_LIMIT} goals. Upgrade to Premium for unlimited goals.`);
                 navigate("/pricing");
                 return;
               }
               setIsDialogOpen(true);
             }}
-            className="border-2 border-dashed border-gray-200 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 hover:bg-blue-50/50 transition-all group"
+            className="border-2 border-dashed border-border rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-primary/40 hover:bg-primary/5 transition-all group"
           >
-            <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-              <Plus className="w-6 h-6 text-gray-400 group-hover:text-blue-600" />
+            <div className="w-12 h-12 bg-secondary/40 rounded-2xl flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+              <Plus className="w-6 h-6 text-muted-foreground/70 group-hover:text-primary" />
             </div>
             <div className="text-center">
-              <p className="font-bold text-gray-900">Add New Goal</p>
-              <p className="text-sm text-gray-500">Start a new journey today</p>
+              <p className="font-bold text-foreground">Add New Goal</p>
+              <p className="text-sm text-muted-foreground">Start a new journey today</p>
             </div>
           </button>
         </div>
 
         {/* Free Tier Limit Notice */}
-        {!isPremium && goals.length >= 1 && (
-          <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-start gap-4">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
-              <Crown className="w-5 h-5 text-amber-600" />
+        {!isPremium && goals.length >= FREE_GOAL_LIMIT && (
+          <div className="bg-ember/10 border border-ember/20 rounded-2xl p-4 flex items-start gap-4">
+            <div className="w-10 h-10 bg-ember/10 rounded-xl flex items-center justify-center shrink-0">
+              <Crown className="w-5 h-5 text-ember" />
             </div>
             <div>
-              <h4 className="font-bold text-amber-900">Goal Limit Reached</h4>
-              <p className="text-sm text-amber-700">Free users can have up to 1 goal. Upgrade to Premium for unlimited goals and advanced planning tools.</p>
-              <Button asChild variant="link" className="text-amber-700 p-0 h-auto font-bold mt-1">
+              <h4 className="font-bold text-ember">Goal Limit Reached</h4>
+              <p className="text-sm text-foreground/80">Free users can have up to {FREE_GOAL_LIMIT} goals. Upgrade to Premium for unlimited goals and advanced planning tools.</p>
+              <Button asChild variant="link" className="text-ember p-0 h-auto font-bold mt-1">
                 <Link to="/pricing">Upgrade Now →</Link>
               </Button>
             </div>

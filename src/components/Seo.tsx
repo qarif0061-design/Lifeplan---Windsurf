@@ -57,7 +57,7 @@ const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd, noIndex }: S
 
     upsertLink("canonical", canonical);
 
-    const ogImage = imageUrl || `${SITE_URL}/HI_RES_ICON-9160.png`;
+    const ogImage = imageUrl || `${SITE_URL}/brand/lifeplans_og_social_image.png`;
 
     upsertMeta("meta[property='og:title']", { property: "og:title", content: title });
     upsertMeta("meta[property='og:description']", { property: "og:description", content: description });

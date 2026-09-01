@@ -1,25 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { subscribeGoalsByUser } from "@/firebase/goals";
+import { calculateProgress } from "@/utils/progress";
 import type { Goal } from "@/types";
 import { useUser } from "@/contexts/UserContext";
-
-const getDerivedProgress = (g: Goal): number => {
-  const cps = g.checkpoints ?? [];
-  if (cps.length > 0) {
-    const per = cps.map((c) => {
-      if (c.kind === "number") {
-        const target = Math.max(0, c.target ?? 0);
-        const current = Math.max(0, c.current ?? 0);
-        if (target <= 0) return 0;
-        return Math.min(1, current / target);
-      }
-      return c.completed ? 1 : 0;
-    });
-    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
-    return Math.round(avg * 100);
-  }
-  return g.progress ?? 0;
-};
 
 export const useGoals = () => {
   const { user, loading: userLoading } = useUser();
@@ -53,7 +36,7 @@ export const useGoals = () => {
       return new Date(g.dueAt).getTime() < now;
     });
     const avgProgress = goals.length
-      ? Math.round(goals.reduce((sum, g) => sum + getDerivedProgress(g), 0) / goals.length)
+      ?       Math.round(goals.reduce((sum, g) => sum + calculateProgress(g.checkpoints, g.progress), 0) / goals.length)
       : 0;
 
     return {

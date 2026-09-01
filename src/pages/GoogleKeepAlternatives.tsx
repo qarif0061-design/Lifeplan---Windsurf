@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const GoogleKeepAlternatives = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "Why do people look for Google Keep alternatives?",
@@ -110,26 +112,26 @@ const GoogleKeepAlternatives = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Notes & Tasks</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Google Keep Alternatives (2026): Stop Collecting Notes, Start Completing Them
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               Google Keep is perfect for quick thoughts — but when your notes become to-dos, plans, and goals, a simple sticky-note app stops scaling. Here are the best Google Keep alternatives for notes, tasks, and daily planning in 2026.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Try GoalPlanner Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Try GoalPlanner Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
             </Button>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-            <p className="text-lg font-medium text-gray-900 mb-2">Quick answer: the best Google Keep alternative for most people</p>
-            <ul className="space-y-2 text-gray-700">
+          <div className="bg-secondary/40 rounded-2xl p-8 border border-border">
+            <p className="text-lg font-medium text-foreground mb-2">Quick answer: the best Google Keep alternative for most people</p>
+            <ul className="space-y-2 text-foreground/80">
               <li>• <strong>Keep using Keep</strong> if you only need quick, disposable notes</li>
               <li>• <strong>Try Notion or Obsidian</strong> if you need a flexible digital notebook</li>
               <li>• <strong>Try GoalPlanner</strong> if your notes are really plans — goals, tasks, and daily priorities that need to become action</li>
@@ -138,14 +140,14 @@ const GoogleKeepAlternatives = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Where Google Keep Falls Short</h2>
+          <h2 className="text-3xl font-bold text-foreground">Where Google Keep Falls Short</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">📁</span> No Real Organization</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Labels and colors don't scale. With a few hundred notes, you'll spend more time scrolling than doing.</p>
+                <p className="text-muted-foreground">Labels and colors don't scale. With a few hundred notes, you'll spend more time scrolling than doing.</p>
               </CardContent>
             </Card>
             <Card>
@@ -153,7 +155,7 @@ const GoogleKeepAlternatives = () => {
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">✅</span> Weak Task Management</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">No recurring tasks, no subtasks, no priorities, and checklists don't roll up into a plan.</p>
+                <p className="text-muted-foreground">No recurring tasks, no subtasks, no priorities, and checklists don't roll up into a plan.</p>
               </CardContent>
             </Card>
             <Card>
@@ -161,7 +163,7 @@ const GoogleKeepAlternatives = () => {
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">🗂️</span> Notes Stay Disconnected</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">A note about a goal never becomes a daily task. Capture is easy; follow-through doesn't exist.</p>
+                <p className="text-muted-foreground">A note about a goal never becomes a daily task. Capture is easy; follow-through doesn't exist.</p>
               </CardContent>
             </Card>
             <Card>
@@ -169,18 +171,18 @@ const GoogleKeepAlternatives = () => {
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">📊</span> No Planning or Progress</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">There's no weekly planning, no goal tracking, no progress view — just a list of things you wrote down.</p>
+                <p className="text-muted-foreground">There's no weekly planning, no goal tracking, no progress view — just a list of things you wrote down.</p>
               </CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">The 4 Best Google Keep Alternatives (2026)</h2>
-          <p className="text-lg text-gray-600">Ranked for real daily use — capture speed, organization, and whether they help you actually get things done.</p>
+          <h2 className="text-3xl font-bold text-foreground">The 4 Best Google Keep Alternatives (2026)</h2>
+          <p className="text-lg text-muted-foreground">Ranked for real daily use — capture speed, organization, and whether they help you actually get things done.</p>
           <div className="grid md:grid-cols-2 gap-6">
             {alternatives.map((alt, i) => (
-              <Card key={i} className={i === 0 ? "border-blue-200 ring-2 ring-blue-100" : ""}>
+              <Card key={i} className={i === 0 ? "border-primary/30 ring-2 ring-primary/10" : ""}>
                 <CardHeader>
                   <div className="flex items-start justify-between gap-3">
                     <CardTitle className="flex items-center gap-2 text-xl">
@@ -188,24 +190,24 @@ const GoogleKeepAlternatives = () => {
                     </CardTitle>
                     <Badge variant={i === 0 ? "default" : "secondary"} className="shrink-0">{alt.rating}</Badge>
                   </div>
-                  <p className="text-sm text-gray-500"><strong>Best for:</strong> {alt.bestFor}</p>
+                  <p className="text-sm text-muted-foreground"><strong>Best for:</strong> {alt.bestFor}</p>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <p className="font-semibold text-green-700 mb-1">Pros</p>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <p className="font-semibold text-momentum mb-1">Pros</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
                       {alt.pros.map((p, j) => <li key={j}>✓ {p}</li>)}
                     </ul>
                   </div>
                   <div>
                     <p className="font-semibold text-red-600 mb-1">Cons</p>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <ul className="space-y-1 text-sm text-muted-foreground">
                       {alt.cons.map((c, j) => <li key={j}>✗ {c}</li>)}
                     </ul>
                   </div>
                   {i === 0 && (
-                    <Button asChild className="w-full rounded-full bg-blue-600 hover:bg-blue-700">
-                      <Link to="/auth">Try GoalPlanner Free</Link>
+                    <Button className="w-full rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                      Try GoalPlanner Free
                     </Button>
                   )}
                 </CardContent>
@@ -215,22 +217,22 @@ const GoogleKeepAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Google Keep vs GoalPlanner: Feature Comparison</h2>
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <h2 className="text-3xl font-bold text-foreground">Google Keep vs GoalPlanner: Feature Comparison</h2>
+          <div className="bg-card rounded-2xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left py-4 px-6 font-semibold text-gray-900">Feature</th>
-                  <th className="text-center py-4 px-6 font-semibold text-gray-900">Google Keep</th>
-                  <th className="text-center py-4 px-6 font-semibold text-blue-600">GoalPlanner</th>
+                <tr className="border-b border-border bg-secondary/40">
+                  <th className="text-left py-4 px-6 font-semibold text-foreground">Feature</th>
+                  <th className="text-center py-4 px-6 font-semibold text-foreground">Google Keep</th>
+                  <th className="text-center py-4 px-6 font-semibold text-primary">GoalPlanner</th>
                 </tr>
               </thead>
               <tbody>
                 {comparison.map((row, i) => (
-                  <tr key={i} className={`border-b border-gray-50 last:border-0 ${i % 2 === 0 ? "bg-gray-50/50" : ""}`}>
-                    <td className="py-3.5 px-6 text-gray-700">{row.feature}</td>
+                  <tr key={i} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-secondary/40" : ""}`}>
+                    <td className="py-3.5 px-6 text-foreground/80">{row.feature}</td>
                     <td className="py-3.5 px-6 text-center">{row.keep ? "✓" : "—"}</td>
-                    <td className="py-3.5 px-6 text-center text-blue-600 font-medium">{row.goalplanner ? "✓" : "—"}</td>
+                    <td className="py-3.5 px-6 text-center text-primary font-medium">{row.goalplanner ? "✓" : "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -239,11 +241,11 @@ const GoogleKeepAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Choose the Right Google Keep Alternative</h2>
+          <h2 className="text-3xl font-bold text-foreground">How to Choose the Right Google Keep Alternative</h2>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">Match the tool to your actual job</h3>
-              <div className="space-y-3 text-blue-800">
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
+              <h3 className="text-xl font-semibold text-foreground mb-4">Match the tool to your actual job</h3>
+              <div className="space-y-3 text-foreground/80">
                 <p><strong>Quick thoughts & shopping lists</strong> → stay with Google Keep or Apple Notes.</p>
                 <p><strong>Research, wikis, databases</strong> → Notion, Obsidian, or Evernote.</p>
                 <p><strong>Plans, goals, tasks, and daily execution</strong> → a planner like GoalPlanner, because the job isn't storing the note — it's doing the thing.</p>
@@ -252,22 +254,22 @@ const GoogleKeepAlternatives = () => {
             <div className="grid md:grid-cols-3 gap-4">
               <Card>
                 <CardHeader><CardTitle className="text-lg">⚡ Capture must stay instant</CardTitle></CardHeader>
-                <CardContent><p className="text-gray-600">If writing a note takes more than a few seconds, you'll stop writing it.</p></CardContent>
+                <CardContent><p className="text-muted-foreground">If writing a note takes more than a few seconds, you'll stop writing it.</p></CardContent>
               </Card>
               <Card>
                 <CardHeader><CardTitle className="text-lg">🗂️ Organization must scale</CardTitle></CardHeader>
-                <CardContent><p className="text-gray-600">Folders, search, and fast navigation matter once you pass a hundred notes.</p></CardContent>
+                <CardContent><p className="text-muted-foreground">Folders, search, and fast navigation matter once you pass a hundred notes.</p></CardContent>
               </Card>
               <Card>
                 <CardHeader><CardTitle className="text-lg">🎯 It must lead to action</CardTitle></CardHeader>
-                <CardContent><p className="text-gray-600">The best alternative turns a note into a task, a plan, or a step you can take today.</p></CardContent>
+                <CardContent><p className="text-muted-foreground">The best alternative turns a note into a task, a plan, or a step you can take today.</p></CardContent>
               </Card>
             </div>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Use Cases: What Each Alternative Is Actually Good At</h2>
+          <h2 className="text-3xl font-bold text-foreground">Use Cases: What Each Alternative Is Actually Good At</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardHeader><CardTitle className="flex items-center gap-2"><span className="text-2xl">🎓</span> Student</CardTitle></CardHeader>
@@ -300,12 +302,12 @@ const GoogleKeepAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Full System</h2>
+          <h2 className="text-3xl font-bold text-foreground">Build Your Full System</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Card>
               <CardHeader><CardTitle>Daily Planning</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Turn notes into a daily schedule and priorities.</p>
+                <p className="text-muted-foreground mb-4">Turn notes into a daily schedule and priorities.</p>
                 <Button asChild variant="outline" className="w-full rounded-full">
                   <Link to="/daily-planner-app">Daily Planner App →</Link>
                 </Button>
@@ -314,7 +316,7 @@ const GoogleKeepAlternatives = () => {
             <Card>
               <CardHeader><CardTitle>Task Management</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Manage tasks and to-dos that actually get done.</p>
+                <p className="text-muted-foreground mb-4">Manage tasks and to-dos that actually get done.</p>
                 <Button asChild variant="outline" className="w-full rounded-full">
                   <Link to="/todoist-alternatives">Todoist Alternatives →</Link>
                 </Button>
@@ -323,7 +325,7 @@ const GoogleKeepAlternatives = () => {
             <Card>
               <CardHeader><CardTitle>Goals & Tracking</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set goals and track progress over time.</p>
+                <p className="text-muted-foreground mb-4">Set goals and track progress over time.</p>
                 <Button asChild variant="outline" className="w-full rounded-full">
                   <Link to="/goal-planner-app">Goal Planner App →</Link>
                 </Button>
@@ -333,14 +335,14 @@ const GoogleKeepAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Notes Are Only Half the Job</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Notes Are Only Half the Job</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               GoalPlanner (LifePlans) turns your notes into goals, weekly plans, and daily tasks — so you stop collecting ideas and start completing them. Free to start on web and mobile.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Get Started Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Get Started Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -350,12 +352,12 @@ const GoogleKeepAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

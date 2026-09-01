@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const HabitTrackerApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the best habit tracker app for beginners?",
@@ -114,26 +116,26 @@ const HabitTrackerApp = () => {
         <header className="space-y-6" id="hero">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Build Habits That Last</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Habit Tracker App: Build Habits That Survive Busy Weeks (Not Just "Perfect" Weeks)
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               Most habit advice breaks down in real life. It's easy to "be consistent" when you have energy, time, and a clear schedule. The real test is what happens when you're stressed, traveling, working late, or mentally tired.
             </p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Building Habits</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Building Habits
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
             </Button>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-            <p className="text-lg font-medium text-gray-900 mb-2">What a great habit tracker app helps you do</p>
-            <ul className="space-y-2 text-gray-700">
+          <div className="bg-secondary/40 rounded-2xl p-8 border border-border">
+            <p className="text-lg font-medium text-foreground mb-2">What a great habit tracker app helps you do</p>
+            <ul className="space-y-2 text-foreground/80">
               <li>• build routines you can repeat</li>
               <li>• keep momentum through imperfect days</li>
               <li>• understand what actually makes your habits stick</li>
@@ -146,18 +148,18 @@ const HabitTrackerApp = () => {
         {/* Screenshot Placeholder */}
         <section className="space-y-6" id="app-preview">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">See Habit Tracking in Action</h2>
-            <div className="bg-gray-100 rounded-2xl p-12 border-2 border-dashed border-gray-300">
-              <p className="text-gray-500 text-lg">📱 App Screenshot Placeholder</p>
-              <p className="text-gray-400 text-sm mt-2">Habit tracking screen with streaks and consistency view</p>
+            <h2 className="text-3xl font-bold text-foreground mb-4">See Habit Tracking in Action</h2>
+            <div className="bg-secondary rounded-2xl p-12 border-2 border-dashed border-border">
+              <p className="text-muted-foreground text-lg">📱 App Screenshot Placeholder</p>
+              <p className="text-muted-foreground/70 text-sm mt-2">Habit tracking screen with streaks and consistency view</p>
             </div>
           </div>
         </section>
 
         {/* What Is Section */}
         <section className="space-y-6" id="what-is">
-          <h2 className="text-3xl font-bold text-gray-900">What Is a Habit Tracker App?</h2>
-          <div className="prose prose-lg max-w-none text-gray-700">
+          <h2 className="text-3xl font-bold text-foreground">What Is a Habit Tracker App?</h2>
+          <div className="prose prose-lg max-w-none text-foreground/80">
             <p>
               A <strong>habit tracker app</strong> (daily habit tracker, routine tracker app, habit planner) helps you track repeated behaviors—so you can build consistency over time.
             </p>
@@ -179,12 +181,12 @@ const HabitTrackerApp = () => {
 
         {/* Why Habits Matter */}
         <section className="space-y-6" id="why-habits-matter">
-          <h2 className="text-3xl font-bold text-gray-900">Why Habits Matter More Than Motivation</h2>
-          <div className="bg-orange-50 rounded-2xl p-8 border border-orange-100">
+          <h2 className="text-3xl font-bold text-foreground">Why Habits Matter More Than Motivation</h2>
+          <div className="bg-ember/10 rounded-2xl p-8 border border-ember/20">
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-xl font-semibold text-orange-900 mb-4">Motivation is Unstable</h3>
-                <p className="text-orange-800 space-y-2">
+                <h3 className="text-xl font-semibold text-foreground mb-4">Motivation is Unstable</h3>
+                <p className="text-foreground/80 space-y-2">
                   Motivation depends on:
                   <br />• mood
                   <br />• stress
@@ -194,8 +196,8 @@ const HabitTrackerApp = () => {
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-orange-900 mb-4">Habits Are Designed</h3>
-                <p className="text-orange-800 space-y-2">
+                <h3 className="text-xl font-semibold text-foreground mb-4">Habits Are Designed</h3>
+                <p className="text-foreground/80 space-y-2">
                   Habits can work even when motivation is low, if they're:
                   <br />• small enough
                   <br />• tied to a trigger
@@ -204,7 +206,7 @@ const HabitTrackerApp = () => {
                 </p>
               </div>
             </div>
-            <p className="text-orange-900 mt-6 font-medium">
+            <p className="text-foreground mt-6 font-medium">
               A build habits app should help you make the habit easier than skipping it.
             </p>
           </div>
@@ -212,7 +214,7 @@ const HabitTrackerApp = () => {
 
         {/* Features Grid */}
         <section className="space-y-6" id="features">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features to Look For in the Best Habit Tracker App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Key Features to Look For in the Best Habit Tracker App</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -223,7 +225,7 @@ const HabitTrackerApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -232,51 +234,51 @@ const HabitTrackerApp = () => {
 
         {/* Habit Building System */}
         <section className="space-y-6" id="habit-building-system">
-          <h2 className="text-3xl font-bold text-gray-900">The Habit Building System That Works</h2>
+          <h2 className="text-3xl font-bold text-foreground">The Habit Building System That Works</h2>
           <div className="space-y-6">
-            <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100">
-              <p className="text-purple-800 mb-6">Simple + Realistic approach that survives busy weeks.</p>
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
+              <p className="text-foreground/80 mb-6">Simple + Realistic approach that survives busy weeks.</p>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Pick habits with clear payoff</h4>
-                    <p className="text-purple-700">Instead of "be better," choose behaviors you can feel: "10-minute walk after lunch," "plan tomorrow in 3 minutes," "write 200 words."</p>
+                    <h4 className="font-semibold text-foreground">Pick habits with clear payoff</h4>
+                    <p className="text-foreground/80">Instead of "be better," choose behaviors you can feel: "10-minute walk after lunch," "plan tomorrow in 3 minutes," "write 200 words."</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Define "what counts"</h4>
-                    <p className="text-purple-700">Ambiguity kills habits. Bad: "exercise." Better: "20 minutes walking or workout video."</p>
+                    <h4 className="font-semibold text-foreground">Define "what counts"</h4>
+                    <p className="text-foreground/80">Ambiguity kills habits. Bad: "exercise." Better: "20 minutes walking or workout video."</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Start smaller than your ambition</h4>
-                    <p className="text-purple-700">Make it "too easy to fail": 5 minutes, 1 page, 1 sentence, 1 short session. You can scale later. Consistency first.</p>
+                    <h4 className="font-semibold text-foreground">Start smaller than your ambition</h4>
+                    <p className="text-foreground/80">Make it "too easy to fail": 5 minutes, 1 page, 1 sentence, 1 short session. You can scale later. Consistency first.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Attach it to a trigger</h4>
-                    <p className="text-purple-700">After coffee → plan the day. After lunch → short walk. After brushing teeth → journal reflection.</p>
+                    <h4 className="font-semibold text-foreground">Attach it to a trigger</h4>
+                    <p className="text-foreground/80">After coffee → plan the day. After lunch → short walk. After brushing teeth → journal reflection.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">5</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Reduce friction</h4>
-                    <p className="text-purple-700">Make starting effortless: clothes ready, tools open, environment prepared, reminders scheduled at the right moment.</p>
+                    <h4 className="font-semibold text-foreground">Reduce friction</h4>
+                    <p className="text-foreground/80">Make starting effortless: clothes ready, tools open, environment prepared, reminders scheduled at the right moment.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">6</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">6</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Track and review weekly</h4>
-                    <p className="text-purple-700">A weekly check-in turns slips into learning.</p>
+                    <h4 className="font-semibold text-foreground">Track and review weekly</h4>
+                    <p className="text-foreground/80">A weekly check-in turns slips into learning.</p>
                   </div>
                 </div>
               </div>
@@ -286,71 +288,71 @@ const HabitTrackerApp = () => {
 
         {/* Best Habit Tracker App Section */}
         <section className="space-y-6" id="best-habit-tracker-app">
-          <h2 className="text-3xl font-bold text-gray-900">Best Habit Tracker App: What Actually Helps</h2>
-          <p className="text-lg text-gray-600">When searching for the best habit tracker app, focus on features that support consistency, not just tracking.</p>
+          <h2 className="text-3xl font-bold text-foreground">Best Habit Tracker App: What Actually Helps</h2>
+          <p className="text-lg text-muted-foreground">When searching for the best habit tracker app, focus on features that support consistency, not just tracking.</p>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">🎯 Essential Features That Build Consistency</h3>
+              <h3 className="text-xl font-semibold text-foreground">🎯 Essential Features That Build Consistency</h3>
               <div className="space-y-3">
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">One-Tap Tracking</p>
-                    <p className="text-gray-600 text-sm">Mark completion with a single tap, no complex forms</p>
+                    <p className="text-muted-foreground text-sm">Mark completion with a single tap, no complex forms</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Flexible Scheduling</p>
-                    <p className="text-gray-600 text-sm">Daily, weekly, or custom patterns that fit your life</p>
+                    <p className="text-muted-foreground text-sm">Daily, weekly, or custom patterns that fit your life</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Pattern Insights</p>
-                    <p className="text-gray-600 text-sm">See what works, not just whether you did it</p>
+                    <p className="text-muted-foreground text-sm">See what works, not just whether you did it</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Gentle Reminders</p>
-                    <p className="text-gray-600 text-sm">Helpful nudges, not constant notifications</p>
+                    <p className="text-muted-foreground text-sm">Helpful nudges, not constant notifications</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">⚠️ Features That Often Create Pressure</h3>
+              <h3 className="text-xl font-semibold text-foreground">⚠️ Features That Often Create Pressure</h3>
               <div className="space-y-3">
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Excessive Gamification</p>
-                    <p className="text-gray-600 text-sm">Points, badges, and leaderboards that create pressure</p>
+                    <p className="text-muted-foreground text-sm">Points, badges, and leaderboards that create pressure</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Social Pressure Features</p>
-                    <p className="text-gray-600 text-sm">Public sharing and comparison that create shame</p>
+                    <p className="text-muted-foreground text-sm">Public sharing and comparison that create shame</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Perfect Streak Emphasis</p>
-                    <p className="text-gray-600 text-sm">All-or-nothing thinking that leads to quitting</p>
+                    <p className="text-muted-foreground text-sm">All-or-nothing thinking that leads to quitting</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Complex Analytics</p>
-                    <p className="text-gray-600 text-sm">Overwhelming data that doesn't drive action</p>
+                    <p className="text-muted-foreground text-sm">Overwhelming data that doesn't drive action</p>
                   </div>
                 </div>
               </div>
@@ -360,15 +362,15 @@ const HabitTrackerApp = () => {
 
         {/* Why Habits Matter Section */}
         <section className="space-y-6" id="why-habits-matter">
-          <h2 className="text-3xl font-bold text-gray-900">Why Habits Matter More Than Motivation</h2>
-          <p className="text-lg text-gray-600">Motivation is unreliable. Habits are the systems that work when motivation fades.</p>
+          <h2 className="text-3xl font-bold text-foreground">Why Habits Matter More Than Motivation</h2>
+          <p className="text-lg text-muted-foreground">Motivation is unreliable. Habits are the systems that work when motivation fades.</p>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-orange-200 bg-orange-50">
+            <Card className="border-ember/20 bg-ember/10">
               <CardHeader>
-                <CardTitle className="text-orange-900">🔥 Motivation</CardTitle>
+                <CardTitle className="text-ember">🔥 Motivation</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 text-orange-800">
+                <div className="space-y-2 text-foreground/80">
                   <p>• Unstable and unpredictable</p>
                   <p>• Depends on mood, energy, circumstances</p>
                   <p>• High at start, fades with difficulty</p>
@@ -377,12 +379,12 @@ const HabitTrackerApp = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900">⚙️ Habits</CardTitle>
+                <CardTitle className="text-momentum">⚙️ Habits</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2 text-green-800">
+                <div className="space-y-2 text-foreground/80">
                   <p>• Consistent and reliable</p>
                   <p>• Work regardless of mood or energy</p>
                   <p>• Build momentum over time</p>
@@ -392,8 +394,8 @@ const HabitTrackerApp = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <p className="text-gray-700 text-center">
+          <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+            <p className="text-foreground/80 text-center">
               <strong>The truth:</strong> Successful people don't have more motivation. They have better habits and systems that work when motivation disappears.
             </p>
           </div>
@@ -401,17 +403,17 @@ const HabitTrackerApp = () => {
 
         {/* Habit Tracker vs Routine Planner */}
         <section className="space-y-6" id="habit-tracker-vs-routine">
-          <h2 className="text-3xl font-bold text-gray-900">Habit Tracker App vs Routine Planner</h2>
-          <p className="text-lg text-gray-600">Understanding the difference helps you choose the right approach for your needs.</p>
+          <h2 className="text-3xl font-bold text-foreground">Habit Tracker App vs Routine Planner</h2>
+          <p className="text-lg text-muted-foreground">Understanding the difference helps you choose the right approach for your needs.</p>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-purple-200 bg-purple-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-purple-900 flex items-center gap-2">
+                <CardTitle className="text-primary flex items-center gap-2">
                   <span className="text-2xl">✅</span> Habit Tracker Apps
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 text-purple-800">
+                <div className="space-y-3 text-foreground/80">
                   <p><strong>Best for:</strong> Individual behaviors, consistency tracking, building new routines</p>
                   <p><strong>Key features:</strong></p>
                   <ul className="space-y-1 ml-4">
@@ -425,14 +427,14 @@ const HabitTrackerApp = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-blue-900 flex items-center gap-2">
+                <CardTitle className="text-momentum flex items-center gap-2">
                   <span className="text-2xl">🔄</span> Routine Planners
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 text-blue-800">
+                <div className="space-y-3 text-foreground/80">
                   <p><strong>Best for:</strong> Sequencing actions, time-based routines, morning/evening schedules</p>
                   <p><strong>Key features:</strong></p>
                   <ul className="space-y-1 ml-4">
@@ -447,8 +449,8 @@ const HabitTrackerApp = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <p className="text-gray-700 text-center">
+          <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+            <p className="text-foreground/80 text-center">
               <strong>Pro tip:</strong> Many successful people use both—habit trackers for consistency, routine planners for structure.
             </p>
           </div>
@@ -456,45 +458,45 @@ const HabitTrackerApp = () => {
 
         {/* How to Build Habits Section */}
         <section className="space-y-6" id="build-habits">
-          <h2 className="text-3xl font-bold text-gray-900">How to Build Habits That Actually Stick</h2>
-          <p className="text-lg text-gray-600">The secret to habit building isn't willpower—it's design. Design habits that are easier than skipping them.</p>
+          <h2 className="text-3xl font-bold text-foreground">How to Build Habits That Actually Stick</h2>
+          <p className="text-lg text-muted-foreground">The secret to habit building isn't willpower—it's design. Design habits that are easier than skipping them.</p>
           <div className="space-y-6">
-            <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100">
-              <h3 className="text-xl font-semibold text-purple-900 mb-6">The Habit Design Framework</h3>
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
+              <h3 className="text-xl font-semibold text-foreground mb-6">The Habit Design Framework</h3>
               <div className="space-y-6">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Start Identity-Based</h4>
-                    <p className="text-purple-700">Instead of "I want to exercise," become "someone who exercises." Identity drives long-term consistency.</p>
+                    <h4 className="font-semibold text-foreground">Start Identity-Based</h4>
+                    <p className="text-foreground/80">Instead of "I want to exercise," become "someone who exercises." Identity drives long-term consistency.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Make It Ridiculously Small</h4>
-                    <p className="text-purple-700">2-minute rule: shrink habits until they're impossible to fail. "Read one page" not "read for 30 minutes."</p>
+                    <h4 className="font-semibold text-foreground">Make It Ridiculously Small</h4>
+                    <p className="text-foreground/80">2-minute rule: shrink habits until they're impossible to fail. "Read one page" not "read for 30 minutes."</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Attach to Existing Triggers</h4>
-                    <p className="text-purple-700">Link new habits to things you already do: after coffee, before bed, during lunch break.</p>
+                    <h4 className="font-semibold text-foreground">Attach to Existing Triggers</h4>
+                    <p className="text-foreground/80">Link new habits to things you already do: after coffee, before bed, during lunch break.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Design the Environment</h4>
-                    <p className="text-purple-700">Make good habits easy and visible, bad habits hard and invisible. Remove friction, add convenience.</p>
+                    <h4 className="font-semibold text-foreground">Design the Environment</h4>
+                    <p className="text-foreground/80">Make good habits easy and visible, bad habits hard and invisible. Remove friction, add convenience.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">5</div>
                   <div>
-                    <h4 className="font-semibold text-purple-900">Plan for Imperfection</h4>
-                    <p className="text-purple-700">Build in flexibility for busy days, low motivation, unexpected obstacles. Never miss twice.</p>
+                    <h4 className="font-semibold text-foreground">Plan for Imperfection</h4>
+                    <p className="text-foreground/80">Build in flexibility for busy days, low motivation, unexpected obstacles. Never miss twice.</p>
                   </div>
                 </div>
               </div>
@@ -505,7 +507,7 @@ const HabitTrackerApp = () => {
                   <CardTitle className="text-lg">🎯 Clear Definition</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Define exactly what counts as completion. "Exercise" becomes "20 minutes walking or workout video."</p>
+                  <p className="text-muted-foreground text-sm">Define exactly what counts as completion. "Exercise" becomes "20 minutes walking or workout video."</p>
                 </CardContent>
               </Card>
               <Card>
@@ -513,7 +515,7 @@ const HabitTrackerApp = () => {
                   <CardTitle className="text-lg">⏰ Time Anchoring</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Attach habits to specific times or existing routines for automatic triggers.</p>
+                  <p className="text-muted-foreground text-sm">Attach habits to specific times or existing routines for automatic triggers.</p>
                 </CardContent>
               </Card>
               <Card>
@@ -521,7 +523,7 @@ const HabitTrackerApp = () => {
                   <CardTitle className="text-lg">📊 Track Patterns</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Focus on weekly consistency and learning from misses, not perfect daily streaks.</p>
+                  <p className="text-muted-foreground text-sm">Focus on weekly consistency and learning from misses, not perfect daily streaks.</p>
                 </CardContent>
               </Card>
             </div>
@@ -530,19 +532,19 @@ const HabitTrackerApp = () => {
 
         {/* Tracking Without Obsession */}
         <section className="space-y-6" id="tracking-without-obsession">
-          <h2 className="text-3xl font-bold text-gray-900">How to Track Habits Without Obsessing Over Streaks</h2>
-          <p className="text-lg text-gray-600">Healthy habit tracking supports growth without creating pressure or shame around imperfection.</p>
+          <h2 className="text-3xl font-bold text-foreground">How to Track Habits Without Obsessing Over Streaks</h2>
+          <p className="text-lg text-muted-foreground">Healthy habit tracking supports growth without creating pressure or shame around imperfection.</p>
           <div className="space-y-6">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🔄 Weekly Consistency Focus</h3>
+                <h3 className="text-xl font-semibold text-foreground">🔄 Weekly Consistency Focus</h3>
                 <div className="space-y-3">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg text-gray-800">Instead of Daily Perfection</CardTitle>
+                      <CardTitle className="text-lg text-foreground">Instead of Daily Perfection</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-1 text-gray-600">
+                      <ul className="space-y-1 text-muted-foreground">
                         <li>• Aim for 80% consistency (4-5 days/week)</li>
                         <li>• Focus on trends, not individual days</li>
                         <li>• Plan for maintenance days</li>
@@ -554,14 +556,14 @@ const HabitTrackerApp = () => {
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">⚡ The "Never Miss Twice" Rule</h3>
+                <h3 className="text-xl font-semibold text-foreground">⚡ The "Never Miss Twice" Rule</h3>
                 <div className="space-y-3">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg text-gray-800">Sustainable Mindset</CardTitle>
+                      <CardTitle className="text-lg text-foreground">Sustainable Mindset</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-1 text-gray-600">
+                      <ul className="space-y-1 text-muted-foreground">
                         <li>• One miss is normal, two is a pattern</li>
                         <li>• Get back on track immediately</li>
                         <li>• Analyze what caused the miss</li>
@@ -573,8 +575,8 @@ const HabitTrackerApp = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-              <p className="text-green-800">
+            <div className="bg-momentum/10 rounded-xl p-6 border border-momentum/20">
+              <p className="text-foreground/80">
                 <strong>The psychology:</strong> Weekly consistency feels achievable and forgiving while still driving results. It prevents the all-or-nothing thinking that makes people quit after one missed day.
               </p>
             </div>
@@ -583,38 +585,38 @@ const HabitTrackerApp = () => {
 
         {/* Breaking Bad Habits */}
         <section className="space-y-6" id="breaking-bad-habits">
-          <h2 className="text-3xl font-bold text-gray-900">Breaking Bad Habits (Without Shame)</h2>
+          <h2 className="text-3xl font-bold text-foreground">Breaking Bad Habits (Without Shame)</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="border-red-200 bg-red-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-red-900">🔍 Notice the Trigger</CardTitle>
+                <CardTitle className="text-primary">🔍 Notice the Trigger</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-red-800">Time, mood, situation. What happens right before the behavior?</p>
+                <p className="text-foreground/80">Time, mood, situation. What happens right before the behavior?</p>
               </CardContent>
             </Card>
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900">🔄 Replace the Behavior</CardTitle>
+                <CardTitle className="text-momentum">🔄 Replace the Behavior</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-green-800">Swap, don't just "stop." Late-night scrolling → short reading habit + wind-down routine.</p>
+                <p className="text-foreground/80">Swap, don't just "stop." Late-night scrolling → short reading habit + wind-down routine.</p>
               </CardContent>
             </Card>
-            <Card className="border-orange-200 bg-orange-50">
+            <Card className="border-ember/20 bg-ember/10">
               <CardHeader>
-                <CardTitle className="text-orange-900">⬆️ Increase Friction</CardTitle>
+                <CardTitle className="text-ember">⬆️ Increase Friction</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-orange-800">Make the bad habit harder: charge phone outside bedroom, put junk food out of sight.</p>
+                <p className="text-foreground/80">Make the bad habit harder: charge phone outside bedroom, put junk food out of sight.</p>
               </CardContent>
             </Card>
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900">⬇️ Decrease Friction</CardTitle>
+                <CardTitle className="text-primary">⬇️ Decrease Friction</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-blue-800">Make the good habit easier: workout clothes ready, book on pillow, app open on phone.</p>
+                <p className="text-foreground/80">Make the good habit easier: workout clothes ready, book on pillow, app open on phone.</p>
               </CardContent>
             </Card>
           </div>
@@ -622,26 +624,26 @@ const HabitTrackerApp = () => {
 
         {/* Habits Connect to Goals Section */}
         <section className="space-y-6" id="habits-goals-connection">
-          <h2 className="text-3xl font-bold text-gray-900">How Habits Connect to Goals and Daily Planning</h2>
-          <p className="text-lg text-gray-600">The most effective systems connect habits to your bigger picture and daily execution.</p>
+          <h2 className="text-3xl font-bold text-foreground">How Habits Connect to Goals and Daily Planning</h2>
+          <p className="text-lg text-muted-foreground">The most effective systems connect habits to your bigger picture and daily execution.</p>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">The Connection Triangle</h3>
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
+              <h3 className="text-xl font-semibold text-foreground mb-4">The Connection Triangle</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-3">🎯 Goals Set Direction</h4>
-                  <p className="text-blue-700 text-sm">Goals provide the "why" - the destination you're working toward. They give habits purpose and meaning.</p>
-                  <p className="text-blue-600 text-sm mt-2">Example: "Run marathon" → "Exercise 3x weekly"</p>
+                  <h4 className="font-medium text-foreground mb-3">🎯 Goals Set Direction</h4>
+                  <p className="text-foreground/80 text-sm">Goals provide the "why" - the destination you're working toward. They give habits purpose and meaning.</p>
+                  <p className="text-muted-foreground text-sm mt-2">Example: "Run marathon" → "Exercise 3x weekly"</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-3">✅ Habits Create Consistency</h4>
-                  <p className="text-blue-700 text-sm">Habits are the daily actions that accumulate into goal achievement. They turn intentions into automatic progress.</p>
-                  <p className="text-blue-600 text-sm mt-2">Example: "Morning run" becomes automatic routine</p>
+                  <h4 className="font-medium text-foreground mb-3">✅ Habits Create Consistency</h4>
+                  <p className="text-foreground/80 text-sm">Habits are the daily actions that accumulate into goal achievement. They turn intentions into automatic progress.</p>
+                  <p className="text-muted-foreground text-sm mt-2">Example: "Morning run" becomes automatic routine</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-3">📅 Planning Ensures Execution</h4>
-                  <p className="text-blue-700 text-sm">Daily planning protects time for habits and adjusts when life happens.</p>
-                  <p className="text-blue-600 text-sm mt-2">Example: Schedule 6am run, protect from conflicts</p>
+                  <h4 className="font-medium text-foreground mb-3">📅 Planning Ensures Execution</h4>
+                  <p className="text-foreground/80 text-sm">Daily planning protects time for habits and adjusts when life happens.</p>
+                  <p className="text-muted-foreground text-sm mt-2">Example: Schedule 6am run, protect from conflicts</p>
                 </div>
               </div>
             </div>
@@ -651,7 +653,7 @@ const HabitTrackerApp = () => {
                   <CardTitle className="text-lg">🔄 Weekly Review</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Review how habits supported goals this week and adjust next week's plan.</p>
+                  <p className="text-muted-foreground text-sm">Review how habits supported goals this week and adjust next week's plan.</p>
                 </CardContent>
               </Card>
               <Card>
@@ -659,7 +661,7 @@ const HabitTrackerApp = () => {
                   <CardTitle className="text-lg">🎯 Identity Alignment</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Choose habits that match the person you want to become.</p>
+                  <p className="text-muted-foreground text-sm">Choose habits that match the person you want to become.</p>
                 </CardContent>
               </Card>
               <Card>
@@ -667,7 +669,7 @@ const HabitTrackerApp = () => {
                   <CardTitle className="text-lg">⚡ Energy Matching</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600 text-sm">Schedule habits when you have the energy and motivation for them.</p>
+                  <p className="text-muted-foreground text-sm">Schedule habits when you have the energy and motivation for them.</p>
                 </CardContent>
               </Card>
             </div>
@@ -676,63 +678,63 @@ const HabitTrackerApp = () => {
 
         {/* Why GoalPlanner Section */}
         <section className="space-y-6" id="why-goalplanner-habits">
-          <h2 className="text-3xl font-bold text-gray-900">Why GoalPlanner Helps with Consistency</h2>
-          <p className="text-lg text-gray-600">GoalPlanner is designed specifically for the messy reality of building and maintaining habits.</p>
+          <h2 className="text-3xl font-bold text-foreground">Why GoalPlanner Helps with Consistency</h2>
+          <p className="text-lg text-muted-foreground">GoalPlanner is designed specifically for the messy reality of building and maintaining habits.</p>
           <div className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🔄 Flexible by Design</h3>
+                <h3 className="text-xl font-semibold text-foreground">🔄 Flexible by Design</h3>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Adapt schedules when life gets busy</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Adapt schedules when life gets busy</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Weekly consistency focus, not daily perfection</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Weekly consistency focus, not daily perfection</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">No guilt or shame around missed days</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">No guilt or shame around missed days</p>
                   </div>
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🎯 Purpose-Driven</h3>
+                <h3 className="text-xl font-semibold text-foreground">🎯 Purpose-Driven</h3>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Connect habits to meaningful goals</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Connect habits to meaningful goals</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">See how daily actions create bigger outcomes</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">See how daily actions create bigger outcomes</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Build identity-based habits that last</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Build identity-based habits that last</p>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100">
-              <h3 className="text-xl font-semibold text-purple-900 mb-4">The GoalPlanner Difference for Habit Building</h3>
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
+              <h3 className="text-xl font-semibold text-foreground mb-4">The GoalPlanner Difference for Habit Building</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="font-medium text-purple-800 mb-2">✅ Simple Tracking</h4>
-                  <p className="text-purple-700 text-sm">One-tap completion that disappears into your routine</p>
+                  <h4 className="font-medium text-foreground/80 mb-2">✅ Simple Tracking</h4>
+                  <p className="text-foreground/80 text-sm">One-tap completion that disappears into your routine</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-purple-800 mb-2">📊 Pattern Insights</h4>
-                  <p className="text-purple-700 text-sm">Learn what works without overwhelming data</p>
+                  <h4 className="font-medium text-foreground/80 mb-2">📊 Pattern Insights</h4>
+                  <p className="text-foreground/80 text-sm">Learn what works without overwhelming data</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-purple-800 mb-2">🔗 Connected System</h4>
-                  <p className="text-purple-700 text-sm">Habits link to goals and daily planning for full context</p>
+                  <h4 className="font-medium text-foreground/80 mb-2">🔗 Connected System</h4>
+                  <p className="text-foreground/80 text-sm">Habits link to goals and daily planning for full context</p>
                 </div>
               </div>
-              <p className="text-purple-900 mt-6 text-center font-medium">
+              <p className="text-foreground mt-6 text-center font-medium">
                 GoalPlanner works because it's built for real habit building, not perfect tracking fantasies.
               </p>
             </div>
@@ -741,28 +743,28 @@ const HabitTrackerApp = () => {
 
         {/* Mid-Page CTA */}
         <section className="space-y-6" id="mid-cta">
-          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Build Habits That Last?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Build Habits That Last?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans for habit tracking that adapts to your real life. Start with just one small habit today.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-              <Link to="/auth">Start Building Habits Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Building Habits Free
             </Button>
           </div>
         </section>
 
         {/* Internal Links */}
         <section className="space-y-6" id="related-topics">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Complete Habit System</h2>
-          <p className="text-lg text-gray-600">Habit building works best when connected to your goals and daily structure.</p>
+          <h2 className="text-3xl font-bold text-foreground">Build Your Complete Habit System</h2>
+          <p className="text-lg text-muted-foreground">Habit building works best when connected to your goals and daily structure.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set meaningful goals that give your habits purpose and direction</p>
+                <p className="text-muted-foreground mb-4">Set meaningful goals that give your habits purpose and direction</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner App →</Link>
                 </Button>
@@ -773,7 +775,7 @@ const HabitTrackerApp = () => {
                 <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Schedule and protect time for your habits to ensure consistency</p>
+                <p className="text-muted-foreground mb-4">Schedule and protect time for your habits to ensure consistency</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner App →</Link>
                 </Button>
@@ -784,7 +786,7 @@ const HabitTrackerApp = () => {
                 <CardTitle className="text-lg">📝 Daily Reflection</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Review habit progress and learn from your patterns with journaling</p>
+                <p className="text-muted-foreground mb-4">Review habit progress and learn from your patterns with journaling</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-journal-app">Daily Journal App →</Link>
                 </Button>
@@ -795,7 +797,7 @@ const HabitTrackerApp = () => {
                 <CardTitle className="text-lg">🔄 All-in-One System</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Combine habits, goals, planning, and reflection in one place</p>
+                <p className="text-muted-foreground mb-4">Combine habits, goals, planning, and reflection in one place</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/productivity-app">Productivity App →</Link>
                 </Button>
@@ -806,14 +808,14 @@ const HabitTrackerApp = () => {
 
         {/* CTA Section */}
         <section className="space-y-6" id="get-started">
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Want a Calmer Way to Build Consistency?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Want a Calmer Way to Build Consistency?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans to track habits, set gentle reminders, and connect routines to your goals—on web and mobile.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-                <Link to="/auth">Start Building Habits</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Building Habits
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -824,14 +826,14 @@ const HabitTrackerApp = () => {
 
         {/* FAQ Section */}
         <section className="space-y-6" id="faq">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-600">
+                <AccordionContent className="text-muted-foreground">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

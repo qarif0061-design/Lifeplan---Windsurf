@@ -86,9 +86,9 @@ const Profile = () => {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
+        <h1 className="text-3xl font-bold text-foreground">Profile</h1>
         {!user ? (
-          <p className="text-gray-600">You are not logged in.</p>
+          <p className="text-muted-foreground">You are not logged in.</p>
         ) : (
           <>
             <Card className="border-none shadow-sm rounded-[2.5rem]">
@@ -97,16 +97,16 @@ const Profile = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-500">Username</p>
-                  <p className="text-lg font-semibold text-gray-900">{user.displayName}</p>
+                  <p className="text-sm text-muted-foreground">Username</p>
+                  <p className="text-lg font-semibold text-foreground">{user.displayName}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="text-lg font-semibold text-gray-900">{user.email}</p>
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p className="text-lg font-semibold text-foreground">{user.email}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Plan</p>
-                  <p className="text-lg font-semibold text-gray-900">{user.isPremium ? "Premium" : "Free"}</p>
+                  <p className="text-sm text-muted-foreground">Plan</p>
+                  <p className="text-lg font-semibold text-foreground">{user.isPremium ? "Premium" : "Free"}</p>
                 </div>
               </CardContent>
             </Card>
@@ -126,7 +126,7 @@ const Profile = () => {
                     className="rounded-xl"
                   />
                 </div>
-                <Button onClick={handleSaveName} disabled={savingName} className="rounded-full bg-blue-600 hover:bg-blue-700">
+                <Button onClick={handleSaveName} disabled={savingName} className="rounded-full bg-primary hover:bg-primary/90">
                   {savingName ? "Saving..." : "Save username"}
                 </Button>
               </CardContent>
@@ -150,7 +150,7 @@ const Profile = () => {
                     <button
                       type="button"
                       onClick={() => setShowCurrentPassword((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       aria-label={showCurrentPassword ? "Hide password" : "Show password"}
                     >
                       {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -170,7 +170,7 @@ const Profile = () => {
                     <button
                       type="button"
                       onClick={() => setShowNewPassword((v) => !v)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       aria-label={showNewPassword ? "Hide password" : "Show password"}
                     >
                       {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -180,7 +180,7 @@ const Profile = () => {
                 <Button
                   onClick={handleChangePassword}
                   disabled={savingPassword}
-                  className="rounded-full bg-blue-600 hover:bg-blue-700"
+                  className="rounded-full bg-primary hover:bg-primary/90"
                 >
                   {savingPassword ? "Updating..." : "Update password"}
                 </Button>

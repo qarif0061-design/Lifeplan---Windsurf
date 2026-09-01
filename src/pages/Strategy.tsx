@@ -56,8 +56,8 @@ const Strategy = () => {
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Strategy</h1>
-          <p className="text-gray-500">Define your why and protect your focus.</p>
+          <h1 className="text-3xl font-display font-bold text-foreground">Strategy</h1>
+          <p className="text-muted-foreground">Define your why and protect your focus.</p>
         </div>
 
         <Card className="border-none shadow-sm rounded-[2.5rem]">
@@ -110,7 +110,7 @@ const Strategy = () => {
                   className="min-h-[110px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
                 />
               </div>
-              <Button onClick={handleSave} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700 w-fit">
+              <Button onClick={handleSave} disabled={saving} className="rounded-full bg-primary hover:bg-primary/90 w-fit">
                 {saving ? "Saving..." : "Save Strategy"}
               </Button>
             </CardContent>

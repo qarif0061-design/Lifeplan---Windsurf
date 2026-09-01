@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "@/firebase/config";
+import { buildCarriedOverTasks } from "@/utils/adaptiveExecution";
 
 export type DayTask = {
   id: string;
@@ -208,8 +209,33 @@ export const getOrCreateWeeklyPlanner = async (
     };
   }
 
-  // Create new planner
+  // Create new planner — passively seed it with anything left unfinished from the
+  // previous week so recalibration happens automatically, not only via the manual
+  // "Recalibrate my plan" button.
   const days = generateWeekDays(weekStart);
+
+  const prevWeekStart = new Date(weekStart);
+  prevWeekStart.setDate(prevWeekStart.getDate() - 7);
+  const prevWeekStartStr = prevWeekStart.toISOString().split("T")[0];
+  const prevDoc = snapshot.docs.find((d) => d.data().weekStart === prevWeekStartStr);
+
+  if (prevDoc) {
+    const prevPlanner = prevDoc.data() as Omit<WeeklyPlanner, "id">;
+    const carriedOverTasks = buildCarriedOverTasks(prevPlanner.days.flatMap((d) => d.tasks));
+
+    if (carriedOverTasks.length > 0) {
+      const nowIso = new Date().toISOString();
+      const seededTasks: DayTask[] = carriedOverTasks.map((t) => ({
+        id: crypto.randomUUID(),
+        title: t.title,
+        completed: false,
+        createdAt: nowIso,
+        updatedAt: nowIso,
+      }));
+      days[0] = { ...days[0], tasks: [...seededTasks, ...days[0].tasks] };
+    }
+  }
+
   const newPlanner = {
     userId,
     weekStart: weekStartStr,

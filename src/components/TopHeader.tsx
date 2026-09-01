@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
 import { subscribePendingInvites } from "@/firebase/accountability";
 import { Link } from "react-router-dom";
+import Logomark from "@/components/Logomark";
 
 const TopHeader = () => {
   const { user } = useUser();
@@ -38,7 +39,7 @@ const TopHeader = () => {
   const isDashboard = location.pathname.startsWith("/dashboard");
 
   return (
-    <header className="border-b border-gray-100/80 dark:border-slate-700/40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40">
+    <header className="border-b border-border/80 bg-background/80 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -54,13 +55,9 @@ const TopHeader = () => {
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             )}
-            <img
-              src="/HI_RES_ICON-9160.png"
-              alt="Goal Planner - Lifeplans"
-              className="w-8 h-8 rounded-xl shrink-0"
-            />
+            <Logomark className="w-8 h-8 shrink-0" />
             {!isDashboard && (
-              <div className="text-lg font-bold text-gray-900 dark:text-white truncate">{title}</div>
+              <div className="text-lg font-display font-bold text-foreground truncate">{title}</div>
             )}
           </div>
 
@@ -74,7 +71,7 @@ const TopHeader = () => {
               >
                 <Link to="/settings">
                   <Bell className="w-5 h-5" />
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-ember text-ember-foreground text-[9px] font-bold rounded-full flex items-center justify-center">
                     {pendingCount}
                   </span>
                 </Link>
@@ -96,9 +93,9 @@ const TopHeader = () => {
           </div>
         </div>
         {isDashboard && greetingName && (
-          <div className="mt-1 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+          <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
             <span>Welcome back</span>
-            <span className="font-semibold text-slate-800 dark:text-white">{greetingName}</span>
+            <span className="font-semibold text-foreground">{greetingName}</span>
           </div>
         )}
       </div>

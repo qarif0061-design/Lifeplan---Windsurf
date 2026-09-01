@@ -2,85 +2,110 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global density reduction — Tailwind's text, icon (w-N/h-N), spacing, and padding
+   utilities are all rem-based, so lowering the root font-size shrinks all of them
+   together, site-wide, without touching individual pages/components. */
+html {
+  font-size: 14px;
+}
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Paper — a barely-tinted cool ground, not stark white */
+    --background: 226 32% 97%;
+    --foreground: 222 47% 11%;
 
+    /* Cards float above the paper as pure white for real depth */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 221.2 83.2% 53.3%;
+    /* Brand blue, deepened from the default shadcn blue */
+    --primary: 224 76% 48%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 222 25% 94%;
+    --secondary-foreground: 222 47% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 222 25% 94%;
+    --muted-foreground: 222 15% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 222 28% 92%;
+    --accent-foreground: 222 47% 15%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border: 222 20% 88%;
+    --input: 222 20% 88%;
+    --ring: 224 76% 48%;
 
-    --radius: 0.75rem;
+    --radius: 0.85rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Momentum — progress, used specifically for progress states */
+    --momentum: 158 64% 38%;
+    --momentum-foreground: 0 0% 100%;
+
+    /* Ember — achievement, milestones and streaks only */
+    --ember: 38 92% 50%;
+    --ember-foreground: 24 45% 15%;
+
+    --sidebar-background: 226 32% 97%;
+    --sidebar-foreground: 222 30% 30%;
+    --sidebar-primary: 224 76% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 28% 92%;
+    --sidebar-accent-foreground: 222 47% 15%;
+    --sidebar-border: 222 20% 88%;
+    --sidebar-ring: 224 76% 48%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Deep ink navy, not pure black */
+    --background: 224 45% 7%;
+    --foreground: 210 30% 96%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 224 38% 10%;
+    --card-foreground: 210 30% 96%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 224 38% 10%;
+    --popover-foreground: 210 30% 96%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 221 90% 66%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 222 30% 16%;
+    --secondary-foreground: 210 30% 92%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 222 30% 16%;
+    --muted-foreground: 218 15% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 222 30% 18%;
+    --accent-foreground: 210 30% 92%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 210 30% 96%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 221 90% 66%;
 
-    --sidebar-background: 222.2 84% 8%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217.2 32.6% 17.5%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 224.3 76.3% 48%;
+    --momentum: 158 55% 48%;
+    --momentum-foreground: 158 60% 8%;
+
+    --ember: 38 92% 58%;
+    --ember-foreground: 30 60% 10%;
+
+    --sidebar-background: 224 45% 8%;
+    --sidebar-foreground: 210 25% 85%;
+    --sidebar-primary: 221 90% 66%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 222 30% 18%;
+    --sidebar-accent-foreground: 210 30% 92%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 221 90% 66%;
   }
 }
 
@@ -96,10 +121,20 @@
   }
 
   body {
-    @apply text-foreground;
+    @apply text-foreground font-sans;
     background-color: hsl(var(--background));
     position: relative;
     transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+  }
+
+  .font-tabular {
+    @apply font-mono;
+    font-variant-numeric: tabular-nums;
   }
 
   ::selection {
@@ -115,10 +150,10 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background-image:
-    radial-gradient(1200px 600px at 15% 10%, rgba(37, 99, 235, 0.16), transparent 60%),
-    radial-gradient(900px 500px at 85% 25%, rgba(168, 85, 247, 0.14), transparent 55%),
-    radial-gradient(800px 500px at 25% 90%, rgba(16, 185, 129, 0.10), transparent 60%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85));
+    radial-gradient(1100px 560px at 12% 8%, rgba(36, 82, 235, 0.14), transparent 60%),
+    radial-gradient(800px 460px at 88% 20%, rgba(18, 183, 106, 0.10), transparent 58%),
+    radial-gradient(700px 460px at 30% 92%, rgba(245, 165, 36, 0.08), transparent 60%),
+    linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
   transform: translate3d(0, 0, 0) scale(1.06);
   transform-origin: center;
   will-change: transform;
@@ -127,12 +162,12 @@ body::before {
 }
 
 .dark body::before {
-  opacity: 0.3;
+  opacity: 0.5;
   background-image:
-    radial-gradient(1200px 600px at 15% 10%, rgba(37, 99, 235, 0.25), transparent 60%),
-    radial-gradient(900px 500px at 85% 25%, rgba(168, 85, 247, 0.2), transparent 55%),
-    radial-gradient(800px 500px at 25% 90%, rgba(16, 185, 129, 0.12), transparent 60%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+    radial-gradient(1100px 560px at 12% 8%, rgba(91, 130, 255, 0.2), transparent 60%),
+    radial-gradient(800px 460px at 88% 20%, rgba(24, 201, 122, 0.14), transparent 58%),
+    radial-gradient(700px 460px at 30% 92%, rgba(245, 165, 36, 0.1), transparent 60%),
+    linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
 }
 
 @keyframes app-bg-float {

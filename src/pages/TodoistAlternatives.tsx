@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const TodoistAlternatives = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "Why look for a Todoist alternative?",
@@ -111,26 +113,26 @@ const TodoistAlternatives = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Tasks & Planning</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-display font-extrabold text-foreground leading-tight">
               Todoist Alternatives (2026): To-Do Lists That Actually Get Finished
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               Todoist is a great task manager — but a long list of tasks doesn't guarantee a productive day. These Todoist alternatives help you prioritize, plan your time, and track goals, so "done" stops being a moving target.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Try GoalPlanner Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Try GoalPlanner Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
             </Button>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-            <p className="text-lg font-medium text-gray-900 mb-2">Quick answer: the best Todoist alternative</p>
-            <ul className="space-y-2 text-gray-700">
+          <div className="bg-secondary/40 rounded-2xl p-8 border border-border">
+            <p className="text-lg font-medium text-foreground mb-2">Quick answer: the best Todoist alternative</p>
+            <ul className="space-y-2 text-foreground/80">
               <li>• <strong>Microsoft To Do</strong> if you want a clean, free to-do list with Outlook sync</li>
               <li>• <strong>TickTick</strong> if you want tasks + a built-in calendar</li>
               <li>• <strong>GoalPlanner</strong> if your tasks are really steps toward goals that need daily planning</li>
@@ -139,14 +141,14 @@ const TodoistAlternatives = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">The Real Problem With Todoist</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">The Real Problem With Todoist</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">📋</span> It Manages Tasks, Not Days</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">A to-do list answers "what's outstanding?" A planner answers "what should I work on right now?" Most people already know their tasks — they struggle to fit them into a real day.</p>
+                <p className="text-muted-foreground">A to-do list answers "what's outstanding?" A planner answers "what should I work on right now?" Most people already know their tasks — they struggle to fit them into a real day.</p>
               </CardContent>
             </Card>
             <Card>
@@ -154,7 +156,7 @@ const TodoistAlternatives = () => {
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">🔒</span> Best Features Are Paid</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Reminders, labels, and project views sit behind the Pro plan. On the free tier you hit task limits and lose key features quickly.</p>
+                <p className="text-muted-foreground">Reminders, labels, and project views sit behind the Pro plan. On the free tier you hit task limits and lose key features quickly.</p>
               </CardContent>
             </Card>
             <Card>
@@ -162,7 +164,7 @@ const TodoistAlternatives = () => {
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">🎯</span> No Connection to Goals</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Your tasks aren't tied to the goals they serve. When daily tasks don't connect to a bigger why, motivation fades and the list grows stale.</p>
+                <p className="text-muted-foreground">Your tasks aren't tied to the goals they serve. When daily tasks don't connect to a bigger why, motivation fades and the list grows stale.</p>
               </CardContent>
             </Card>
             <Card>
@@ -170,18 +172,18 @@ const TodoistAlternatives = () => {
                 <CardTitle className="flex items-center gap-2"><span className="text-2xl">📊</span> No Progress View</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">Completing tasks feels like bailing water — you can't see trends, streaks, or whether you're actually moving forward on what matters.</p>
+                <p className="text-muted-foreground">Completing tasks feels like bailing water — you can't see trends, streaks, or whether you're actually moving forward on what matters.</p>
               </CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">The 4 Best Todoist Alternatives (2026)</h2>
-          <p className="text-lg text-gray-600">Rated for people who want to finish things — not just collect more tasks.</p>
+          <h2 className="text-3xl font-display font-bold text-foreground">The 4 Best Todoist Alternatives (2026)</h2>
+          <p className="text-lg text-muted-foreground">Rated for people who want to finish things — not just collect more tasks.</p>
           <div className="grid md:grid-cols-2 gap-6">
             {alternatives.map((alt, i) => (
-              <Card key={i} className={i === 0 ? "border-blue-200 ring-2 ring-blue-100" : ""}>
+              <Card key={i} className={i === 0 ? "border-primary/20 ring-2 ring-primary/10" : ""}>
                 <CardHeader>
                   <div className="flex items-start justify-between gap-3">
                     <CardTitle className="flex items-center gap-2 text-xl">
@@ -189,24 +191,24 @@ const TodoistAlternatives = () => {
                     </CardTitle>
                     <Badge variant={i === 0 ? "default" : "secondary"} className="shrink-0">{alt.rating}</Badge>
                   </div>
-                  <p className="text-sm text-gray-500"><strong>Best for:</strong> {alt.bestFor}</p>
+                  <p className="text-sm text-muted-foreground"><strong>Best for:</strong> {alt.bestFor}</p>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <p className="font-semibold text-green-700 mb-1">Pros</p>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <p className="font-semibold text-momentum mb-1">Pros</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
                       {alt.pros.map((p, j) => <li key={j}>✓ {p}</li>)}
                     </ul>
                   </div>
                   <div>
                     <p className="font-semibold text-red-600 mb-1">Cons</p>
-                    <ul className="space-y-1 text-sm text-gray-600">
+                    <ul className="space-y-1 text-sm text-muted-foreground">
                       {alt.cons.map((c, j) => <li key={j}>✗ {c}</li>)}
                     </ul>
                   </div>
                   {i === 0 && (
-                    <Button asChild className="w-full rounded-full bg-blue-600 hover:bg-blue-700">
-                      <Link to="/auth">Try GoalPlanner Free</Link>
+                    <Button className="w-full rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                      Try GoalPlanner Free
                     </Button>
                   )}
                 </CardContent>
@@ -216,22 +218,22 @@ const TodoistAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Todoist vs GoalPlanner: Feature Comparison</h2>
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <h2 className="text-3xl font-display font-bold text-foreground">Todoist vs GoalPlanner: Feature Comparison</h2>
+          <div className="bg-card rounded-2xl border border-border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left py-4 px-6 font-semibold text-gray-900">Feature</th>
-                  <th className="text-center py-4 px-6 font-semibold text-gray-900">Todoist</th>
-                  <th className="text-center py-4 px-6 font-semibold text-blue-600">GoalPlanner</th>
+                <tr className="border-b border-border bg-secondary/40">
+                  <th className="text-left py-4 px-6 font-semibold text-foreground">Feature</th>
+                  <th className="text-center py-4 px-6 font-semibold text-foreground">Todoist</th>
+                  <th className="text-center py-4 px-6 font-semibold text-primary">GoalPlanner</th>
                 </tr>
               </thead>
               <tbody>
                 {comparison.map((row, i) => (
-                  <tr key={i} className={`border-b border-gray-50 last:border-0 ${i % 2 === 0 ? "bg-gray-50/50" : ""}`}>
-                    <td className="py-3.5 px-6 text-gray-700">{row.feature}</td>
+                  <tr key={i} className={`border-b border-border last:border-0 ${i % 2 === 0 ? "bg-secondary/20" : ""}`}>
+                    <td className="py-3.5 px-6 text-foreground/80">{row.feature}</td>
                     <td className="py-3.5 px-6 text-center">{row.todoist ? "✓" : "—"}</td>
-                    <td className="py-3.5 px-6 text-center text-blue-600 font-medium">{row.goalplanner ? "✓" : "—"}</td>
+                    <td className="py-3.5 px-6 text-center text-primary font-medium">{row.goalplanner ? "✓" : "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -240,37 +242,37 @@ const TodoistAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Turn a To-Do List Into a Finished Day</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">How to Turn a To-Do List Into a Finished Day</h2>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">The 4-step daily plan</h3>
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
+              <h3 className="text-xl font-semibold text-primary mb-4">The 4-step daily plan</h3>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
                     <h4 className="font-semibold">Pick 1–3 priorities</h4>
-                    <p className="text-gray-700">Choose what finishing today actually means. If everything is a priority, nothing is.</p>
+                    <p className="text-foreground/80">Choose what finishing today actually means. If everything is a priority, nothing is.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
                     <h4 className="font-semibold">Time-block the most important work</h4>
-                    <p className="text-gray-700">Assign a start time to your top priority so it happens before reactive work eats the day.</p>
+                    <p className="text-foreground/80">Assign a start time to your top priority so it happens before reactive work eats the day.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
                     <h4 className="font-semibold">Connect tasks to a weekly plan</h4>
-                    <p className="text-gray-700">Daily tasks should roll up to a weekly target and a goal. That's what keeps them meaningful.</p>
+                    <p className="text-foreground/80">Daily tasks should roll up to a weekly target and a goal. That's what keeps them meaningful.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
                     <h4 className="font-semibold">Check in and review</h4>
-                    <p className="text-gray-700">A 30-second check-in at the end of the day keeps you honest, and a weekly review keeps the plan realistic.</p>
+                    <p className="text-foreground/80">A 30-second check-in at the end of the day keeps you honest, and a weekly review keeps the plan realistic.</p>
                   </div>
                 </div>
               </div>
@@ -279,12 +281,12 @@ const TodoistAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Full System</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">Build Your Full System</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Card>
               <CardHeader><CardTitle>Daily Planning</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Turn tasks into a daily schedule and priorities.</p>
+                <p className="text-muted-foreground mb-4">Turn tasks into a daily schedule and priorities.</p>
                 <Button asChild variant="outline" className="w-full rounded-full">
                   <Link to="/daily-planner-app">Daily Planner App →</Link>
                 </Button>
@@ -293,7 +295,7 @@ const TodoistAlternatives = () => {
             <Card>
               <CardHeader><CardTitle>Notes & Capture</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Capture quick thoughts and lists instantly.</p>
+                <p className="text-muted-foreground mb-4">Capture quick thoughts and lists instantly.</p>
                 <Button asChild variant="outline" className="w-full rounded-full">
                   <Link to="/google-keep-alternatives">Google Keep Alternatives →</Link>
                 </Button>
@@ -302,7 +304,7 @@ const TodoistAlternatives = () => {
             <Card>
               <CardHeader><CardTitle>Goals & Tracking</CardTitle></CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Connect tasks to goals and track progress.</p>
+                <p className="text-muted-foreground mb-4">Connect tasks to goals and track progress.</p>
                 <Button asChild variant="outline" className="w-full rounded-full">
                   <Link to="/goal-planner-app">Goal Planner App →</Link>
                 </Button>
@@ -313,13 +315,13 @@ const TodoistAlternatives = () => {
 
         <section className="space-y-6">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Don't Just List Tasks — Finish Days</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-display font-bold text-foreground mb-4">Don't Just List Tasks — Finish Days</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               GoalPlanner (LifePlans) connects your tasks to priorities, time blocks, weekly plans, and goals — with progress analytics to keep you consistent. Free to start on web and mobile.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Get Started Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Get Started Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -329,12 +331,12 @@ const TodoistAlternatives = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-display font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

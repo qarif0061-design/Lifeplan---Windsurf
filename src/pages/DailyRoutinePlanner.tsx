@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const DailyRoutinePlanner = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between a routine and a schedule?",
@@ -177,13 +179,13 @@ const DailyRoutinePlanner = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Build Routines That Transform Your Life</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground">Build Routines That Transform Your Life</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Master daily routines for morning success, productive workdays, restful evenings, and recharging weekends. Build habits that stick and create the life you want, one day at a time.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-orange-600 hover:bg-orange-700">
-            <Link to="/auth">Start Building Routines</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Building Routines
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#routine-types">Explore Routines</Link>
@@ -193,8 +195,8 @@ const DailyRoutinePlanner = () => {
 
       {/* Why Routines Matter */}
       <section className="space-y-6" id="why-routines">
-        <h2 className="text-3xl font-bold text-gray-900">Why Daily Routines Change Everything</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Why Daily Routines Change Everything</h2>
+        <p className="text-lg text-muted-foreground">
           Routines reduce decision fatigue, create consistency, and build the foundation for lasting change.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
@@ -208,12 +210,12 @@ const DailyRoutinePlanner = () => {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">✅ With Routines</CardTitle>
+              <CardTitle className="text-foreground">✅ With Routines</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-foreground/80">
                 Mental energy saved for important decisions, consistent energy and focus, automatic progress toward goals, reduced stress, and starting each day with intention and purpose.
               </p>
             </CardContent>
@@ -223,8 +225,8 @@ const DailyRoutinePlanner = () => {
 
       {/* Types of Routines */}
       <section className="space-y-6" id="routine-types">
-        <h2 className="text-3xl font-bold text-gray-900">Six Types of Daily Routines</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Six Types of Daily Routines</h2>
+        <p className="text-lg text-muted-foreground">
           Different routines serve different purposes and times of day.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -237,7 +239,7 @@ const DailyRoutinePlanner = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{type.description}</p>
+                <p className="text-muted-foreground">{type.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -246,8 +248,8 @@ const DailyRoutinePlanner = () => {
 
       {/* Essential Routine Elements */}
       <section className="space-y-6" id="elements">
-        <h2 className="text-3xl font-bold text-gray-900">Essential Routine Elements</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Essential Routine Elements</h2>
+        <p className="text-lg text-muted-foreground">
           These components create effective routines for any time of day.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -260,7 +262,7 @@ const DailyRoutinePlanner = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{element.description}</p>
+                <p className="text-muted-foreground">{element.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -269,8 +271,8 @@ const DailyRoutinePlanner = () => {
 
       {/* Sample Morning Routine */}
       <section className="space-y-6" id="morning-routine">
-        <h2 className="text-3xl font-bold text-gray-900">Sample Morning Routine (20 minutes)</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Sample Morning Routine (20 minutes)</h2>
+        <p className="text-lg text-muted-foreground">
           A proven structure that starts your day with energy and intention.
         </p>
         <div className="bg-orange-50 rounded-2xl p-8 border border-orange-200">
@@ -297,27 +299,27 @@ const DailyRoutinePlanner = () => {
 
       {/* Sample Evening Routine */}
       <section className="space-y-6" id="evening-routine">
-        <h2 className="text-3xl font-bold text-gray-900">Sample Evening Routine (30 minutes)</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Sample Evening Routine (30 minutes)</h2>
+        <p className="text-lg text-muted-foreground">
           Wind down effectively for restorative sleep and tomorrow's success.
         </p>
-        <div className="bg-blue-50 rounded-2xl p-8 border border-blue-200">
+        <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="space-y-3">
-              <h3 className="font-semibold text-blue-900">9:00 PM - Digital Sunset</h3>
-              <p className="text-blue-800 text-sm">Turn off screens and dim lights to signal bedtime to your brain.</p>
+              <h3 className="font-semibold text-foreground">9:00 PM - Digital Sunset</h3>
+              <p className="text-foreground/80 text-sm">Turn off screens and dim lights to signal bedtime to your brain.</p>
             </div>
             <div className="space-y-3">
-              <h3 className="font-semibold text-blue-900">9:15 PM - Tidy Up</h3>
-              <p className="text-blue-800 text-sm">5 minutes to organize your space for a fresh start tomorrow.</p>
+              <h3 className="font-semibold text-foreground">9:15 PM - Tidy Up</h3>
+              <p className="text-foreground/80 text-sm">5 minutes to organize your space for a fresh start tomorrow.</p>
             </div>
             <div className="space-y-3">
-              <h3 className="font-semibold text-blue-900">9:20 PM - Reflection</h3>
-              <p className="text-blue-800 text-sm">10 minutes of journaling or reviewing your day's wins and lessons.</p>
+              <h3 className="font-semibold text-foreground">9:20 PM - Reflection</h3>
+              <p className="text-foreground/80 text-sm">10 minutes of journaling or reviewing your day's wins and lessons.</p>
             </div>
             <div className="space-y-3">
-              <h3 className="font-semibold text-blue-900">9:30 PM - Relaxation</h3>
-              <p className="text-blue-800 text-sm">Light reading, gentle stretching, or calming activities.</p>
+              <h3 className="font-semibold text-foreground">9:30 PM - Relaxation</h3>
+              <p className="text-foreground/80 text-sm">Light reading, gentle stretching, or calming activities.</p>
             </div>
           </div>
         </div>
@@ -325,8 +327,8 @@ const DailyRoutinePlanner = () => {
 
       {/* Building Routines That Stick */}
       <section className="space-y-6" id="building-routines">
-        <h2 className="text-3xl font-bold text-gray-900">Building Routines That Stick</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Building Routines That Stick</h2>
+        <p className="text-lg text-muted-foreground">
           Follow this systematic approach to create lasting habits.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -339,7 +341,7 @@ const DailyRoutinePlanner = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{step.description}</p>
+                <p className="text-muted-foreground">{step.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -348,17 +350,17 @@ const DailyRoutinePlanner = () => {
 
       {/* Routine Flexibility */}
       <section className="space-y-6" id="flexibility">
-        <h2 className="text-3xl font-bold text-gray-900">Adapting Routines to Real Life</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Adapting Routines to Real Life</h2>
+        <p className="text-lg text-muted-foreground">
           Life isn't predictable—your routines need to bend without breaking.
         </p>
         <div className="grid md:grid-cols-3 gap-6">
-          <Card className="border-yellow-200 bg-yellow-50">
+          <Card className="border-ember/20 bg-ember/10">
             <CardHeader>
-              <CardTitle className="text-yellow-900">🌅 Energy-Based Routines</CardTitle>
+              <CardTitle className="text-foreground">🌅 Energy-Based Routines</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-yellow-800">
+              <p className="text-foreground/80">
                 Match routine intensity to your energy levels. Have 'minimum viable days' for low-energy times and 'power routines' for high-energy periods.
               </p>
             </CardContent>
@@ -373,12 +375,12 @@ const DailyRoutinePlanner = () => {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">⚡ Seasonal Adjustments</CardTitle>
+              <CardTitle className="text-foreground">⚡ Seasonal Adjustments</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-foreground/80">
                 Modify routines for different seasons, life phases, and energy patterns. What works in summer might need adjustment in winter.
               </p>
             </CardContent>
@@ -388,59 +390,59 @@ const DailyRoutinePlanner = () => {
 
       {/* Common Routine Mistakes */}
       <section className="space-y-6" id="mistakes">
-        <h2 className="text-3xl font-bold text-gray-900">Common Routine Mistakes to Avoid</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Common Routine Mistakes to Avoid</h2>
+        <p className="text-lg text-muted-foreground">
           These pitfalls often cause people to abandon their routines.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">❌ What to Avoid</h3>
+            <h3 className="text-xl font-display font-semibold text-foreground">❌ What to Avoid</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">Starting Too Big</p>
-                  <p className="text-gray-600 text-sm">Trying to implement too many habits at once</p>
+                  <p className="text-muted-foreground text-sm">Trying to implement too many habits at once</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">All-or-Nothing Thinking</p>
-                  <p className="text-gray-600 text-sm">Abandoning routines after missing one day</p>
+                  <p className="text-muted-foreground text-sm">Abandoning routines after missing one day</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">No Flexibility</p>
-                  <p className="text-gray-600 text-sm">Rigid routines that break with life changes</p>
+                  <p className="text-muted-foreground text-sm">Rigid routines that break with life changes</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">✅ What to Do Instead</h3>
+            <h3 className="text-xl font-display font-semibold text-foreground">✅ What to Do Instead</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Start Small</p>
-                  <p className="text-gray-600 text-sm">Begin with 2-3 essential elements</p>
+                  <p className="text-muted-foreground text-sm">Begin with 2-3 essential elements</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Focus on Consistency</p>
-                  <p className="text-gray-600 text-sm">Show up daily, even imperfectly</p>
+                  <p className="text-muted-foreground text-sm">Show up daily, even imperfectly</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Build in Flexibility</p>
-                  <p className="text-gray-600 text-sm">Have backup plans for different situations</p>
+                  <p className="text-muted-foreground text-sm">Have backup plans for different situations</p>
                 </div>
               </div>
             </div>
@@ -451,20 +453,20 @@ const DailyRoutinePlanner = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-8 border border-orange-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Build Life-Changing Routines?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Build Life-Changing Routines?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start building daily routines that stick and transform your life. Create morning success, productive days, restful nights, and recharging weekends with GoalPlanner.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-orange-600 hover:bg-orange-700">
-            <Link to="/auth">Start Building Routines Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Building Routines Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Routine Building Skills</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Master Routine Building Skills</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific routine strategies and connect with related habit-building techniques.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -473,7 +475,7 @@ const DailyRoutinePlanner = () => {
               <CardTitle className="text-lg">✅ Habit Tracking</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Track and maintain your routine consistency</p>
+              <p className="text-muted-foreground mb-4">Track and maintain your routine consistency</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/habit-tracker-app">Habit Tracking →</Link>
               </Button>
@@ -484,7 +486,7 @@ const DailyRoutinePlanner = () => {
               <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Align routines with your bigger goals</p>
+              <p className="text-muted-foreground mb-4">Align routines with your bigger goals</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/goal-planner">Goal Planning →</Link>
               </Button>
@@ -495,7 +497,7 @@ const DailyRoutinePlanner = () => {
               <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Plan your days around your routines</p>
+              <p className="text-muted-foreground mb-4">Plan your days around your routines</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/daily-planner-app">Daily Planning →</Link>
               </Button>
@@ -506,7 +508,7 @@ const DailyRoutinePlanner = () => {
               <CardTitle className="text-lg">🧘 Focus & Clarity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Build mental clarity into your routines</p>
+              <p className="text-muted-foreground mb-4">Build mental clarity into your routines</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/focus-and-mental-clarity">Focus & Clarity →</Link>
               </Button>
@@ -517,7 +519,7 @@ const DailyRoutinePlanner = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Daily Routine FAQ</h2>
+        <h2 className="text-3xl font-bold text-foreground">Daily Routine FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -525,7 +527,7 @@ const DailyRoutinePlanner = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

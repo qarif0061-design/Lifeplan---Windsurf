@@ -19,7 +19,20 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ["'Bricolage Grotesque'", "system-ui", "sans-serif"],
+        sans: ["'Plus Jakarta Sans'", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "monospace"],
+      },
       colors: {
+        momentum: {
+          DEFAULT: "hsl(var(--momentum))",
+          foreground: "hsl(var(--momentum-foreground))",
+        },
+        ember: {
+          DEFAULT: "hsl(var(--ember))",
+          foreground: "hsl(var(--ember-foreground))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

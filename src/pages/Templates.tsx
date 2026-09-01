@@ -58,14 +58,14 @@ const Templates = () => {
     <Layout>
       <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in duration-500">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-gray-900">Plan Templates</h1>
-          <p className="text-gray-500 max-w-lg mx-auto">
+          <h1 className="text-3xl font-display font-bold text-foreground">Plan Templates</h1>
+          <p className="text-muted-foreground max-w-lg mx-auto">
             Browse community-created plans. Clone one and make it yours.
           </p>
         </div>
 
         <div className="relative w-full max-w-md mx-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
           <Input
             placeholder="Search templates..."
             className="pl-10 rounded-2xl"
@@ -90,9 +90,9 @@ const Templates = () => {
         )}
 
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Loading templates...</div>
+          <div className="text-center py-12 text-muted-foreground">Loading templates...</div>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-muted-foreground">
             No templates found. Be the first to publish one!
           </div>
         ) : (
@@ -102,8 +102,8 @@ const Templates = () => {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
-                      <CardTitle className="text-lg font-bold text-gray-900">{t.title}</CardTitle>
-                      <CardDescription className="text-sm text-gray-500 line-clamp-2">
+                      <CardTitle className="text-lg font-display font-bold text-foreground">{t.title}</CardTitle>
+                      <CardDescription className="text-sm text-muted-foreground line-clamp-2">
                         {t.description}
                       </CardDescription>
                     </div>
@@ -116,7 +116,7 @@ const Templates = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                     <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {t.dayCount} days</span>
                     <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {t.cloneCount} clones</span>
                     <span>by {t.userName}</span>

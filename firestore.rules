@@ -1,5 +1,12 @@
 rules_version = '2';
 
+// LIFEPLANS — Canonical Firestore Security Rules
+// This file is the single source of truth for both the mobile app and the website —
+// they share one Firebase project (lifeplans-f63f3). Keep the copy in both repos
+// byte-for-byte identical; only ONE of them is ever actually deployed
+// (`firebase deploy --only firestore:rules`), so a change made in only one repo is a
+// silent no-op until it's copied to the other and deployed.
+
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() {
@@ -14,11 +21,32 @@ service cloud.firestore {
       return signedIn() && resource.data.userId == request.auth.uid;
     }
 
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.token.email == 'shumailasahervu@gmail.com' ||
+        request.auth.token.email == 'faranh31@gmail.com'
+      );
+    }
+
     match /users/{userId} {
-      allow read: if signedIn() && (request.auth.uid == userId || request.auth.token.email == 'shumailasahervu@gmail.com' || request.auth.token.email == 'faranh31@gmail.com');
+      allow read: if signedIn() && (request.auth.uid == userId || isAdmin());
       allow create: if signedIn() && request.auth.uid == userId;
-      allow update: if signedIn() && (request.auth.uid == userId || request.auth.token.email == 'shumailasahervu@gmail.com' || request.auth.token.email == 'faranh31@gmail.com');
+      allow update: if signedIn() && (request.auth.uid == userId || isAdmin());
       allow delete: if false;
+
+      // Mobile-only subcollections (app/(tabs)/journal + related screens).
+      match /dailyCheckins/{dateKey} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+      match /dailyCheckIns/{dateKey} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+      match /smartPlans/{smartPlanId} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+      match /customPlanners/{plannerId} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
     }
 
     match /goals/{goalId} {
@@ -49,39 +77,166 @@ service cloud.firestore {
       allow delete: if isOwnerExisting();
     }
 
+    // Top-level daily check-ins (mobile app).
+    match /daily_check_ins/{docId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
+    }
+    match /daily_check_ins/{userId}/history/{docId} {
+      allow read, write: if signedIn() && request.auth.uid == userId;
+    }
+
+    // Strategies (mobile app).
+    match /strategies/{strategyId} {
+      allow read: if signedIn();
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
+    }
+    match /goals/{goalId}/strategies/{strategyId} {
+      allow read, write: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // PDCA reviews (mobile app).
+    match /pdca_reviews/{reviewId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
+    }
+
+    // Goal notes subcollection (mobile app).
+    match /goals/{goalId}/notes/{noteId} {
+      allow read, write: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // User profiles (mobile app legacy path).
+    match /userProfiles/{userId} {
+      allow read, write: if signedIn() && request.auth.uid == userId;
+    }
+
+    // Premium status mirror — server-only write (no Cloud Function currently writes
+    // this; left locked down rather than opened up).
+    match /premiumUsers/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    // Weekly / custom planners (website).
     match /weeklyPlanners/{plannerId} {
-      allow read: if signedIn();
-      allow create: if signedIn();
-      allow update: if signedIn();
-      allow delete: if signedIn();
+      allow read: if isOwnerExisting();
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
     }
-
     match /customPlanners/{plannerId} {
-      allow read: if signedIn();
-      allow create: if signedIn();
-      allow update: if signedIn();
-      allow delete: if signedIn();
+      allow read: if isOwnerExisting();
+      allow create: if isOwnerByField();
+      allow update: if isOwnerExisting();
+      allow delete: if isOwnerExisting();
     }
 
+    // Referrals — { id, userId, code, totalSignups, premiumGranted, createdAt }.
+    // premiumGranted stores the highest REFERRAL_TIERS threshold already rewarded.
     match /referrals/{referralId} {
       allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+
+      // The owner may update their own record freely (including granting their own
+      // reward — that only ever runs in their own session). A newly-signed-up user
+      // applying someone else's code may only bump totalSignups by exactly 1 —
+      // nothing else, since only the owner ever grants their own reward.
+      allow update: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        (
+          request.resource.data.userId == resource.data.userId &&
+          request.resource.data.code == resource.data.code &&
+          request.resource.data.totalSignups == resource.data.totalSignups + 1 &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalSignups'])
+        )
+      );
+      allow delete: if false;
+    }
+
+    // Templates — service (templates.ts, both platforms) writes `userId`, not `authorId`.
+    match /templates/{templateId} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // Accountability partnerships — fields: inviterId, partnerEmail, partnerId?
+    match /accountabilities/{accId} {
+      function isInviter() {
+        return signedIn() && resource.data.inviterId == request.auth.uid;
+      }
+      function isPartner() {
+        return signedIn() && (
+          resource.data.partnerId == request.auth.uid ||
+          (resource.data.partnerId == null && resource.data.partnerEmail == request.auth.token.email.lower())
+        );
+      }
+
+      allow read: if isInviter() || isPartner();
+      allow create: if signedIn() && request.resource.data.inviterId == request.auth.uid;
+      allow update: if isInviter() || isPartner();
+      allow delete: if isInviter();
+    }
+
+    // Public share records.
+    match /shares/{shareId} {
+      allow read: if true; // Public pages must be readable
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // User achievements.
+    match /achievements/{achievementId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
       allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
       allow update: if signedIn() && resource.data.userId == request.auth.uid;
       allow delete: if false;
     }
 
-    match /templates/{templateId} {
+    // Challenges — public read so the /challenge/:inviteCode landing page works for
+    // signed-out visitors (mirrors `shares`'s public-read pattern).
+    match /challenges/{challengeId} {
       allow read: if true;
-      allow create: if signedIn() && request.resource.data.authorId == request.auth.uid;
-      allow update: if signedIn() && resource.data.authorId == request.auth.uid;
-      allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      // Owner can edit anything; any signed-in participant may bump participantCount
+      // by exactly +1 (join) or -1 (leave) — nothing else and no other delta.
+      allow update: if signedIn() && (
+        resource.data.userId == request.auth.uid ||
+        (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['participantCount']) &&
+          (
+            request.resource.data.participantCount == resource.data.participantCount + 1 ||
+            request.resource.data.participantCount == resource.data.participantCount - 1
+          )
+        )
+      );
+      allow delete: if signedIn() && resource.data.userId == request.auth.uid;
+
+      // Challenge participants — anyone signed in can join; only the participant
+      // themself can write their own doc (doc ID == their uid).
+      match /participants/{uid} {
+        allow read: if signedIn();
+        allow create: if signedIn() && request.auth.uid == uid && request.resource.data.userId == request.auth.uid;
+        allow update: if signedIn() && request.auth.uid == uid;
+        allow delete: if signedIn() && request.auth.uid == uid;
+      }
     }
 
-    match /accountabilities/{accId} {
-      allow read: if signedIn() && (resource.data.inviterId == request.auth.uid || resource.data.partnerEmail == request.auth.token.email || resource.data.partnerId == request.auth.uid);
-      allow create: if signedIn() && request.resource.data.inviterId == request.auth.uid;
-      allow update: if signedIn() && (resource.data.inviterId == request.auth.uid || resource.data.partnerEmail == request.auth.token.email || resource.data.partnerId == request.auth.uid);
-      allow delete: if signedIn() && (resource.data.inviterId == request.auth.uid || resource.data.partnerId == request.auth.uid);
+    // Analytics — write-only telemetry via logEvent(). Never client-readable.
+    match /analytics/{eventId} {
+      allow read: if false;
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if false;
+      allow delete: if false;
     }
   }
 }

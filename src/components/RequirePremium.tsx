@@ -1,4 +1,5 @@
 import { useUser } from "@/contexts/UserContext";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -9,6 +10,7 @@ type RequirePremiumProps = {
 
 const RequirePremium = ({ children }: RequirePremiumProps) => {
   const { user, isPremium, loading } = useUser();
+  const { openAuthModal } = useAuthModal();
 
   if (loading) return null;
 
@@ -18,8 +20,11 @@ const RequirePremium = ({ children }: RequirePremiumProps) => {
         <div className="max-w-2xl mx-auto space-y-4 animate-in fade-in duration-500">
           <h1 className="text-2xl font-bold text-gray-900">Sign in required</h1>
           <p className="text-gray-600">Please sign in to continue.</p>
-          <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
-            <Link to="/auth">Sign In</Link>
+          <Button
+            className="rounded-full bg-blue-600 hover:bg-blue-700"
+            onClick={() => openAuthModal({ intent: "signin" })}
+          >
+            Sign In
           </Button>
         </div>
       </Layout>

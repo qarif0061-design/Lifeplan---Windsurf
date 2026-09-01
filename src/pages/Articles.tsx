@@ -595,11 +595,11 @@ const Articles = () => {
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Articles</h1>
-            <p className="text-gray-500">Guides and insights to help you plan better and achieve more.</p>
+            <h1 className="text-3xl font-bold text-foreground">Articles</h1>
+            <p className="text-muted-foreground">Guides and insights to help you plan better and achieve more.</p>
           </div>
           <div className="relative w-full md:w-[320px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
             <Input
               placeholder="Search articles..."
               className="pl-10 rounded-xl"
@@ -631,20 +631,20 @@ const Articles = () => {
           ))}
         </div>
 
-        <div className="text-sm text-gray-500">Showing {filteredArticles.length} articles.</div>
+        <div className="text-sm text-muted-foreground">Showing {filteredArticles.length} articles.</div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {filteredArticles.map((a) => (
             <Card key={a.slug} className="border-none shadow-sm rounded-[2rem]">
               <CardHeader>
                 <CardTitle className="text-xl font-bold">
-                  <Link to={`/articles/${a.slug}`} className="hover:text-blue-600 transition-colors">
+                  <Link to={`/articles/${a.slug}`} className="hover:text-primary transition-colors">
                     {a.title}
                   </Link>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{a.excerpt}</p>
+                <p className="text-muted-foreground">{a.excerpt}</p>
               </CardContent>
             </Card>
           ))}
@@ -652,7 +652,7 @@ const Articles = () => {
 
         {filteredArticles.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500">No articles found matching your search.</p>
+            <p className="text-muted-foreground">No articles found matching your search.</p>
           </div>
         )}
       </div>

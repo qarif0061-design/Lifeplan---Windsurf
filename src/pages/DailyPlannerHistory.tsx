@@ -31,8 +31,8 @@ const DailyPlannerHistory = () => {
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Daily Planner History</h1>
-            <p className="text-gray-500">Review and revisit previous days.</p>
+            <h1 className="text-3xl font-bold text-foreground">Daily Planner History</h1>
+            <p className="text-muted-foreground">Review and revisit previous days.</p>
           </div>
           <Button asChild variant="outline" className="rounded-full">
             <Link to="/daily-planner">
@@ -44,13 +44,13 @@ const DailyPlannerHistory = () => {
         <div className="grid md:grid-cols-2 gap-6">
           {loading && (
             <Card className="border-none shadow-sm rounded-[2rem]">
-              <CardContent className="p-6 text-gray-500">Loading...</CardContent>
+              <CardContent className="p-6 text-muted-foreground">Loading...</CardContent>
             </Card>
           )}
 
           {!loading && !visibleDays.length && (
             <Card className="border-none shadow-sm rounded-[2rem]">
-              <CardContent className="p-6 text-gray-500">No daily planner entries yet.</CardContent>
+              <CardContent className="p-6 text-muted-foreground">No daily planner entries yet.</CardContent>
             </Card>
           )}
 
@@ -66,10 +66,10 @@ const DailyPlannerHistory = () => {
                     <CardTitle className="text-xl font-bold">{toDisplayDate(d.date)}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-muted-foreground">
                       Priorities: {prioritiesDone}/{prioritiesTotal} • Calls/Emails: {callEmailDone}/{callEmailTotal}
                     </div>
-                    <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
+                    <Button asChild className="rounded-full bg-primary hover:bg-primary/90">
                       <Link to={`/daily-planner?date=${encodeURIComponent(d.date)}`}>Open</Link>
                     </Button>
                   </CardContent>

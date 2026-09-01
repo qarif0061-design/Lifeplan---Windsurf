@@ -37,6 +37,7 @@ export interface UserProfile {
   isPremium: boolean;
   premiumExpiresAt?: string;
   featuredGoalId?: string;
+  joinedChallengeIds?: string[];
   preferences: {
     theme: 'light' | 'dark' | 'auto';
     notifications: boolean;

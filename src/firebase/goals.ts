@@ -1,5 +1,5 @@
 import { db } from "@/firebase/config";
-import type { Goal, Priority, Timeframe } from "@/types";
+import type { Goal, GoalCheckpoint, Priority, Timeframe } from "@/types";
 import {
     addDoc,
     collection,
@@ -113,6 +113,14 @@ const normalizeGoalFromFirestore = (goalId: string, raw: unknown): Goal => {
       }))
     : data.checkpoints;
 
+  const notes = Array.isArray(data.notes)
+    ? data.notes.map((n: any) => ({
+        ...n,
+        createdAt: toIsoString(n?.createdAt) ?? n?.createdAt,
+        updatedAt: toIsoString(n?.updatedAt) ?? n?.updatedAt,
+      }))
+    : data.notes;
+
   return {
     id: goalId,
     ...(data as Omit<Goal, "id">),
@@ -123,6 +131,7 @@ const normalizeGoalFromFirestore = (goalId: string, raw: unknown): Goal => {
     endDate: toIsoString(data.endDate) ?? data.endDate,
     dueAt: toIsoString(data.dueAt) ?? data.dueAt,
     checkpoints,
+    notes,
   } as Goal;
 };
 
@@ -192,4 +201,33 @@ export const updateGoal = async (goalId: string, patch: Partial<Goal>): Promise<
 export const deleteGoal = async (goalId: string): Promise<void> => {
   const ref = doc(db, "goals", goalId);
   await deleteDoc(ref);
+};
+
+// Clone a shared goal's title/category/checkpoints structure (captured on the public
+// ShareRecord at share-creation time — see buildGoalShareData) into a brand-new goal
+// owned by the viewer. Never touches the original goal doc; checkpoints are reset to
+// incomplete with fresh ids/timestamps, mirroring cloneCustomPlanner/cloneTemplate.
+export const cloneGoalFromShareData = async (
+  userId: string,
+  name: string,
+  category?: string,
+  checkpoints?: GoalCheckpoint[],
+): Promise<string> => {
+  const now = new Date().toISOString();
+  const resetCheckpoints: GoalCheckpoint[] = (checkpoints ?? []).map((c) => ({
+    ...c,
+    id: crypto.randomUUID(),
+    completed: false,
+    current: c.kind === "number" ? 0 : c.current,
+    createdAt: now,
+    updatedAt: now,
+  }));
+
+  return createGoal({
+    userId,
+    name,
+    category: category || "General",
+    priority: "medium",
+    checkpoints: resetCheckpoints,
+  });
 };

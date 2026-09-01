@@ -87,11 +87,11 @@ const Videos = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Videos</h1>
-            <p className="text-gray-500">Learn goal planning and productivity strategies.</p>
+            <h1 className="text-3xl font-display font-bold text-foreground">Videos</h1>
+            <p className="text-muted-foreground">Learn goal planning and productivity strategies.</p>
           </div>
           <div className="relative w-full md:w-[320px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
             <Input
               placeholder="Search videos..."
               className="pl-10 rounded-xl"
@@ -105,14 +105,14 @@ const Videos = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredVideos.map((video) => (
             <Card key={video.id} className="group overflow-hidden hover:shadow-lg transition-all duration-300 rounded-2xl">
-              <div className="relative aspect-video bg-gray-100 overflow-hidden">
+              <div className="relative aspect-video bg-secondary overflow-hidden">
                 <img
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                  <Button size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full w-12 h-12 bg-white/90 hover:bg-white text-black">
+                  <Button size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full w-12 h-12 bg-card/90 hover:bg-card text-foreground">
                     <Play className="w-5 h-5 ml-1" />
                   </Button>
                 </div>
@@ -121,11 +121,11 @@ const Videos = () => {
                 </div>
               </div>
               <CardContent className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="font-display font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                   {video.title}
                 </h3>
-                <p className="text-sm text-gray-600 mb-3 line-clamp-3">{video.description}</p>
-                <div className="flex items-center justify-between text-xs text-gray-500">
+                <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{video.description}</p>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Eye className="w-3 h-3" />
                     <span>{video.views} views</span>
@@ -142,7 +142,7 @@ const Videos = () => {
 
         {filteredVideos.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500">No videos found matching your search.</p>
+            <p className="text-muted-foreground">No videos found matching your search.</p>
           </div>
         )}
       </div>

@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const GoalTrackingSoftwareSeo = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     { question: "What is goal tracking software?", answer: "Goal tracking software helps individuals and businesses set, monitor, and achieve objectives. It provides tools for defining goals with milestones, tracking progress visually, setting reminders, and generating reports on achievement rates." },
     { question: "Is there free goal tracking software?", answer: "Yes. Many goal tracking platforms offer free tiers with essential features like goal creation, progress tracking, and basic reporting. Goal Planner – LifePlans offers a free tier with daily planning and goal tracking." },
@@ -34,13 +36,13 @@ const GoalTrackingSoftwareSeo = () => {
 
       <div className="space-y-10">
         <header className="space-y-3">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900">Goal Tracking Software</h1>
-          <p className="text-gray-600 text-lg">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground">Goal Tracking Software</h1>
+          <p className="text-muted-foreground text-lg">
             Track goals effectively with the right software. From free personal goal trackers to enterprise goal management systems.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Try free goal tracker</Link>
+            <Button className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Try free goal tracker
             </Button>
             <Button asChild variant="outline" className="rounded-full">
               <Link to="/goal-tracker-app">Explore goal tracker app</Link>
@@ -49,27 +51,27 @@ const GoalTrackingSoftwareSeo = () => {
         </header>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Types of goal tracking tools</h2>
+          <h2 className="text-2xl font-bold text-foreground">Types of goal tracking tools</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Personal goal trackers</CardTitle></CardHeader>
-              <CardContent className="text-gray-700">Individual-focused apps for tracking daily habits, fitness goals, learning targets, and personal projects. Free options available with essential features.</CardContent>
+              <CardContent className="text-foreground/80">Individual-focused apps for tracking daily habits, fitness goals, learning targets, and personal projects. Free options available with essential features.</CardContent>
             </Card>
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Business goal management</CardTitle></CardHeader>
-              <CardContent className="text-gray-700">Enterprise-grade software supporting OKRs, team alignment, performance dashboards, and automated reporting. Designed for organizations of all sizes.</CardContent>
+              <CardContent className="text-foreground/80">Enterprise-grade software supporting OKRs, team alignment, performance dashboards, and automated reporting. Designed for organizations of all sizes.</CardContent>
             </Card>
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Social accountability apps</CardTitle></CardHeader>
-              <CardContent className="text-gray-700">Goal trackers with friends, group challenges, and community support. Social accountability boosts consistency and makes goal pursuit more engaging.</CardContent>
+              <CardContent className="text-foreground/80">Goal trackers with friends, group challenges, and community support. Social accountability boosts consistency and makes goal pursuit more engaging.</CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Features to look for in goal tracking software</h2>
-          <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm">
-            <ul className="list-disc pl-6 space-y-2 text-gray-700">
+          <h2 className="text-2xl font-bold text-foreground">Features to look for in goal tracking software</h2>
+          <div className="rounded-[2rem] border border-border bg-card p-7 shadow-sm">
+            <ul className="list-disc pl-6 space-y-2 text-foreground/80">
               <li><strong>Goal setting framework:</strong> SMART goals, OKRs, or custom goal templates.</li>
               <li><strong>Progress visualization:</strong> Charts, progress bars, and dashboards showing completion rates.</li>
               <li><strong>Milestone tracking:</strong> Break large goals into smaller, measurable checkpoints.</li>
@@ -83,18 +85,18 @@ const GoalTrackingSoftwareSeo = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Free vs paid goal tracking software</h2>
+          <h2 className="text-2xl font-bold text-foreground">Free vs paid goal tracking software</h2>
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Free goal trackers</CardTitle></CardHeader>
-              <CardContent className="text-gray-700 space-y-2">
+              <CardContent className="text-foreground/80 space-y-2">
                 <p>Most free plans include basic goal creation, daily progress tracking, and limited history. Perfect for individuals starting their goal achievement journey.</p>
                 <p>Look for: no hidden limits on goals, clean interface, and mobile access.</p>
               </CardContent>
             </Card>
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Premium goal management</CardTitle></CardHeader>
-              <CardContent className="text-gray-700 space-y-2">
+              <CardContent className="text-foreground/80 space-y-2">
                 <p>Premium tools add advanced analytics, unlimited goals, team features, priority support, and integrations with other productivity tools.</p>
                 <p>Ideal for: businesses, coaches, and serious goal achievers who want deeper insights.</p>
               </CardContent>
@@ -103,9 +105,9 @@ const GoalTrackingSoftwareSeo = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">How to choose the right goal tracking system</h2>
-          <div className="rounded-[2rem] border border-blue-100 bg-blue-50 p-7 shadow-sm">
-            <ol className="list-decimal pl-6 space-y-2 text-gray-700">
+          <h2 className="text-2xl font-bold text-foreground">How to choose the right goal tracking system</h2>
+          <div className="rounded-[2rem] border border-primary/20 bg-primary/10 p-7 shadow-sm">
+            <ol className="list-decimal pl-6 space-y-2 text-foreground/80">
               <li><strong>Define your needs:</strong> Are you tracking personal goals, team objectives, or both?</li>
               <li><strong>Check the framework:</strong> Does it support SMART goals, OKRs, or your preferred method?</li>
               <li><strong>Test free tiers:</strong> Try before you buy. Most tools offer free versions with core features.</li>
@@ -117,14 +119,14 @@ const GoalTrackingSoftwareSeo = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Frequently asked questions</h2>
+          <h2 className="text-2xl font-bold text-foreground">Frequently asked questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
-                <AccordionTrigger className="text-left font-medium text-gray-900">
+                <AccordionTrigger className="text-left font-medium text-foreground">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-foreground/80">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

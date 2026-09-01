@@ -272,8 +272,8 @@ const DailyPlanner = () => {
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Daily Planner</h1>
-            <p className="text-gray-500">{headerSubtitle}</p>
+            <h1 className="text-3xl font-bold text-foreground">Daily Planner</h1>
+            <p className="text-muted-foreground">{headerSubtitle}</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <Button asChild variant="outline" className="rounded-full">
@@ -305,10 +305,10 @@ const DailyPlanner = () => {
 
                 <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">Top 3 Priorities</div>
+                    <div className="text-sm font-semibold text-foreground">Top 3 Priorities</div>
                     <div className="space-y-2">
                       {(selectedDay?.priorities ?? []).filter((p) => (p.title ?? "").trim().length > 0).length === 0 ? (
-                        <div className="text-sm text-gray-500">No priorities saved.</div>
+                        <div className="text-sm text-muted-foreground">No priorities saved.</div>
                       ) : (
                         (selectedDay?.priorities ?? [])
                           .filter((p) => (p.title ?? "").trim().length > 0)
@@ -316,7 +316,7 @@ const DailyPlanner = () => {
                           .map((p) => (
                             <div key={p.id} className="flex items-center gap-3 text-sm">
                               <input type="checkbox" checked={!!p.completed} readOnly />
-                              <div className="text-gray-900">{p.title}</div>
+                              <div className="text-foreground">{p.title}</div>
                             </div>
                           ))
                       )}
@@ -324,32 +324,32 @@ const DailyPlanner = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">Today's Schedule</div>
+                    <div className="text-sm font-semibold text-foreground">Today's Schedule</div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {scheduleHours
                         .filter((h) => (selectedDay?.schedule?.[h] ?? "").trim().length > 0)
                         .map((h) => (
-                          <div key={h} className="flex items-center gap-3 text-sm rounded-xl border border-gray-100 p-2">
-                            <div className="w-14 text-xs font-semibold text-gray-500">{h}</div>
-                            <div className="text-gray-900">{selectedDay?.schedule?.[h]}</div>
+                          <div key={h} className="flex items-center gap-3 text-sm rounded-xl border border-border p-2">
+                            <div className="w-14 text-xs font-semibold text-muted-foreground">{h}</div>
+                            <div className="text-foreground">{selectedDay?.schedule?.[h]}</div>
                           </div>
                         ))}
                       {scheduleHours.filter((h) => (selectedDay?.schedule?.[h] ?? "").trim().length > 0).length === 0 && (
-                        <div className="text-sm text-gray-500">No schedule saved.</div>
+                        <div className="text-sm text-muted-foreground">No schedule saved.</div>
                       )}
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">Reminder</div>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.reminder ?? "").trim() || "No reminder saved."}</div>
+                    <div className="text-sm font-semibold text-foreground">Reminder</div>
+                    <div className="text-sm text-foreground/80 whitespace-pre-wrap">{(selectedDay?.reminder ?? "").trim() || "No reminder saved."}</div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">To Call / Email</div>
+                    <div className="text-sm font-semibold text-foreground">To Call / Email</div>
                     <div className="space-y-2">
                       {(selectedDay?.callEmail ?? []).filter((c) => (c.title ?? "").trim().length > 0).length === 0 ? (
-                        <div className="text-sm text-gray-500">No calls/emails saved.</div>
+                        <div className="text-sm text-muted-foreground">No calls/emails saved.</div>
                       ) : (
                         (selectedDay?.callEmail ?? [])
                           .filter((c) => (c.title ?? "").trim().length > 0)
@@ -357,7 +357,7 @@ const DailyPlanner = () => {
                           .map((c) => (
                             <div key={c.id} className="flex items-center gap-3 text-sm">
                               <input type="checkbox" checked={!!c.completed} readOnly />
-                              <div className="text-gray-900">{c.title}</div>
+                              <div className="text-foreground">{c.title}</div>
                             </div>
                           ))
                       )}
@@ -365,18 +365,18 @@ const DailyPlanner = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">For Tomorrow</div>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.forTomorrow ?? "").trim() || "Nothing saved."}</div>
+                    <div className="text-sm font-semibold text-foreground">For Tomorrow</div>
+                    <div className="text-sm text-foreground/80 whitespace-pre-wrap">{(selectedDay?.forTomorrow ?? "").trim() || "Nothing saved."}</div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">Daily Affirmation</div>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.affirmation ?? "").trim() || "Nothing saved."}</div>
+                    <div className="text-sm font-semibold text-foreground">Daily Affirmation</div>
+                    <div className="text-sm text-foreground/80 whitespace-pre-wrap">{(selectedDay?.affirmation ?? "").trim() || "Nothing saved."}</div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-gray-900">Notes</div>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap">{(selectedDay?.notes ?? "").trim() || "No notes saved."}</div>
+                    <div className="text-sm font-semibold text-foreground">Notes</div>
+                    <div className="text-sm text-foreground/80 whitespace-pre-wrap">{(selectedDay?.notes ?? "").trim() || "No notes saved."}</div>
                   </div>
                 </div>
               </DialogContent>
@@ -435,8 +435,8 @@ const DailyPlanner = () => {
               </PopoverContent>
             </Popover>
             {!canWriteToSelectedDate && (
-              <div className="text-sm text-gray-600">
-                {limitMessage} <Link className="text-blue-600 hover:underline" to="/pricing">Upgrade</Link>
+              <div className="text-sm text-muted-foreground">
+                {limitMessage} <Link className="text-primary hover:underline" to="/pricing">Upgrade</Link>
               </div>
             )}
           </CardContent>
@@ -451,7 +451,7 @@ const DailyPlanner = () => {
               <CardContent className="space-y-3">
                 {scheduleHours.map((h) => (
                   <div key={h} className="flex items-center gap-3">
-                    <div className="w-14 text-xs font-semibold text-gray-500">{h}</div>
+                    <div className="w-14 text-xs font-semibold text-muted-foreground">{h}</div>
                     <Input
                       value={schedule[h] ?? ""}
                       onChange={(e) =>

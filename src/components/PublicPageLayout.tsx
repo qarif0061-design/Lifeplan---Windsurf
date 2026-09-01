@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const PublicPageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,11 +8,7 @@ const PublicPageLayout = ({ children }: { children: React.ReactNode }) => {
       <main className="max-w-5xl mx-auto px-4 py-12">
         {children}
       </main>
-      <footer className="py-12 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto px-4 text-center">
-          <p className="text-gray-500 text-sm">© 2024 LifePlan. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

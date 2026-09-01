@@ -98,27 +98,27 @@ const CheckIn = () => {
       <div className="relative max-w-4xl mx-auto">
         <div className="space-y-8 animate-in fade-in duration-500">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Daily Check-in</h1>
-            <p className="text-gray-500">Build consistency and keep your streak alive.</p>
+            <h1 className="text-3xl font-bold text-foreground">Daily Check-in</h1>
+            <p className="text-muted-foreground">Build consistency and keep your streak alive.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
             <Card className="border-none shadow-sm rounded-[2rem]">
               <CardContent className="p-6 text-center">
-                <div className="text-2xl font-bold text-blue-600 mb-1">{stats.streak}</div>
-                <div className="text-sm text-gray-500">Current Streak</div>
+                <div className="text-2xl font-bold text-primary mb-1">{stats.streak}</div>
+                <div className="text-sm text-muted-foreground">Current Streak</div>
               </CardContent>
             </Card>
             <Card className="border-none shadow-sm rounded-[2rem]">
               <CardContent className="p-6 text-center">
-                <div className="text-2xl font-bold text-emerald-600 mb-1">{stats.avgLast7CompletionPct}%</div>
-                <div className="text-sm text-gray-500">Last 7 Days Completion</div>
+                <div className="text-2xl font-bold text-momentum mb-1">{stats.avgLast7CompletionPct}%</div>
+                <div className="text-sm text-muted-foreground">Last 7 Days Completion</div>
               </CardContent>
             </Card>
             <Card className="border-none shadow-sm rounded-[2rem]">
               <CardContent className="p-6 text-center">
-                <div className="text-2xl font-bold text-purple-600 mb-1">{stats.totalCheckIns}</div>
-                <div className="text-sm text-gray-500">Total Check-ins</div>
+                <div className="text-2xl font-bold text-ember mb-1">{stats.totalCheckIns}</div>
+                <div className="text-sm text-muted-foreground">Total Check-ins</div>
               </CardContent>
             </Card>
           </div>
@@ -129,38 +129,38 @@ const CheckIn = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid sm:grid-cols-3 gap-4">
-                <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <input 
-                    type="checkbox" 
-                    checked={hydration} 
+                <label className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+                  <input
+                    type="checkbox"
+                    checked={hydration}
                     onChange={(e) => {
                       if (handlePremiumCheck("checking off daily habits")) return;
                       setHydration(e.target.checked);
-                    }} 
+                    }}
                   />
-                  <span className="font-medium text-gray-900">Hydration</span>
+                  <span className="font-medium text-foreground">Hydration</span>
                 </label>
-                <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <input 
-                    type="checkbox" 
-                    checked={healthyEating} 
+                <label className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+                  <input
+                    type="checkbox"
+                    checked={healthyEating}
                     onChange={(e) => {
                       if (handlePremiumCheck("checking off daily habits")) return;
                       setHealthyEating(e.target.checked);
-                    }} 
+                    }}
                   />
-                  <span className="font-medium text-gray-900">Healthy Eating</span>
+                  <span className="font-medium text-foreground">Healthy Eating</span>
                 </label>
-                <label className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
-                  <input 
-                    type="checkbox" 
-                    checked={exercise} 
+                <label className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
+                  <input
+                    type="checkbox"
+                    checked={exercise}
                     onChange={(e) => {
                       if (handlePremiumCheck("checking off daily habits")) return;
                       setExercise(e.target.checked);
-                    }} 
+                    }}
                   />
-                  <span className="font-medium text-gray-900">Exercise</span>
+                  <span className="font-medium text-foreground">Exercise</span>
                 </label>
               </div>
 
@@ -177,7 +177,7 @@ const CheckIn = () => {
                 />
               </div>
 
-              <Button onClick={handleSave} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleSave} disabled={saving} className="rounded-full bg-primary hover:bg-primary/90">
                 {saving ? "Saving..." : "Save Check-in"}
               </Button>
             </CardContent>

@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const FocusAndMentalClarity = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between focus and concentration?",
@@ -177,13 +179,13 @@ const FocusAndMentalClarity = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Achieve Laser Focus & Mental Clarity</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground">Achieve Laser Focus & Mental Clarity</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Master the art of concentration and clear thinking. Learn proven techniques to eliminate distractions, improve mental stamina, and achieve deep work in a distracted world.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-cyan-600 hover:bg-cyan-700">
-            <Link to="/auth">Improve Your Focus</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Improve Your Focus
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#techniques">Learn Techniques</Link>
@@ -193,8 +195,8 @@ const FocusAndMentalClarity = () => {
 
       {/* Focus vs Clarity */}
       <section className="space-y-6" id="focus-vs-clarity">
-        <h2 className="text-3xl font-bold text-gray-900">Focus vs. Mental Clarity</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Focus vs. Mental Clarity</h2>
+        <p className="text-lg text-muted-foreground">
           Both are essential but different skills that work together for peak performance.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
@@ -208,12 +210,12 @@ const FocusAndMentalClarity = () => {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-primary/20 bg-primary/10">
             <CardHeader>
-              <CardTitle className="text-blue-900">🧠 Mental Clarity</CardTitle>
+              <CardTitle className="text-foreground">🧠 Mental Clarity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-blue-800">
+              <p className="text-foreground/80">
                 The quality of your thinking and decision-making. Clarity comes from reduced mental noise, organized thoughts, and emotional balance.
               </p>
             </CardContent>
@@ -223,8 +225,8 @@ const FocusAndMentalClarity = () => {
 
       {/* Focus Techniques */}
       <section className="space-y-6" id="techniques">
-        <h2 className="text-3xl font-bold text-gray-900">Proven Focus Techniques</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Proven Focus Techniques</h2>
+        <p className="text-lg text-muted-foreground">
           These methods help you train and maintain your attention muscle.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -237,7 +239,7 @@ const FocusAndMentalClarity = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{technique.description}</p>
+                <p className="text-muted-foreground">{technique.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -246,8 +248,8 @@ const FocusAndMentalClarity = () => {
 
       {/* Mental Clarity Practices */}
       <section className="space-y-6" id="clarity-practices">
-        <h2 className="text-3xl font-bold text-gray-900">Mental Clarity Practices</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Mental Clarity Practices</h2>
+        <p className="text-lg text-muted-foreground">
           These habits clear mental fog and improve thinking quality.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -260,7 +262,7 @@ const FocusAndMentalClarity = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{practice.description}</p>
+                <p className="text-muted-foreground">{practice.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -269,8 +271,8 @@ const FocusAndMentalClarity = () => {
 
       {/* Common Focus Blockers */}
       <section className="space-y-6" id="blockers">
-        <h2 className="text-3xl font-bold text-gray-900">Common Focus Blockers</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Common Focus Blockers</h2>
+        <p className="text-lg text-muted-foreground">
           Identify and eliminate these common enemies of concentration.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -283,7 +285,7 @@ const FocusAndMentalClarity = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{blocker.description}</p>
+                <p className="text-muted-foreground">{blocker.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -292,8 +294,8 @@ const FocusAndMentalClarity = () => {
 
       {/* Creating a Focus Environment */}
       <section className="space-y-6" id="environment">
-        <h2 className="text-3xl font-bold text-gray-900">Design Your Focus Environment</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Design Your Focus Environment</h2>
+        <p className="text-lg text-muted-foreground">
           Your environment can either support or sabotage your concentration.
         </p>
         <div className="bg-cyan-50 rounded-2xl p-8 border border-cyan-200">
@@ -323,27 +325,27 @@ const FocusAndMentalClarity = () => {
 
       {/* Energy Management for Focus */}
       <section className="space-y-6" id="energy-management">
-        <h2 className="text-3xl font-bold text-gray-900">Energy Management for Better Focus</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Energy Management for Better Focus</h2>
+        <p className="text-lg text-muted-foreground">
           Your ability to focus depends directly on your physical and mental energy.
         </p>
         <div className="grid md:grid-cols-3 gap-6">
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">🌅 Morning Energy</CardTitle>
+              <CardTitle className="text-foreground">🌅 Morning Energy</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-foreground/80">
                 Use peak morning focus for your most demanding work. Protect this time with a morning routine that includes exercise and nutrition.
               </p>
             </CardContent>
           </Card>
-          <Card className="border-yellow-200 bg-yellow-50">
+          <Card className="border-ember/20 bg-ember/10">
             <CardHeader>
-              <CardTitle className="text-yellow-900">⚡ Midday Energy</CardTitle>
+              <CardTitle className="text-foreground">⚡ Midday Energy</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-yellow-800">
+              <p className="text-foreground/80">
                 Schedule lighter tasks during natural energy dips. Use lunch and short walks to recharge for afternoon focus blocks.
               </p>
             </CardContent>
@@ -363,8 +365,8 @@ const FocusAndMentalClarity = () => {
 
       {/* Building Mental Stamina */}
       <section className="space-y-6" id="mental-stamina">
-        <h2 className="text-3xl font-bold text-gray-900">Building Mental Stamina</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Building Mental Stamina</h2>
+        <p className="text-lg text-muted-foreground">
           Focus is like a muscle—it gets stronger with consistent training.
         </p>
         <div className="space-y-4">
@@ -374,7 +376,7 @@ const FocusAndMentalClarity = () => {
                 <CardTitle className="text-lg text-center">Start Small</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-center">Begin with 15-20 minute focus sessions and gradually increase duration.</p>
+                <p className="text-muted-foreground text-center">Begin with 15-20 minute focus sessions and gradually increase duration.</p>
               </CardContent>
             </Card>
             <Card>
@@ -382,7 +384,7 @@ const FocusAndMentalClarity = () => {
                 <CardTitle className="text-lg text-center">Stay Consistent</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-center">Daily practice is more important than intensity.</p>
+                <p className="text-muted-foreground text-center">Daily practice is more important than intensity.</p>
               </CardContent>
             </Card>
             <Card>
@@ -390,7 +392,7 @@ const FocusAndMentalClarity = () => {
                 <CardTitle className="text-lg text-center">Recover Properly</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-center">Take breaks and get adequate sleep to prevent burnout.</p>
+                <p className="text-muted-foreground text-center">Take breaks and get adequate sleep to prevent burnout.</p>
               </CardContent>
             </Card>
             <Card>
@@ -398,7 +400,7 @@ const FocusAndMentalClarity = () => {
                 <CardTitle className="text-lg text-center">Track Progress</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-center">Monitor focus duration and quality to see improvement.</p>
+                <p className="text-muted-foreground text-center">Monitor focus duration and quality to see improvement.</p>
               </CardContent>
             </Card>
           </div>
@@ -408,20 +410,20 @@ const FocusAndMentalClarity = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-2xl p-8 border border-cyan-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Master Your Focus?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Master Your Focus?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start building laser focus and mental clarity with proven techniques and systems. Eliminate distractions, improve concentration, and achieve deep work with GoalPlanner.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-cyan-600 hover:bg-cyan-700">
-            <Link to="/auth">Improve Focus Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Improve Focus Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Focus & Clarity Skills</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Master Focus & Clarity Skills</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific focus techniques and connect with related productivity strategies.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -430,7 +432,7 @@ const FocusAndMentalClarity = () => {
               <CardTitle className="text-lg">🎯 Productivity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Achieve more with better focus</p>
+              <p className="text-muted-foreground mb-4">Achieve more with better focus</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/productivity">Productivity →</Link>
               </Button>
@@ -441,7 +443,7 @@ const FocusAndMentalClarity = () => {
               <CardTitle className="text-lg">⏰ Time Management</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Protect time for focused work</p>
+              <p className="text-muted-foreground mb-4">Protect time for focused work</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/time-management">Time Management →</Link>
               </Button>
@@ -452,7 +454,7 @@ const FocusAndMentalClarity = () => {
               <CardTitle className="text-lg">📝 Daily Journal</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Clear mental fog through reflection</p>
+              <p className="text-muted-foreground mb-4">Clear mental fog through reflection</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/daily-journal-app">Daily Journal →</Link>
               </Button>
@@ -463,7 +465,7 @@ const FocusAndMentalClarity = () => {
               <CardTitle className="text-lg">🧠 ADHD Support</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Focus strategies for neurodivergent minds</p>
+              <p className="text-muted-foreground mb-4">Focus strategies for neurodivergent minds</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/adhd-productivity">ADHD Strategies →</Link>
               </Button>
@@ -474,7 +476,7 @@ const FocusAndMentalClarity = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Focus & Mental Clarity FAQ</h2>
+        <h2 className="text-3xl font-bold text-foreground">Focus & Mental Clarity FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -482,7 +484,7 @@ const FocusAndMentalClarity = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

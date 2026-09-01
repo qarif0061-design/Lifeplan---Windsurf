@@ -144,8 +144,8 @@ const Planning = () => {
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Weekly Planning</h1>
-          <p className="text-gray-500">Turn goals into weekly actions.</p>
+          <h1 className="text-3xl font-bold text-foreground">Weekly Planning</h1>
+          <p className="text-muted-foreground">Turn goals into weekly actions.</p>
         </div>
 
         <Card className="border-none shadow-sm rounded-[2.5rem]">
@@ -154,10 +154,10 @@ const Planning = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             {!mergedPlan ? (
-              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5">
-                <p className="font-semibold text-gray-900">No weekly plan set yet.</p>
-                <p className="text-sm text-gray-600 mt-1">Set your weekly priorities and tasks to stay on track.</p>
-                <Button onClick={openEditor} className="mt-4 rounded-full bg-blue-600 hover:bg-blue-700">
+              <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-5">
+                <p className="font-semibold text-foreground">No weekly plan set yet.</p>
+                <p className="text-sm text-muted-foreground mt-1">Set your weekly priorities and tasks to stay on track.</p>
+                <Button onClick={openEditor} className="mt-4 rounded-full bg-primary hover:bg-primary/90">
                   Set Weekly Plan
                 </Button>
               </div>
@@ -165,8 +165,8 @@ const Planning = () => {
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm text-gray-500">Week of</p>
-                    <p className="text-lg font-bold text-gray-900">{mergedPlan.weekStart}</p>
+                    <p className="text-sm text-muted-foreground">Week of</p>
+                    <p className="text-lg font-bold text-foreground">{mergedPlan.weekStart}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" className="rounded-full" onClick={openEditor}>
@@ -192,33 +192,33 @@ const Planning = () => {
 
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">Top priorities</p>
-                    <div className="mt-2 space-y-1 text-sm text-gray-600">
+                    <p className="text-sm font-semibold text-foreground">Top priorities</p>
+                    <div className="mt-2 space-y-1 text-sm text-muted-foreground">
                       {(mergedPlan.priorities ?? []).length ? (
                         (mergedPlan.priorities ?? []).map((p, idx) => (
                           <div key={String(idx) + "-" + p} className="whitespace-pre-wrap">{idx + 1}. {p}</div>
                         ))
                       ) : (
-                        <div className="text-sm text-gray-500">No priorities yet.</div>
+                        <div className="text-sm text-muted-foreground">No priorities yet.</div>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">Tasks</p>
+                    <p className="text-sm font-semibold text-foreground">Tasks</p>
                     <div className="mt-2 space-y-2">
                       {(mergedPlan.tasks ?? []).length ? (
                         (mergedPlan.tasks ?? []).slice(0, 6).map((t) => (
-                          <div key={t.id} className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-4">
-                            <span className={t.completed ? "text-gray-400 line-through" : "text-gray-900"}>{t.title}</span>
-                            <span className="text-xs font-medium text-gray-500">{t.completed ? "Done" : "Pending"}</span>
+                          <div key={t.id} className="flex items-center justify-between rounded-2xl border border-border bg-card p-4">
+                            <span className={t.completed ? "text-muted-foreground/70 line-through" : "text-foreground"}>{t.title}</span>
+                            <span className="text-xs font-medium text-muted-foreground">{t.completed ? "Done" : "Pending"}</span>
                           </div>
                         ))
                       ) : (
-                        <div className="text-sm text-gray-500">No tasks yet.</div>
+                        <div className="text-sm text-muted-foreground">No tasks yet.</div>
                       )}
                       {(mergedPlan.tasks ?? []).length > 6 && (
-                        <div className="text-sm text-gray-500">+{(mergedPlan.tasks ?? []).length - 6} more</div>
+                        <div className="text-sm text-muted-foreground">+{(mergedPlan.tasks ?? []).length - 6} more</div>
                       )}
                     </div>
                   </div>
@@ -247,11 +247,11 @@ const Planning = () => {
             <div className="max-h-[70vh] overflow-y-auto space-y-4 pr-2">
               {plans.length ? (
                 plans.map((p) => (
-                  <div key={p.id} className="rounded-2xl border border-gray-100 bg-white p-5">
+                  <div key={p.id} className="rounded-2xl border border-border bg-card p-5">
                     <div className="flex items-center justify-between gap-3">
                       <div>
-                        <p className="text-sm text-gray-500">Week of</p>
-                        <p className="font-bold text-gray-900">{p.weekStart}</p>
+                        <p className="text-sm text-muted-foreground">Week of</p>
+                        <p className="font-bold text-foreground">{p.weekStart}</p>
                       </div>
                       <Button
                         variant="outline"
@@ -272,19 +272,19 @@ const Planning = () => {
                         View
                       </Button>
                     </div>
-                    <div className="mt-3 text-sm text-gray-600 space-y-1">
+                    <div className="mt-3 text-sm text-muted-foreground space-y-1">
                       {(p.priorities ?? []).length ? (
                         (p.priorities ?? []).map((pr, idx) => (
                           <div key={p.id + "-p-" + String(idx)} className="whitespace-pre-wrap">{idx + 1}. {pr}</div>
                         ))
                       ) : (
-                        <div className="text-gray-500">No priorities saved.</div>
+                        <div className="text-muted-foreground">No priorities saved.</div>
                       )}
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-5 text-sm text-muted-foreground">
                   No weekly plans yet.
                 </div>
               )}
@@ -303,30 +303,30 @@ const Planning = () => {
                 <Input value={priority1} onChange={(e) => setPriority1(e.target.value)} className="rounded-xl" placeholder="Priority 1" />
                 <Input value={priority2} onChange={(e) => setPriority2(e.target.value)} className="rounded-xl" placeholder="Priority 2" />
                 <Input value={priority3} onChange={(e) => setPriority3(e.target.value)} className="rounded-xl" placeholder="Priority 3" />
-                <Button onClick={handleSavePriorities} disabled={saving} className="rounded-full bg-blue-600 hover:bg-blue-700 w-fit">
+                <Button onClick={handleSavePriorities} disabled={saving} className="rounded-full bg-primary hover:bg-primary/90 w-fit">
                   Save Priorities
                 </Button>
               </div>
 
-              <div className="pt-2 border-t border-gray-100" />
+              <div className="pt-2 border-t border-border" />
 
               <div className="grid gap-3">
                 <Label>Tasks</Label>
                 <div className="flex gap-2">
                   <Input value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} className="rounded-xl" placeholder="Add a task" />
-                  <Button onClick={handleAddTask} disabled={saving} className="rounded-xl bg-blue-600 hover:bg-blue-700">
+                  <Button onClick={handleAddTask} disabled={saving} className="rounded-xl bg-primary hover:bg-primary/90">
                     Add
                   </Button>
                 </div>
 
                 <div className="space-y-2">
                   {(mergedPlan?.tasks ?? []).map((t) => (
-                    <label key={t.id} className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white p-4">
+                    <label key={t.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
                       <input type="checkbox" checked={t.completed} onChange={() => handleToggleTask(t.id)} />
-                      <span className={t.completed ? "text-gray-400 line-through" : "text-gray-900"}>{t.title}</span>
+                      <span className={t.completed ? "text-muted-foreground/70 line-through" : "text-foreground"}>{t.title}</span>
                     </label>
                   ))}
-                  {!mergedPlan?.tasks?.length && <div className="text-sm text-gray-500">No tasks yet.</div>}
+                  {!mergedPlan?.tasks?.length && <div className="text-sm text-muted-foreground">No tasks yet.</div>}
                 </div>
               </div>
             </CardContent>

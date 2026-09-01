@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const ToDoList = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between a to-do list and a daily planner?",
@@ -111,13 +113,13 @@ const ToDoList = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Master Your To-Do List</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground">Master Your To-Do List</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Learn proven methods to organize tasks, reduce overwhelm, and actually complete what matters most. From Eisenhower Matrix to time blocking, find the system that works for you.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-orange-600 hover:bg-orange-700">
-            <Link to="/auth">Organize Your Tasks</Link>
+          <Button size="lg" className="rounded-full bg-orange-600 hover:bg-orange-700" onClick={() => openAuthModal({ intent: "signup" })}>
+            Organize Your Tasks
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#methods">See Methods</Link>
@@ -127,73 +129,73 @@ const ToDoList = () => {
 
       {/* What Makes a Good To-Do List */}
       <section className="space-y-6" id="what-makes-good">
-        <h2 className="text-3xl font-bold text-gray-900">What Makes a Good To-Do List?</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">What Makes a Good To-Do List?</h2>
+        <p className="text-lg text-muted-foreground">
           A great to-do list doesn't just capture tasks—it helps you focus on what matters and actually get things done.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">✅ Effective Lists Have:</h3>
+            <h3 className="text-xl font-semibold text-foreground">✅ Effective Lists Have:</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Clear Priorities</p>
-                  <p className="text-gray-600 text-sm">1-3 most important tasks stand out</p>
+                  <p className="text-muted-foreground text-sm">1-3 most important tasks stand out</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Realistic Scope</p>
-                  <p className="text-gray-600 text-sm">Completable in a day or week</p>
+                  <p className="text-muted-foreground text-sm">Completable in a day or week</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Action-Oriented</p>
-                  <p className="text-gray-600 text-sm">Each item starts with a verb</p>
+                  <p className="text-muted-foreground text-sm">Each item starts with a verb</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Regular Review</p>
-                  <p className="text-gray-600 text-sm">Updated daily/weekly</p>
+                  <p className="text-muted-foreground text-sm">Updated daily/weekly</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">❌ Ineffective Lists Have:</h3>
+            <h3 className="text-xl font-semibold text-foreground">❌ Ineffective Lists Have:</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">Too Many Items</p>
-                  <p className="text-gray-600 text-sm">Creates overwhelm and decision fatigue</p>
+                  <p className="text-muted-foreground text-sm">Creates overwhelm and decision fatigue</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">Vague Tasks</p>
-                  <p className="text-gray-600 text-sm">"Work on project" instead of specific actions</p>
+                  <p className="text-muted-foreground text-sm">"Work on project" instead of specific actions</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">No Prioritization</p>
-                  <p className="text-gray-600 text-sm">Everything seems equally important</p>
+                  <p className="text-muted-foreground text-sm">Everything seems equally important</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                 <div>
                   <p className="font-medium">Never Updated</p>
-                  <p className="text-gray-600 text-sm">Becomes a graveyard of unfinished tasks</p>
+                  <p className="text-muted-foreground text-sm">Becomes a graveyard of unfinished tasks</p>
                 </div>
               </div>
             </div>
@@ -203,8 +205,8 @@ const ToDoList = () => {
 
       {/* To-Do List Methods */}
       <section className="space-y-6" id="methods">
-        <h2 className="text-3xl font-bold text-gray-900">Proven To-Do List Methods</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Proven To-Do List Methods</h2>
+        <p className="text-lg text-muted-foreground">
           These methods work because they provide structure and help you focus on what matters most.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -217,7 +219,7 @@ const ToDoList = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{method.description}</p>
+                <p className="text-muted-foreground">{method.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -226,8 +228,8 @@ const ToDoList = () => {
 
       {/* Eisenhower Matrix Explained */}
       <section className="space-y-6" id="eisenhower">
-        <h2 className="text-3xl font-bold text-gray-900">Eisenhower Matrix: The Priority System</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Eisenhower Matrix: The Priority System</h2>
+        <p className="text-lg text-muted-foreground">
           The Eisenhower Matrix helps you decide what to do now, schedule later, delegate, or eliminate.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
@@ -241,12 +243,12 @@ const ToDoList = () => {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-primary/20 bg-primary/10">
             <CardHeader>
-              <CardTitle className="text-blue-900">📅 Not Urgent & Important (Schedule)</CardTitle>
+              <CardTitle className="text-primary">📅 Not Urgent & Important (Schedule)</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-blue-800">
+              <p className="text-primary/80">
                 Goal planning, relationship building, prevention, new opportunities. These drive long-term success.
               </p>
             </CardContent>
@@ -261,12 +263,12 @@ const ToDoList = () => {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-gray-200 bg-gray-50">
+          <Card className="border-border bg-secondary/40">
             <CardHeader>
-              <CardTitle className="text-gray-900">🗑️ Not Urgent & Not Important (Eliminate)</CardTitle>
+              <CardTitle className="text-foreground">🗑️ Not Urgent & Not Important (Eliminate)</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-800">
+              <p className="text-foreground/80">
                 Trivial tasks, time wasters, some emails, some phone calls. These distract from what matters.
               </p>
             </CardContent>
@@ -276,73 +278,73 @@ const ToDoList = () => {
 
       {/* Digital vs Paper */}
       <section className="space-y-6" id="digital-vs-paper">
-        <h2 className="text-3xl font-bold text-gray-900">Digital vs. Paper To-Do Lists</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Digital vs. Paper To-Do Lists</h2>
+        <p className="text-lg text-muted-foreground">
           Choose the format that fits your workflow and personality.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">💻 Digital Advantages</h3>
+            <h3 className="text-xl font-semibold text-foreground">💻 Digital Advantages</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Reminders & Notifications</p>
-                  <p className="text-gray-600 text-sm">Never forget important deadlines</p>
+                  <p className="text-muted-foreground text-sm">Never forget important deadlines</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Search & Filter</p>
-                  <p className="text-gray-600 text-sm">Find tasks quickly across projects</p>
+                  <p className="text-muted-foreground text-sm">Find tasks quickly across projects</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Cross-Device Sync</p>
-                  <p className="text-gray-600 text-sm">Access your list anywhere</p>
+                  <p className="text-muted-foreground text-sm">Access your list anywhere</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Easy Editing</p>
-                  <p className="text-gray-600 text-sm">Reorganize and update quickly</p>
+                  <p className="text-muted-foreground text-sm">Reorganize and update quickly</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">📝 Paper Advantages</h3>
+            <h3 className="text-xl font-semibold text-foreground">📝 Paper Advantages</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Tactile Satisfaction</p>
-                  <p className="text-gray-600 text-sm">Physical act of crossing off items</p>
+                  <p className="text-muted-foreground text-sm">Physical act of crossing off items</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Fewer Distractions</p>
-                  <p className="text-gray-600 text-sm">No notifications or digital interruptions</p>
+                  <p className="text-muted-foreground text-sm">No notifications or digital interruptions</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Memory Enhancement</p>
-                  <p className="text-gray-600 text-sm">Writing helps with retention</p>
+                  <p className="text-muted-foreground text-sm">Writing helps with retention</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Creative Freedom</p>
-                  <p className="text-gray-600 text-sm">Draw, doodle, organize visually</p>
+                  <p className="text-muted-foreground text-sm">Draw, doodle, organize visually</p>
                 </div>
               </div>
             </div>
@@ -352,8 +354,8 @@ const ToDoList = () => {
 
       {/* Common Mistakes */}
       <section className="space-y-6" id="mistakes">
-        <h2 className="text-3xl font-bold text-gray-900">Common To-Do List Mistakes</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Common To-Do List Mistakes</h2>
+        <p className="text-lg text-muted-foreground">
           Avoid these pitfalls that turn to-do lists from productivity tools into sources of stress.
         </p>
         <div className="bg-orange-50 rounded-2xl p-8 border border-orange-200">
@@ -385,20 +387,20 @@ const ToDoList = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-8 border border-orange-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Tame Your To-Do List?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-display font-bold text-foreground mb-4">Ready to Tame Your To-Do List?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start organizing tasks with a system that actually works. Set priorities, track progress, and complete what matters most with GoalPlanner.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-orange-600 hover:bg-orange-700">
-            <Link to="/auth">Organize Your Tasks Free</Link>
+          <Button size="lg" className="rounded-full bg-orange-600 hover:bg-orange-700" onClick={() => openAuthModal({ intent: "signup" })}>
+            Organize Your Tasks Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Task Organization</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Master Task Organization</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific to-do list techniques and templates for different situations and needs.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -407,7 +409,7 @@ const ToDoList = () => {
               <CardTitle className="text-lg">📋 Daily Templates</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Ready-to-use daily to-do list templates</p>
+              <p className="text-muted-foreground mb-4">Ready-to-use daily to-do list templates</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/daily-to-do-list-template">Daily Templates →</Link>
               </Button>
@@ -418,7 +420,7 @@ const ToDoList = () => {
               <CardTitle className="text-lg">🎓 Student Lists</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">To-do lists specifically for students</p>
+              <p className="text-muted-foreground mb-4">To-do lists specifically for students</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/to-do-list-for-students">Student Lists →</Link>
               </Button>
@@ -429,7 +431,7 @@ const ToDoList = () => {
               <CardTitle className="text-lg">🎨 Aesthetic Lists</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Beautiful and inspiring to-do list designs</p>
+              <p className="text-muted-foreground mb-4">Beautiful and inspiring to-do list designs</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/aesthetic-to-do-list">Aesthetic Lists →</Link>
               </Button>
@@ -440,7 +442,7 @@ const ToDoList = () => {
               <CardTitle className="text-lg">⚡ Minimalist Lists</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Simple, clean to-do list approaches</p>
+              <p className="text-muted-foreground mb-4">Simple, clean to-do list approaches</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/minimalist-to-do-list">Minimalist Lists →</Link>
               </Button>
@@ -451,7 +453,7 @@ const ToDoList = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">To-Do List FAQ</h2>
+        <h2 className="text-3xl font-display font-bold text-foreground">To-Do List FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -459,7 +461,7 @@ const ToDoList = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

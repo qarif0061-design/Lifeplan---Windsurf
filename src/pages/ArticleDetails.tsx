@@ -18,7 +18,7 @@ const renderInlineWithLinks = (text: string): React.ReactNode[] => {
           <a
             key={`url-${idx}`}
             href={p}
-            className="text-blue-600 underline"
+            className="text-primary underline"
             target="_blank"
             rel="noreferrer"
           >
@@ -38,7 +38,7 @@ const renderBody = (body: string): React.ReactElement[] => {
   const flushList = (keyBase: string) => {
     if (!list.length) return;
     out.push(
-      <ul key={`${keyBase}-ul`} className="list-disc pl-6 space-y-2 text-gray-700">
+      <ul key={`${keyBase}-ul`} className="list-disc pl-6 space-y-2 text-foreground/80">
         {list.map((t, idx) => (
           <li key={`${keyBase}-li-${idx}`}>{renderInlineWithLinks(t)}</li>
         ))}
@@ -64,7 +64,7 @@ const renderBody = (body: string): React.ReactElement[] => {
 
     if (line.startsWith("## ")) {
       out.push(
-        <h2 key={`h2-${i}`} className="text-xl font-extrabold text-gray-900 mt-6">
+        <h2 key={`h2-${i}`} className="text-xl font-extrabold text-foreground mt-6">
           {line.slice(3)}
         </h2>,
       );
@@ -72,7 +72,7 @@ const renderBody = (body: string): React.ReactElement[] => {
     }
 
     out.push(
-      <p key={`p-${i}`} className="text-gray-700 leading-relaxed">
+      <p key={`p-${i}`} className="text-foreground/80 leading-relaxed">
         {renderInlineWithLinks(line)}
       </p>,
     );
@@ -90,18 +90,18 @@ const extractDescription = (body: string) => {
 };
 
 const SupportingCard = ({ pillarSlug, pillarTitle }: { pillarSlug: string; pillarTitle: string }) => (
-  <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm space-y-3">
-    <div className="text-sm font-semibold text-gray-900">Want the full guide?</div>
-    <p className="text-gray-700">
+  <div className="rounded-[2rem] border border-border bg-card p-8 shadow-sm space-y-3">
+    <div className="text-sm font-semibold text-foreground">Want the full guide?</div>
+    <p className="text-foreground/80">
       This page is supporting content. For the complete, updated guide, read:
     </p>
-    <Link to={`/articles/${pillarSlug}`} className="text-blue-600 font-semibold hover:underline">
+    <Link to={`/articles/${pillarSlug}`} className="text-primary font-semibold hover:underline">
       {pillarTitle}
     </Link>
     <div className="pt-2">
       <Link
         to="/download"
-        className="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-white font-semibold hover:bg-blue-700"
+        className="inline-flex items-center justify-center rounded-2xl bg-primary px-5 py-3 text-primary-foreground font-semibold hover:bg-primary/90"
       >
         Try Lifeplans (Free)
       </Link>
@@ -1302,12 +1302,12 @@ const ArticleDetails = () => {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in duration-500">
-        <Link to="/articles" className="text-sm font-medium text-gray-500 hover:text-blue-600">
+        <Link to="/articles" className="text-sm font-medium text-muted-foreground hover:text-primary">
           Back to Articles
         </Link>
 
         {!article ? (
-          <div className="text-gray-600">Article not found.</div>
+          <div className="text-muted-foreground">Article not found.</div>
         ) : (
           <>
             {(() => {
@@ -1332,22 +1332,22 @@ const ArticleDetails = () => {
                 />
               );
             })()}
-            <h1 className="text-3xl font-bold text-gray-900">{article.title}</h1>
+            <h1 className="text-3xl font-bold text-foreground">{article.title}</h1>
 
             {isSupporting && (
               <SupportingCard pillarSlug={supportingPillar!.slug} pillarTitle={supportingPillar!.title} />
             )}
 
-            <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm">
+            <div className="rounded-[2rem] border border-border bg-card p-8 shadow-sm">
               <div className="space-y-3">{renderBody(article.body)}</div>
             </div>
 
             {pillar && (
-              <div className="rounded-[2rem] border border-gray-100 bg-white p-8 shadow-sm space-y-3">
-                <div className="text-sm font-semibold text-gray-900">Related guides</div>
+              <div className="rounded-[2rem] border border-border bg-card p-8 shadow-sm space-y-3">
+                <div className="text-sm font-semibold text-foreground">Related guides</div>
                 <div className="space-y-1">
                   {pillar.relatedSlugs.slice(0, 6).map((s) => (
-                    <Link key={s} to={`/articles/${s}`} className="block text-blue-600 hover:underline">
+                    <Link key={s} to={`/articles/${s}`} className="block text-primary hover:underline">
                       {getPillarUrl(s)}
                     </Link>
                   ))}

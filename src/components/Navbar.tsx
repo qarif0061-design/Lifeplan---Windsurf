@@ -2,11 +2,14 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { useAuthModal } from "@/contexts/AuthModalContext";
+import Logo from "@/components/Logo";
 
 const Navbar = () => {
   const [mounted, setMounted] = useState(false);
   const { user, logout } = useUser();
   const navigate = useNavigate();
+  const { openAuthModal } = useAuthModal();
 
   useEffect(() => {
     setMounted(true);
@@ -18,12 +21,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+    <nav className="bg-background/85 backdrop-blur-md border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-6">
-            <Link to={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-gray-900">Lifeplans</span>
+            <Link to={user ? "/dashboard" : "/"} className="flex items-center">
+              <Logo className="h-8 w-auto" />
             </Link>
 
             {user && (
@@ -42,6 +45,9 @@ const Navbar = () => {
                 </Button>
                 <Button asChild variant="ghost" className="rounded-full">
                   <Link to="/articles">Articles</Link>
+                </Button>
+                <Button asChild variant="ghost" className="rounded-full text-momentum hover:text-momentum">
+                  <Link to="/referrals">Refer & Earn</Link>
                 </Button>
               </div>
             )}
@@ -65,9 +71,21 @@ const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <Button asChild variant="outline" className="rounded-full">
-                <Link to="/auth">Sign In</Link>
-              </Button>
+              <>
+                <Button
+                  variant="ghost"
+                  className="rounded-full hidden sm:inline-flex"
+                  onClick={() => openAuthModal({ intent: "signin" })}
+                >
+                  Sign In
+                </Button>
+                <Button
+                  className="rounded-full bg-primary hover:bg-primary/90"
+                  onClick={() => openAuthModal({ intent: "signup" })}
+                >
+                  Start Planning
+                </Button>
+              </>
             )}
           </div>
         </div>

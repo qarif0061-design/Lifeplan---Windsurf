@@ -20,8 +20,8 @@ const Social = () => {
       />
       <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Social Media</h1>
-          <p className="text-gray-500">Follow Lifeplans and stay updated.</p>
+          <h1 className="text-3xl font-display font-bold text-foreground">Social Media</h1>
+          <p className="text-muted-foreground">Follow Lifeplans and stay updated.</p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6">
@@ -35,7 +35,7 @@ const Social = () => {
                   href={l.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-primary hover:text-primary/90 font-medium"
                 >
                   {l.href}
                 </a>

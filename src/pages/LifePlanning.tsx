@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const LifePlanning = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between life planning and goal setting?",
@@ -144,13 +146,13 @@ const LifePlanning = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Design Your Ideal Life</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground">Design Your Ideal Life</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Create a comprehensive life plan that aligns your values, goals, and daily actions. Build the life you truly want with intentional planning and consistent progress.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-indigo-600 hover:bg-indigo-700">
-            <Link to="/auth">Start Life Planning Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Life Planning Free
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#life-areas">Explore Life Areas</Link>
@@ -160,8 +162,8 @@ const LifePlanning = () => {
 
       {/* Life Areas */}
       <section className="space-y-6" id="life-areas">
-        <h2 className="text-3xl font-bold text-gray-900">The Six Life Areas</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">The Six Life Areas</h2>
+        <p className="text-lg text-muted-foreground">
           A balanced life plan addresses all important areas of your life, ensuring they work together harmoniously.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -174,7 +176,7 @@ const LifePlanning = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{area.description}</p>
+                <p className="text-muted-foreground">{area.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -183,8 +185,8 @@ const LifePlanning = () => {
 
       {/* Life Planning Process */}
       <section className="space-y-6" id="planning-process">
-        <h2 className="text-3xl font-bold text-gray-900">The Life Planning Process</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">The Life Planning Process</h2>
+        <p className="text-lg text-muted-foreground">
           Follow these six steps to create a comprehensive life plan that guides your decisions and actions.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -197,7 +199,7 @@ const LifePlanning = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{step.description}</p>
+                <p className="text-muted-foreground">{step.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -206,20 +208,20 @@ const LifePlanning = () => {
 
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 border border-indigo-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Design Your Ideal Life?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+        <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Design Your Ideal Life?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start building a comprehensive life plan that aligns your values, vision, and daily actions. Create the life you truly want with GoalPlanner.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-indigo-600 hover:bg-indigo-700">
-            <Link to="/auth">Start Life Planning Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Life Planning Free
           </Button>
         </div>
       </section>
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Life Planning FAQ</h2>
+        <h2 className="text-3xl font-bold text-foreground">Life Planning FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -227,7 +229,7 @@ const LifePlanning = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

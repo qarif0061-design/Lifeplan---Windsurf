@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const EisenhowerMatrix = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What exactly is the Eisenhower Matrix?",
@@ -147,13 +149,13 @@ const EisenhowerMatrix = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Master the Eisenhower Matrix</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground">Master the Eisenhower Matrix</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Transform your productivity with the Eisenhower Matrix. Learn to prioritize tasks by urgency and importance, focus on what truly matters, and eliminate time wasters. Join thousands who've mastered their priorities.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-            <Link to="/auth">Start Priority Management Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Priority Management Free
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#quadrants">Learn the Matrix</Link>
@@ -163,8 +165,8 @@ const EisenhowerMatrix = () => {
 
       {/* What Is Eisenhower Matrix */}
       <section className="space-y-6" id="what-is-eisenhower">
-        <h2 className="text-3xl font-bold text-gray-900">What Is the Eisenhower Matrix?</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">What Is the Eisenhower Matrix?</h2>
+        <p className="text-lg text-muted-foreground">
           The Eisenhower Matrix is a simple but powerful tool for prioritizing tasks based on two questions: Is it urgent? Is it important? This creates four quadrants that guide you to focus on what truly matters.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
@@ -178,12 +180,12 @@ const EisenhowerMatrix = () => {
               </p>
             </CardContent>
           </Card>
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">📋 Eisenhower Method</CardTitle>
+              <CardTitle className="text-foreground">📋 Eisenhower Method</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-foreground/80">
                 Systematically categorizing tasks, focusing on important goals, and eliminating what doesn't advance your priorities.
               </p>
             </CardContent>
@@ -193,8 +195,8 @@ const EisenhowerMatrix = () => {
 
       {/* The Four Quadrants */}
       <section className="space-y-6" id="quadrants">
-        <h2 className="text-3xl font-bold text-gray-900">The Four Eisenhower Quadrants</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">The Four Eisenhower Quadrants</h2>
+        <p className="text-lg text-muted-foreground">
           Understanding each quadrant helps you make better decisions about where to focus your time and energy.
         </p>
         <div className="grid md:grid-cols-2 gap-6">
@@ -220,31 +222,31 @@ const EisenhowerMatrix = () => {
 
       {/* Step-by-Step Implementation */}
       <section className="space-y-6" id="step-by-step">
-        <h2 className="text-3xl font-bold text-gray-900">Using the Eisenhower Matrix: Step-by-Step</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Using the Eisenhower Matrix: Step-by-Step</h2>
+        <p className="text-lg text-muted-foreground">
           Follow this daily process to master priority management with GoalPlanner.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-blue-100">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">1</span>
+                <span className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">1</span>
                 List All Tasks
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Write down everything you need to do without filtering yet.</p>
+              <p className="text-muted-foreground">Write down everything you need to do without filtering yet.</p>
             </CardContent>
           </Card>
-          <Card className="border-green-100">
+          <Card className="border-momentum/20">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">2</span>
+                <span className="w-8 h-8 bg-momentum text-momentum-foreground rounded-full flex items-center justify-center text-sm font-semibold">2</span>
                 Categorize Each Task
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Ask: Is this urgent? Is this important? Place in the correct quadrant.</p>
+              <p className="text-muted-foreground">Ask: Is this urgent? Is this important? Place in the correct quadrant.</p>
             </CardContent>
           </Card>
           <Card className="border-purple-100">
@@ -255,7 +257,7 @@ const EisenhowerMatrix = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Tackle Quadrant 1 first, then schedule time for Quadrant 2.</p>
+              <p className="text-muted-foreground">Tackle Quadrant 1 first, then schedule time for Quadrant 2.</p>
             </CardContent>
           </Card>
           <Card className="border-orange-100">
@@ -266,7 +268,7 @@ const EisenhowerMatrix = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Analyze your patterns and improve your categorization accuracy.</p>
+              <p className="text-muted-foreground">Analyze your patterns and improve your categorization accuracy.</p>
             </CardContent>
           </Card>
         </div>
@@ -274,8 +276,8 @@ const EisenhowerMatrix = () => {
 
       {/* Best Practices */}
       <section className="space-y-6" id="best-practices">
-        <h2 className="text-3xl font-bold text-gray-900">Eisenhower Matrix Best Practices</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Eisenhower Matrix Best Practices</h2>
+        <p className="text-lg text-muted-foreground">
           These proven strategies will make your priority management more effective and consistent.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -288,7 +290,7 @@ const EisenhowerMatrix = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{practice.description}</p>
+                <p className="text-muted-foreground">{practice.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -297,8 +299,8 @@ const EisenhowerMatrix = () => {
 
       {/* How GoalPlanner Helps */}
       <section className="space-y-6" id="how-goalplanner-helps">
-        <h2 className="text-3xl font-bold text-gray-900">How GoalPlanner Enhances Priority Management</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">How GoalPlanner Enhances Priority Management</h2>
+        <p className="text-lg text-muted-foreground">
           GoalPlanner provides specific features that make the Eisenhower Matrix more effective and easier to implement daily.
         </p>
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100">
@@ -313,8 +315,8 @@ const EisenhowerMatrix = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">⚡ Productivity Integration</h3>
-              <ul className="space-y-2 text-blue-800">
+              <h3 className="text-xl font-display font-semibold text-foreground mb-4">⚡ Productivity Integration</h3>
+              <ul className="space-y-2 text-foreground/80">
                 <li>• <strong>Goal connection:</strong> Link matrix tasks to meaningful objectives</li>
                 <li>• <strong>Time blocking integration:</strong> Schedule focused blocks for priority tasks</li>
                 <li>• <strong>Weekly planning:</strong> Review and adjust your weekly priorities</li>
@@ -328,20 +330,20 @@ const EisenhowerMatrix = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Master Your Priorities?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Master Your Priorities?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start using the Eisenhower Matrix with GoalPlanner. Focus on what truly matters, eliminate time wasters, and achieve your most important goals.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-            <Link to="/auth">Start Priority Management Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Priority Management Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Priority Management Skills</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Master Priority Management Skills</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific prioritization techniques and connect with time management systems that support effective decision-making.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -350,7 +352,7 @@ const EisenhowerMatrix = () => {
               <CardTitle className="text-lg">⏰ Time Management</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Comprehensive time management strategies and techniques</p>
+              <p className="text-muted-foreground mb-4">Comprehensive time management strategies and techniques</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/time-management">Time Management →</Link>
               </Button>
@@ -361,7 +363,7 @@ const EisenhowerMatrix = () => {
               <CardTitle className="text-lg">🧘 Time Blocking</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Schedule focused work sessions and protect your time</p>
+              <p className="text-muted-foreground mb-4">Schedule focused work sessions and protect your time</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/time-blocking">Time Blocking →</Link>
               </Button>
@@ -372,7 +374,7 @@ const EisenhowerMatrix = () => {
               <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Set meaningful goals that drive your priority decisions</p>
+              <p className="text-muted-foreground mb-4">Set meaningful goals that drive your priority decisions</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/goal-planner">Goal Planning →</Link>
               </Button>
@@ -383,7 +385,7 @@ const EisenhowerMatrix = () => {
               <CardTitle className="text-lg">⚡ Productivity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Build systems that support effective priority management</p>
+              <p className="text-muted-foreground mb-4">Build systems that support effective priority management</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/productivity">Productivity →</Link>
               </Button>
@@ -394,7 +396,7 @@ const EisenhowerMatrix = () => {
               <CardTitle className="text-lg">📝 To-Do Lists</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Organize tasks effectively with proven methods</p>
+              <p className="text-muted-foreground mb-4">Organize tasks effectively with proven methods</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/to-do-list">To-Do Lists →</Link>
               </Button>
@@ -405,7 +407,7 @@ const EisenhowerMatrix = () => {
               <CardTitle className="text-lg">🎓 Student Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Priority management for academic success and study sessions</p>
+              <p className="text-muted-foreground mb-4">Priority management for academic success and study sessions</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/student-planner">Student Planning →</Link>
               </Button>
@@ -416,7 +418,7 @@ const EisenhowerMatrix = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Eisenhower Matrix FAQ</h2>
+        <h2 className="text-3xl font-bold text-foreground">Eisenhower Matrix FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -424,7 +426,7 @@ const EisenhowerMatrix = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

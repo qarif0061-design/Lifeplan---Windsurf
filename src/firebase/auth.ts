@@ -58,14 +58,19 @@ export const signUp = async (email: string, password: string, displayName: strin
   
   await setDoc(doc(db, "users", firebaseUser.uid), userProfile);
 
-  // Handle referral
+  // Handle referral. Runs in the NEW user's own session, so it can only ever write
+  // its own users/{uid} doc and bump totalSignups on the referrer's referral doc
+  // (Firestore rules scope that one field to +1 for a non-owner). The referrer's
+  // own premium reward is granted separately, in their own session, by
+  // checkAndGrantReferralRewards() — see src/firebase/referrals.ts.
   if (referralCode) {
     try {
-      const { getReferralByCode, incrementReferralSignups, grantReferrerPremium } = await import("@/firebase/referrals");
+      const { getReferralByCode, incrementReferralSignups } = await import("@/firebase/referrals");
+      const { trackReferralSignup } = await import("@/utils/analytics");
       const referral = await getReferralByCode(referralCode);
       if (referral && referral.userId !== firebaseUser.uid) {
+        trackReferralSignup(firebaseUser.uid, referral.userId);
         await incrementReferralSignups(referral.id);
-        await grantReferrerPremium(referral.id);
         // Give the new user 7 days premium too
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
         await import("firebase/firestore").then(({ updateDoc }) =>

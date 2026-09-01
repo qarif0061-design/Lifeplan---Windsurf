@@ -6,17 +6,21 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
+  Gift,
   Home,
   LogOut,
   ListTodo,
   Target,
   User,
+  Users,
   CheckSquare,
   Lock,
   CalendarDays,
   PenSquare,
+  Trophy,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Logomark from "@/components/Logomark";
 
 type SidebarProps = {
   collapsed: boolean;
@@ -42,6 +46,9 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         { to: "/weekly-planner", label: "Weekly Planner", icon: CalendarDays },
         { to: "/custom-planner", label: "Custom Planner", icon: PenSquare },
         { to: "/insights", label: "Insights", icon: Calendar, premiumOnly: true as const },
+        { to: "/challenges", label: "Challenges", icon: Trophy },
+        { to: "/accountability", label: "Accountability", icon: Users },
+        { to: "/referrals", label: "Refer & Earn", icon: Gift },
         { to: "/articles", label: "Articles", icon: BookOpen },
         { to: "/questions", label: "Questions", icon: BookOpen },
         { to: "/download", label: "Download", icon: Download },
@@ -50,24 +57,29 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
 
   return (
     <aside
-      className={`sticky top-0 h-screen border-r border-slate-200/80 dark:border-slate-700/50 bg-gradient-to-b from-white via-sky-50 to-blue-100/60 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/80 transition-all duration-300 ${
+      className={`sticky top-0 h-screen border-r border-border bg-card transition-all duration-300 ${
         collapsed ? "w-[72px]" : "w-[260px]"
       }`}
     >
-      <div className="h-16 px-3 flex items-center justify-between border-b border-slate-200/80 dark:border-slate-700/50">
-        <div />
+      <div className={`h-16 px-3 flex items-center border-b border-border ${collapsed ? "justify-center" : "justify-between"}`}>
+        {!collapsed && (
+          <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-2">
+            <Logomark className="w-6 h-6" />
+            <span className="font-display font-bold text-foreground">Lifeplans</span>
+          </Link>
+        )}
         <Button
           variant="ghost"
           size="icon"
           onClick={onToggleCollapsed}
-          className="rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-200"
+          className="rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </Button>
       </div>
 
-      <div className="p-3 space-y-1">
+      <div className="p-3 space-y-0.5">
         {nav.map((item) => {
           const active = location.pathname === item.to;
           const Icon = item.icon;
@@ -77,12 +89,15 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
               key={item.to}
               asChild
               variant="ghost"
-              className={`w-full justify-start rounded-2xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-200 ${
-                active ? "bg-blue-600/10 dark:bg-blue-500/20 text-blue-900 dark:text-blue-300 font-semibold" : ""
+              className={`relative w-full justify-start rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200 ${
+                active ? "bg-momentum/10 text-foreground font-semibold" : ""
               } ${collapsed ? "px-0" : "px-3"}`}
             >
               <Link to={item.to} className={`flex items-center gap-3 ${collapsed ? "justify-center" : ""}`}>
-                <Icon className="w-4 h-4" />
+                {active && !collapsed && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-full bg-momentum" />
+                )}
+                <Icon className={`w-4 h-4 ${active ? "text-momentum" : ""}`} />
                 {!collapsed && (
                   <span className="flex items-center gap-2">
                     <span>{item.label}</span>
@@ -95,13 +110,13 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
         })}
       </div>
 
-      <div className="mt-auto p-3 border-t border-slate-200/80 dark:border-slate-700/50 space-y-1">
+      <div className="mt-auto p-3 border-t border-border space-y-1">
         {user && (
           <>
             <Button
               asChild
               variant="ghost"
-              className={`w-full justify-start rounded-2xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-900/5 dark:hover:bg-white/10 transition-all duration-200 ${
+              className={`w-full justify-start rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-200 ${
                 collapsed ? "px-0" : "px-3"
               }`}
             >
@@ -113,7 +128,7 @@ const Sidebar = ({ collapsed, onToggleCollapsed }: SidebarProps) => {
             <Button
               onClick={handleLogout}
               variant="outline"
-              className={`w-full rounded-2xl border-slate-300/70 dark:border-slate-600/50 bg-white/40 dark:bg-slate-800/40 text-slate-700 dark:text-slate-300 hover:bg-white/70 dark:hover:bg-slate-700/70 hover:text-slate-900 dark:hover:text-white transition-all duration-200 ${
+              className={`w-full rounded-xl border-border bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200 ${
                 collapsed ? "px-0" : "px-3 justify-start"
               }`}
             >

@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const ManifestationPlannerSeo = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     { question: "What is a manifestation planner?", answer: "A manifestation planner combines goal setting with visualization and gratitude practices. It helps you clarify what you want, align your daily actions with your intentions, and track progress toward your dream life." },
     { question: "How is a manifestation planner different from a regular planner?", answer: "While regular planners focus on tasks and schedules, manifestation planners include space for affirmations, gratitude journaling, vision boards, intention setting, and reflecting on what you're attracting into your life." },
@@ -34,13 +36,13 @@ const ManifestationPlannerSeo = () => {
 
       <div className="space-y-10">
         <header className="space-y-3">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900">Manifestation & Success Planner</h1>
-          <p className="text-gray-600 text-lg">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground">Manifestation & Success Planner</h1>
+          <p className="text-muted-foreground text-lg">
             Combine intention with action. Use manifestation principles and structured planning to create the life you want.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start your success planner</Link>
+            <Button className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start your success planner
             </Button>
             <Button asChild variant="outline" className="rounded-full">
               <Link to="/goal-planner-app">Explore goal planner</Link>
@@ -49,27 +51,27 @@ const ManifestationPlannerSeo = () => {
         </header>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Key elements of a manifestation planner</h2>
+          <h2 className="text-2xl font-bold text-foreground">Key elements of a manifestation planner</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Intention setting</CardTitle></CardHeader>
-              <CardContent className="text-gray-700">Write clear intentions for each area of your life. Intentions guide your subconscious mind toward what you want to attract.</CardContent>
+              <CardContent className="text-foreground/80">Write clear intentions for each area of your life. Intentions guide your subconscious mind toward what you want to attract.</CardContent>
             </Card>
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Gratitude practice</CardTitle></CardHeader>
-              <CardContent className="text-gray-700">Daily gratitude shifts your focus to abundance. Writing 3 things you're grateful for each day rewires your brain for positivity.</CardContent>
+              <CardContent className="text-foreground/80">Daily gratitude shifts your focus to abundance. Writing 3 things you're grateful for each day rewires your brain for positivity.</CardContent>
             </Card>
-            <Card className="rounded-[2rem] border border-gray-100 bg-white shadow-sm">
+            <Card className="rounded-[2rem] border border-border bg-card shadow-sm">
               <CardHeader><CardTitle className="text-lg">Aligned action</CardTitle></CardHeader>
-              <CardContent className="text-gray-700">Manifestation without action is wishful thinking. Break your intentions into weekly priorities and daily tasks that move you forward.</CardContent>
+              <CardContent className="text-foreground/80">Manifestation without action is wishful thinking. Break your intentions into weekly priorities and daily tasks that move you forward.</CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">How to use a success planner effectively</h2>
-          <div className="rounded-[2rem] border border-gray-100 bg-white p-7 shadow-sm">
-            <ol className="list-decimal pl-6 space-y-3 text-gray-700">
+          <h2 className="text-2xl font-bold text-foreground">How to use a success planner effectively</h2>
+          <div className="rounded-[2rem] border border-border bg-card p-7 shadow-sm">
+            <ol className="list-decimal pl-6 space-y-3 text-foreground/80">
               <li><strong>Define your vision.</strong> What does success look like for you? Write a vivid description of your ideal life in 1 year, 3 years, and 5 years.</li>
               <li><strong>Set quarterly intentions.</strong> Choose 2-3 major intentions per quarter. Align them with your long-term vision.</li>
               <li><strong>Create monthly milestones.</strong> Break each intention into monthly outcomes. These bridge the gap between vision and action.</li>
@@ -81,29 +83,29 @@ const ManifestationPlannerSeo = () => {
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Success planner for different goals</h2>
-          <div className="rounded-[2rem] border border-blue-100 bg-blue-50 p-7 shadow-sm space-y-3">
-            <p className="text-gray-700"><strong>For NEET / exam preparation:</strong> Use a success planner to break your syllabus into weekly study targets, track mock test scores, and maintain consistent daily study habits.</p>
-            <p className="text-gray-700"><strong>For career growth:</strong> Set quarterly career intentions, track skill development, network building, and project completions. Review progress with your manager.</p>
-            <p className="text-gray-700"><strong>For personal transformation:</strong> Combine habit tracking, journaling, and goal setting. Use daily affirmations and weekly reviews to stay aligned with your growth path.</p>
-            <p className="text-gray-700"><strong>For financial goals:</strong> Set savings targets, income milestones, and investment goals. Track monthly progress and celebrate each financial win.</p>
+          <h2 className="text-2xl font-bold text-foreground">Success planner for different goals</h2>
+          <div className="rounded-[2rem] border border-primary/20 bg-primary/10 p-7 shadow-sm space-y-3">
+            <p className="text-foreground/80"><strong>For NEET / exam preparation:</strong> Use a success planner to break your syllabus into weekly study targets, track mock test scores, and maintain consistent daily study habits.</p>
+            <p className="text-foreground/80"><strong>For career growth:</strong> Set quarterly career intentions, track skill development, network building, and project completions. Review progress with your manager.</p>
+            <p className="text-foreground/80"><strong>For personal transformation:</strong> Combine habit tracking, journaling, and goal setting. Use daily affirmations and weekly reviews to stay aligned with your growth path.</p>
+            <p className="text-foreground/80"><strong>For financial goals:</strong> Set savings targets, income milestones, and investment goals. Track monthly progress and celebrate each financial win.</p>
           </div>
           <div className="mt-4">
-            <Button asChild className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Create your success plan</Link>
+            <Button className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Create your success plan
             </Button>
           </div>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-2xl font-bold text-gray-900">Frequently asked questions</h2>
+          <h2 className="text-2xl font-bold text-foreground">Frequently asked questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, i) => (
               <AccordionItem key={i} value={`faq-${i}`}>
-                <AccordionTrigger className="text-left font-medium text-gray-900">
+                <AccordionTrigger className="text-left font-medium text-foreground">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-foreground/80">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

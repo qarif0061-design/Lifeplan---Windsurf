@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const SelfImprovement = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between self-improvement and self-help?",
@@ -177,13 +179,13 @@ const SelfImprovement = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Become Your Best Self</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground">Become Your Best Self</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Master self-improvement with proven strategies for building better habits, developing valuable skills, and creating lasting personal growth. Transform your life one small action at a time.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-            <Link to="/auth">Start Self-Improvement Journey</Link>
+          <Button size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Self-Improvement Journey
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#improvement-areas">Explore Areas</Link>
@@ -193,8 +195,8 @@ const SelfImprovement = () => {
 
       {/* What Is Self-Improvement */}
       <section className="space-y-6" id="what-is-self-improvement">
-        <h2 className="text-3xl font-bold text-gray-900">What Is Self-Improvement?</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">What Is Self-Improvement?</h2>
+        <p className="text-lg text-muted-foreground">
           Self-improvement is the conscious process of developing yourself through consistent action and reflection.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
@@ -223,8 +225,8 @@ const SelfImprovement = () => {
 
       {/* Six Areas of Self-Improvement */}
       <section className="space-y-6" id="improvement-areas">
-        <h2 className="text-3xl font-bold text-gray-900">Six Areas of Self-Improvement</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Six Areas of Self-Improvement</h2>
+        <p className="text-lg text-muted-foreground">
           Comprehensive personal development addresses all aspects of who you are and who you want to become.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -237,7 +239,7 @@ const SelfImprovement = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{area.description}</p>
+                <p className="text-muted-foreground">{area.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -246,8 +248,8 @@ const SelfImprovement = () => {
 
       {/* Keystone Habits */}
       <section className="space-y-6" id="keystone-habits">
-        <h2 className="text-3xl font-bold text-gray-900">Keystone Habits That Change Everything</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Keystone Habits That Change Everything</h2>
+        <p className="text-lg text-muted-foreground">
           Some habits create ripple effects that improve multiple areas of your life simultaneously.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -260,7 +262,7 @@ const SelfImprovement = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{habit.description}</p>
+                <p className="text-muted-foreground">{habit.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -269,8 +271,8 @@ const SelfImprovement = () => {
 
       {/* Self-Improvement Framework */}
       <section className="space-y-6" id="framework">
-        <h2 className="text-3xl font-bold text-gray-900">The Self-Improvement Framework</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">The Self-Improvement Framework</h2>
+        <p className="text-lg text-muted-foreground">
           Follow this systematic approach to create lasting personal growth.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -283,7 +285,7 @@ const SelfImprovement = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{step.description}</p>
+                <p className="text-muted-foreground">{step.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -292,8 +294,8 @@ const SelfImprovement = () => {
 
       {/* Getting Started */}
       <section className="space-y-6" id="getting-started">
-        <h2 className="text-3xl font-bold text-gray-900">How to Start Your Self-Improvement Journey</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">How to Start Your Self-Improvement Journey</h2>
+        <p className="text-lg text-muted-foreground">
           Begin with small, consistent actions that build momentum over time.
         </p>
         <div className="bg-purple-50 rounded-2xl p-8 border border-purple-200">
@@ -322,59 +324,59 @@ const SelfImprovement = () => {
 
       {/* Overcoming Common Challenges */}
       <section className="space-y-6" id="challenges">
-        <h2 className="text-3xl font-bold text-gray-900">Overcoming Common Self-Improvement Challenges</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Overcoming Common Self-Improvement Challenges</h2>
+        <p className="text-lg text-muted-foreground">
           Anticipate these obstacles and have strategies ready to overcome them.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">🧠 Mental Barriers</h3>
+            <h3 className="text-xl font-semibold text-foreground">🧠 Mental Barriers</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center text-sm font-semibold">!</span>
                 <div>
                   <p className="font-medium">Perfectionism</p>
-                  <p className="text-gray-600 text-sm">Focus on progress, not perfect execution</p>
+                  <p className="text-muted-foreground text-sm">Focus on progress, not perfect execution</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center text-sm font-semibold">!</span>
                 <div>
                   <p className="font-medium">All-or-nothing thinking</p>
-                  <p className="text-gray-600 text-sm">Small actions count more than doing nothing</p>
+                  <p className="text-muted-foreground text-sm">Small actions count more than doing nothing</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center text-sm font-semibold">!</span>
                 <div>
                   <p className="font-medium">Comparison with others</p>
-                  <p className="text-gray-600 text-sm">Focus on your own journey and progress</p>
+                  <p className="text-muted-foreground text-sm">Focus on your own journey and progress</p>
                 </div>
               </div>
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">⚡ Practical Solutions</h3>
+            <h3 className="text-xl font-semibold text-foreground">⚡ Practical Solutions</h3>
             <div className="space-y-3">
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Track consistency, not results</p>
-                  <p className="text-gray-600 text-sm">Celebrate showing up daily</p>
+                  <p className="text-muted-foreground text-sm">Celebrate showing up daily</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Use the 2-minute rule</p>
-                  <p className="text-gray-600 text-sm">Start with actions that take 2 minutes or less</p>
+                  <p className="text-muted-foreground text-sm">Start with actions that take 2 minutes or less</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                 <div>
                   <p className="font-medium">Build identity-based habits</p>
-                  <p className="text-gray-600 text-sm">Become the type of person who does X</p>
+                  <p className="text-muted-foreground text-sm">Become the type of person who does X</p>
                 </div>
               </div>
             </div>
@@ -384,27 +386,27 @@ const SelfImprovement = () => {
 
       {/* Measuring Progress */}
       <section className="space-y-6" id="progress">
-        <h2 className="text-3xl font-bold text-gray-900">Measuring Self-Improvement Progress</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Measuring Self-Improvement Progress</h2>
+        <p className="text-lg text-muted-foreground">
           Track both the journey and the destination to stay motivated and adjust your approach.
         </p>
         <div className="grid md:grid-cols-3 gap-6">
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-primary/20 bg-primary/10">
             <CardHeader>
-              <CardTitle className="text-blue-900">📊 Process Metrics</CardTitle>
+              <CardTitle className="text-primary">📊 Process Metrics</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-blue-800">
+              <p className="text-primary/80">
                 Track consistency, time spent, and effort level. These are within your control and show commitment regardless of immediate results.
               </p>
             </CardContent>
           </Card>
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">🎯 Outcome Metrics</CardTitle>
+              <CardTitle className="text-momentum">🎯 Outcome Metrics</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-momentum/80">
                 Measure skill improvements, habit strength, and life results. These show the impact of your efforts and guide adjustments.
               </p>
             </CardContent>
@@ -424,8 +426,8 @@ const SelfImprovement = () => {
 
       {/* Long-Term Growth */}
       <section className="space-y-6" id="long-term">
-        <h2 className="text-3xl font-bold text-gray-900">The Compound Effect of Self-Improvement</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">The Compound Effect of Self-Improvement</h2>
+        <p className="text-lg text-muted-foreground">
           Small, consistent actions create exponential growth over time.
         </p>
         <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-8 border border-purple-200">
@@ -456,20 +458,20 @@ const SelfImprovement = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-8 border border-purple-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Start Your Growth Journey?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-display font-bold text-foreground mb-4">Ready to Start Your Growth Journey?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Begin your self-improvement journey with proven systems and strategies. Build better habits, develop valuable skills, and create the life you want with GoalPlanner.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-            <Link to="/auth">Start Self-Improvement Free</Link>
+          <Button size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Self-Improvement Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Personal Growth Skills</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Master Personal Growth Skills</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific self-improvement techniques and connect with related growth strategies.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -478,7 +480,7 @@ const SelfImprovement = () => {
               <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Set and achieve meaningful personal goals</p>
+              <p className="text-muted-foreground mb-4">Set and achieve meaningful personal goals</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/goal-planner">Goal Planning →</Link>
               </Button>
@@ -489,7 +491,7 @@ const SelfImprovement = () => {
               <CardTitle className="text-lg">✅ Habit Building</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Create habits that support your growth</p>
+              <p className="text-muted-foreground mb-4">Create habits that support your growth</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/habit-tracker-app">Habit Tracking →</Link>
               </Button>
@@ -500,7 +502,7 @@ const SelfImprovement = () => {
               <CardTitle className="text-lg">🧘 Focus & Clarity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Develop mental clarity and concentration</p>
+              <p className="text-muted-foreground mb-4">Develop mental clarity and concentration</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/focus-and-mental-clarity">Focus & Clarity →</Link>
               </Button>
@@ -511,7 +513,7 @@ const SelfImprovement = () => {
               <CardTitle className="text-lg">📝 Daily Journal</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Reflect and track your personal growth</p>
+              <p className="text-muted-foreground mb-4">Reflect and track your personal growth</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/daily-journal-app">Daily Journal →</Link>
               </Button>
@@ -522,7 +524,7 @@ const SelfImprovement = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Self-Improvement FAQ</h2>
+        <h2 className="text-3xl font-display font-bold text-foreground">Self-Improvement FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -530,7 +532,7 @@ const SelfImprovement = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

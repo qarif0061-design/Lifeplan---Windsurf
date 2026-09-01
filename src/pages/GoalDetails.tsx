@@ -24,8 +24,11 @@ import { useUser } from "@/contexts/UserContext";
 import { createGoal, deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { updateFeaturedGoalId } from "@/firebase/users";
 import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
+import { createShare as saveShareRecord, buildGoalShareData } from "@/firebase/shares";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
 import { showError, showSuccess } from "@/utils/toast";
+import { calculateProgress } from "@/utils/progress";
+import { projectGoalPace } from "@/utils/adaptiveExecution";
 import {
     DndContext,
     KeyboardSensor,
@@ -47,6 +50,7 @@ import {
     Crown,
     Edit3,
     FileText,
+    Gauge,
     GripVertical,
     Lock,
     Plus,
@@ -207,20 +211,7 @@ const normalizeCheckpointList = (
 
 const getDerivedProgress = (g: Goal, checkpoints?: GoalCheckpoint[]): number => {
   const cps = checkpoints ?? g.checkpoints ?? [];
-  if (cps.length > 0) {
-    const per = cps.map((c) => {
-      if (c.kind === "number") {
-        const target = Math.max(0, c.target ?? 0);
-        const current = Math.max(0, c.current ?? 0);
-        if (target <= 0) return 0;
-        return Math.min(1, current / target);
-      }
-      return c.completed ? 1 : 0;
-    });
-    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
-    return Math.round(avg * 100);
-  }
-  return g.progress ?? 0;
+  return calculateProgress(cps, g.progress);
 };
 
 const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }) => {
@@ -245,7 +236,7 @@ const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }
           cy={size / 2}
           r={radius}
           strokeWidth={stroke}
-          className="text-gray-100"
+          className="text-secondary"
           stroke="currentColor"
           fill="transparent"
         />
@@ -260,7 +251,7 @@ const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }
           strokeLinecap="round"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-gray-900">
+      <div className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-foreground">
         {pct}%
       </div>
     </div>
@@ -406,6 +397,11 @@ const GoalDetails = () => {
     }).length;
     return { total, done };
   }, [checkpoints]);
+
+  const pace = useMemo(() => {
+    if (!goal) return null;
+    return projectGoalPace(checkpoints, goal.createdAt, goal.dueAt ?? goal.endDate ?? null);
+  }, [goal, checkpoints]);
 
   const handleSave = async () => {
     if (!goal) return;
@@ -830,6 +826,14 @@ const GoalDetails = () => {
       };
       const blob = await generateShareCard(data);
       await shareImage(blob, `goal-${goal.id}.png`);
+      const cps = goal.checkpoints ?? [];
+      const completed = cps.filter((c) => c.completed).length;
+      const remaining = cps.length - completed;
+      const shareData = buildGoalShareData(goal.name, goal.progress, completed, remaining, cps.length, {
+        category: goal.category,
+        checkpoints: cps,
+      });
+      await saveShareRecord(user.uid, 'goal', `GOAL — ${goal.name}`, shareData, `${goal.progress}% Complete`);
     } catch {}
   };
 
@@ -898,20 +902,20 @@ const GoalDetails = () => {
     <Layout>
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         {loading ? (
-          <div className="text-gray-600">Loading...</div>
+          <div className="text-muted-foreground">Loading...</div>
         ) : !goal ? (
-          <div className="text-gray-600">Goal not found.</div>
+          <div className="text-muted-foreground">Goal not found.</div>
         ) : (
           <>
             <div className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
-                  <h1 className="text-4xl font-bold text-gray-900">{goal.name}</h1>
+                  <h1 className="text-4xl font-bold text-foreground">{goal.name}</h1>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                       goal.status === "completed"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : "bg-blue-100 text-blue-700"
+                        ? "bg-momentum/10 text-momentum"
+                        : "bg-primary/10 text-primary"
                     }`}
                   >
                     {goal.status}
@@ -925,13 +929,13 @@ const GoalDetails = () => {
                     {getRemainingDaysText(goal)}
                   </span>
                 </div>
-                {goal.description && <p className="text-gray-500 max-w-2xl">{goal.description}</p>}
+                {goal.description && <p className="text-muted-foreground max-w-2xl">{goal.description}</p>}
               </div>
 
               <div className="flex flex-wrap items-center gap-3">
                 <Link
                   to="/goals"
-                  className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors"
+                  className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4 mr-1" /> Back to Goals
                 </Link>
@@ -942,7 +946,7 @@ const GoalDetails = () => {
                   onClick={handleToggleFavorite}
                   disabled={isSaving}
                 >
-                  <Star className={`w-4 h-4 mr-2 ${goal.isFavorite ? "text-amber-400 fill-amber-400" : "text-gray-500"}`} />
+                  <Star className={`w-4 h-4 mr-2 ${goal.isFavorite ? "text-ember fill-ember" : "text-muted-foreground"}`} />
                   {goal.isFavorite ? "Favorited" : "Favorite"}
                 </Button>
 
@@ -961,53 +965,53 @@ const GoalDetails = () => {
                     <div className="space-y-6 py-2 max-h-[70vh] overflow-auto pr-1">
                       <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
-                          <div className="text-lg font-bold text-gray-900">{goal.name}</div>
+                          <div className="text-lg font-bold text-foreground">{goal.name}</div>
                           <span
                             className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                               goal.status === "completed"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : "bg-blue-100 text-blue-700"
+                                ? "bg-momentum/10 text-momentum"
+                                : "bg-primary/10 text-primary"
                             }`}
                           >
                             {goal.status}
                           </span>
-                          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-slate-100 text-slate-700">
+                          <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-secondary text-foreground">
                             {derivedProgress}%
                           </span>
                         </div>
-                        {goal.description ? <div className="text-sm text-gray-600">{goal.description}</div> : null}
+                        {goal.description ? <div className="text-sm text-muted-foreground">{goal.description}</div> : null}
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Details</div>
-                          <div className="mt-2 space-y-2 text-sm text-gray-600">
+                        <div className="rounded-2xl border border-border bg-card p-4">
+                          <div className="text-sm font-semibold text-foreground">Details</div>
+                          <div className="mt-2 space-y-2 text-sm text-muted-foreground">
                             <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Category</span>
-                              <span className="text-gray-900">{goal.category}</span>
+                              <span className="font-medium text-muted-foreground">Category</span>
+                              <span className="text-foreground">{goal.category}</span>
                             </div>
                             <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Priority</span>
-                              <span className="text-gray-900">{goal.priority}</span>
+                              <span className="font-medium text-muted-foreground">Priority</span>
+                              <span className="text-foreground">{goal.priority}</span>
                             </div>
                             <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Days Passed</span>
-                              <span className="text-gray-900">{getDaysPassedText(goal)}</span>
+                              <span className="font-medium text-muted-foreground">Days Passed</span>
+                              <span className="text-foreground">{getDaysPassedText(goal)}</span>
                             </div>
                             <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">Start</span>
-                              <span className="text-gray-900">{goal.startDate?.trim() ? goal.startDate : "No date set"}</span>
+                              <span className="font-medium text-muted-foreground">Start</span>
+                              <span className="text-foreground">{goal.startDate?.trim() ? goal.startDate : "No date set"}</span>
                             </div>
                             <div className="flex justify-between gap-3">
-                              <span className="font-medium text-gray-500">End</span>
-                              <span className="text-gray-900">{goal.endDate?.trim() ? goal.endDate : "No date set"}</span>
+                              <span className="font-medium text-muted-foreground">End</span>
+                              <span className="text-foreground">{goal.endDate?.trim() ? goal.endDate : "No date set"}</span>
                             </div>
                           </div>
                         </div>
 
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Success Metric</div>
-                          <div className="mt-2 text-sm text-gray-600">
+                        <div className="rounded-2xl border border-border bg-card p-4">
+                          <div className="text-sm font-semibold text-foreground">Success Metric</div>
+                          <div className="mt-2 text-sm text-muted-foreground">
                             {goal.successMetric?.type === "number" ? (
                               <div>
                                 Reach {goal.successMetric.target ?? 0}
@@ -1020,25 +1024,25 @@ const GoalDetails = () => {
                         </div>
                       </div>
 
-                      <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                        <div className="text-sm font-semibold text-gray-900">Checkpoints</div>
+                      <div className="rounded-2xl border border-border bg-card p-4">
+                        <div className="text-sm font-semibold text-foreground">Checkpoints</div>
                         <div className="mt-3 space-y-2">
                           {checkpoints.length === 0 ? (
-                            <div className="text-sm text-gray-600">No checkpoints yet.</div>
+                            <div className="text-sm text-muted-foreground">No checkpoints yet.</div>
                           ) : (
                             checkpoints.map((c) => (
                               <div key={c.id} className="flex items-start gap-2 text-sm">
                                 {c.kind === "number" ? (
-                                  <span className="text-gray-500">
+                                  <span className="text-muted-foreground">
                                     {Math.max(0, c.current ?? 0) >= Math.max(1, c.target ?? 1) ? "[x]" : "[ ]"}
                                   </span>
                                 ) : (
-                                  <span className="text-gray-500">{c.completed ? "[x]" : "[ ]"}</span>
+                                  <span className="text-muted-foreground">{c.completed ? "[x]" : "[ ]"}</span>
                                 )}
                                 <div className="flex-1">
-                                  <div className="text-gray-900">{c.title}</div>
+                                  <div className="text-foreground">{c.title}</div>
                                   {c.kind === "number" ? (
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-muted-foreground">
                                       {Math.max(0, c.current ?? 0)}/{Math.max(1, c.target ?? 1)}
                                     </div>
                                   ) : null}
@@ -1049,16 +1053,16 @@ const GoalDetails = () => {
                         </div>
                       </div>
 
-                      <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                        <div className="text-sm font-semibold text-gray-900">Notes/Key Points</div>
+                      <div className="rounded-2xl border border-border bg-card p-4">
+                        <div className="text-sm font-semibold text-foreground">Notes/Key Points</div>
                         <div className="mt-3 space-y-2">
                           {todos.length === 0 ? (
-                            <div className="text-sm text-gray-600">No notes yet.</div>
+                            <div className="text-sm text-muted-foreground">No notes yet.</div>
                           ) : (
                             todos.map((t) => (
                               <div key={t.id} className="flex items-center gap-2 text-sm">
-                                <span className="text-gray-500">{t.completed ? "[x]" : "[ ]"}</span>
-                                <span className={t.completed ? "line-through text-gray-400" : "text-gray-900"}>{t.title}</span>
+                                <span className="text-muted-foreground">{t.completed ? "[x]" : "[ ]"}</span>
+                                <span className={t.completed ? "line-through text-muted-foreground/70" : "text-foreground"}>{t.title}</span>
                               </div>
                             ))
                           )}
@@ -1066,19 +1070,19 @@ const GoalDetails = () => {
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Strategy</div>
-                          <div className="mt-3 space-y-2 text-sm text-gray-600">
+                        <div className="rounded-2xl border border-border bg-card p-4">
+                          <div className="text-sm font-semibold text-foreground">Strategy</div>
+                          <div className="mt-3 space-y-2 text-sm text-muted-foreground">
                             {goal.strategy ? (
                               <>
                                 <div>
-                                  <span className="font-medium text-gray-500">Why:</span> {goal.strategy.whyMatters}
+                                  <span className="font-medium text-muted-foreground">Why:</span> {goal.strategy.whyMatters}
                                 </div>
                                 <div>
-                                  <span className="font-medium text-gray-500">Who benefits:</span> {goal.strategy.whoBenefits}
+                                  <span className="font-medium text-muted-foreground">Who benefits:</span> {goal.strategy.whoBenefits}
                                 </div>
                                 <div>
-                                  <span className="font-medium text-gray-500">Say no to:</span> {goal.strategy.sayNoTo}
+                                  <span className="font-medium text-muted-foreground">Say no to:</span> {goal.strategy.sayNoTo}
                                 </div>
                               </>
                             ) : (
@@ -1087,14 +1091,14 @@ const GoalDetails = () => {
                           </div>
                         </div>
 
-                        <div className="rounded-2xl border border-gray-100 bg-white p-4">
-                          <div className="text-sm font-semibold text-gray-900">Planning</div>
-                          <div className="mt-3 space-y-2 text-sm text-gray-600">
+                        <div className="rounded-2xl border border-border bg-card p-4">
+                          <div className="text-sm font-semibold text-foreground">Planning</div>
+                          <div className="mt-3 space-y-2 text-sm text-muted-foreground">
                             {goal.planning ? (
                               <>
-                                {goal.planning.obstacles ? <div><span className="font-medium text-gray-500">Obstacles:</span> {goal.planning.obstacles}</div> : null}
-                                {goal.planning.nextActions ? <div><span className="font-medium text-gray-500">Next actions:</span> {goal.planning.nextActions}</div> : null}
-                                {goal.planning.aiPreview ? <div><span className="font-medium text-gray-500">AI preview:</span> {goal.planning.aiPreview}</div> : null}
+                                {goal.planning.obstacles ? <div><span className="font-medium text-muted-foreground">Obstacles:</span> {goal.planning.obstacles}</div> : null}
+                                {goal.planning.nextActions ? <div><span className="font-medium text-muted-foreground">Next actions:</span> {goal.planning.nextActions}</div> : null}
+                                {goal.planning.aiPreview ? <div><span className="font-medium text-muted-foreground">AI preview:</span> {goal.planning.aiPreview}</div> : null}
                               </>
                             ) : (
                               <div>No planning set.</div>
@@ -1118,7 +1122,7 @@ const GoalDetails = () => {
                   onClick={handleSetFeatured}
                   disabled={isSaving || !user}
                 >
-                  <Crown className="w-4 h-4 mr-2 text-amber-600" /> {isFeatured ? "Unfeature" : "Set Featured"}
+                  <Crown className="w-4 h-4 mr-2 text-ember" /> {isFeatured ? "Unfeature" : "Set Featured"}
                 </Button>
 
                 <Button
@@ -1231,7 +1235,7 @@ const GoalDetails = () => {
                       <Button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="bg-blue-600 hover:bg-blue-700 rounded-xl"
+                        className="bg-primary hover:bg-primary/90 rounded-xl"
                       >
                         {isSaving ? "Saving..." : "Save Changes"}
                       </Button>
@@ -1242,7 +1246,7 @@ const GoalDetails = () => {
                 <Button
                   onClick={handleMarkComplete}
                   disabled={isSaving || goal.status === "completed"}
-                  className="bg-blue-600 hover:bg-blue-700 rounded-full"
+                  className="bg-primary hover:bg-primary/90 rounded-full"
                 >
                   Mark Completed
                 </Button>
@@ -1254,7 +1258,7 @@ const GoalDetails = () => {
                 <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-bold flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-blue-600" />
+                      <TrendingUp className="w-5 h-5 text-primary" />
                       Overall Progress
                     </CardTitle>
                   </CardHeader>
@@ -1262,27 +1266,47 @@ const GoalDetails = () => {
                     <div className="flex justify-between items-end">
                       <span
                         className={`text-5xl font-black ${
-                          goal.status === "completed" ? "text-emerald-600" : "text-gray-900"
+                          goal.status === "completed" ? "text-momentum" : "text-foreground"
                         }`}
                       >
                         {derivedProgress}%
                       </span>
-                      <span className="text-sm font-medium text-gray-500">Target: 100%</span>
+                      <span className="text-sm font-medium text-muted-foreground">Target: 100%</span>
                     </div>
                     <Progress
                       value={derivedProgress}
-                      className={`h-4 bg-gray-100 ${getProgressIndicatorClass(derivedProgress)} ${
+                      className={`h-4 bg-secondary ${getProgressIndicatorClass(derivedProgress)} ${
                         goal.status === "completed" ? "[&>div]:from-emerald-500 [&>div]:to-lime-400" : ""
                       }`}
                     />
                   </CardContent>
                 </Card>
 
+                {pace && pace.status !== "no-deadline" && (
+                  <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden bg-card">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xl font-bold flex items-center gap-2">
+                        <Gauge className="w-5 h-5 text-primary" />
+                        Pace
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pb-8">
+                      <p
+                        className={`text-sm ${
+                          pace.status === "at-risk" ? "text-amber-600" : "text-muted-foreground"
+                        }`}
+                      >
+                        {pace.message}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+
                 <Card className="border-none shadow-sm rounded-[2.5rem] overflow-hidden">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-bold flex items-center justify-between">
                       <span>Checkpoints</span>
-                      <span className="text-sm font-medium text-gray-500">
+                      <span className="text-sm font-medium text-muted-foreground">
                         {derivedCheckpointStats.done}/{derivedCheckpointStats.total}
                       </span>
                     </CardTitle>
@@ -1308,7 +1332,7 @@ const GoalDetails = () => {
                         <Button
                           onClick={handleAddCheckpoint}
                           disabled={isSaving || !newCheckpointTitle.trim()}
-                          className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                          className="rounded-xl bg-primary hover:bg-primary/90"
                         >
                           Add
                         </Button>
@@ -1316,7 +1340,7 @@ const GoalDetails = () => {
                     </div>
 
                     {checkpoints.length === 0 ? (
-                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                      <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-5 text-sm text-muted-foreground">
                         Add checkpoints to automatically calculate progress.
                       </div>
                     ) : (
@@ -1327,7 +1351,7 @@ const GoalDetails = () => {
                               {(dragProps) => (
                                 <div
                                   ref={dragProps.setNodeRef}
-                                  className="rounded-2xl border border-gray-100 bg-white p-3"
+                                  className="rounded-2xl border border-border bg-card p-3"
                                   style={{
                                     transform: CSS.Transform.toString(dragProps.transform),
                                     transition: dragProps.isDragging ? 'none' : undefined,
@@ -1336,7 +1360,7 @@ const GoalDetails = () => {
                                 >
                                   <div className="flex items-start gap-2">
                                     <button
-                                      className="cursor-move p-1 text-gray-400 hover:text-gray-600"
+                                      className="cursor-move p-1 text-muted-foreground/70 hover:text-muted-foreground"
                                       {...dragProps.listeners}
                                       {...dragProps.attributes}
                                     >
@@ -1406,7 +1430,7 @@ const GoalDetails = () => {
                                                 }
                                                 className="w-full sm:w-[120px] rounded-xl"
                                               />
-                                              <span className="text-sm text-gray-500">/</span>
+                                              <span className="text-sm text-muted-foreground">/</span>
                                               <Input
                                                 type="number"
                                                 inputMode="numeric"
@@ -1425,7 +1449,7 @@ const GoalDetails = () => {
                                                 className="w-full sm:w-[120px] rounded-xl"
                                               />
                                             </div>
-                                            <div className="text-xs font-semibold text-gray-500 sm:ml-auto">
+                                            <div className="text-xs font-semibold text-muted-foreground sm:ml-auto">
                                               {Math.max(0, (c.target ?? 1) - (c.current ?? 0))} remaining
                                             </div>
                                           </div>
@@ -1448,7 +1472,7 @@ const GoalDetails = () => {
                   <CardHeader className="pb-2">
                     <CardTitle className="text-xl font-bold flex items-center justify-between">
                       <span>Notes/Key Points</span>
-                      <span className="text-sm font-medium text-gray-500">
+                      <span className="text-sm font-medium text-muted-foreground">
                         {notes.length} notes
                       </span>
                     </CardTitle>
@@ -1464,7 +1488,7 @@ const GoalDetails = () => {
                       <Button
                         onClick={handleAddNote}
                         disabled={isSaving || !newNoteContent.trim()}
-                        className="rounded-xl bg-blue-600 hover:bg-blue-700"
+                        className="rounded-xl bg-primary hover:bg-primary/90"
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         Add new note
@@ -1472,7 +1496,7 @@ const GoalDetails = () => {
                     </div>
 
                     {notes.length === 0 ? (
-                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5 text-sm text-gray-600">
+                      <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-5 text-sm text-muted-foreground">
                         Add notes/key points to track specific action items for this goal.
                       </div>
                     ) : (
@@ -1483,7 +1507,7 @@ const GoalDetails = () => {
                               {(dragProps) => (
                                 <div
                                   ref={dragProps.setNodeRef}
-                                  className="rounded-2xl border border-gray-100 bg-white p-3"
+                                  className="rounded-2xl border border-border bg-card p-3"
                                   style={{
                                     transform: CSS.Transform.toString(dragProps.transform),
                                     transition: dragProps.isDragging ? 'none' : undefined,
@@ -1492,7 +1516,7 @@ const GoalDetails = () => {
                                 >
                                   <div className="flex items-start gap-2">
                                     <button
-                                      className="cursor-move p-1 text-gray-400 hover:text-gray-600"
+                                      className="cursor-move p-1 text-muted-foreground/70 hover:text-muted-foreground"
                                       {...dragProps.listeners}
                                       {...dragProps.attributes}
                                     >
@@ -1500,7 +1524,7 @@ const GoalDetails = () => {
                                     </button>
                                     <div className="flex-1">
                                       <div className="flex items-center gap-3">
-                                        <span className="flex-1 text-sm text-gray-900">
+                                        <span className="flex-1 text-sm text-foreground">
                                           {note.content}
                                         </span>
                                         <Button
@@ -1527,27 +1551,27 @@ const GoalDetails = () => {
                     {notes.length > 0 && (
                       <div className="space-y-3">
                         <div>
-                          <h4 className="text-lg font-bold text-gray-900">Notes/Key Points</h4>
-                          <p className="text-sm text-gray-500">Quick preview of your notes.</p>
+                          <h4 className="text-lg font-bold text-foreground">Notes/Key Points</h4>
+                          <p className="text-sm text-muted-foreground">Quick preview of your notes.</p>
                         </div>
                         <div className="space-y-2">
                           {notes.slice(0, 6).map((note) => (
                             <div key={note.id} className="flex items-start gap-2 text-sm">
-                              <FileText className="w-4 h-4 text-gray-400 mt-0.5" />
-                              <span className="text-gray-700">{note.content}</span>
+                              <FileText className="w-4 h-4 text-muted-foreground/70 mt-0.5" />
+                              <span className="text-foreground/80">{note.content}</span>
                             </div>
                           ))}
                           {notes.length > 6 && (
-                            <div className="text-xs font-semibold text-gray-500">+ {notes.length - 6} more</div>
+                            <div className="text-xs font-semibold text-muted-foreground">+ {notes.length - 6} more</div>
                           )}
                         </div>
                       </div>
                     )}
 
                     {!goal.strategy && !goal.planning ? (
-                      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-5">
-                        <p className="font-semibold text-gray-900">No strategy or planning set for this goal yet.</p>
-                        <p className="text-sm text-gray-600 mt-1">
+                      <div className="rounded-2xl border border-dashed border-border bg-secondary/40 p-5">
+                        <p className="font-semibold text-foreground">No strategy or planning set for this goal yet.</p>
+                        <p className="text-sm text-muted-foreground mt-1">
                           Add a simple “why” and a plan for the week to stay consistent. Use the buttons below to set it now.
                         </p>
                       </div>
@@ -1556,22 +1580,22 @@ const GoalDetails = () => {
                         {!!goal.strategy && (
                           <div className="space-y-3">
                             <div>
-                              <h4 className="text-lg font-bold text-gray-900">Strategy</h4>
-                              <p className="text-sm text-gray-500">Your motivation and focus.</p>
+                              <h4 className="text-lg font-bold text-foreground">Strategy</h4>
+                              <p className="text-sm text-muted-foreground">Your motivation and focus.</p>
                             </div>
 
                             <div className="space-y-4">
                               <div>
-                                <p className="text-sm font-semibold text-gray-900">Why does this goal matter?</p>
-                                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.strategy.whyMatters}</p>
+                                <p className="text-sm font-semibold text-foreground">Why does this goal matter?</p>
+                                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{goal.strategy.whyMatters}</p>
                               </div>
                               <div>
-                                <p className="text-sm font-semibold text-gray-900">Who benefits if you succeed?</p>
-                                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.strategy.whoBenefits}</p>
+                                <p className="text-sm font-semibold text-foreground">Who benefits if you succeed?</p>
+                                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{goal.strategy.whoBenefits}</p>
                               </div>
                               <div>
-                                <p className="text-sm font-semibold text-gray-900">What will you say “No” to?</p>
-                                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.strategy.sayNoTo}</p>
+                                <p className="text-sm font-semibold text-foreground">What will you say “No” to?</p>
+                                <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{goal.strategy.sayNoTo}</p>
                               </div>
                             </div>
                           </div>
@@ -1580,27 +1604,27 @@ const GoalDetails = () => {
                         {!!goal.planning && (
                           <div className="space-y-3">
                             <div>
-                              <h4 className="text-lg font-bold text-gray-900">Planning</h4>
-                              <p className="text-sm text-gray-500">What could block you, and what you’ll do next.</p>
+                              <h4 className="text-lg font-bold text-foreground">Planning</h4>
+                              <p className="text-sm text-muted-foreground">What could block you, and what you’ll do next.</p>
                             </div>
 
                             <div className="space-y-4">
                               {goal.planning.obstacles ? (
                                 <div>
-                                  <p className="text-sm font-semibold text-gray-900">Common obstacles</p>
-                                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.planning.obstacles}</p>
+                                  <p className="text-sm font-semibold text-foreground">Common obstacles</p>
+                                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{goal.planning.obstacles}</p>
                                 </div>
                               ) : null}
                               {goal.planning.nextActions ? (
                                 <div>
-                                  <p className="text-sm font-semibold text-gray-900">Next actions for this week</p>
-                                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.planning.nextActions}</p>
+                                  <p className="text-sm font-semibold text-foreground">Next actions for this week</p>
+                                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{goal.planning.nextActions}</p>
                                 </div>
                               ) : null}
                               {goal.planning.aiPreview ? (
                                 <div>
-                                  <p className="text-sm font-semibold text-gray-900">AI reflection</p>
-                                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{goal.planning.aiPreview}</p>
+                                  <p className="text-sm font-semibold text-foreground">AI reflection</p>
+                                  <p className="text-sm text-muted-foreground mt-1 whitespace-pre-wrap">{goal.planning.aiPreview}</p>
                                 </div>
                               ) : null}
                             </div>
@@ -1613,7 +1637,7 @@ const GoalDetails = () => {
                       <div className="space-y-6 pt-4 border-t">
                         {(editTarget === null || editTarget === "strategy") && (
                           <div>
-                            <h4 className="font-semibold text-gray-900 mb-3">Strategy</h4>
+                            <h4 className="font-semibold text-foreground mb-3">Strategy</h4>
                             <div className="space-y-3">
                               <div className="grid gap-2">
                                 <Label>Why does this goal matter?</Label>
@@ -1648,7 +1672,7 @@ const GoalDetails = () => {
 
                         {(editTarget === null || editTarget === "planning") && (
                           <div>
-                            <h4 className="font-semibold text-gray-900 mb-3">Planning</h4>
+                            <h4 className="font-semibold text-foreground mb-3">Planning</h4>
                             <div className="space-y-3">
                               <div className="grid gap-2">
                                 <Label>Common obstacles</Label>
@@ -1713,7 +1737,7 @@ const GoalDetails = () => {
                             <Button
                               onClick={handleSaveStrategy}
                               disabled={isSavingStrategy}
-                              className="rounded-full bg-blue-600 hover:bg-blue-700"
+                              className="rounded-full bg-primary hover:bg-primary/90"
                             >
                               {isSavingStrategy ? "Saving..." : "Save Strategy"}
                             </Button>
@@ -1722,7 +1746,7 @@ const GoalDetails = () => {
                             <Button
                               onClick={handleSavePlanning}
                               disabled={isSavingPlanning}
-                              className="rounded-full bg-blue-600 hover:bg-blue-700"
+                              className="rounded-full bg-primary hover:bg-primary/90"
                             >
                               {isSavingPlanning ? "Saving..." : "Save Planning"}
                             </Button>
@@ -1737,17 +1761,17 @@ const GoalDetails = () => {
               <div className="space-y-8">
                 <Card
                   className={`border-none shadow-sm rounded-[2.5rem] text-white transition-colors ${
-                    goal.status === "completed" ? "bg-emerald-600" : "bg-blue-600"
+                    goal.status === "completed" ? "bg-momentum" : "bg-primary"
                   }`}
                 >
                   <CardHeader>
                     <CardTitle className="text-lg font-bold flex items-center gap-2">
-                      <Trophy className="w-5 h-5 text-blue-200" />
+                      <Trophy className="w-5 h-5 text-primary-foreground/70" />
                       Success Metric
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-blue-50 leading-relaxed">
+                    <p className="text-primary-foreground/90 leading-relaxed">
                       {goal.successMetric?.type === "number" ? "Reach target" : "Complete goal"}
                     </p>
                   </CardContent>
@@ -1756,30 +1780,30 @@ const GoalDetails = () => {
                 <Card className="border-none shadow-sm rounded-[2.5rem]">
                   <CardHeader>
                     <CardTitle className="text-lg font-bold flex items-center gap-2">
-                      <Target className="w-5 h-5 text-amber-500" />
+                      <Target className="w-5 h-5 text-ember" />
                       Details
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2 text-sm text-gray-600">
+                  <CardContent className="space-y-2 text-sm text-muted-foreground">
                     <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">Category</span>
-                      <span className="text-gray-900">{goal.category}</span>
+                      <span className="font-medium text-muted-foreground">Category</span>
+                      <span className="text-foreground">{goal.category}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">Priority</span>
-                      <span className="text-gray-900">{goal.priority}</span>
+                      <span className="font-medium text-muted-foreground">Priority</span>
+                      <span className="text-foreground">{goal.priority}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">Days Passed</span>
-                      <span className="text-gray-900">{getDaysPassedText(goal)}</span>
+                      <span className="font-medium text-muted-foreground">Days Passed</span>
+                      <span className="text-foreground">{getDaysPassedText(goal)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">Start</span>
-                      <span className="text-gray-900">{typeof (goal as unknown as { startDate?: unknown }).startDate === "string" && (goal as unknown as { startDate?: string }).startDate?.trim() ? (goal as unknown as { startDate?: string }).startDate : "No date set"}</span>
+                      <span className="font-medium text-muted-foreground">Start</span>
+                      <span className="text-foreground">{typeof (goal as unknown as { startDate?: unknown }).startDate === "string" && (goal as unknown as { startDate?: string }).startDate?.trim() ? (goal as unknown as { startDate?: string }).startDate : "No date set"}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium text-gray-500">End</span>
-                      <span className="text-gray-900">{typeof (goal as unknown as { endDate?: unknown }).endDate === "string" && (goal as unknown as { endDate?: string }).endDate?.trim() ? (goal as unknown as { endDate?: string }).endDate : "No date set"}</span>
+                      <span className="font-medium text-muted-foreground">End</span>
+                      <span className="text-foreground">{typeof (goal as unknown as { endDate?: unknown }).endDate === "string" && (goal as unknown as { endDate?: string }).endDate?.trim() ? (goal as unknown as { endDate?: string }).endDate : "No date set"}</span>
                     </div>
                     <div className="pt-3">
                       <CircularProgress value={derivedProgress} />

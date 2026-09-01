@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const GoalPlannerApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between a goal planner and goal tracker?",
@@ -114,26 +116,26 @@ const GoalPlannerApp = () => {
         <header className="space-y-6" id="hero">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Free Goal Planner App</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Goal Planner App: The Practical Way to Set Goals, Take Daily Action, and Stay Consistent
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               If you've ever set a goal you genuinely cared about—then watched it fade under a busy week—you're not alone. Most "goal failure" isn't a motivation problem. It's a systems problem.
             </p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Goals</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Goals
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
             </Button>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-            <p className="text-lg font-medium text-gray-900 mb-2">Quick answer: What a goal planner app should help you do</p>
-            <ul className="space-y-2 text-gray-700">
+          <div className="bg-secondary/40 rounded-2xl p-8 border border-border">
+            <p className="text-lg font-medium text-foreground mb-2">Quick answer: What a goal planner app should help you do</p>
+            <ul className="space-y-2 text-foreground/80">
               <li>• set goals clearly (so "done" is obvious)</li>
               <li>• break goals into milestones and next actions</li>
               <li>• plan weekly and daily steps you can actually complete</li>
@@ -147,18 +149,18 @@ const GoalPlannerApp = () => {
         {/* Screenshot Placeholder */}
         <section className="space-y-6" id="app-preview">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">See Goal Planning in Action</h2>
-            <div className="bg-gray-100 rounded-2xl p-12 border-2 border-dashed border-gray-300">
-              <p className="text-gray-500 text-lg">📱 App Screenshot Placeholder</p>
-              <p className="text-gray-400 text-sm mt-2">Goal setting screen with milestones and daily actions</p>
+            <h2 className="text-3xl font-bold text-foreground mb-4">See Goal Planning in Action</h2>
+            <div className="bg-secondary rounded-2xl p-12 border-2 border-dashed border-border">
+              <p className="text-muted-foreground text-lg">📱 App Screenshot Placeholder</p>
+              <p className="text-muted-foreground/70 text-sm mt-2">Goal setting screen with milestones and daily actions</p>
             </div>
           </div>
         </section>
 
         {/* What Is Section */}
         <section className="space-y-6" id="what-is">
-          <h2 className="text-3xl font-bold text-gray-900">What Is a Goal Planner App?</h2>
-          <div className="prose prose-lg max-w-none text-gray-700">
+          <h2 className="text-3xl font-bold text-foreground">What Is a Goal Planner App?</h2>
+          <div className="prose prose-lg max-w-none text-foreground/80">
             <p>
               A <strong>goal planner app</strong> is a tool for setting, organizing, and achieving goals by turning them into <strong>actionable steps</strong> you can schedule and repeat.
             </p>
@@ -181,7 +183,7 @@ const GoalPlannerApp = () => {
 
         {/* Why People Don't Reach Goals */}
         <section className="space-y-6" id="why-people-fail">
-          <h2 className="text-3xl font-bold text-gray-900">Why People Don't Reach Goals (Even When They're Serious)</h2>
+          <h2 className="text-3xl font-bold text-foreground">Why People Don't Reach Goals (Even When They're Serious)</h2>
           <div className="grid md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
@@ -228,7 +230,7 @@ const GoalPlannerApp = () => {
 
         {/* Features Grid */}
         <section className="space-y-6" id="features">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features to Look For in the Best Goal Planner App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Key Features to Look For in the Best Goal Planner App</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -239,7 +241,7 @@ const GoalPlannerApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -248,54 +250,54 @@ const GoalPlannerApp = () => {
 
         {/* How to Set Goals Section */}
         <section className="space-y-6" id="how-to-set-goals">
-          <h2 className="text-3xl font-bold text-gray-900">How to Set Goals in a Way That Leads to Action</h2>
+          <h2 className="text-3xl font-bold text-foreground">How to Set Goals in a Way That Leads to Action</h2>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">The GoalPlanner Approach</h3>
-              <p className="text-blue-800 mb-4">
+            <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10">
+              <h3 className="text-xl font-display font-semibold text-foreground mb-4">The GoalPlanner Approach</h3>
+              <p className="text-foreground/80 mb-4">
                 You don't need more goals. You need a clearer plan for the goals you already care about.
               </p>
-              <p className="text-blue-700">
+              <p className="text-foreground/80">
                 Instead of pushing complexity, it helps you keep a small, repeatable system: define goals → connect them to weekly targets → convert targets into daily actions → track habits and progress → reflect and adjust.
               </p>
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">Step-by-Step Method</h3>
+              <h3 className="text-xl font-display font-semibold text-foreground">Step-by-Step Method</h3>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
                     <h4 className="font-semibold">Choose one meaningful goal (per season)</h4>
-                    <p className="text-gray-600">Ask: If I make progress on one thing, what will matter most?</p>
+                    <p className="text-muted-foreground">Ask: If I make progress on one thing, what will matter most?</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
                     <h4 className="font-semibold">Define the finish line</h4>
-                    <p className="text-gray-600">Make it testable: "Complete 12 lessons," "Save $3,000," "Run 3x/week for 8 weeks"</p>
+                    <p className="text-muted-foreground">Make it testable: "Complete 12 lessons," "Save $3,000," "Run 3x/week for 8 weeks"</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
                     <h4 className="font-semibold">Set a timeframe</h4>
-                    <p className="text-gray-600">Deadlines shape plans without shaming you.</p>
+                    <p className="text-muted-foreground">Deadlines shape plans without shaming you.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
                     <h4 className="font-semibold">Break into milestones</h4>
-                    <p className="text-gray-600">Milestones keep you from drifting and help you measure progress.</p>
+                    <p className="text-muted-foreground">Milestones keep you from drifting and help you measure progress.</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">5</div>
                   <div>
                     <h4 className="font-semibold">Convert to daily actions</h4>
-                    <p className="text-gray-600">Daily actions should be small, clear, and tied to a time or trigger.</p>
+                    <p className="text-muted-foreground">Daily actions should be small, clear, and tied to a time or trigger.</p>
                   </div>
                 </div>
               </div>
@@ -305,71 +307,71 @@ const GoalPlannerApp = () => {
 
         {/* Best Goal Planner App Section */}
         <section className="space-y-6" id="best-goal-planner-app">
-          <h2 className="text-3xl font-bold text-gray-900">Best Goal Planner App: What Actually Matters</h2>
-          <p className="text-lg text-gray-600">When searching for the best goal planner app, look beyond flashy features and focus on what drives real results.</p>
+          <h2 className="text-3xl font-bold text-foreground">Best Goal Planner App: What Actually Matters</h2>
+          <p className="text-lg text-muted-foreground">When searching for the best goal planner app, look beyond flashy features and focus on what drives real results.</p>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">🎯 Essential Features That Matter</h3>
+              <h3 className="text-xl font-display font-semibold text-foreground">🎯 Essential Features That Matter</h3>
               <div className="space-y-3">
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Clear Next Actions</p>
-                    <p className="text-gray-600 text-sm">The app should always show you what to do next, not just what you want to achieve</p>
+                    <p className="text-muted-foreground text-sm">The app should always show you what to do next, not just what you want to achieve</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Daily Planning Integration</p>
-                    <p className="text-gray-600 text-sm">Goals should connect to your daily tasks and calendar</p>
+                    <p className="text-muted-foreground text-sm">Goals should connect to your daily tasks and calendar</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Progress Without Overwhelm</p>
-                    <p className="text-gray-600 text-sm">Simple tracking that shows trends without complicated dashboards</p>
+                    <p className="text-muted-foreground text-sm">Simple tracking that shows trends without complicated dashboards</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">Flexible Scheduling</p>
-                    <p className="text-gray-600 text-sm">Adapts to busy weeks, travel, and life's unpredictability</p>
+                    <p className="text-muted-foreground text-sm">Adapts to busy weeks, travel, and life's unpredictability</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">⚠️ Features That Often Distract</h3>
+              <h3 className="text-xl font-display font-semibold text-foreground">⚠️ Features That Often Distract</h3>
               <div className="space-y-3">
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Over-Complicated Analytics</p>
-                    <p className="text-gray-600 text-sm">Too many charts and metrics that don't drive action</p>
+                    <p className="text-muted-foreground text-sm">Too many charts and metrics that don't drive action</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Gamification Over Substance</p>
-                    <p className="text-gray-600 text-sm">Points and badges that replace real progress</p>
+                    <p className="text-muted-foreground text-sm">Points and badges that replace real progress</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Constant Notifications</p>
-                    <p className="text-gray-600 text-sm">Alerts that create anxiety rather than support</p>
+                    <p className="text-muted-foreground text-sm">Alerts that create anxiety rather than support</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">Complex Setup Requirements</p>
-                    <p className="text-gray-600 text-sm">Apps that require hours of configuration before you can start</p>
+                    <p className="text-muted-foreground text-sm">Apps that require hours of configuration before you can start</p>
                   </div>
                 </div>
               </div>
@@ -379,17 +381,17 @@ const GoalPlannerApp = () => {
 
         {/* Free vs Paid Section */}
         <section className="space-y-6" id="free-vs-paid">
-          <h2 className="text-3xl font-bold text-gray-900">Free Goal Planner App vs Paid Tools</h2>
-          <p className="text-lg text-gray-600">You don't need to pay for effective goal planning—but understanding the trade-offs helps you choose wisely.</p>
+          <h2 className="text-3xl font-bold text-foreground">Free Goal Planner App vs Paid Tools</h2>
+          <p className="text-lg text-muted-foreground">You don't need to pay for effective goal planning—but understanding the trade-offs helps you choose wisely.</p>
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900 flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <span className="text-2xl">🆓</span> Free Goal Planner Apps
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 text-green-800">
+                <div className="space-y-3 text-foreground/80">
                   <p><strong>What you typically get:</strong></p>
                   <ul className="space-y-1 ml-4">
                     <li>• Goal setting and basic categorization</li>
@@ -403,14 +405,14 @@ const GoalPlannerApp = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900 flex items-center gap-2">
+                <CardTitle className="text-foreground flex items-center gap-2">
                   <span className="text-2xl">💎</span> Paid Goal Planner Apps
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 text-blue-800">
+                <div className="space-y-3 text-foreground/80">
                   <p><strong>What you typically get:</strong></p>
                   <ul className="space-y-1 ml-4">
                     <li>• Unlimited goals and projects</li>
@@ -425,8 +427,8 @@ const GoalPlannerApp = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <p className="text-gray-700 text-center">
+          <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+            <p className="text-foreground/80 text-center">
               <strong>Our recommendation:</strong> Start with a free app. If you outgrow its features and can clearly identify how paid features would help you achieve more, then upgrade.
             </p>
           </div>
@@ -434,8 +436,8 @@ const GoalPlannerApp = () => {
 
         {/* Digital vs Paper Section */}
         <section className="space-y-6" id="digital-vs-paper">
-          <h2 className="text-3xl font-bold text-gray-900">Digital Goal Planner vs Paper Goal Planner</h2>
-          <p className="text-lg text-gray-600">Both approaches work—the choice depends on your personality, preferences, and what helps you stay consistent.</p>
+          <h2 className="text-3xl font-bold text-foreground">Digital Goal Planner vs Paper Goal Planner</h2>
+          <p className="text-lg text-muted-foreground">Both approaches work—the choice depends on your personality, preferences, and what helps you stay consistent.</p>
           <div className="grid md:grid-cols-2 gap-8">
             <Card className="border-purple-200 bg-purple-50">
               <CardHeader>
@@ -480,8 +482,8 @@ const GoalPlannerApp = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-            <p className="text-blue-800 text-center">
+          <div className="bg-primary/10 rounded-xl p-6 border border-primary/20">
+            <p className="text-foreground/80 text-center">
               <strong>Hybrid approach:</strong> Many people use paper for initial goal setting and weekly reviews, then digital for daily tracking and reminders.
             </p>
           </div>
@@ -489,8 +491,8 @@ const GoalPlannerApp = () => {
 
         {/* Who Should Use Section */}
         <section className="space-y-6" id="who-should-use">
-          <h2 className="text-3xl font-bold text-gray-900">Who Should Use a Goal Planner App?</h2>
-          <p className="text-lg text-gray-600">Goal planner apps aren't just for "high achievers"—they're for anyone who wants to turn intentions into actions.</p>
+          <h2 className="text-3xl font-bold text-foreground">Who Should Use a Goal Planner App?</h2>
+          <p className="text-lg text-muted-foreground">Goal planner apps aren't just for "high achievers"—they're for anyone who wants to turn intentions into actions.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -501,7 +503,7 @@ const GoalPlannerApp = () => {
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <p>Career development, skill building, project milestones, performance goals, work-life balance targets.</p>
-                  <p className="text-gray-600">Benefit: Structure for long-term career growth with busy work schedules.</p>
+                  <p className="text-muted-foreground">Benefit: Structure for long-term career growth with busy work schedules.</p>
                 </div>
               </CardContent>
             </Card>
@@ -514,7 +516,7 @@ const GoalPlannerApp = () => {
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <p>Academic targets, study habits, skill acquisition, research deadlines, personal development goals.</p>
-                  <p className="text-gray-600">Benefit: Breaking large academic projects into manageable daily tasks.</p>
+                  <p className="text-muted-foreground">Benefit: Breaking large academic projects into manageable daily tasks.</p>
                 </div>
               </CardContent>
             </Card>
@@ -527,7 +529,7 @@ const GoalPlannerApp = () => {
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <p>Training consistency, performance targets, habit formation, nutrition tracking, recovery goals.</p>
-                  <p className="text-gray-600">Benefit: Maintaining motivation through plateaus and busy periods.</p>
+                  <p className="text-muted-foreground">Benefit: Maintaining motivation through plateaus and busy periods.</p>
                 </div>
               </CardContent>
             </Card>
@@ -540,7 +542,7 @@ const GoalPlannerApp = () => {
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <p>Project completion, skill development, portfolio building, creative habits, networking goals.</p>
-                  <p className="text-gray-600">Benefit: Structure for creative work that doesn't feel restrictive.</p>
+                  <p className="text-muted-foreground">Benefit: Structure for creative work that doesn't feel restrictive.</p>
                 </div>
               </CardContent>
             </Card>
@@ -553,7 +555,7 @@ const GoalPlannerApp = () => {
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <p>Home organization, family goals, personal development, financial targets, relationship improvements.</p>
-                  <p className="text-gray-600">Benefit: Balancing multiple life areas without dropping important priorities.</p>
+                  <p className="text-muted-foreground">Benefit: Balancing multiple life areas without dropping important priorities.</p>
                 </div>
               </CardContent>
             </Card>
@@ -566,7 +568,7 @@ const GoalPlannerApp = () => {
               <CardContent>
                 <div className="space-y-2 text-sm">
                   <p>Breaking old patterns, building new routines, consistency tracking, milestone celebrations.</p>
-                  <p className="text-gray-600">Benefit: Accountability and progress visibility for long-term behavior change.</p>
+                  <p className="text-muted-foreground">Benefit: Accountability and progress visibility for long-term behavior change.</p>
                 </div>
               </CardContent>
             </Card>
@@ -575,28 +577,28 @@ const GoalPlannerApp = () => {
 
         {/* Consistency Section */}
         <section className="space-y-6" id="consistency-help">
-          <h2 className="text-3xl font-bold text-gray-900">How a Goal Planner App Helps You Stay Consistent</h2>
-          <p className="text-lg text-gray-600">Consistency isn't about perfect discipline—it's about having the right support system when motivation fades.</p>
+          <h2 className="text-3xl font-bold text-foreground">How a Goal Planner App Helps You Stay Consistent</h2>
+          <p className="text-lg text-muted-foreground">Consistency isn't about perfect discipline—it's about having the right support system when motivation fades.</p>
           <div className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border-green-200 bg-green-50">
+              <Card className="border-momentum/20 bg-momentum/10">
                 <CardHeader>
-                  <CardTitle className="text-green-900 flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <span className="text-xl">🧠</span> External Memory
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-green-800">The app remembers your goals and next steps when your brain is busy or tired. No more "I forgot what I was supposed to work on."</p>
+                  <p className="text-foreground/80">The app remembers your goals and next steps when your brain is busy or tired. No more "I forgot what I was supposed to work on."</p>
                 </CardContent>
               </Card>
-              <Card className="border-blue-200 bg-blue-50">
+              <Card className="border-primary/20 bg-primary/10">
                 <CardHeader>
-                  <CardTitle className="text-blue-900 flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <span className="text-xl">⏰</span> Timely Reminders
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-blue-800">Gentle nudges at the right moment protect your time and energy, preventing important tasks from getting lost in daily chaos.</p>
+                  <p className="text-foreground/80">Gentle nudges at the right moment protect your time and energy, preventing important tasks from getting lost in daily chaos.</p>
                 </CardContent>
               </Card>
               <Card className="border-purple-200 bg-purple-50">
@@ -620,8 +622,8 @@ const GoalPlannerApp = () => {
                 </CardContent>
               </Card>
             </div>
-            <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-              <p className="text-gray-700">
+            <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+              <p className="text-foreground/80">
                 <strong>The key insight:</strong> Consistency comes from systems, not willpower. A goal planner app provides the external structure that keeps you moving forward through busy weeks, low motivation, and unexpected obstacles.
               </p>
             </div>
@@ -630,44 +632,44 @@ const GoalPlannerApp = () => {
 
         {/* Breaking Goals Section */}
         <section className="space-y-6" id="breaking-goals">
-          <h2 className="text-3xl font-bold text-gray-900">How to Break Big Goals into Daily Actions</h2>
-          <p className="text-lg text-gray-600">The gap between "I want to achieve X" and "Today I will do Y" is where most goals die. Here's how to bridge it.</p>
-          <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
-            <h3 className="text-xl font-semibold text-blue-900 mb-6">The Goal Decomposition Framework</h3>
+          <h2 className="text-3xl font-bold text-foreground">How to Break Big Goals into Daily Actions</h2>
+          <p className="text-lg text-muted-foreground">The gap between "I want to achieve X" and "Today I will do Y" is where most goals die. Here's how to bridge it.</p>
+          <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10">
+            <h3 className="text-xl font-display font-semibold text-foreground mb-6">The Goal Decomposition Framework</h3>
             <div className="space-y-6">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Start with the Big Outcome</h4>
-                  <p className="text-blue-800">Define your destination clearly: "Complete marathon in under 4 hours" not "get better at running."</p>
+                  <h4 className="font-semibold text-foreground">Start with the Big Outcome</h4>
+                  <p className="text-foreground/80">Define your destination clearly: "Complete marathon in under 4 hours" not "get better at running."</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Work Backward with Milestones</h4>
-                  <p className="text-blue-800">Create quarterly checkpoints: Month 3: 10 miles, Month 6: 15 miles, Month 9: 20 miles.</p>
+                  <h4 className="font-semibold text-foreground">Work Backward with Milestones</h4>
+                  <p className="text-foreground/80">Create quarterly checkpoints: Month 3: 10 miles, Month 6: 15 miles, Month 9: 20 miles.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Define Weekly Targets</h4>
-                  <p className="text-blue-800">Break milestones into weekly actions: "Week 1: Run 3x, 2 miles each. Week 2: Run 3x, 2.5 miles each."</p>
+                  <h4 className="font-semibold text-foreground">Define Weekly Targets</h4>
+                  <p className="text-foreground/80">Break milestones into weekly actions: "Week 1: Run 3x, 2 miles each. Week 2: Run 3x, 2.5 miles each."</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Identify Daily Actions</h4>
-                  <p className="text-blue-800">Convert weekly targets to specific daily tasks: "Monday: 3-mile run after work. Tuesday: 20-minute stretching."</p>
+                  <h4 className="font-semibold text-foreground">Identify Daily Actions</h4>
+                  <p className="text-foreground/80">Convert weekly targets to specific daily tasks: "Monday: 3-mile run after work. Tuesday: 20-minute stretching."</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">5</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Make Actions "Too Easy to Skip"</h4>
-                  <p className="text-blue-800">Ensure each daily action is small enough to complete even on your worst day: "Put on running shoes" is better than "run 5 miles."</p>
+                  <h4 className="font-semibold text-foreground">Make Actions "Too Easy to Skip"</h4>
+                  <p className="text-foreground/80">Ensure each daily action is small enough to complete even on your worst day: "Put on running shoes" is better than "run 5 miles."</p>
                 </div>
               </div>
             </div>
@@ -678,7 +680,7 @@ const GoalPlannerApp = () => {
                 <CardTitle className="text-lg">💡 Pro Tip: Time-Based Actions</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-sm">Attach actions to specific times: "Run Monday/Wednesday/Friday at 6pm" rather than "run 3x this week."</p>
+                <p className="text-muted-foreground text-sm">Attach actions to specific times: "Run Monday/Wednesday/Friday at 6pm" rather than "run 3x this week."</p>
               </CardContent>
             </Card>
             <Card>
@@ -686,7 +688,7 @@ const GoalPlannerApp = () => {
                 <CardTitle className="text-lg">🎯 Pro Tip: Trigger-Based Actions</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-sm">Link to existing habits: "After morning coffee, review goal progress" or "After dinner, plan tomorrow's goal action."</p>
+                <p className="text-muted-foreground text-sm">Link to existing habits: "After morning coffee, review goal progress" or "After dinner, plan tomorrow's goal action."</p>
               </CardContent>
             </Card>
             <Card>
@@ -694,7 +696,7 @@ const GoalPlannerApp = () => {
                 <CardTitle className="text-lg">🔄 Pro Tip: Weekly Review</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-sm">Every Sunday, adjust next week's actions based on what worked, what didn't, and upcoming challenges.</p>
+                <p className="text-muted-foreground text-sm">Every Sunday, adjust next week's actions based on what worked, what didn't, and upcoming challenges.</p>
               </CardContent>
             </Card>
           </div>
@@ -702,8 +704,8 @@ const GoalPlannerApp = () => {
 
         {/* Common Mistakes Section */}
         <section className="space-y-6" id="common-mistakes">
-          <h2 className="text-3xl font-bold text-gray-900">Common Goal-Setting Mistakes That Keep People Stuck</h2>
-          <p className="text-lg text-gray-600">Understanding these pitfalls is half the battle. Most goal failures aren't motivation problems—they're planning problems.</p>
+          <h2 className="text-3xl font-bold text-foreground">Common Goal-Setting Mistakes That Keep People Stuck</h2>
+          <p className="text-lg text-muted-foreground">Understanding these pitfalls is half the battle. Most goal failures aren't motivation problems—they're planning problems.</p>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <Card className="border-red-200 bg-red-50">
@@ -728,15 +730,15 @@ const GoalPlannerApp = () => {
                   <p className="text-orange-700 mt-2"><strong>The fix:</strong> Define daily/weekly actions that lead to the outcome: "walk 30 minutes daily," "meal prep Sundays"</p>
                 </CardContent>
               </Card>
-              <Card className="border-yellow-200 bg-yellow-50">
+              <Card className="border-ember/20 bg-ember/10">
                 <CardHeader>
-                  <CardTitle className="text-yellow-900 flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <span className="text-xl">📋</span> No Next Action
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-yellow-800"><strong>The mistake:</strong> Knowing what you want but not what to do right now</p>
-                  <p className="text-yellow-700 mt-2"><strong>The fix:</strong> Always have a clear, immediate next step: "Email professor about research opportunity" not "advance career"</p>
+                  <p className="text-foreground/80"><strong>The mistake:</strong> Knowing what you want but not what to do right now</p>
+                  <p className="text-foreground/80 mt-2"><strong>The fix:</strong> Always have a clear, immediate next step: "Email professor about research opportunity" not "advance career"</p>
                 </CardContent>
               </Card>
             </div>
@@ -752,32 +754,32 @@ const GoalPlannerApp = () => {
                   <p className="text-purple-700 mt-2"><strong>The fix:</strong> Start with one habit or goal for 2-3 weeks before adding more. Build momentum gradually.</p>
                 </CardContent>
               </Card>
-              <Card className="border-blue-200 bg-blue-50">
+              <Card className="border-primary/20 bg-primary/10">
                 <CardHeader>
-                  <CardTitle className="text-blue-900 flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <span className="text-xl">📅</span> Unrealistic Timelines
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-blue-800"><strong>The mistake:</strong> Expecting major changes in weeks</p>
-                  <p className="text-blue-700 mt-2"><strong>The fix:</strong> Set realistic timeframes and celebrate small milestones along the way</p>
+                  <p className="text-foreground/80"><strong>The mistake:</strong> Expecting major changes in weeks</p>
+                  <p className="text-foreground/80 mt-2"><strong>The fix:</strong> Set realistic timeframes and celebrate small milestones along the way</p>
                 </CardContent>
               </Card>
-              <Card className="border-green-200 bg-green-50">
+              <Card className="border-momentum/20 bg-momentum/10">
                 <CardHeader>
-                  <CardTitle className="text-green-900 flex items-center gap-2">
+                  <CardTitle className="text-foreground flex items-center gap-2">
                     <span className="text-xl">🔄</span> No Tracking or Review
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-green-800"><strong>The mistake:</strong> Setting goals and never checking progress</p>
-                  <p className="text-green-700 mt-2"><strong>The fix:</strong> Weekly reviews to adjust plans based on real experience and obstacles</p>
+                  <p className="text-foreground/80"><strong>The mistake:</strong> Setting goals and never checking progress</p>
+                  <p className="text-foreground/80 mt-2"><strong>The fix:</strong> Weekly reviews to adjust plans based on real experience and obstacles</p>
                 </CardContent>
               </Card>
             </div>
           </div>
-          <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-            <p className="text-gray-700">
+          <div className="bg-secondary/40 rounded-xl p-6 border border-border">
+            <p className="text-foreground/80">
               <strong>The pattern:</strong> Most goal-setting mistakes come from focusing on the destination instead of the journey. A good goal planner app helps you focus on daily actions while keeping the destination in sight.
             </p>
           </div>
@@ -785,63 +787,63 @@ const GoalPlannerApp = () => {
 
         {/* Why GoalPlanner Section */}
         <section className="space-y-6" id="why-goalplanner">
-          <h2 className="text-3xl font-bold text-gray-900">Why GoalPlanner is Useful for Real Daily Life</h2>
-          <p className="text-lg text-gray-600">Most goal planning systems assume you have perfect discipline and unlimited time. GoalPlanner is built for reality.</p>
+          <h2 className="text-3xl font-bold text-foreground">Why GoalPlanner is Useful for Real Daily Life</h2>
+          <p className="text-lg text-muted-foreground">Most goal planning systems assume you have perfect discipline and unlimited time. GoalPlanner is built for reality.</p>
           <div className="space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🏠 Built for Real Life Constraints</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground">🏠 Built for Real Life Constraints</h3>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Quick setup that fits into busy schedules</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Quick setup that fits into busy schedules</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Flexible planning for travel, sick days, and unexpected events</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Flexible planning for travel, sick days, and unexpected events</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Recognizes some weeks are for maintenance, not growth</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary/10 text-primary rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Recognizes some weeks are for maintenance, not growth</p>
                   </div>
                 </div>
               </div>
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-900">🔗 Integrated System Approach</h3>
+                <h3 className="text-xl font-display font-semibold text-foreground">🔗 Integrated System Approach</h3>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Goals connect directly to daily planning and habits</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Goals connect directly to daily planning and habits</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">No context switching between multiple apps</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">No context switching between multiple apps</p>
                   </div>
                   <div className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm">✓</span>
-                    <p className="text-gray-700">Weekly reviews that actually improve your plans</p>
+                    <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm">✓</span>
+                    <p className="text-foreground/80">Weekly reviews that actually improve your plans</p>
                   </div>
                 </div>
               </div>
             </div>
             
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">The GoalPlanner Difference</h3>
+              <h3 className="text-xl font-display font-semibold text-foreground mb-4">The GoalPlanner Difference</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-2">🎯 Focus on Action</h4>
-                  <p className="text-blue-700 text-sm">Always shows you what to do next, not just what you want to achieve</p>
+                  <h4 className="font-medium text-foreground mb-2">🎯 Focus on Action</h4>
+                  <p className="text-foreground/80 text-sm">Always shows you what to do next, not just what you want to achieve</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-2">🔄 Sustainable Pacing</h4>
-                  <p className="text-blue-700 text-sm">Helps you maintain momentum through busy periods and low motivation</p>
+                  <h4 className="font-medium text-foreground mb-2">🔄 Sustainable Pacing</h4>
+                  <p className="text-foreground/80 text-sm">Helps you maintain momentum through busy periods and low motivation</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-blue-800 mb-2">📊 Simple Progress</h4>
-                  <p className="text-blue-700 text-sm">Shows trends without overwhelming analytics or complicated dashboards</p>
+                  <h4 className="font-medium text-foreground mb-2">📊 Simple Progress</h4>
+                  <p className="text-foreground/80 text-sm">Shows trends without overwhelming analytics or complicated dashboards</p>
                 </div>
               </div>
-              <p className="text-blue-900 mt-6 text-center font-medium">
+              <p className="text-foreground mt-6 text-center font-medium">
                 GoalPlanner works because it's designed for people who have jobs, families, and other commitments—helping you make steady progress without requiring life to be perfect first.
               </p>
             </div>
@@ -850,7 +852,7 @@ const GoalPlannerApp = () => {
 
         {/* Use Cases */}
         <section className="space-y-6" id="use-cases">
-          <h2 className="text-3xl font-bold text-gray-900">Real Examples: How People Use a Goal Planner App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Real Examples: How People Use a Goal Planner App</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -902,15 +904,15 @@ const GoalPlannerApp = () => {
 
         {/* Internal Links */}
         <section className="space-y-6" id="related-topics">
-          <h2 className="text-3xl font-bold text-gray-900">Build Your Full System</h2>
-          <p className="text-lg text-gray-600">Goal planning works best when connected to daily execution and consistency.</p>
+          <h2 className="text-3xl font-bold text-foreground">Build Your Full System</h2>
+          <p className="text-lg text-muted-foreground">Goal planning works best when connected to daily execution and consistency.</p>
           <div className="grid md:grid-cols-3 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle>Daily Execution</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan your day and protect focus time</p>
+                <p className="text-muted-foreground mb-4">Plan your day and protect focus time</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner App →</Link>
                 </Button>
@@ -921,7 +923,7 @@ const GoalPlannerApp = () => {
                 <CardTitle>Consistency & Routines</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build habits that support your goals</p>
+                <p className="text-muted-foreground mb-4">Build habits that support your goals</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/habit-tracker-app">Habit Tracker App →</Link>
                 </Button>
@@ -932,7 +934,7 @@ const GoalPlannerApp = () => {
                 <CardTitle>All-in-One System</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Goals + tasks + habits + reflections</p>
+                <p className="text-muted-foreground mb-4">Goals + tasks + habits + reflections</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/productivity-app">Productivity App →</Link>
                 </Button>
@@ -944,13 +946,13 @@ const GoalPlannerApp = () => {
         {/* CTA Section */}
         <section className="space-y-6" id="get-started">
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Prefer a Simple System Over "Motivation"?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Prefer a Simple System Over "Motivation"?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans on web or mobile. Start with one goal and one next action today—no complicated setup, just a calm place to plan, track, and stay consistent.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Get Started Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Get Started Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -961,14 +963,14 @@ const GoalPlannerApp = () => {
 
         {/* FAQ Section */}
         <section className="space-y-6" id="faq">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-600">
+                <AccordionContent className="text-muted-foreground">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

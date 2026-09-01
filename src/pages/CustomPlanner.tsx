@@ -487,7 +487,7 @@ const CustomPlannerPage = () => {
   if (!user) {
     return (
       <Layout>
-        <div className="text-center py-12 text-slate-500">Please sign in to use the Custom Planner.</div>
+        <div className="text-center py-12 text-muted-foreground">Please sign in to use the Custom Planner.</div>
       </Layout>
     );
   }
@@ -495,7 +495,7 @@ const CustomPlannerPage = () => {
   if (loading || weeklyPlansLoading) {
     return (
       <Layout>
-        <div className="text-center py-12 text-slate-500">Loading planners...</div>
+        <div className="text-center py-12 text-muted-foreground">Loading planners...</div>
       </Layout>
     );
   }
@@ -538,7 +538,7 @@ const CustomPlannerPage = () => {
                 </Button>
               </div>
             ) : (
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
                 {planner.title}
                 {fromMobile && <Badge variant="secondary" className="text-xs">From Mobile App</Badge>}
               </h2>
@@ -552,7 +552,7 @@ const CustomPlannerPage = () => {
                 {completedTasks}/{totalTasks} tasks
               </Badge>
               {progress > 0 && (
-                <Badge className="text-xs bg-blue-100 text-blue-700 hover:bg-blue-100">
+                <Badge className="text-xs bg-primary/10 text-primary hover:bg-primary/10">
                   {progress}% done
                 </Badge>
               )}
@@ -597,9 +597,9 @@ const CustomPlannerPage = () => {
           {preview ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {planner.days.map((day, idx) => (
-                <Card key={idx} className="bg-white/50">
+                <Card key={idx} className="bg-card/50">
                   <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-sm font-semibold text-slate-700">
+                    <CardTitle className="text-sm font-semibold text-foreground/80">
                       {day.title}
                     </CardTitle>
                   </CardHeader>
@@ -616,18 +616,18 @@ const CustomPlannerPage = () => {
                     {day.tasks.length > 0 ? (
                       <ul className="space-y-1">
                         {day.tasks.map((task) => (
-                          <li key={task.id} className="flex items-center gap-2 text-sm text-slate-600">
-                            <span className={task.completed ? "line-through text-slate-400" : ""}>
+                          <li key={task.id} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <span className={task.completed ? "line-through text-muted-foreground/70" : ""}>
                               {task.title}
                             </span>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-xs text-slate-400 italic">No tasks</p>
+                      <p className="text-xs text-muted-foreground/70 italic">No tasks</p>
                     )}
                     {day.notes && (
-                      <p className="text-xs text-slate-500 italic line-clamp-2">{day.notes}</p>
+                      <p className="text-xs text-muted-foreground italic line-clamp-2">{day.notes}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -645,7 +645,7 @@ const CustomPlannerPage = () => {
                 const isSaving = savingDay[dayKey];
 
                 return (
-                  <Card key={idx} className="bg-white/50">
+                  <Card key={idx} className="bg-card/50">
                     <div
                       className="flex items-center gap-3 p-4 cursor-pointer select-none"
                       onClick={() => toggleDay(idx)}
@@ -657,14 +657,14 @@ const CustomPlannerPage = () => {
                           <ChevronRight className="w-4 h-4" />
                         )}
                       </Button>
-                      <span className="font-medium text-slate-700 text-sm">{day.title}</span>
+                      <span className="font-medium text-foreground/80 text-sm">{day.title}</span>
                       {dayTasks.length > 0 && (
                         <Badge variant="secondary" className="text-xs">
                           {dayCompleted}/{dayTasks.length}
                         </Badge>
                       )}
                       {day.notes && (
-                        <span className="text-xs text-slate-400 italic truncate max-w-[200px]">
+                        <span className="text-xs text-muted-foreground/70 italic truncate max-w-[200px]">
                           {day.notes}
                         </span>
                       )}
@@ -673,7 +673,7 @@ const CustomPlannerPage = () => {
                     {isExpanded && (
                       <CardContent className="p-4 pt-0 space-y-4">
                         <div>
-                          <label className="text-xs font-medium text-slate-500 mb-1 block">
+                          <label className="text-xs font-medium text-muted-foreground mb-1 block">
                             Priorities (max 3)
                           </label>
                           <div className="space-y-1">
@@ -695,7 +695,7 @@ const CustomPlannerPage = () => {
                         </div>
 
                         <div>
-                          <label className="text-xs font-medium text-slate-500 mb-1 block">
+                          <label className="text-xs font-medium text-muted-foreground mb-1 block">
                             Tasks
                           </label>
                           <div className="space-y-1">
@@ -705,11 +705,11 @@ const CustomPlannerPage = () => {
                                   type="checkbox"
                                   checked={task.completed}
                                   onChange={() => handleToggleTask(idx, task.id, task.completed)}
-                                  className="rounded border-slate-300"
+                                  className="rounded border-border"
                                 />
                                 <span
                                   className={`flex-1 text-sm ${
-                                    task.completed ? "line-through text-slate-400" : "text-slate-700"
+                                    task.completed ? "line-through text-muted-foreground/70" : "text-foreground/80"
                                   }`}
                                 >
                                   {task.title}
@@ -754,7 +754,7 @@ const CustomPlannerPage = () => {
 
                         {!fromMobile && (
                           <div>
-                            <label className="text-xs font-medium text-slate-500 mb-1 block">
+                            <label className="text-xs font-medium text-muted-foreground mb-1 block">
                               Notes
                             </label>
                             <Textarea
@@ -981,8 +981,8 @@ const CustomPlannerPage = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-slate-800">Custom Planner</h1>
-            <p className="text-sm text-slate-500 mt-1">
+            <h1 className="text-2xl font-bold text-foreground">Custom Planner</h1>
+            <p className="text-sm text-muted-foreground mt-1">
               Create reusable planners for any duration — 3 weeks, 1 month, or your own custom length.
             </p>
           </div>
@@ -992,11 +992,11 @@ const CustomPlannerPage = () => {
         </div>
 
         {allPlanners.length === 0 ? (
-          <Card className="bg-white/50">
+          <Card className="bg-card/50">
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-              <CalendarDays className="w-12 h-12 text-slate-300 mb-4" />
-              <p className="text-slate-500 mb-2">No custom planners yet</p>
-              <p className="text-sm text-slate-400 mb-4">
+              <CalendarDays className="w-12 h-12 text-muted-foreground/70 mb-4" />
+              <p className="text-muted-foreground mb-2">No custom planners yet</p>
+              <p className="text-sm text-muted-foreground/70 mb-4">
                 Create a planner for a 3-week challenge, a 30-day goal, or any duration you need.
               </p>
               <Button onClick={() => setShowCreate(true)}>
@@ -1017,16 +1017,16 @@ const CustomPlannerPage = () => {
               return (
                 <Card
                   key={planner.id}
-                  className="bg-white/50 cursor-pointer hover:shadow-md transition-shadow"
+                  className="bg-card/50 cursor-pointer hover:shadow-md transition-shadow"
                   onClick={() => setSelectedPlanner(planner)}
                 >
                   <CardHeader className="p-5 pb-3">
-                    <CardTitle className="text-base font-semibold text-slate-800 truncate">
+                    <CardTitle className="text-base font-semibold text-foreground truncate">
                       {planner.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-5 pt-0 space-y-3">
-                    <div className="flex items-center gap-3 text-sm text-slate-500">
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <CalendarDays className="w-4 h-4" />
                         {planner.dayCount} days
@@ -1037,9 +1037,9 @@ const CustomPlannerPage = () => {
                       </span>
                     </div>
                     {total > 0 && (
-                      <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                      <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-500 rounded-full transition-all"
+                          className="h-full bg-primary rounded-full transition-all"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -1061,7 +1061,7 @@ const CustomPlannerPage = () => {
             </DialogHeader>
             <div className="space-y-4 py-2">
               <div>
-                <label className="text-sm font-medium text-slate-700 mb-1 block">Planner Name</label>
+                <label className="text-sm font-medium text-foreground/80 mb-1 block">Planner Name</label>
                 <Input
                   placeholder="e.g. 30-Day Fitness Challenge"
                   value={createTitle}
@@ -1070,7 +1070,7 @@ const CustomPlannerPage = () => {
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-slate-700 mb-1 block">Duration</label>
+                <label className="text-sm font-medium text-foreground/80 mb-1 block">Duration</label>
                 <Select value={createPreset} onValueChange={setCreatePreset}>
                   <SelectTrigger>
                     <SelectValue />
@@ -1086,7 +1086,7 @@ const CustomPlannerPage = () => {
               </div>
               {createPreset === "-1" && (
                 <div>
-                  <label className="text-sm font-medium text-slate-700 mb-1 block">
+                  <label className="text-sm font-medium text-foreground/80 mb-1 block">
                     Number of Days
                   </label>
                   <Input

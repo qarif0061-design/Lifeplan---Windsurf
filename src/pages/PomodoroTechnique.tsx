@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const PomodoroTechnique = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What exactly is the Pomodoro Technique?",
@@ -172,13 +174,13 @@ const PomodoroTechnique = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Master the Pomodoro Technique</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground">Master the Pomodoro Technique</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Transform your focus with the proven Pomodoro Technique. Work in 25-minute focused sprints with strategic breaks to achieve more while avoiding burnout. Join thousands who've mastered their attention.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-red-600 hover:bg-red-700">
-            <Link to="/auth">Start Pomodoro Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Pomodoro Free
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#how-it-works">Learn How It Works</Link>
@@ -188,27 +190,27 @@ const PomodoroTechnique = () => {
 
       {/* What Is Pomodoro */}
       <section className="space-y-6" id="what-is-pomodoro">
-        <h2 className="text-3xl font-bold text-gray-900">What Is the Pomodoro Technique?</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">What Is the Pomodoro Technique?</h2>
+        <p className="text-lg text-muted-foreground">
           The Pomodoro Technique breaks your workday into focused 25-minute intervals separated by 5-minute breaks. This simple structure maintains high mental performance while preventing fatigue through regular recovery periods.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
-          <Card className="border-red-200 bg-red-50">
+          <Card className="border-primary/20 bg-primary/10">
             <CardHeader>
-              <CardTitle className="text-red-900">🍅 The Pomodoro Method</CardTitle>
+              <CardTitle className="text-primary">🍅 The Pomodoro Method</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-red-800">
+              <p className="text-foreground/80">
                 25 minutes of focused work + 5-minute break. Repeat 4 times, then take a longer 15-30 minute break. This rhythm maintains peak performance throughout your day.
               </p>
             </CardContent>
           </Card>
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">🧘 Why It Works</CardTitle>
+              <CardTitle className="text-momentum">🧘 Why It Works</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-foreground/80">
                 Creates urgency to start, prevents burnout with regular breaks, trains your brain to focus in sprints, and builds momentum through consistent completion.
               </p>
             </CardContent>
@@ -218,8 +220,8 @@ const PomodoroTechnique = () => {
 
       {/* How It Works */}
       <section className="space-y-6" id="how-it-works">
-        <h2 className="text-3xl font-bold text-gray-900">How the Pomodoro Technique Works</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">How the Pomodoro Technique Works</h2>
+        <p className="text-lg text-muted-foreground">
           Follow this simple process to implement Pomodoro effectively with GoalPlanner.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -232,7 +234,7 @@ const PomodoroTechnique = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{step.description}</p>
+                <p className="text-muted-foreground">{step.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -241,8 +243,8 @@ const PomodoroTechnique = () => {
 
       {/* Best Practices */}
       <section className="space-y-6" id="best-practices">
-        <h2 className="text-3xl font-bold text-gray-900">Pomodoro Best Practices</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Pomodoro Best Practices</h2>
+        <p className="text-lg text-muted-foreground">
           These proven strategies will make your Pomodoro sessions more effective and sustainable.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -255,7 +257,7 @@ const PomodoroTechnique = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{practice.description}</p>
+                <p className="text-muted-foreground">{practice.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -264,31 +266,31 @@ const PomodoroTechnique = () => {
 
       {/* Common Mistakes */}
       <section className="space-y-6" id="mistakes">
-        <h2 className="text-3xl font-bold text-gray-900">Common Pomodoro Mistakes</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Common Pomodoro Mistakes</h2>
+        <p className="text-lg text-muted-foreground">
           Avoid these pitfalls that can undermine your Pomodoro effectiveness and focus.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">❌ What Doesn't Work</h3>
+            <h3 className="text-xl font-semibold text-foreground">❌ What Doesn't Work</h3>
             <div className="space-y-3">
               {commonMistakes.map((mistake, index) => (
                 <div key={index} className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">{mistake.title}</p>
-                    <p className="text-gray-600 text-sm">{mistake.description}</p>
+                    <p className="text-muted-foreground text-sm">{mistake.description}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">✅ What Works</h3>
+            <h3 className="text-xl font-semibold text-foreground">✅ What Works</h3>
             <div className="space-y-3">
               {commonMistakes.map((mistake, index) => (
                 <div key={index} className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">{mistake.solution}</p>
                   </div>
@@ -301,15 +303,15 @@ const PomodoroTechnique = () => {
 
       {/* How GoalPlanner Helps */}
       <section className="space-y-6" id="how-goalplanner-helps">
-        <h2 className="text-3xl font-bold text-gray-900">How GoalPlanner Enhances Pomodoro</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">How GoalPlanner Enhances Pomodoro</h2>
+        <p className="text-lg text-muted-foreground">
           GoalPlanner provides specific features that make the Pomodoro Technique more effective and easier to track.
         </p>
-        <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-8 border border-red-100">
+        <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-xl font-semibold text-red-900 mb-4">🍅 Pomodoro Integration</h3>
-              <ul className="space-y-2 text-red-800">
+              <h3 className="text-xl font-semibold text-foreground mb-4">🍅 Pomodoro Integration</h3>
+              <ul className="space-y-2 text-foreground/80">
                 <li>• <strong>Built-in Pomodoro timer:</strong> Automatic 25/5 timing with visual alerts</li>
                 <li>• <strong>Session tracking:</strong> Monitor completed pomodoros and daily patterns</li>
                 <li>• <strong>Task-pomodoro linking:</strong> Connect focus sessions to specific goals</li>
@@ -317,8 +319,8 @@ const PomodoroTechnique = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-orange-900 mb-4">⚡ Focus Enhancement</h3>
-              <ul className="space-y-2 text-orange-800">
+              <h3 className="text-xl font-semibold text-foreground mb-4">⚡ Focus Enhancement</h3>
+              <ul className="space-y-2 text-foreground/80">
                 <li>• <strong>Distraction blocking:</strong> Protect Pomodoro sessions from interruptions</li>
                 <li>• <strong>Progress visualization:</strong> See how Pomodoro advances your goals</li>
                 <li>• <strong>Energy matching:</strong> Schedule pomodoros during your peak focus times</li>
@@ -331,21 +333,21 @@ const PomodoroTechnique = () => {
 
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
-        <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-8 border border-red-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Master Your Focus?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+        <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+          <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Master Your Focus?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start using the Pomodoro Technique with GoalPlanner. Build sustained focus, prevent burnout, and achieve more through strategic work-break cycles.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-red-600 hover:bg-red-700">
-            <Link to="/auth">Start Pomodoro Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Pomodoro Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Focus & Productivity Skills</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-bold text-foreground">Master Focus & Productivity Skills</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific focus techniques and connect with time management systems that support sustained attention.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -354,7 +356,7 @@ const PomodoroTechnique = () => {
               <CardTitle className="text-lg">⏰ Time Blocking</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Schedule focused work sessions and protect your time</p>
+              <p className="text-muted-foreground mb-4">Schedule focused work sessions and protect your time</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/time-blocking">Time Blocking →</Link>
               </Button>
@@ -365,7 +367,7 @@ const PomodoroTechnique = () => {
               <CardTitle className="text-lg">🎯 Focus & Clarity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Improve concentration and mental clarity for better focus</p>
+              <p className="text-muted-foreground mb-4">Improve concentration and mental clarity for better focus</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/focus-and-mental-clarity">Focus & Clarity →</Link>
               </Button>
@@ -376,7 +378,7 @@ const PomodoroTechnique = () => {
               <CardTitle className="text-lg">⚡ Productivity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Build systems that support sustained focus and achievement</p>
+              <p className="text-muted-foreground mb-4">Build systems that support sustained focus and achievement</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/productivity">Productivity →</Link>
               </Button>
@@ -387,7 +389,7 @@ const PomodoroTechnique = () => {
               <CardTitle className="text-lg">🧘 Deep Work</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Achieve flow state and maximize focus for complex tasks</p>
+              <p className="text-muted-foreground mb-4">Achieve flow state and maximize focus for complex tasks</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/deep-work">Deep Work →</Link>
               </Button>
@@ -398,7 +400,7 @@ const PomodoroTechnique = () => {
               <CardTitle className="text-lg">🎓 Student Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Focus techniques for academic success and study sessions</p>
+              <p className="text-muted-foreground mb-4">Focus techniques for academic success and study sessions</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/student-planner">Student Planning →</Link>
               </Button>
@@ -409,7 +411,7 @@ const PomodoroTechnique = () => {
               <CardTitle className="text-lg">🚫 ADHD Productivity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Focus strategies specifically designed for neurodivergent minds</p>
+              <p className="text-muted-foreground mb-4">Focus strategies specifically designed for neurodivergent minds</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/adhd-productivity">ADHD Strategies →</Link>
               </Button>
@@ -420,7 +422,7 @@ const PomodoroTechnique = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Pomodoro Technique FAQ</h2>
+        <h2 className="text-3xl font-bold text-foreground">Pomodoro Technique FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -428,7 +430,7 @@ const PomodoroTechnique = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}

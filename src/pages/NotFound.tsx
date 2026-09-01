@@ -20,11 +20,11 @@ const NotFound = () => {
             <ArrowLeft className="w-4 h-4" />
           </Button>
         </div>
-        <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-600">
-          <Search className="h-6 w-6 text-white" />
+        <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+          <Search className="h-6 w-6 text-primary-foreground" />
         </div>
-        <h1 className="text-4xl font-bold text-gray-900">404</h1>
-        <p className="mt-4 text-gray-600">Oops! The page you're looking for doesn't exist.</p>
+        <h1 className="text-4xl font-bold text-foreground">404</h1>
+        <p className="mt-4 text-muted-foreground">Oops! The page you're looking for doesn't exist.</p>
         <div className="mt-6 flex justify-center gap-4">
           <Button asChild variant="outline" className="rounded-full px-6 h-10">
             <Link to="/">

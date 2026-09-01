@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const GoalsCalendarApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What is a goals calendar app?",
@@ -93,17 +95,17 @@ const GoalsCalendarApp = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Connect Calendar to Goals</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Goals Calendar App: Your Calendar Should Serve Your Goals, Not the Other Way Around
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               Most people use a calendar for events and a separate tool for goals. A goals calendar app brings them together so you can see—at a glance—whether your time is going where it matters.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
@@ -112,37 +114,37 @@ const GoalsCalendarApp = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Why You Need a Goals Calendar</h2>
+          <h2 className="text-3xl font-bold text-foreground">Why You Need a Goals Calendar</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900">🔄 Align Time with Priorities</CardTitle>
+                <CardTitle className="text-primary">🔄 Align Time with Priorities</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-blue-800">A goals calendar reveals the gap between what you say matters and where your time actually goes. It makes misalignment visible so you can fix it.</p>
+                <p className="text-foreground/80">A goals calendar reveals the gap between what you say matters and where your time actually goes. It makes misalignment visible so you can fix it.</p>
               </CardContent>
             </Card>
-            <Card className="border-purple-200 bg-purple-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-purple-900">📊 See Progress in Context</CardTitle>
+                <CardTitle className="text-momentum">📊 See Progress in Context</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-800">Goal progress makes more sense when viewed alongside your calendar. 'I completed 60% of my goal' becomes 'I completed 60% while managing a busy work month.'</p>
+                <p className="text-foreground/80">Goal progress makes more sense when viewed alongside your calendar. 'I completed 60% of my goal' becomes 'I completed 60% while managing a busy work month.'</p>
               </CardContent>
             </Card>
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-ember/20 bg-ember/10">
               <CardHeader>
-                <CardTitle className="text-green-900">🎯 Make Better Trade-offs</CardTitle>
+                <CardTitle className="text-ember">🎯 Make Better Trade-offs</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-green-800">When you see a calendar event next to your goal deadline, you can make conscious decisions about where your time is best spent.</p>
+                <p className="text-foreground/80">When you see a calendar event next to your goal deadline, you can make conscious decisions about where your time is best spent.</p>
               </CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features of the Best Goals Calendar App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Key Features of the Best Goals Calendar App</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -153,7 +155,7 @@ const GoalsCalendarApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -161,35 +163,35 @@ const GoalsCalendarApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Use a Goals Calendar Effectively</h2>
-          <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100">
+          <h2 className="text-3xl font-bold text-foreground">How to Use a Goals Calendar Effectively</h2>
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                 <div>
-                  <h4 className="font-semibold text-purple-900">Set monthly objectives, not just daily tasks</h4>
-                  <p className="text-purple-700">Start each month by defining 1-3 key goals. These become the lens through which you evaluate your calendar.</p>
+                  <h4 className="font-semibold text-foreground">Set monthly objectives, not just daily tasks</h4>
+                  <p className="text-foreground/80">Start each month by defining 1-3 key goals. These become the lens through which you evaluate your calendar.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                 <div>
-                  <h4 className="font-semibold text-purple-900">Block goal time first</h4>
-                  <p className="text-purple-700">Schedule goal-related work before adding meetings, errands, or routine tasks. Your best hours go to your priorities.</p>
+                  <h4 className="font-semibold text-foreground">Block goal time first</h4>
+                  <p className="text-foreground/80">Schedule goal-related work before adding meetings, errands, or routine tasks. Your best hours go to your priorities.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                 <div>
-                  <h4 className="font-semibold text-purple-900">Review weekly, not daily</h4>
-                  <p className="text-purple-700">A weekly review of your goals calendar is more effective than daily micro-managing. Look for patterns, not perfection.</p>
+                  <h4 className="font-semibold text-foreground">Review weekly, not daily</h4>
+                  <p className="text-foreground/80">A weekly review of your goals calendar is more effective than daily micro-managing. Look for patterns, not perfection.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                 <div>
-                  <h4 className="font-semibold text-purple-900">Adjust and iterate</h4>
-                  <p className="text-purple-700">Your goals calendar is a living tool. If something isn't working, adjust your approach rather than abandoning the system.</p>
+                  <h4 className="font-semibold text-foreground">Adjust and iterate</h4>
+                  <p className="text-foreground/80">Your goals calendar is a living tool. If something isn't working, adjust your approach rather than abandoning the system.</p>
                 </div>
               </div>
             </div>
@@ -197,26 +199,26 @@ const GoalsCalendarApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Align Your Calendar with Your Goals?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Align Your Calendar with Your Goals?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans for a goals calendar that connects your daily schedule to the things that matter most. Free on web and mobile.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">More Goal Planning Tools</h2>
+          <h2 className="text-3xl font-bold text-foreground">More Goal Planning Tools</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">🎯 Goal Setting</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set clear, measurable goals to guide your calendar</p>
+                <p className="text-muted-foreground mb-4">Set clear, measurable goals to guide your calendar</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner →</Link>
                 </Button>
@@ -227,7 +229,7 @@ const GoalsCalendarApp = () => {
                 <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan daily actions that serve your larger goals</p>
+                <p className="text-muted-foreground mb-4">Plan daily actions that serve your larger goals</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner →</Link>
                 </Button>
@@ -238,7 +240,7 @@ const GoalsCalendarApp = () => {
                 <CardTitle className="text-lg">📊 Weekly Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Structure your weeks around goal-driven priorities</p>
+                <p className="text-muted-foreground mb-4">Structure your weeks around goal-driven priorities</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/weekly-planning">Weekly Planning →</Link>
                 </Button>
@@ -249,7 +251,7 @@ const GoalsCalendarApp = () => {
                 <CardTitle className="text-lg">⏰ Time Blocking</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Protect time for your goals with focused blocks</p>
+                <p className="text-muted-foreground mb-4">Protect time for your goals with focused blocks</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/time-blocking">Time Blocking →</Link>
                 </Button>
@@ -259,14 +261,14 @@ const GoalsCalendarApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Your Calendar, Your Goals, One App</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Your Calendar, Your Goals, One App</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Goal Planner – LifePlans brings your goals and calendar together so you can plan with purpose. Start free today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-purple-600 hover:bg-purple-700">
-                <Link to="/auth">Start Planning Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Planning Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -276,12 +278,12 @@ const GoalsCalendarApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

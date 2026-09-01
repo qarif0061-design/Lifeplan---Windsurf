@@ -444,11 +444,11 @@ const Questions = () => {
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Questions</h1>
-            <p className="text-gray-500">Real-world Q&A on goal setting, planning, and consistency.</p>
+            <h1 className="text-3xl font-display font-bold text-foreground">Questions</h1>
+            <p className="text-muted-foreground">Real-world Q&A on goal setting, planning, and consistency.</p>
           </div>
           <div className="relative w-full md:w-[360px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
             <Input
               placeholder="Search questions..."
               className="pl-10 rounded-xl"
@@ -484,10 +484,10 @@ const Questions = () => {
           {filtered.map((q) => (
             <Card key={q.id} className="border-none shadow-sm rounded-[2rem]">
               <CardHeader>
-                <CardTitle className="text-xl font-bold text-gray-900">{q.question}</CardTitle>
+                <CardTitle className="text-xl font-display font-bold text-foreground">{q.question}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{q.answer}</p>
+                <p className="text-foreground/80 leading-relaxed whitespace-pre-wrap">{q.answer}</p>
                 <div className="flex flex-wrap gap-2">
                   {q.topics.map((t) => (
                     <Button
@@ -507,7 +507,7 @@ const Questions = () => {
 
           {!filtered.length && (
             <div className="text-center py-12">
-              <p className="text-gray-500">No questions found.</p>
+              <p className="text-muted-foreground">No questions found.</p>
             </div>
           )}
         </div>

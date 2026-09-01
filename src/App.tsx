@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/contexts/UserContext";
+import { AuthModalProvider } from "@/contexts/AuthModalContext";
+import AuthModal from "@/components/AuthModal";
 import RememberMeRedirect from "@/components/RememberMeRedirect";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -93,11 +95,17 @@ import GoalTrackingSoftwareSeo from "./pages/GoalTrackingSoftwareSeo";
 import GoogleKeepAlternatives from "./pages/GoogleKeepAlternatives";
 import TodoistAlternatives from "./pages/TodoistAlternatives";
 import NotionAlternatives from "./pages/NotionAlternatives";
+import ProgressShare from "./pages/ProgressShare";
+import Referrals from "./pages/Referrals";
+import Accountability from "./pages/Accountability";
+import Challenges from "./pages/Challenges";
+import ChallengeJoin from "./pages/ChallengeJoin";
 
 function App() {
   return (
     <UserProvider>
       <Router>
+        <AuthModalProvider>
         <RememberMeRedirect>
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -194,10 +202,17 @@ function App() {
             <Route path="/google-keep-alternatives" element={<GoogleKeepAlternatives />} />
             <Route path="/todoist-alternatives" element={<TodoistAlternatives />} />
             <Route path="/notion-alternatives" element={<NotionAlternatives />} />
+            <Route path="/progress/:publicId" element={<ProgressShare />} />
+            <Route path="/referrals" element={<Referrals />} />
+            <Route path="/accountability" element={<Accountability />} />
+            <Route path="/challenges" element={<Challenges />} />
+            <Route path="/challenge/:inviteCode" element={<ChallengeJoin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
+          <AuthModal />
         </RememberMeRedirect>
+        </AuthModalProvider>
       </Router>
     </UserProvider>
   );

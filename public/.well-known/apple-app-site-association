@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "76D5K6CADB.com.faran.lifeplans",
+        "paths": [
+          "/progress/*",
+          "/challenge/*",
+          "/auth",
+          "/referral"
+        ]
+      }
+    ]
+  }
+}

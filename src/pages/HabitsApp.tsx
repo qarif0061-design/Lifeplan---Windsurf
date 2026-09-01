@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const HabitsApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {"question":"What is a habits app?","answer":"A habits app helps you track and maintain daily habits through logging, reminders, and visual progress tracking."},
     {"question":"What habits should I track in a habits app?","answer":"Track habits that align with your goals. Common ones include exercise, reading, meditation, drinking water, and planning your day."},
@@ -55,17 +57,17 @@ const HabitsApp = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Build Positive Habits</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Habits App: Transform Your Life One Habit at a Time
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               A habits app helps you build good habits, break bad ones, and track your consistency over time. Small daily changes that compound into extraordinary results.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
@@ -74,8 +76,8 @@ const HabitsApp = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features</h2>
-          <p className="text-lg text-gray-600">Everything you need to stay organized and achieve your goals.</p>
+          <h2 className="text-3xl font-bold text-foreground">Key Features</h2>
+          <p className="text-lg text-muted-foreground">Everything you need to stay organized and achieve your goals.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -86,7 +88,7 @@ const HabitsApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -94,40 +96,40 @@ const HabitsApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Get Started</h2>
+          <h2 className="text-3xl font-bold text-foreground">How to Get Started</h2>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+            <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
               <div className="space-y-4">
                 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Choose key habits</h4>
-                    <p className="text-blue-700">Pick 2-3 habits that will have the biggest impact on your life.</p>
+                    <h4 className="font-semibold text-foreground">Choose key habits</h4>
+                    <p className="text-foreground/80">Pick 2-3 habits that will have the biggest impact on your life.</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Set them up</h4>
-                    <p className="text-blue-700">Configure each habit with a name, frequency, and reminder time.</p>
+                    <h4 className="font-semibold text-foreground">Set them up</h4>
+                    <p className="text-foreground/80">Configure each habit with a name, frequency, and reminder time.</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Track daily</h4>
-                    <p className="text-blue-700">Log each habit daily. Even on bad days, logging helps maintain awareness.</p>
+                    <h4 className="font-semibold text-foreground">Track daily</h4>
+                    <p className="text-foreground/80">Log each habit daily. Even on bad days, logging helps maintain awareness.</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Review and adapt</h4>
-                    <p className="text-blue-700">Check your weekly stats and adjust your habits or approach.</p>
+                    <h4 className="font-semibold text-foreground">Review and adapt</h4>
+                    <p className="text-foreground/80">Check your weekly stats and adjust your habits or approach.</p>
                   </div>
                 </div>
               </div>
@@ -136,26 +138,26 @@ const HabitsApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans free today. Start on web or mobile.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">More Tools to Help You Succeed</h2>
+          <h2 className="text-3xl font-bold text-foreground">More Tools to Help You Succeed</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">📅 Daily Planner</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan each day with tasks, priorities, and reflection</p>
+                <p className="text-muted-foreground mb-4">Plan each day with tasks, priorities, and reflection</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner →</Link>
                 </Button>
@@ -166,7 +168,7 @@ const HabitsApp = () => {
                 <CardTitle className="text-lg">🎯 Goal Planner</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set and track goals that matter</p>
+                <p className="text-muted-foreground mb-4">Set and track goals that matter</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner →</Link>
                 </Button>
@@ -177,7 +179,7 @@ const HabitsApp = () => {
                 <CardTitle className="text-lg">🔄 Habit Tracker</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build and maintain positive routines</p>
+                <p className="text-muted-foreground mb-4">Build and maintain positive routines</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/habit-tracker-app">Habit Tracker →</Link>
                 </Button>
@@ -188,7 +190,7 @@ const HabitsApp = () => {
                 <CardTitle className="text-lg">📋 Progress Tracker</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Monitor your achievements over time</p>
+                <p className="text-muted-foreground mb-4">Monitor your achievements over time</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/progress-tracker-app">Progress Tracker →</Link>
                 </Button>
@@ -198,14 +200,14 @@ const HabitsApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Start Your Journey Today</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Start Your Journey Today</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               The right tools make all the difference. Try Goal Planner – LifePlans free and see what you can achieve.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Start Planning Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Planning Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -215,12 +217,12 @@ const HabitsApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={String(index)}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

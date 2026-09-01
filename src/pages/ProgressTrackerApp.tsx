@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const ProgressTrackerApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What is a progress tracker app?",
@@ -97,17 +99,17 @@ const ProgressTrackerApp = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">See Your Progress Clearly</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Progress Tracker App: See How Far You've Come
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               A progress tracker app does what your memory can't—it shows you the real story of your effort over time. Not just what you did today, but the trend, the streak, the momentum you're building.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Tracking Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Tracking Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
@@ -116,37 +118,37 @@ const ProgressTrackerApp = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Why Progress Tracking Changes Everything</h2>
+          <h2 className="text-3xl font-bold text-foreground">Why Progress Tracking Changes Everything</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900">🎯 Makes Progress Visible</CardTitle>
+                <CardTitle className="text-momentum">🎯 Makes Progress Visible</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-green-800">When progress is invisible, motivation fades. A progress tracker shows you the concrete evidence of your effort—streaks, percentages, and trends that keep you going.</p>
+                <p className="text-foreground/80">When progress is invisible, motivation fades. A progress tracker shows you the concrete evidence of your effort—streaks, percentages, and trends that keep you going.</p>
               </CardContent>
             </Card>
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900">🔍 Reveals Patterns</CardTitle>
+                <CardTitle className="text-primary">🔍 Reveals Patterns</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-blue-800">Spot trends you'd otherwise miss: your best days of the week, habits that slip during busy periods, what actually moves your goals forward. Pattern awareness enables better decisions.</p>
+                <p className="text-foreground/80">Spot trends you'd otherwise miss: your best days of the week, habits that slip during busy periods, what actually moves your goals forward. Pattern awareness enables better decisions.</p>
               </CardContent>
             </Card>
-            <Card className="border-purple-200 bg-purple-50">
+            <Card className="border-ember/20 bg-ember/10">
               <CardHeader>
-                <CardTitle className="text-purple-900">⚡ Fuels Momentum</CardTitle>
+                <CardTitle className="text-ember">⚡ Fuels Momentum</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-800">Seeing your progress creates a feedback loop: progress → motivation → more action → more progress. This is the 'progress principle'—forward momentum is self-reinforcing.</p>
+                <p className="text-foreground/80">Seeing your progress creates a feedback loop: progress → motivation → more action → more progress. This is the 'progress principle'—forward momentum is self-reinforcing.</p>
               </CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features of the Best Progress Tracker App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Key Features of the Best Progress Tracker App</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -157,7 +159,7 @@ const ProgressTrackerApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -165,35 +167,35 @@ const ProgressTrackerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Track Progress Without Obsessing</h2>
-          <div className="bg-green-50 rounded-2xl p-8 border border-green-100">
+          <h2 className="text-3xl font-bold text-foreground">How to Track Progress Without Obsessing</h2>
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Set a weekly review, not daily check</h4>
-                  <p className="text-green-700">Daily checking creates anxiety. Weekly reviews build sustainable awareness. Pick one time each week to review your progress trends.</p>
+                  <h4 className="font-semibold text-foreground">Set a weekly review, not daily check</h4>
+                  <p className="text-foreground/80">Daily checking creates anxiety. Weekly reviews build sustainable awareness. Pick one time each week to review your progress trends.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Focus on trends, not perfection</h4>
-                  <p className="text-green-700">Ask 'am I improving over time?' not 'was today perfect?' Weekly trends are more meaningful than daily streaks. 4 out of 7 days consistently is success.</p>
+                  <h4 className="font-semibold text-foreground">Focus on trends, not perfection</h4>
+                  <p className="text-foreground/80">Ask 'am I improving over time?' not 'was today perfect?' Weekly trends are more meaningful than daily streaks. 4 out of 7 days consistently is success.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Track input, not just output</h4>
-                  <p className="text-green-700">Track the actions you control (sessions completed, time spent) not just results you can't fully control (weight, sales, rankings). Input tracking is empowering.</p>
+                  <h4 className="font-semibold text-foreground">Track input, not just output</h4>
+                  <p className="text-foreground/80">Track the actions you control (sessions completed, time spent) not just results you can't fully control (weight, sales, rankings). Input tracking is empowering.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                 <div>
-                  <h4 className="font-semibold text-green-900">Celebrate milestones</h4>
-                  <p className="text-green-700">Acknowledge progress along the way. A good progress tracker app helps you see and celebrate incremental wins, not just the final goal completion.</p>
+                  <h4 className="font-semibold text-foreground">Celebrate milestones</h4>
+                  <p className="text-foreground/80">Acknowledge progress along the way. A good progress tracker app helps you see and celebrate incremental wins, not just the final goal completion.</p>
                 </div>
               </div>
             </div>
@@ -201,26 +203,26 @@ const ProgressTrackerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8 border border-green-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to See Your Real Progress?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to See Your Real Progress?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans for progress tracking that connects your daily actions to your biggest goals. Free on web and mobile.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-green-600 hover:bg-green-700">
-              <Link to="/auth">Start Tracking Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Tracking Free
             </Button>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">More Tracking Tools</h2>
+          <h2 className="text-3xl font-bold text-foreground">More Tracking Tools</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">🎯 Goal Setting</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set clear, measurable goals worth tracking</p>
+                <p className="text-muted-foreground mb-4">Set clear, measurable goals worth tracking</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner →</Link>
                 </Button>
@@ -231,7 +233,7 @@ const ProgressTrackerApp = () => {
                 <CardTitle className="text-lg">✅ Habit Tracking</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build consistent habits that move your goals forward</p>
+                <p className="text-muted-foreground mb-4">Build consistent habits that move your goals forward</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/habit-tracker-app">Habit Tracker →</Link>
                 </Button>
@@ -242,7 +244,7 @@ const ProgressTrackerApp = () => {
                 <CardTitle className="text-lg">📅 Daily Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan daily actions that accumulate into real progress</p>
+                <p className="text-muted-foreground mb-4">Plan daily actions that accumulate into real progress</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner →</Link>
                 </Button>
@@ -253,7 +255,7 @@ const ProgressTrackerApp = () => {
                 <CardTitle className="text-lg">📊 Weekly Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Review and plan your progress week by week</p>
+                <p className="text-muted-foreground mb-4">Review and plan your progress week by week</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/weekly-planning">Weekly Planning →</Link>
                 </Button>
@@ -263,14 +265,14 @@ const ProgressTrackerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-green-50 to-teal-50 rounded-2xl p-8 border border-green-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Track What Matters</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Track What Matters</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Goal Planner – LifePlans combines progress tracking with goal setting, habit building, and daily planning in one integrated system.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-green-600 hover:bg-green-700">
-                <Link to="/auth">Start Tracking Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Tracking Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -280,12 +282,12 @@ const ProgressTrackerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

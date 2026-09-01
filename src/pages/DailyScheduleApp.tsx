@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const DailyScheduleApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {"question":"What is a daily schedule app?","answer":"A daily schedule app lets you plan your day hour by hour, assigning tasks and activities to specific time slots. It's more structured than a simple to-do list."},
     {"question":"How is a daily schedule app different from a calendar?","answer":"Calendars track events; schedule apps help you plan tasks, block time for deep work, build routines, and track what you actually accomplish."},
@@ -55,17 +57,17 @@ const DailyScheduleApp = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Plan Your Day Well</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Daily Schedule App: Take Control of Your Time
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               A daily schedule app helps you plan each hour, prioritize what matters, and actually follow through. Stop reacting to the day and start directing it.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
@@ -74,8 +76,8 @@ const DailyScheduleApp = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features</h2>
-          <p className="text-lg text-gray-600">Everything you need to stay organized and achieve your goals.</p>
+          <h2 className="text-3xl font-bold text-foreground">Key Features</h2>
+          <p className="text-lg text-muted-foreground">Everything you need to stay organized and achieve your goals.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -86,7 +88,7 @@ const DailyScheduleApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -94,40 +96,40 @@ const DailyScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Get Started</h2>
+          <h2 className="text-3xl font-bold text-foreground">How to Get Started</h2>
           <div className="space-y-6">
-            <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+            <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10">
               <div className="space-y-4">
                 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Identify priorities</h4>
-                    <p className="text-blue-700">Before scheduling, know your top 1-3 priorities for the day.</p>
+                    <h4 className="font-semibold text-foreground">Identify priorities</h4>
+                    <p className="text-foreground/80">Before scheduling, know your top 1-3 priorities for the day.</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Time-block your day</h4>
-                    <p className="text-blue-700">Assign each priority to a specific time slot during your peak focus hours.</p>
+                    <h4 className="font-semibold text-foreground">Time-block your day</h4>
+                    <p className="text-foreground/80">Assign each priority to a specific time slot during your peak focus hours.</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Add routines and breaks</h4>
-                    <p className="text-blue-700">Schedule recurring routines and intentional breaks to maintain energy throughout the day.</p>
+                    <h4 className="font-semibold text-foreground">Add routines and breaks</h4>
+                    <p className="text-foreground/80">Schedule recurring routines and intentional breaks to maintain energy throughout the day.</p>
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                   <div>
-                    <h4 className="font-semibold text-blue-900">Review and adjust</h4>
-                    <p className="text-blue-700">At day's end, review what worked and adjust tomorrow's schedule accordingly.</p>
+                    <h4 className="font-semibold text-foreground">Review and adjust</h4>
+                    <p className="text-foreground/80">At day's end, review what worked and adjust tomorrow's schedule accordingly.</p>
                   </div>
                 </div>
               </div>
@@ -136,26 +138,26 @@ const DailyScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Get Started?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans free today. Start on web or mobile.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">More Tools to Help You Succeed</h2>
+          <h2 className="text-3xl font-bold text-foreground">More Tools to Help You Succeed</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">📅 Daily Planner</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan each day with tasks, priorities, and reflection</p>
+                <p className="text-muted-foreground mb-4">Plan each day with tasks, priorities, and reflection</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/daily-planner-app">Daily Planner →</Link>
                 </Button>
@@ -166,7 +168,7 @@ const DailyScheduleApp = () => {
                 <CardTitle className="text-lg">🎯 Goal Planner</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set and track goals that matter</p>
+                <p className="text-muted-foreground mb-4">Set and track goals that matter</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner →</Link>
                 </Button>
@@ -177,7 +179,7 @@ const DailyScheduleApp = () => {
                 <CardTitle className="text-lg">🔄 Habit Tracker</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Build and maintain positive routines</p>
+                <p className="text-muted-foreground mb-4">Build and maintain positive routines</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/habit-tracker-app">Habit Tracker →</Link>
                 </Button>
@@ -188,7 +190,7 @@ const DailyScheduleApp = () => {
                 <CardTitle className="text-lg">📋 Progress Tracker</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Monitor your achievements over time</p>
+                <p className="text-muted-foreground mb-4">Monitor your achievements over time</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/progress-tracker-app">Progress Tracker →</Link>
                 </Button>
@@ -198,14 +200,14 @@ const DailyScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Start Your Journey Today</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Start Your Journey Today</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               The right tools make all the difference. Try Goal Planner – LifePlans free and see what you can achieve.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Start Planning Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Planning Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -215,12 +217,12 @@ const DailyScheduleApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={String(index)}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

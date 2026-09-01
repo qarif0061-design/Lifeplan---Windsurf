@@ -114,11 +114,32 @@ export default async function handler(req: VercelReq, res: VercelRes) {
     const isOnTrial = status === "on_trial";
     const isCancelledLike = status === "cancelled" || status === "expired";
 
+    // Lifetime is a one-time LemonSqueezy order, not a subscription — it fires
+    // order_created/order_refunded, never subscription_*. Once the Lifetime variant
+    // exists in LemonSqueezy, set LEMONSQUEEZY_LIFETIME_VARIANT_ID so only that
+    // specific product grants a permanent entitlement here; until it's configured,
+    // any successfully paid one-time order is treated as Lifetime (this webhook has
+    // no other one-time product to confuse it with today).
+    const lifetimeVariantId = process.env.LEMONSQUEEZY_LIFETIME_VARIANT_ID;
+    const variantId = String(
+      (isRecord(attributes.first_order_item) ? attributes.first_order_item.variant_id : attributes.variant_id) ?? ""
+    );
+    const matchesLifetimeVariant = !lifetimeVariantId || variantId === lifetimeVariantId;
+
     let nextIsPremium: boolean | null = null;
+    let isLifetime = false;
 
     if (eventName.startsWith("subscription_")) {
       if (isActive || isOnTrial) nextIsPremium = true;
       else if (isCancelledLike) nextIsPremium = false;
+    } else if (eventName === "order_created" && matchesLifetimeVariant) {
+      const orderStatus = String(attributes.status ?? "");
+      if (orderStatus === "paid") {
+        nextIsPremium = true;
+        isLifetime = true;
+      }
+    } else if (eventName === "order_refunded" && matchesLifetimeVariant) {
+      nextIsPremium = false;
     }
 
     if (nextIsPremium === null) {
@@ -134,7 +155,9 @@ export default async function handler(req: VercelReq, res: VercelRes) {
     const endsAt = isRecord(attributes.ends_at)
       ? null
       : (attributes.ends_at as string | null);
-    const premiumExpiresAt = trialEndsAt || endsAt || null;
+    // Lifetime never expires — deliberately omit premiumExpiresAt (never set it, never clear
+    // an existing one) so it reads as "no expiry" the same way a RevenueCat lifetime purchase does.
+    const premiumExpiresAt = isLifetime ? null : trialEndsAt || endsAt || null;
 
     ensureAdmin();
     const db = admin.firestore();
@@ -142,7 +165,9 @@ export default async function handler(req: VercelReq, res: VercelRes) {
     const updateData: Record<string, unknown> = {
       isPremium: nextIsPremium,
     };
-    if (premiumExpiresAt) {
+    if (isLifetime) {
+      updateData.premiumSource = "lemonsqueezy-lifetime";
+    } else if (premiumExpiresAt) {
       updateData.premiumExpiresAt = premiumExpiresAt;
     }
     if (!nextIsPremium) {

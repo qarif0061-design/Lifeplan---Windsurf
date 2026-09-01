@@ -25,5 +25,8 @@ Disallow: /billing
 Disallow: /social
 Disallow: /auth
 Disallow: /daily-planner
+Disallow: /referrals
+Disallow: /accountability
+Disallow: /challenges
 
-Sitemap: https://www.goalplanner.io/sitemap.xml
+Sitemap: https://goalplanner.io/sitemap.xml

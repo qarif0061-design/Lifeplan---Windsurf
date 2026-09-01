@@ -27,10 +27,12 @@ import {
   Copy,
   History,
   Share2,
+  RefreshCw,
 } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
 import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
+import { computeWeeklyExecution, buildExecutionInsights, buildCarriedOverTasks } from "@/utils/adaptiveExecution";
 import {
   type WeeklyPlanner,
   type DayPlan,
@@ -401,6 +403,56 @@ const WeeklyPlannerPage = () => {
     }
   };
 
+  const weeklyExecutionSummary = useMemo(
+    () => computeWeeklyExecution(planner?.days.flatMap((d) => d.tasks) ?? []),
+    [planner],
+  );
+  const weeklyExecutionInsights = useMemo(
+    () => buildExecutionInsights(weeklyExecutionSummary),
+    [weeklyExecutionSummary],
+  );
+
+  const handleRecalibrate = async () => {
+    if (!planner || !user) return;
+
+    const flatTasks = planner.days.flatMap((d) => d.tasks);
+    const carriedOverTasks = buildCarriedOverTasks(flatTasks);
+    if (carriedOverTasks.length === 0) return;
+
+    setIsSaving(true);
+    try {
+      const nextWeek = new Date(currentWeek);
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      const nextPlanner = await getOrCreateWeeklyPlanner(user.id, nextWeek);
+
+      const existingTitles = new Set(nextPlanner.days.flatMap((d) => d.tasks.map((t) => t.title)));
+      const nowIso = new Date().toISOString();
+      const newTasks: DayTask[] = carriedOverTasks
+        .filter((t) => !existingTitles.has(t.title))
+        .map((t) => ({
+          id: crypto.randomUUID(),
+          title: t.title,
+          completed: false,
+          createdAt: nowIso,
+          updatedAt: nowIso,
+        }));
+
+      if (newTasks.length > 0) {
+        const nextDays = nextPlanner.days.map((d, idx) =>
+          idx === 0 ? { ...d, tasks: [...newTasks, ...d.tasks] } : d,
+        );
+        await updateWeeklyPlanner(nextPlanner.id, { days: nextDays });
+      }
+
+      setLastSaved(new Date());
+      showSuccess("Your plan has been recalibrated.");
+    } catch (e) {
+      showError(e instanceof Error ? e.message : "Failed to recalibrate plan");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const loadHistory = async () => {
     if (!user) return;
     setLoadingHistory(true);
@@ -431,7 +483,7 @@ const WeeklyPlannerPage = () => {
         <div className="flex items-center justify-center min-h-[60vh]">
           <Card className="border-none shadow-sm rounded-[2rem]">
             <CardContent className="p-8 text-center">
-              <p className="text-gray-600">Please sign in to access the Weekly Planner.</p>
+              <p className="text-muted-foreground">Please sign in to access the Weekly Planner.</p>
             </CardContent>
           </Card>
         </div>
@@ -445,23 +497,23 @@ const WeeklyPlannerPage = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-              <Calendar className="w-8 h-8 text-blue-600" />
+            <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-2">
+              <Calendar className="w-8 h-8 text-primary" />
               Weekly Planner
             </h1>
             {isSaving && (
-              <div className="flex items-center gap-2 text-sm text-blue-600 mt-1">
+              <div className="flex items-center gap-2 text-sm text-primary mt-1">
                 <Save className="w-4 h-4 animate-pulse" />
                 Saving...
               </div>
             )}
             {!isSaving && lastSaved && (
-              <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                 <Save className="w-4 h-4" />
                 Saved at {lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </div>
             )}
-            <p className="text-gray-500 mt-1">
+            <p className="text-muted-foreground mt-1">
               Plan your week day by day with priorities and tasks
             </p>
           </div>
@@ -479,7 +531,7 @@ const WeeklyPlannerPage = () => {
               variant={isCurrentWeek ? "default" : "outline"}
               size="sm"
               onClick={goToCurrentWeek}
-              className={`rounded-full ${isCurrentWeek ? "bg-blue-600 hover:bg-blue-700" : ""}`}
+              className={`rounded-full ${isCurrentWeek ? "bg-primary hover:bg-primary/90" : ""}`}
             >
               {isCurrentWeek ? "This Week" : "Back to Current"}
             </Button>
@@ -523,11 +575,53 @@ const WeeklyPlannerPage = () => {
           </div>
         </div>
 
+        {/* Execution Summary */}
+        {!loading && planner && (
+          <Card className="border-none shadow-sm rounded-[2rem] bg-card">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-display font-bold text-foreground flex items-center justify-between gap-3">
+                <span>{isCurrentWeek ? "This week so far" : "Week summary"}</span>
+                <span className="font-mono text-2xl font-black text-primary">
+                  {weeklyExecutionSummary.executionPct}%
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                {weeklyExecutionInsights.map((line) => (
+                  <span key={line}>
+                    {line.split(/(\d+%?)/).map((part, i) =>
+                      /^\d+%?$/.test(part) ? (
+                        <span key={i} className="font-mono font-semibold text-foreground">
+                          {part}
+                        </span>
+                      ) : (
+                        <span key={i}>{part}</span>
+                      ),
+                    )}
+                  </span>
+                ))}
+              </div>
+              {weeklyExecutionSummary.carriedOverCount > 0 && (
+                <Button
+                  onClick={handleRecalibrate}
+                  disabled={isSaving}
+                  variant="outline"
+                  className="rounded-full shrink-0"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Recalibrate my plan
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Loading State */}
         {loading && (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="text-gray-500 mt-4">Loading your weekly planner...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="text-muted-foreground mt-4">Loading your weekly planner...</p>
           </div>
         )}
 
@@ -537,8 +631,8 @@ const WeeklyPlannerPage = () => {
             <div className="rounded-full bg-red-100 p-4 w-16 h-16 mx-auto flex items-center justify-center mb-4">
               <span className="text-2xl">!</span>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Could not load planner</h3>
-            <p className="text-gray-500 mb-4">{error || "An unexpected error occurred."}</p>
+            <h3 className="text-lg font-semibold text-foreground mb-2">Could not load planner</h3>
+            <p className="text-muted-foreground mb-4">{error || "An unexpected error occurred."}</p>
             <Button onClick={() => window.location.reload()} className="rounded-full">
               Try Again
             </Button>
@@ -553,20 +647,20 @@ const WeeklyPlannerPage = () => {
                 key={day.date}
                 className={`border-none shadow-sm rounded-[2rem] ${
                   day.date === new Date().toISOString().split("T")[0]
-                    ? "ring-2 ring-blue-500"
+                    ? "ring-2 ring-primary"
                     : ""
                 }`}
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-lg font-bold text-gray-900">
+                      <CardTitle className="text-lg font-display font-bold text-foreground">
                         {day.dayName}
                       </CardTitle>
-                      <p className="text-sm text-gray-500">{formatDate(day.date)}</p>
+                      <p className="text-sm text-muted-foreground">{formatDate(day.date)}</p>
                     </div>
                     {day.date === new Date().toISOString().split("T")[0] && (
-                      <Badge className="bg-blue-600 text-white rounded-full">Today</Badge>
+                      <Badge className="bg-primary text-primary-foreground rounded-full">Today</Badge>
                     )}
                   </div>
                 </CardHeader>
@@ -574,10 +668,10 @@ const WeeklyPlannerPage = () => {
                 <CardContent className="space-y-4">
                   {/* Top Priorities Section */}
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <Target className="w-4 h-4 text-amber-500" />
+                    <div className="flex items-center gap-2 text-sm font-semibold text-foreground/80">
+                      <Target className="w-4 h-4 text-ember" />
                       Top Priorities
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-muted-foreground/70">
                         (
                         {(editingPriorities[dayIndex] || day.priorities).length}
                         /3)
@@ -601,7 +695,7 @@ const WeeklyPlannerPage = () => {
                               variant="ghost"
                               size="sm"
                               onClick={() => removePriority(dayIndex, priorityIndex)}
-                              className="h-8 w-8 p-0 text-gray-400 hover:text-red-500"
+                              className="h-8 w-8 p-0 text-muted-foreground/70 hover:text-red-500"
                             >
                               <X className="w-4 h-4" />
                             </Button>
@@ -614,7 +708,7 @@ const WeeklyPlannerPage = () => {
                           variant="ghost"
                           size="sm"
                           onClick={() => addPriority(dayIndex)}
-                          className="w-full rounded-xl text-gray-500 hover:text-gray-700"
+                          className="w-full rounded-xl text-muted-foreground hover:text-foreground/80"
                         >
                           <Plus className="w-4 h-4 mr-1" />
                           Add Priority
@@ -623,14 +717,14 @@ const WeeklyPlannerPage = () => {
                     </div>
                   </div>
 
-                  <hr className="border-gray-100" />
+                  <hr className="border-border" />
 
                   {/* Tasks Section */}
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                    <div className="flex items-center gap-2 text-sm font-semibold text-foreground/80">
+                      <CheckCircle2 className="w-4 h-4 text-momentum" />
                       Tasks
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-muted-foreground/70">
                         ({day.tasks.filter((t) => t.completed).length}/{day.tasks.length})
                       </span>
                     </div>
@@ -639,16 +733,16 @@ const WeeklyPlannerPage = () => {
                       {day.tasks.map((task) => (
                         <div
                           key={task.id}
-                          className="flex items-start gap-2 group p-2 rounded-xl hover:bg-gray-50"
+                          className="flex items-start gap-2 group p-2 rounded-xl hover:bg-secondary/40"
                         >
                           <button
                             onClick={() => handleToggleTask(dayIndex, task)}
                             className="mt-0.5 flex-shrink-0"
                           >
                             {task.completed ? (
-                              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                              <CheckCircle2 className="w-5 h-5 text-momentum" />
                             ) : (
-                              <Circle className="w-5 h-5 text-gray-300" />
+                              <Circle className="w-5 h-5 text-muted-foreground/50" />
                             )}
                           </button>
 
@@ -672,8 +766,8 @@ const WeeklyPlannerPage = () => {
                               onClick={() => handleEditTask(task.id, task.title)}
                               className={`flex-1 text-sm cursor-pointer ${
                                 task.completed
-                                  ? "line-through text-gray-400"
-                                  : "text-gray-700"
+                                  ? "line-through text-muted-foreground/70"
+                                  : "text-foreground/80"
                               }`}
                             >
                               {task.title}
@@ -684,7 +778,7 @@ const WeeklyPlannerPage = () => {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleDeleteTask(dayIndex, task.id)}
-                            className="h-6 w-6 p-0 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="h-6 w-6 p-0 text-muted-foreground/50 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                           >
                             <Trash2 className="w-3 h-3" />
                           </Button>
@@ -711,7 +805,7 @@ const WeeklyPlannerPage = () => {
                           size="sm"
                           onClick={() => handleAddTask(dayIndex)}
                           disabled={!newTaskInputs[dayIndex]?.trim()}
-                          className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 disabled:text-gray-300"
+                          className="h-8 w-8 p-0 text-primary hover:text-primary/90 disabled:text-muted-foreground/50"
                         >
                           <Plus className="w-4 h-4" />
                         </Button>
@@ -728,8 +822,8 @@ const WeeklyPlannerPage = () => {
         <Dialog open={showHistory} onOpenChange={setShowHistory}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-                <History className="w-6 h-6 text-blue-600" />
+              <DialogTitle className="text-2xl font-display font-bold flex items-center gap-2">
+                <History className="w-6 h-6 text-primary" />
                 Weekly History
               </DialogTitle>
               <DialogDescription>
@@ -739,12 +833,12 @@ const WeeklyPlannerPage = () => {
 
             {loadingHistory ? (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="text-gray-500 mt-4">Loading history...</p>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                <p className="text-muted-foreground mt-4">Loading history...</p>
               </div>
             ) : historyPlanners.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-500">No past plans found.</p>
+                <p className="text-muted-foreground">No past plans found.</p>
               </div>
             ) : (
               <div className="space-y-3 mt-2">
@@ -760,23 +854,23 @@ const WeeklyPlannerPage = () => {
                       onClick={() => navigateToWeek(wp.weekStart)}
                       className={`w-full text-left p-4 rounded-2xl border transition-colors ${
                         isCurrent
-                          ? "border-blue-300 bg-blue-50"
-                          : "border-gray-100 hover:border-blue-200 hover:bg-gray-50"
+                          ? "border-primary/30 bg-primary/10"
+                          : "border-border hover:border-primary/20 hover:bg-secondary/40"
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-semibold text-gray-900">
+                          <p className="font-semibold text-foreground">
                             {formatDate(wp.weekStart)} – {formatDate(wp.weekEnd)}
                           </p>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-muted-foreground mt-1">
                             {totalPriorities > 0 ? `${totalPriorities} priorities` : "No priorities"}
                             {" · "}
                             {completedTasks}/{totalTasks} tasks done
                           </p>
                         </div>
                         {isCurrent && (
-                          <Badge className="bg-blue-600 text-white rounded-full">Current</Badge>
+                          <Badge className="bg-primary text-primary-foreground rounded-full">Current</Badge>
                         )}
                       </div>
                     </button>
@@ -791,7 +885,7 @@ const WeeklyPlannerPage = () => {
         <Dialog open={showResetConfirm} onOpenChange={setShowResetConfirm}>
           <DialogContent className="max-w-md rounded-[2rem]">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold flex items-center gap-2 text-red-600">
+              <DialogTitle className="text-xl font-display font-bold flex items-center gap-2 text-red-600">
                 <RotateCcw className="w-5 h-5" />
                 Reset Week
               </DialogTitle>
@@ -822,8 +916,8 @@ const WeeklyPlannerPage = () => {
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2rem]">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-bold flex items-center gap-2">
-                <Eye className="w-6 h-6 text-blue-600" />
+              <DialogTitle className="text-2xl font-display font-bold flex items-center gap-2">
+                <Eye className="w-6 h-6 text-primary" />
                 Week Preview
               </DialogTitle>
               <DialogDescription>
@@ -833,39 +927,39 @@ const WeeklyPlannerPage = () => {
 
             <div className="space-y-6 mt-4">
               {planner?.days.map((day) => (
-                <div key={day.date} className="border-b border-gray-100 pb-4 last:border-0">
+                <div key={day.date} className="border-b border-border pb-4 last:border-0">
                   <div className="flex items-center gap-3 mb-3">
-                    <h3 className="font-bold text-lg text-gray-900">{day.dayName}</h3>
-                    <span className="text-sm text-gray-500">{formatDate(day.date)}</span>
+                    <h3 className="font-display font-bold text-lg text-foreground">{day.dayName}</h3>
+                    <span className="text-sm text-muted-foreground">{formatDate(day.date)}</span>
                     {day.date === new Date().toISOString().split("T")[0] && (
-                      <Badge className="bg-blue-600 text-white rounded-full">Today</Badge>
+                      <Badge className="bg-primary text-primary-foreground rounded-full">Today</Badge>
                     )}
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     {/* Priorities Preview */}
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-amber-600">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-ember">
                         <Target className="w-4 h-4" />
                         Top Priorities
                       </div>
                       {day.priorities.length > 0 ? (
                         <ul className="space-y-1">
                           {day.priorities.map((priority, i) => (
-                            <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
-                              <span className="text-amber-500 font-bold">{i + 1}.</span>
+                            <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
+                              <span className="text-ember font-bold">{i + 1}.</span>
                               {priority}
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-gray-400 italic">No priorities set</p>
+                        <p className="text-sm text-muted-foreground/70 italic">No priorities set</p>
                       )}
                     </div>
 
                     {/* Tasks Preview */}
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-momentum">
                         <CheckCircle2 className="w-4 h-4" />
                         Tasks ({day.tasks.filter((t) => t.completed).length}/{day.tasks.length})
                       </div>
@@ -875,20 +969,20 @@ const WeeklyPlannerPage = () => {
                             <li
                               key={task.id}
                               className={`text-sm flex items-center gap-2 ${
-                                task.completed ? "text-gray-400 line-through" : "text-gray-700"
+                                task.completed ? "text-muted-foreground/70 line-through" : "text-foreground/80"
                               }`}
                             >
                               {task.completed ? (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                <CheckCircle2 className="w-4 h-4 text-momentum" />
                               ) : (
-                                <Circle className="w-4 h-4 text-gray-300" />
+                                <Circle className="w-4 h-4 text-muted-foreground/50" />
                               )}
                               {task.title}
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="text-sm text-gray-400 italic">No tasks added</p>
+                        <p className="text-sm text-muted-foreground/70 italic">No tasks added</p>
                       )}
                     </div>
                   </div>

@@ -3,8 +3,8 @@ import { useId, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Target, 
+import {
+  Target,
   Plus,
   Search,
   Star,
@@ -12,9 +12,13 @@ import {
   Crown,
   Lock,
   ListTodo,
-  TrendingUp
+  TrendingUp,
+  Flame,
+  CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
 import { Apple, Smartphone, Share2 } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { showError, showSuccess } from "@/utils/toast";
@@ -22,6 +26,8 @@ import { useGoals } from "@/hooks/useGoals";
 import { useDailyTasks } from "@/hooks/useDailyTasks";
 import { createGoal } from "@/firebase/goals";
 import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
+import { createShare as saveShareRecord, buildGoalShareData } from "@/firebase/shares";
+import { FREE_GOAL_LIMIT } from "@/constants/product";
 import type { Goal } from "@/types";
 import {
   Dialog,
@@ -42,23 +48,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Priority } from "@/types";
+import { calculateProgress } from "@/utils/progress";
 
 const getDerivedProgress = (g: Goal): number => {
-  const cps = g.checkpoints ?? [];
-  if (cps.length > 0) {
-    const per = cps.map((c) => {
-      if (c.kind === "number") {
-        const target = Math.max(0, c.target ?? 0);
-        const current = Math.max(0, c.current ?? 0);
-        if (target <= 0) return 0;
-        return Math.min(1, current / target);
-      }
-      return c.completed ? 1 : 0;
-    });
-    const avg = per.reduce((s, v) => s + v, 0) / cps.length;
-    return Math.round(avg * 100);
-  }
-  return g.progress ?? 0;
+  return calculateProgress(g.checkpoints, g.progress);
 };
 
 const getRemainingDaysText = (g: Goal): string => {
@@ -77,54 +70,40 @@ const getRemainingDaysText = (g: Goal): string => {
   return `${days}d left`;
 };
 
-  const getRemainingDaysBadgeClass = (g: Goal): string => {
-    const pct = getDerivedProgress(g);
-    if (!g.endDate) return "bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300";
-    if (pct >= 100) return "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300";
-    if (pct < 20) return "bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300";
-    if (pct < 50) return "bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300";
-    return "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300";
-  };
-
-const getProgressIndicatorClass = (pct: number): string => {
-  if (pct >= 100) return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-emerald-400 [&>div]:to-lime-400";
-  if (pct < 20) return "[&>div]:bg-gradient-to-r [&>div]:from-rose-600 [&>div]:via-rose-500 [&>div]:to-amber-500";
-  if (pct < 50) return "[&>div]:bg-gradient-to-r [&>div]:from-amber-500 [&>div]:via-orange-500 [&>div]:to-yellow-400";
-  if (pct < 80) return "[&>div]:bg-gradient-to-r [&>div]:from-sky-500 [&>div]:via-blue-600 [&>div]:to-indigo-500";
-  return "[&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:via-teal-500 [&>div]:to-sky-500";
+const getRemainingDaysBadgeClass = (g: Goal): string => {
+  const pct = getDerivedProgress(g);
+  if (!g.endDate) return "bg-secondary text-muted-foreground";
+  if (pct >= 100) return "bg-momentum/10 text-momentum";
+  if (pct < 20) return "bg-rose-500/10 text-rose-600 dark:text-rose-400";
+  if (pct < 50) return "bg-ember/10 text-ember";
+  return "bg-primary/10 text-primary";
 };
 
-const getProgressStroke = (pct: number): { from: string; to: string } => {
-  if (pct >= 100) return { from: "#22c55e", to: "#a3e635" };
-  if (pct < 20) return { from: "#e11d48", to: "#f59e0b" };
-  if (pct < 50) return { from: "#f59e0b", to: "#fde047" };
-  if (pct < 80) return { from: "#0ea5e9", to: "#4f46e5" };
-  return { from: "#22c55e", to: "#0ea5e9" };
-};
+// A single, calm accent per state — not a rainbow gradient. Progress fills read as
+// data, not decoration: momentum green once complete, primary blue otherwise.
+const getProgressBarClass = (pct: number): string =>
+  pct >= 100 ? "[&>div]:bg-momentum" : "[&>div]:bg-primary";
 
-const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }) => {
+const getProgressStrokeColor = (pct: number): string =>
+  pct >= 100 ? "hsl(var(--momentum))" : "hsl(var(--primary))";
+
+const CircularProgress = ({ value, size = 64, trackClassName = "text-secondary" }: { value: number; size?: number; trackClassName?: string }) => {
   const gradId = useId();
-  const stroke = 12;
+  const stroke = 8;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const pct = Math.min(100, Math.max(0, value));
   const dash = (pct / 100) * circumference;
-  const strokeColors = getProgressStroke(pct);
+  const color = getProgressStrokeColor(pct);
   return (
-    <div className="relative" style={{ width: size, height: size }}>
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <defs>
-          <linearGradient id={gradId} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor={strokeColors.from} />
-            <stop offset="100%" stopColor={strokeColors.to} />
-          </linearGradient>
-        </defs>
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           strokeWidth={stroke}
-          className="text-white/60"
+          className={trackClassName}
           stroke="currentColor"
           fill="transparent"
         />
@@ -133,13 +112,14 @@ const CircularProgress = ({ value, size = 64 }: { value: number; size?: number }
           cy={size / 2}
           r={radius}
           strokeWidth={stroke}
-          stroke={`url(#${gradId})`}
+          stroke={color}
           fill="transparent"
           strokeDasharray={`${dash} ${circumference - dash}`}
           strokeLinecap="round"
+          id={gradId}
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center text-sm font-extrabold text-gray-900 dark:text-white">
+      <div className="absolute inset-0 flex items-center justify-center text-sm font-bold font-mono text-foreground">
         {pct}%
       </div>
     </div>
@@ -195,8 +175,8 @@ const Dashboard = () => {
   }, [dailyTaskDays, todayKey]);
 
   const openCreateGoalDialog = () => {
-    if (!isPremium && goals.length >= 1) {
-      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+    if (!isPremium && goals.length >= FREE_GOAL_LIMIT) {
+      showError(`Free users can only create ${FREE_GOAL_LIMIT} goals. Upgrade to Premium for unlimited goals.`);
       navigate("/pricing");
       return;
     }
@@ -216,6 +196,8 @@ const Dashboard = () => {
       };
       const blob = await generateShareCard(data);
       await shareImage(blob, `streak-${daysStreak}.png`);
+      const shareData = buildGoalShareData(`${daysStreak}-Day Streak`, 100, daysStreak, 0, daysStreak);
+      await saveShareRecord(user.uid, 'streak', `${daysStreak}-Day Streak`, shareData, `on GoalPlanner`);
     } catch {}
   };
 
@@ -224,8 +206,8 @@ const Dashboard = () => {
       showError("Please sign in to create goals.");
       return;
     }
-    if (!isPremium && goals.length >= 1) {
-      showError("Free users can only create 1 goal. Upgrade to Premium for unlimited goals.");
+    if (!isPremium && goals.length >= FREE_GOAL_LIMIT) {
+      showError(`Free users can only create ${FREE_GOAL_LIMIT} goals. Upgrade to Premium for unlimited goals.`);
       navigate("/pricing");
       return;
     }
@@ -294,440 +276,449 @@ const Dashboard = () => {
     return byId ?? goals[0] ?? null;
   }, [goals, user?.featuredGoalId]);
 
+  const greeting = greetingName
+    ? `Good ${new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'}, ${greetingName}`
+    : 'Welcome to Goal Planner';
+
+  const otherCount = Math.max(0, goals.length - stats.activeCount - stats.completedCount - stats.failedCount);
+  const goalStatusData = [
+    { name: "Active", value: stats.activeCount, color: "hsl(var(--primary))" },
+    { name: "Completed", value: stats.completedCount, color: "hsl(var(--momentum))" },
+    { name: "Failed", value: stats.failedCount, color: "#e11d48" },
+    { name: "Other", value: otherCount, color: "hsl(var(--muted-foreground))" },
+  ].filter((d) => d.value > 0);
+
+  const statCards = [
+    { label: "Active", value: stats.activeCount, icon: Target, onClick: () => navigate("/goals?status=active") },
+    { label: "Completed", value: stats.completedCount, icon: CheckCircle2, onClick: () => navigate("/goals?status=completed") },
+    { label: "Day streak", value: daysStreak, icon: Flame, onClick: () => navigate("/check-in"), share: true },
+    { label: "Avg. progress", value: `${stats.avgProgress}%`, icon: TrendingUp, onClick: () => navigate("/insights") },
+    { label: "Failed", value: stats.failedCount, icon: AlertCircle, onClick: () => navigate("/goals?status=failed"), muted: true },
+  ];
+
   return (
     <Layout>
-      <div className="space-y-6 animate-fade-in">
-        {/* Hero Section */}
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:from-blue-700 dark:via-indigo-800 dark:to-purple-900 p-8 md:p-10 text-white shadow-2xl shadow-blue-500/20 dark:shadow-blue-900/30">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-          <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-blue-200 text-sm font-medium">
-                <span className="w-1.5 h-1.5 bg-blue-300 rounded-full animate-pulse-soft" />
-                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-              </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-                {greetingName ? `Good ${new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}, ${greetingName}` : 'Welcome to Goal Planner'}
-              </h1>
-              <p className="text-blue-100/80 text-lg max-w-xl">
-                {effectiveFeaturedGoal
-                  ? `Focus on "${effectiveFeaturedGoal.name}" — ${getDerivedProgress(effectiveFeaturedGoal)}% complete`
-                  : 'Set your goals, track your progress, achieve more.'}
-              </p>
+      <div className="space-y-8 animate-fade-in">
+        {/* Header — a calm, information-first bar rather than a marketing hero */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-6 border-b border-border">
+          <div>
+            <div className="text-sm text-muted-foreground font-mono">
+              {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </div>
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  className="bg-white text-blue-700 hover:bg-blue-50 rounded-full px-8 h-12 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 shrink-0"
-                  onClick={() => openCreateGoalDialog()}
-                >
-                  <Plus className="w-5 h-5 mr-2" /> New Goal
-                </Button>
-              </DialogTrigger>
-            <DialogContent className="w-[92vw] sm:max-w-[520px] md:w-[50vw] md:max-w-[720px] rounded-[2rem]">
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-bold">Create New Goal</DialogTitle>
-                <DialogDescription>Define your objective and how you'll measure success.</DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-6 py-4 max-h-[70vh] overflow-y-auto pr-2">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Goal Name</Label>
-                  <Input
-                    id="name"
-                    value={goalName}
-                    onChange={(e) => setGoalName(e.target.value)}
-                    className="rounded-xl"
-                    placeholder="e.g., Run a 5K without stopping"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Category</Label>
-                    <Input
-                      value={goalCategory}
-                      onChange={(e) => setGoalCategory(e.target.value)}
-                      className="rounded-xl"
-                      placeholder="e.g., Health"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Priority</Label>
-                    <Select value={goalPriority} onValueChange={(v) => setGoalPriority(v as Priority)}>
-                      <SelectTrigger className="rounded-xl">
-                        <SelectValue placeholder="Select priority" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Start Date</Label>
-                    <Input
-                      type="date"
-                      value={goalStartDate}
-                      onChange={(e) => setGoalStartDate(e.target.value)}
-                      className="rounded-xl"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>End Date</Label>
-                    <Input
-                      type="date"
-                      value={goalEndDate}
-                      onChange={(e) => setGoalEndDate(e.target.value)}
-                      className="rounded-xl"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Description (optional)</Label>
-                  <textarea
-                    value={goalDescription}
-                    onChange={(e) => setGoalDescription(e.target.value)}
-                    className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                    placeholder="Add context, motivation, or any notes you want to remember..."
-                  />
-                </div>
-
-                <div className="border-t pt-4 space-y-3">
-                  {!showStrategyFields ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full rounded-xl"
-                      onClick={() => {
-                        if (!isPremium) {
-                          showError("Strategy is a Premium feature. Upgrade to add strategy.");
-                          navigate("/pricing");
-                          return;
-                        }
-                        setShowStrategyFields(true);
-                      }}
-                    >
-                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
-                      Add Strategy
-                    </Button>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-gray-900">Strategy</h4>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          className="h-8 px-2"
-                          onClick={() => {
-                            setShowStrategyFields(false);
-                            setStrategyWhy("");
-                            setStrategyWho("");
-                            setStrategyNo("");
-                          }}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="strategy-why">Why does this goal matter?</Label>
-                        <textarea
-                          id="strategy-why"
-                          value={strategyWhy}
-                          onChange={(e) => setStrategyWhy(e.target.value)}
-                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                          placeholder="e.g., I want more energy and confidence"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
-                        <textarea
-                          id="strategy-who"
-                          value={strategyWho}
-                          onChange={(e) => setStrategyWho(e.target.value)}
-                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                          placeholder="e.g., Me and my family"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="strategy-no">What will you say \"no\" to?</Label>
-                        <textarea
-                          id="strategy-no"
-                          value={strategyNo}
-                          onChange={(e) => setStrategyNo(e.target.value)}
-                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                          placeholder="e.g., Late-night scrolling"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {!showPlanningFields ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full rounded-xl"
-                      onClick={() => {
-                        if (!isPremium) {
-                          showError("Planning is a Premium feature. Upgrade to add planning.");
-                          navigate("/pricing");
-                          return;
-                        }
-                        setShowPlanningFields(true);
-                      }}
-                    >
-                      {!isPremium && <Lock className="w-4 h-4 mr-2" />}
-                      Add Planning
-                    </Button>
-                  ) : (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-gray-900">Planning</h4>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          className="h-8 px-2"
-                          onClick={() => {
-                            setShowPlanningFields(false);
-                            setShowAiReflectionField(false);
-                            setPlanningObstacles("");
-                            setPlanningNextActions("");
-                            setPlanningAiPreview("");
-                          }}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="planning-obstacles">Potential obstacles</Label>
-                        <textarea
-                          id="planning-obstacles"
-                          value={planningObstacles}
-                          onChange={(e) => setPlanningObstacles(e.target.value)}
-                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                          placeholder="e.g., Busy schedule, low motivation"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="planning-next">Next actions</Label>
-                        <textarea
-                          id="planning-next"
-                          value={planningNextActions}
-                          onChange={(e) => setPlanningNextActions(e.target.value)}
-                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                          placeholder="e.g., Buy running shoes, schedule 3 runs/week"
-                        />
-                      </div>
-
-                      {!showAiReflectionField ? (
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="w-full rounded-xl"
-                          onClick={() => setShowAiReflectionField(true)}
-                        >
-                          Add AI Reflection
-                        </Button>
-                      ) : (
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <Label htmlFor="planning-ai">AI reflection</Label>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              className="h-8 px-2"
-                              onClick={() => {
-                                setShowAiReflectionField(false);
-                                setPlanningAiPreview("");
-                              }}
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                          <textarea
-                            id="planning-ai"
-                            value={planningAiPreview}
-                            onChange={(e) => setPlanningAiPreview(e.target.value)}
-                            className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                            placeholder="e.g., Ask: What are the biggest risks to this plan?"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <DialogFooter>
-                <Button onClick={handleCreateGoal} disabled={isCreating} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12">
-                  {isCreating ? "Creating..." : "Create Goal"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+            <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground tracking-tight mt-1">
+              {greeting}
+            </h1>
+            <p className="text-muted-foreground mt-1.5 max-w-xl">
+              {effectiveFeaturedGoal
+                ? <>Focus today: <span className="text-foreground font-medium">{effectiveFeaturedGoal.name}</span> — {getDerivedProgress(effectiveFeaturedGoal)}% complete</>
+                : 'Set your goals, track your progress, achieve more.'}
+            </p>
           </div>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/goals?status=active")}
-            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/40 dark:to-blue-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-          >
-            <CardContent className="p-5 text-center">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">{stats.activeCount}</div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Active</p>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/goals?status=completed")}
-            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-950/40 dark:to-emerald-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-          >
-            <CardContent className="p-5 text-center">
-              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Star className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{stats.completedCount}</div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Completed</p>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/goals?status=failed")}
-            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100/50 dark:from-rose-950/40 dark:to-rose-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-          >
-            <CardContent className="p-5 text-center">
-              <div className="w-10 h-10 bg-rose-100 dark:bg-rose-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <AlertCircle className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-              </div>
-              <div className="text-2xl font-extrabold text-rose-600 dark:text-rose-400">{stats.failedCount}</div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Failed</p>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/check-in")}
-            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/40 dark:to-purple-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-          >
-            <CardContent className="p-5 text-center relative">
-              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <span className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">🔥</span>
-              </div>
-              <div className="text-2xl font-extrabold text-purple-600 dark:text-purple-400">{daysStreak}</div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Day Streak</p>
-              <button
-                onClick={(e) => { e.stopPropagation(); shareStreakCard(); }}
-                className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/50 transition"
-                title="Share streak"
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl px-5 h-11 font-semibold shrink-0"
+                onClick={() => openCreateGoalDialog()}
               >
-                <Share2 className="w-3.5 h-3.5 text-purple-400 dark:text-purple-300" />
-              </button>
-            </CardContent>
-          </Card>
-          <Card
-            role="button"
-            tabIndex={0}
-            onClick={() => navigate("/insights")}
-            className="border-0 shadow-sm dark:shadow-slate-900/50 rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/40 dark:to-amber-900/20 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
-          >
-            <CardContent className="p-5 text-center">
-              <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <TrendingUp className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <Plus className="w-4 h-4 mr-2" /> New Goal
+              </Button>
+            </DialogTrigger>
+          <DialogContent className="w-[92vw] sm:max-w-[520px] md:w-[50vw] md:max-w-[720px] rounded-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-display font-bold">Create New Goal</DialogTitle>
+              <DialogDescription>Define your objective and how you'll measure success.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-6 py-4 max-h-[70vh] overflow-y-auto pr-2">
+              <div className="space-y-2">
+                <Label htmlFor="name">Goal Name</Label>
+                <Input
+                  id="name"
+                  value={goalName}
+                  onChange={(e) => setGoalName(e.target.value)}
+                  className="rounded-xl"
+                  placeholder="e.g., Run a 5K without stopping"
+                />
               </div>
-              <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400">{stats.avgProgress}%</div>
-              <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">Avg Progress</p>
-            </CardContent>
-          </Card>
-        </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Input
+                    value={goalCategory}
+                    onChange={(e) => setGoalCategory(e.target.value)}
+                    className="rounded-xl"
+                    placeholder="e.g., Health"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Priority</Label>
+                  <Select value={goalPriority} onValueChange={(v) => setGoalPriority(v as Priority)}>
+                    <SelectTrigger className="rounded-xl">
+                      <SelectValue placeholder="Select priority" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Start Date</Label>
+                  <Input
+                    type="date"
+                    value={goalStartDate}
+                    onChange={(e) => setGoalStartDate(e.target.value)}
+                    className="rounded-xl"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>End Date</Label>
+                  <Input
+                    type="date"
+                    value={goalEndDate}
+                    onChange={(e) => setGoalEndDate(e.target.value)}
+                    className="rounded-xl"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Description (optional)</Label>
+                <textarea
+                  value={goalDescription}
+                  onChange={(e) => setGoalDescription(e.target.value)}
+                  className="min-h-[100px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                  placeholder="Add context, motivation, or any notes you want to remember..."
+                />
+              </div>
 
-        {effectiveFeaturedGoal && (
-          <Card className="border-0 shadow-lg dark:shadow-slate-900/40 rounded-3xl overflow-hidden animate-fade-up">
-            <CardContent className="p-0">
-              <div className="relative bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 dark:from-amber-600 dark:via-orange-700 dark:to-rose-800 p-8 md:p-10">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
-                <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 text-amber-100">
-                      <Crown className="w-4 h-4" />
-                      <div className="text-xs font-extrabold uppercase tracking-widest">Featured Goal</div>
-                      {!user?.featuredGoalId && (
-                        <div className="text-xs font-semibold text-amber-200/70">(auto)</div>
-                      )}
-                    </div>
-                    <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-3">
-                      <div className="text-3xl font-black text-white truncate drop-shadow-sm">{effectiveFeaturedGoal.name}</div>
-                      <div
-                        className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-extrabold ${getRemainingDaysBadgeClass(
-                          effectiveFeaturedGoal,
-                        )}`}
+              <div className="border-t pt-4 space-y-3">
+                {!showStrategyFields ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full rounded-xl"
+                    onClick={() => {
+                      if (!isPremium) {
+                        showError("Strategy is a Premium feature. Upgrade to add strategy.");
+                        navigate("/pricing");
+                        return;
+                      }
+                      setShowStrategyFields(true);
+                    }}
+                  >
+                    {!isPremium && <Lock className="w-4 h-4 mr-2" />}
+                    Add Strategy
+                  </Button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold text-foreground">Strategy</h4>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={() => {
+                          setShowStrategyFields(false);
+                          setStrategyWhy("");
+                          setStrategyWho("");
+                          setStrategyNo("");
+                        }}
                       >
-                        {getRemainingDaysText(effectiveFeaturedGoal)}
-                      </div>
+                        Remove
+                      </Button>
                     </div>
-                    <div className="mt-1 text-sm font-medium text-amber-100/80 truncate">{effectiveFeaturedGoal.category}</div>
-                    {(effectiveFeaturedGoal.startDate || effectiveFeaturedGoal.endDate) && (
-                      <div className="mt-3 text-sm text-amber-100/70">
-                        <span className="font-semibold text-amber-100">Dates:</span>{" "}
-                        {effectiveFeaturedGoal.startDate ?? ""} → {effectiveFeaturedGoal.endDate ?? ""}
+                    <div className="space-y-2">
+                      <Label htmlFor="strategy-why">Why does this goal matter?</Label>
+                      <textarea
+                        id="strategy-why"
+                        value={strategyWhy}
+                        onChange={(e) => setStrategyWhy(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="e.g., I want more energy and confidence"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="strategy-who">Who benefits if you succeed?</Label>
+                      <textarea
+                        id="strategy-who"
+                        value={strategyWho}
+                        onChange={(e) => setStrategyWho(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="e.g., Me and my family"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="strategy-no">What will you say \"no\" to?</Label>
+                      <textarea
+                        id="strategy-no"
+                        value={strategyNo}
+                        onChange={(e) => setStrategyNo(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="e.g., Late-night scrolling"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {!showPlanningFields ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full rounded-xl"
+                    onClick={() => {
+                      if (!isPremium) {
+                        showError("Planning is a Premium feature. Upgrade to add planning.");
+                        navigate("/pricing");
+                        return;
+                      }
+                      setShowPlanningFields(true);
+                    }}
+                  >
+                    {!isPremium && <Lock className="w-4 h-4 mr-2" />}
+                    Add Planning
+                  </Button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold text-foreground">Planning</h4>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className="h-8 px-2"
+                        onClick={() => {
+                          setShowPlanningFields(false);
+                          setShowAiReflectionField(false);
+                          setPlanningObstacles("");
+                          setPlanningNextActions("");
+                          setPlanningAiPreview("");
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="planning-obstacles">Potential obstacles</Label>
+                      <textarea
+                        id="planning-obstacles"
+                        value={planningObstacles}
+                        onChange={(e) => setPlanningObstacles(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="e.g., Busy schedule, low motivation"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="planning-next">Next actions</Label>
+                      <textarea
+                        id="planning-next"
+                        value={planningNextActions}
+                        onChange={(e) => setPlanningNextActions(e.target.value)}
+                        className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                        placeholder="e.g., Buy running shoes, schedule 3 runs/week"
+                      />
+                    </div>
+
+                    {!showAiReflectionField ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full rounded-xl"
+                        onClick={() => setShowAiReflectionField(true)}
+                      >
+                        Add AI Reflection
+                      </Button>
+                    ) : (
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="planning-ai">AI reflection</Label>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            className="h-8 px-2"
+                            onClick={() => {
+                              setShowAiReflectionField(false);
+                              setPlanningAiPreview("");
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                        <textarea
+                          id="planning-ai"
+                          value={planningAiPreview}
+                          onChange={(e) => setPlanningAiPreview(e.target.value)}
+                          className="min-h-[80px] w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
+                          placeholder="e.g., Ask: What are the biggest risks to this plan?"
+                        />
                       </div>
                     )}
-                    <div className="mt-6 space-y-2">
-                      <div className="flex items-center justify-between text-sm font-semibold">
-                        <span className="text-amber-100">Progress</span>
-                        <span className="text-white">
-                        {(() => {
-                          const cps = effectiveFeaturedGoal.checkpoints ?? [];
-                          if (cps.length === 0) return `${getDerivedProgress(effectiveFeaturedGoal)}%`;
-                          const done = cps.filter((c) => {
-                            if (c.kind === "number") {
-                              const target = Math.max(0, c.target ?? 0);
-                              const current = Math.max(0, c.current ?? 0);
-                              return target > 0 && current >= target;
-                            }
-                            return c.completed;
-                          }).length;
-                          return `${done}/${cps.length} (${getDerivedProgress(effectiveFeaturedGoal)}%)`;
-                        })()}
-                      </span>
-                    </div>
-                    <Progress
-                      value={getDerivedProgress(effectiveFeaturedGoal)}
-                      className={`h-6 bg-white ${getProgressIndicatorClass(getDerivedProgress(effectiveFeaturedGoal))}`}
+                  </div>
+                )}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button onClick={handleCreateGoal} disabled={isCreating} className="w-full bg-primary hover:bg-primary/90 rounded-xl h-12">
+                {isCreating ? "Creating..." : "Create Goal"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        </div>
+
+        {/* Stats — uniform data tiles, one small colored badge each, not full-tint cards */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {statCards.map((s) => (
+            <Card
+              key={s.label}
+              role="button"
+              tabIndex={0}
+              onClick={s.onClick}
+              className="border border-border shadow-none rounded-xl bg-card cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all duration-150 relative"
+            >
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${s.muted ? "bg-rose-500/10" : "bg-primary/10"}`}>
+                    <s.icon className={`w-4 h-4 ${s.muted ? "text-rose-600 dark:text-rose-400" : "text-primary"}`} />
+                  </div>
+                  {s.share && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); shareStreakCard(); }}
+                      className="text-muted-foreground/50 hover:text-foreground transition-colors"
+                      title="Share streak"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+                <div className="text-2xl font-bold font-mono text-foreground mt-3 tabular-nums">{s.value}</div>
+                <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Goals by status — a real pie chart, not another stat tile */}
+        {goals.length > 0 && (
+          <Card className="border border-border shadow-none rounded-2xl animate-fade-up">
+            <CardHeader>
+              <CardTitle className="text-base font-bold text-foreground">Goals by Status</CardTitle>
+              <p className="text-sm text-muted-foreground">How your {goals.length} goal{goals.length === 1 ? "" : "s"} break down right now.</p>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={goalStatusData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={56}
+                      outerRadius={88}
+                      paddingAngle={2}
+                      stroke="none"
+                    >
+                      {goalStatusData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{
+                        background: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: 12,
+                        fontSize: 13,
+                      }}
                     />
-                  </div>
+                    <Legend
+                      verticalAlign="bottom"
+                      height={32}
+                      formatter={(value) => <span className="text-sm text-muted-foreground">{value}</span>}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <Button
-                      className="rounded-full bg-blue-600 hover:bg-blue-700"
-                      onClick={() => navigate(`/goals/${effectiveFeaturedGoal.id}`)}
-                    >
-                      View Goal
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="rounded-full"
-                      onClick={() => openCreateGoalDialog()}
-                    >
-                      <Plus className="w-4 h-4 mr-2" /> Add Goal
-                    </Button>
+        {/* Featured goal — a calm, precise card, not a full-bleed gradient hero */}
+        {effectiveFeaturedGoal && (
+          <Card className="border border-border shadow-none rounded-2xl overflow-hidden animate-fade-up">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 text-ember">
+                    <Crown className="w-3.5 h-3.5" />
+                    <div className="text-xs font-bold uppercase tracking-widest">Featured Goal</div>
+                    {!user?.featuredGoalId && (
+                      <div className="text-xs font-medium text-muted-foreground">(auto)</div>
+                    )}
                   </div>
+                  <div className="mt-2 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="text-2xl md:text-3xl font-display font-bold text-foreground truncate">{effectiveFeaturedGoal.name}</div>
+                    <div
+                      className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold w-fit ${getRemainingDaysBadgeClass(
+                        effectiveFeaturedGoal,
+                      )}`}
+                    >
+                      {getRemainingDaysText(effectiveFeaturedGoal)}
+                    </div>
+                  </div>
+                  <div className="mt-1 text-sm font-medium text-muted-foreground truncate">{effectiveFeaturedGoal.category}</div>
+                  {(effectiveFeaturedGoal.startDate || effectiveFeaturedGoal.endDate) && (
+                    <div className="mt-3 text-sm text-muted-foreground">
+                      <span className="font-semibold text-foreground">Dates:</span>{" "}
+                      {effectiveFeaturedGoal.startDate ?? ""} → {effectiveFeaturedGoal.endDate ?? ""}
+                    </div>
+                  )}
+                  <div className="mt-6 space-y-2 max-w-md">
+                    <div className="flex items-center justify-between text-sm font-semibold">
+                      <span className="text-muted-foreground">Progress</span>
+                      <span className="text-foreground font-mono">
+                      {(() => {
+                        const cps = effectiveFeaturedGoal.checkpoints ?? [];
+                        if (cps.length === 0) return `${getDerivedProgress(effectiveFeaturedGoal)}%`;
+                        const done = cps.filter((c) => {
+                          if (c.kind === "number") {
+                            const target = Math.max(0, c.target ?? 0);
+                            const current = Math.max(0, c.current ?? 0);
+                            return target > 0 && current >= target;
+                          }
+                          return c.completed;
+                        }).length;
+                        return `${done}/${cps.length} (${getDerivedProgress(effectiveFeaturedGoal)}%)`;
+                      })()}
+                    </span>
+                  </div>
+                  <Progress
+                    value={getDerivedProgress(effectiveFeaturedGoal)}
+                    className={`h-2 bg-secondary ${getProgressBarClass(getDerivedProgress(effectiveFeaturedGoal))}`}
+                  />
                 </div>
 
-                <div className="flex items-center justify-start lg:justify-end gap-5">
-                  <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={198} />
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <Button
+                    className="rounded-xl bg-primary hover:bg-primary/90"
+                    onClick={() => navigate(`/goals/${effectiveFeaturedGoal.id}`)}
+                  >
+                    View Goal
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-xl"
+                    onClick={() => openCreateGoalDialog()}
+                  >
+                    <Plus className="w-4 h-4 mr-2" /> Add Goal
+                  </Button>
                 </div>
+              </div>
+
+              <div className="flex items-center justify-start lg:justify-end">
+                <CircularProgress value={getDerivedProgress(effectiveFeaturedGoal)} size={116} />
               </div>
             </div>
           </CardContent>
@@ -735,18 +726,18 @@ const Dashboard = () => {
         )}
 
         {/* Mobile App */}
-        <div className="rounded-2xl border border-slate-200/60 dark:border-slate-700/40 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800/80 p-6 md:p-8 shadow-sm dark:shadow-slate-900/30 transition-colors duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="rounded-2xl border border-border bg-card p-6 md:p-8 shadow-none transition-colors duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20">
-              <Smartphone className="w-6 h-6 text-white" />
+            <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
+              <Smartphone className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white">Get the mobile app</h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Plan and check-in from anywhere.</p>
+              <h3 className="text-base font-bold text-foreground">Get the mobile app</h3>
+              <p className="text-sm text-muted-foreground">Plan and check-in from anywhere.</p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <Button asChild className="rounded-xl bg-gray-900 dark:bg-gray-800 hover:bg-black dark:hover:bg-gray-700 text-white h-11 px-5 text-sm transition-all duration-200 hover:scale-105 flex-1 md:flex-none">
+            <Button asChild className="rounded-xl bg-foreground hover:bg-foreground/90 text-background h-10 px-4 text-sm flex-1 md:flex-none">
               <a
                 href="https://apps.apple.com/us/app/goal-planner-lifeplans/id6756404940"
                 target="_blank"
@@ -755,7 +746,7 @@ const Dashboard = () => {
                 <Apple className="w-4 h-4 mr-2" /> App Store
               </a>
             </Button>
-            <Button asChild className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300 h-11 px-5 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all duration-200 hover:scale-105 flex-1 md:flex-none">
+            <Button asChild variant="outline" className="rounded-xl h-10 px-4 text-sm flex-1 md:flex-none">
               <a
                 href="https://play.google.com/store/apps/details?id=com.faran.lifeplans"
                 target="_blank"
@@ -768,66 +759,67 @@ const Dashboard = () => {
         </div>
 
         {/* Goals Overview */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 animate-fade-up">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Goals Overview</h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 animate-fade-up">
+          <h2 className="text-xl font-display font-bold text-foreground">Goals Overview</h2>
           <div className="relative w-full md:w-[320px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
             <Input
               placeholder="Search goals..."
-              className="pl-10 rounded-2xl bg-white dark:bg-slate-800 border-gray-100 dark:border-slate-700 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500"
+              className="pl-10 rounded-xl bg-card border-border text-foreground placeholder:text-muted-foreground/70"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
 
-        <Card className="border-none shadow-sm dark:shadow-slate-900/50 rounded-[2.5rem] mb-8 animate-fade-up">
+        <Card className="border border-border shadow-none rounded-2xl animate-fade-up">
           <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <CardTitle className="text-xl font-bold text-gray-900 dark:text-white">Daily Tasks</CardTitle>
-              <p className="text-sm text-gray-500 dark:text-slate-400">Plan your day and keep momentum.</p>
+              <CardTitle className="text-base font-bold text-foreground">Daily Tasks</CardTitle>
+              <p className="text-sm text-muted-foreground">Plan your day and keep momentum.</p>
             </div>
             <Button
               type="button"
-              className="rounded-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white transition-all duration-200 hover:scale-105"
+              variant="outline"
+              className="rounded-xl"
               onClick={() => navigate("/daily-planner")}
             >
               <ListTodo className="w-4 h-4 mr-2" /> Open Daily Planner
             </Button>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex items-center justify-between rounded-2xl border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 transition-colors duration-300">
-              <div className="text-sm font-medium text-gray-700 dark:text-slate-300">Today's priorities</div>
-              <div className="text-sm font-semibold text-gray-900 dark:text-white">
+            <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/30 p-4">
+              <div className="text-sm font-medium text-foreground/80">Today's priorities</div>
+              <div className="text-sm font-semibold text-foreground font-mono">
                 {todaysPrioritiesProgress.done}/{todaysPrioritiesProgress.total}
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {dashboardGoals.map((goal) => (
-            <Card key={goal.id} className="border-0 shadow-sm dark:shadow-slate-900/40 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 rounded-2xl bg-white dark:bg-slate-900 overflow-hidden group">
+            <Card key={goal.id} className="border border-border shadow-none hover:border-primary/40 hover:shadow-sm transition-all duration-150 rounded-2xl bg-card overflow-hidden group">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-3">
                   <div className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider ${
-                    goal.status === 'completed' ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
+                    goal.status === 'completed' ? 'bg-momentum/10 text-momentum' : 'bg-primary/10 text-primary'
                   }`}>
                     {goal.status}
                   </div>
                   <div className="flex items-center gap-2">
-                    {goal.isFavorite && <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />}
+                    {goal.isFavorite && <Star className="w-3.5 h-3.5 text-ember fill-ember" />}
                   </div>
                 </div>
 
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{goal.name}</h3>
+                <h3 className="text-base font-bold text-foreground truncate group-hover:text-primary transition-colors">{goal.name}</h3>
 
-                <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-500 dark:text-slate-400">
+                <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <Target className="w-3 h-3" />
                     <span>{goal.category}</span>
                   </div>
-                  <span className="text-slate-300 dark:text-slate-600">·</span>
+                  <span className="text-muted-foreground/50">·</span>
                   <span className={getRemainingDaysBadgeClass(goal).split(' ').slice(0, 2).join(' ')}>
                     {getRemainingDaysText(goal)}
                   </span>
@@ -835,16 +827,16 @@ const Dashboard = () => {
 
                 <div className="mt-4">
                   <div className="flex justify-between text-xs font-medium mb-1.5">
-                    <span className="text-slate-500 dark:text-slate-400">Progress</span>
-                    <span className="text-gray-900 dark:text-white font-semibold">{getDerivedProgress(goal)}%</span>
+                    <span className="text-muted-foreground">Progress</span>
+                    <span className="text-foreground font-semibold font-mono">{getDerivedProgress(goal)}%</span>
                   </div>
                   <Progress
                     value={getDerivedProgress(goal)}
-                    className={`h-1.5 bg-gray-100 dark:bg-slate-700 ${getProgressIndicatorClass(getDerivedProgress(goal))}`}
+                    className={`h-1.5 bg-secondary ${getProgressBarClass(getDerivedProgress(goal))}`}
                   />
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
                   {goal.priority === 'high' ? (
                     <div className="flex items-center gap-1 text-rose-600 dark:text-rose-400 text-xs font-semibold">
                       <AlertCircle className="w-3 h-3" /> High
@@ -852,8 +844,8 @@ const Dashboard = () => {
                   ) : (
                     <div />
                   )}
-                  <Button asChild variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-lg text-xs h-8 px-3 transition-all">
-                    <Link to={`/goals/${goal.id}`}>View →</Link>
+                  <Button asChild variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10 rounded-lg text-xs h-8 px-3">
+                    <Link to={`/goals/${goal.id}`}>View <ArrowRight className="w-3 h-3 ml-1" /></Link>
                   </Button>
                 </div>
               </CardContent>
@@ -862,51 +854,51 @@ const Dashboard = () => {
           {/* Empty State Card */}
           <Card
             onClick={() => openCreateGoalDialog()}
-            className="border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-[2rem] p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all duration-200 group cursor-pointer animate-fade-up"
+            className="border-2 border-dashed border-border rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-primary/40 hover:bg-primary/5 transition-all duration-150 group cursor-pointer animate-fade-up"
           >
-            <div className="w-12 h-12 bg-gray-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
-              <Plus className="w-6 h-6 text-gray-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+            <div className="w-11 h-11 bg-secondary/40 rounded-xl flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+              <Plus className="w-5 h-5 text-muted-foreground/70 group-hover:text-primary" />
             </div>
             <div className="text-center">
-              <p className="font-bold text-gray-900 dark:text-white">Add new goal</p>
-              <p className="text-sm text-gray-500 dark:text-slate-400">Add new goal, start a new journey</p>
+              <p className="font-bold text-foreground text-sm">Add new goal</p>
+              <p className="text-sm text-muted-foreground">Start a new journey</p>
             </div>
           </Card>
         </div>
 
         {stats.failedCount > 0 && (
-          <div className="mt-10 animate-fade-up">
+          <div className="animate-fade-up">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Failed Goals</h2>
-              <span className="text-sm text-gray-500 dark:text-slate-400">Overdue goals that weren't completed in time</span>
+              <h2 className="text-xl font-display font-bold text-foreground">Failed Goals</h2>
+              <span className="text-sm text-muted-foreground">Overdue goals that weren't completed in time</span>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {stats.failed.map((goal) => (
-                <Card key={goal.id} className="border-0 shadow-sm dark:shadow-slate-900/40 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+                <Card key={goal.id} className="border border-border shadow-none rounded-2xl overflow-hidden bg-card hover:border-rose-500/30 hover:shadow-sm transition-all duration-150">
                   <CardContent className="p-5">
                     <div className="flex items-center mb-3">
-                      <div className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300">
+                      <div className="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400">
                         failed
                       </div>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{goal.name}</h3>
-                    <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mb-4">
+                    <h3 className="text-base font-bold text-foreground mb-1">{goal.name}</h3>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-4">
                       <Target className="w-3 h-3" />
                       <span>{goal.category}</span>
                     </div>
                     <div>
                       <div className="flex justify-between text-xs font-medium mb-1.5">
-                        <span className="text-slate-500 dark:text-slate-400">Progress</span>
-                        <span className="text-gray-900 dark:text-white font-semibold">{getDerivedProgress(goal)}%</span>
+                        <span className="text-muted-foreground">Progress</span>
+                        <span className="text-foreground font-semibold font-mono">{getDerivedProgress(goal)}%</span>
                       </div>
                       <Progress
                         value={getDerivedProgress(goal)}
-                        className={`h-1.5 bg-gray-100 dark:bg-slate-700 ${getProgressIndicatorClass(getDerivedProgress(goal))}`}
+                        className={`h-1.5 bg-secondary ${getProgressBarClass(getDerivedProgress(goal))}`}
                       />
                     </div>
-                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-                      <Button asChild variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 rounded-lg text-xs h-8 px-3">
-                        <Link to={`/goals/${goal.id}`}>View →</Link>
+                    <div className="mt-4 pt-4 border-t border-border flex justify-end">
+                      <Button asChild variant="ghost" size="sm" className="text-primary hover:text-primary/80 hover:bg-primary/10 rounded-lg text-xs h-8 px-3">
+                        <Link to={`/goals/${goal.id}`}>View <ArrowRight className="w-3 h-3 ml-1" /></Link>
                       </Button>
                     </div>
                   </CardContent>
@@ -916,18 +908,17 @@ const Dashboard = () => {
           </div>
         )}
 
-        {/* Premium Features */}
+        {/* Premium Features — a quiet, bordered card rather than a loud gradient block */}
         {!isPremium && (
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 rounded-[3rem] p-8 text-white shadow-lg dark:shadow-purple-900/30 animate-fade-up">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                <Crown className="w-5 h-5" />
-                <h3 className="text-xl font-bold">Unlock Premium Features</h3>
-                <Crown className="w-5 h-5" />
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 md:p-8 animate-fade-up">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Crown className="w-4 h-4 text-ember" />
+                <h3 className="text-lg font-display font-bold text-foreground">Unlock Premium Features</h3>
               </div>
-              <p className="text-lg mb-6">Get unlimited goals, unlimited Daily Planner tasks, advanced analytics, and AI-powered insights.</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild className="bg-amber-400 text-gray-900 hover:bg-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 rounded-full px-8 transition-all duration-200 hover:scale-105">
+              <p className="text-muted-foreground">Get unlimited goals, unlimited Daily Planner tasks, advanced analytics, and AI-powered insights.</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-5">
+                <Button asChild className="bg-primary hover:bg-primary/90 rounded-xl px-6">
                   <Link to="/pricing">View Plans</Link>
                 </Button>
               </div>
@@ -935,7 +926,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        <div className="pt-6 text-xs text-center text-gray-500 dark:text-slate-400">
+        <div className="pt-2 text-xs text-center text-muted-foreground">
           <Link to="/terms" className="underline">Terms</Link>
           <span> · </span>
           <Link to="/privacy" className="underline">Privacy</Link>

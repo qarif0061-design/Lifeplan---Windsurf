@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const CalendarPlannerApp = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What is a calendar planner app?",
@@ -97,17 +99,17 @@ const CalendarPlannerApp = () => {
         <header className="space-y-6">
           <div className="space-y-4">
             <Badge variant="secondary" className="w-fit">Plan Everything in One Place</Badge>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-foreground leading-tight">
               Calendar Planner App: Combine Events, Tasks & Goals in One View
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl">
+            <p className="text-xl text-muted-foreground max-w-3xl">
               A calendar planner app brings everything together—your events, your tasks, your priorities. No more switching between a calendar for appointments and a separate app for to-dos. See it all, plan it all, and make sure your time goes where it matters.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link to="/download">Download Mobile App</Link>
@@ -116,37 +118,37 @@ const CalendarPlannerApp = () => {
         </header>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Why a Calendar Planner Beats Separate Tools</h2>
+          <h2 className="text-3xl font-bold text-foreground">Why a Calendar Planner Beats Separate Tools</h2>
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-primary/20 bg-primary/10">
               <CardHeader>
-                <CardTitle className="text-blue-900">🔄 See Everything Together</CardTitle>
+                <CardTitle className="text-primary">🔄 See Everything Together</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-blue-800">When events and tasks are in separate apps, you can't see the full picture. A calendar planner shows your commitments and available time in one view, so you can plan realistically.</p>
+                <p className="text-foreground/80">When events and tasks are in separate apps, you can't see the full picture. A calendar planner shows your commitments and available time in one view, so you can plan realistically.</p>
               </CardContent>
             </Card>
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-momentum/20 bg-momentum/10">
               <CardHeader>
-                <CardTitle className="text-green-900">⏰ Time-Block Effectively</CardTitle>
+                <CardTitle className="text-momentum">⏰ Time-Block Effectively</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-green-800">Drag tasks directly onto your calendar to schedule them around existing appointments. Time blocking becomes effortless when your tasks live on your calendar.</p>
+                <p className="text-foreground/80">Drag tasks directly onto your calendar to schedule them around existing appointments. Time blocking becomes effortless when your tasks live on your calendar.</p>
               </CardContent>
             </Card>
-            <Card className="border-purple-200 bg-purple-50">
+            <Card className="border-ember/20 bg-ember/10">
               <CardHeader>
-                <CardTitle className="text-purple-900">🎯 Align with Priorities</CardTitle>
+                <CardTitle className="text-ember">🎯 Align with Priorities</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-purple-800">See at a glance whether your scheduled time matches your priorities. A calendar planner makes misalignment visible so you can correct it.</p>
+                <p className="text-foreground/80">See at a glance whether your scheduled time matches your priorities. A calendar planner makes misalignment visible so you can correct it.</p>
               </CardContent>
             </Card>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Key Features of the Best Calendar Planner App</h2>
+          <h2 className="text-3xl font-bold text-foreground">Key Features of the Best Calendar Planner App</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Card key={index}>
@@ -157,7 +159,7 @@ const CalendarPlannerApp = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -165,42 +167,42 @@ const CalendarPlannerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">How to Plan Your Week with a Calendar Planner</h2>
-          <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100">
+          <h2 className="text-3xl font-bold text-foreground">How to Plan Your Week with a Calendar Planner</h2>
+          <div className="bg-primary/10 rounded-2xl p-8 border border-primary/20">
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">1</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Start with your fixed commitments</h4>
-                  <p className="text-blue-700">Add all meetings, appointments, and fixed events for the week first. This creates the container your tasks need to fit around.</p>
+                  <h4 className="font-semibold text-foreground">Start with your fixed commitments</h4>
+                  <p className="text-foreground/80">Add all meetings, appointments, and fixed events for the week first. This creates the container your tasks need to fit around.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">2</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Add your top priorities as time blocks</h4>
-                  <p className="text-blue-700">Identify your 1-3 most important tasks and block dedicated time for them. Schedule these during your peak energy hours.</p>
+                  <h4 className="font-semibold text-foreground">Add your top priorities as time blocks</h4>
+                  <p className="text-foreground/80">Identify your 1-3 most important tasks and block dedicated time for them. Schedule these during your peak energy hours.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">3</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Fill remaining time with routine tasks</h4>
-                  <p className="text-blue-700">Once priorities are blocked, schedule routine tasks and smaller items in the remaining available time slots.</p>
+                  <h4 className="font-semibold text-foreground">Fill remaining time with routine tasks</h4>
+                  <p className="text-foreground/80">Once priorities are blocked, schedule routine tasks and smaller items in the remaining available time slots.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">4</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Leave buffer time</h4>
-                  <p className="text-blue-700">Always leave 20-30% of your time unscheduled. This buffer absorbs interruptions, delays, and last-minute changes without derailing your plan.</p>
+                  <h4 className="font-semibold text-foreground">Leave buffer time</h4>
+                  <p className="text-foreground/80">Always leave 20-30% of your time unscheduled. This buffer absorbs interruptions, delays, and last-minute changes without derailing your plan.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">5</div>
+                <div className="flex-shrink-0 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-semibold">5</div>
                 <div>
-                  <h4 className="font-semibold text-blue-900">Review and adjust daily</h4>
-                  <p className="text-blue-700">Spend 5 minutes at end of each day reviewing what worked and adjusting tomorrow's calendar plan. This turns planning into a dynamic, responsive system.</p>
+                  <h4 className="font-semibold text-foreground">Review and adjust daily</h4>
+                  <p className="text-foreground/80">Spend 5 minutes at end of each day reviewing what worked and adjusting tomorrow's calendar plan. This turns planning into a dynamic, responsive system.</p>
                 </div>
               </div>
             </div>
@@ -208,26 +210,26 @@ const CalendarPlannerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Plan with Everything in One Place?</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Ready to Plan with Everything in One Place?</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Try Goal Planner – LifePlans for calendar planning that combines events, tasks, and goals in one integrated view. Free on web and mobile.
             </p>
-            <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-              <Link to="/auth">Start Planning Free</Link>
+            <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+              Start Planning Free
             </Button>
           </div>
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">More Planning Tools</h2>
+          <h2 className="text-3xl font-bold text-foreground">More Planning Tools</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">📅 Schedule App</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Plan tasks, routines, and time blocks in one place</p>
+                <p className="text-muted-foreground mb-4">Plan tasks, routines, and time blocks in one place</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/schedule-app">Schedule App →</Link>
                 </Button>
@@ -238,7 +240,7 @@ const CalendarPlannerApp = () => {
                 <CardTitle className="text-lg">🎯 Goal Setting</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Set goals that your calendar plan serves</p>
+                <p className="text-muted-foreground mb-4">Set goals that your calendar plan serves</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/goal-planner-app">Goal Planner →</Link>
                 </Button>
@@ -249,7 +251,7 @@ const CalendarPlannerApp = () => {
                 <CardTitle className="text-lg">📊 Progress Tracking</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Track progress toward your calendar-planned goals</p>
+                <p className="text-muted-foreground mb-4">Track progress toward your calendar-planned goals</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/progress-tracker-app">Progress Tracker →</Link>
                 </Button>
@@ -260,7 +262,7 @@ const CalendarPlannerApp = () => {
                 <CardTitle className="text-lg">🔄 Weekly Planning</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 mb-4">Structure your weeks with a strategic planning approach</p>
+                <p className="text-muted-foreground mb-4">Structure your weeks with a strategic planning approach</p>
                 <Button asChild variant="outline" className="w-full">
                   <Link to="/weekly-planning">Weekly Planning →</Link>
                 </Button>
@@ -270,14 +272,14 @@ const CalendarPlannerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Plan Everything in One App</h2>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl p-8 border border-primary/20 text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Plan Everything in One App</h2>
+            <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
               Goal Planner – LifePlans combines your calendar, tasks, and goals so you can plan with clarity and purpose. Start free today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-                <Link to="/auth">Start Planning Free</Link>
+              <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+                Start Planning Free
               </Button>
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link to="/download">Download Mobile App</Link>
@@ -287,12 +289,12 @@ const CalendarPlannerApp = () => {
         </section>
 
         <section className="space-y-6">
-          <h2 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold text-foreground">Frequently Asked Questions</h2>
           <Accordion type="single" collapsible className="w-full">
             {faqData.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
-                <AccordionContent className="text-gray-600">{faq.answer}</AccordionContent>
+                <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

@@ -5,8 +5,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import PublicPageLayout from "@/components/PublicPageLayout";
 import Seo from "@/components/Seo";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 
 const TimeBlocking = () => {
+  const { openAuthModal } = useAuthModal();
   const faqData = [
     {
       question: "What's the difference between time blocking and time boxing?",
@@ -172,13 +174,13 @@ const TimeBlocking = () => {
 
       {/* Hero Section */}
       <section className="space-y-6 text-center py-12" id="hero">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Time Blocking: Master Your Focus</h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground">Time Blocking: Master Your Focus</h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
           Transform your productivity with time blocking. Schedule focused work, protect deep time, and achieve more in less time. Join thousands who've mastered their schedule.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-            <Link to="/auth">Start Time Blocking Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Time Blocking Free
           </Button>
           <Button asChild variant="outline" size="lg" className="rounded-full">
             <Link to="#types">Learn Techniques</Link>
@@ -188,27 +190,27 @@ const TimeBlocking = () => {
 
       {/* What Is Time Blocking */}
       <section className="space-y-6" id="what-is-time-blocking">
-        <h2 className="text-3xl font-bold text-gray-900">What Is Time Blocking?</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">What Is Time Blocking?</h2>
+        <p className="text-lg text-muted-foreground">
           Time blocking is scheduling specific blocks of time for focused work on your calendar. Instead of working from a to-do list, you protect dedicated time slots for important tasks, protecting them from interruptions and context switching.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-primary/20 bg-primary/10">
             <CardHeader>
-              <CardTitle className="text-blue-900">🎯 Traditional Scheduling</CardTitle>
+              <CardTitle className="text-primary">🎯 Traditional Scheduling</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-blue-800">
+              <p className="text-primary/80">
                 Reacting to tasks as they come up, constant context switching, and feeling busy but not productive.
               </p>
             </CardContent>
           </Card>
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-momentum/20 bg-momentum/10">
             <CardHeader>
-              <CardTitle className="text-green-900">🧘 Time Blocking</CardTitle>
+              <CardTitle className="text-momentum">🧘 Time Blocking</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-green-800">
+              <p className="text-momentum/80">
                 Proactively scheduling focused work, protecting deep time, and making consistent progress on important priorities.
               </p>
             </CardContent>
@@ -218,8 +220,8 @@ const TimeBlocking = () => {
 
       {/* Types of Time Blocks */}
       <section className="space-y-6" id="types">
-        <h2 className="text-3xl font-bold text-gray-900">Types of Time Blocks</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Types of Time Blocks</h2>
+        <p className="text-lg text-muted-foreground">
           Different types of work require different time block strategies. Match your blocks to the nature of your tasks.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -232,7 +234,7 @@ const TimeBlocking = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{type.description}</p>
+                <p className="text-muted-foreground">{type.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -241,31 +243,31 @@ const TimeBlocking = () => {
 
       {/* Step-by-Step Guide */}
       <section className="space-y-6" id="step-by-step">
-        <h2 className="text-3xl font-bold text-gray-900">Time Blocking: Step-by-Step</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Time Blocking: Step-by-Step</h2>
+        <p className="text-lg text-muted-foreground">
           Follow this process to implement time blocking effectively with GoalPlanner.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-blue-100">
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <span className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">1</span>
+                <span className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">1</span>
                 Track Your Time
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Monitor how you spend time for 1 week to understand patterns and identify time-wasters.</p>
+              <p className="text-muted-foreground">Monitor how you spend time for 1 week to understand patterns and identify time-wasters.</p>
             </CardContent>
           </Card>
-          <Card className="border-green-100">
+          <Card className="border-momentum/20">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <span className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">2</span>
+                <span className="w-8 h-8 bg-momentum text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold">2</span>
                 Categorize Tasks
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Group tasks by type (deep work, administrative, creative, learning) to match appropriate block lengths.</p>
+              <p className="text-muted-foreground">Group tasks by type (deep work, administrative, creative, learning) to match appropriate block lengths.</p>
             </CardContent>
           </Card>
           <Card className="border-purple-100">
@@ -276,7 +278,7 @@ const TimeBlocking = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Block time on your calendar, starting with 2-3 focused blocks per day and building from there.</p>
+              <p className="text-muted-foreground">Block time on your calendar, starting with 2-3 focused blocks per day and building from there.</p>
             </CardContent>
           </Card>
           <Card className="border-orange-100">
@@ -287,7 +289,7 @@ const TimeBlocking = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600">Review what worked, adjust block lengths, and improve your system weekly.</p>
+              <p className="text-muted-foreground">Review what worked, adjust block lengths, and improve your system weekly.</p>
             </CardContent>
           </Card>
         </div>
@@ -295,8 +297,8 @@ const TimeBlocking = () => {
 
       {/* Best Practices */}
       <section className="space-y-6" id="best-practices">
-        <h2 className="text-3xl font-bold text-gray-900">Time Blocking Best Practices</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Time Blocking Best Practices</h2>
+        <p className="text-lg text-muted-foreground">
           These proven strategies will make your time blocking more effective and sustainable.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -309,7 +311,7 @@ const TimeBlocking = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{practice.description}</p>
+                <p className="text-muted-foreground">{practice.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -318,31 +320,31 @@ const TimeBlocking = () => {
 
       {/* Common Mistakes */}
       <section className="space-y-6" id="mistakes">
-        <h2 className="text-3xl font-bold text-gray-900">Common Time Blocking Mistakes</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Common Time Blocking Mistakes</h2>
+        <p className="text-lg text-muted-foreground">
           Avoid these pitfalls that can undermine your time blocking effectiveness.
         </p>
         <div className="grid md:grid-cols-2 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">❌ What Doesn't Work</h3>
+            <h3 className="text-xl font-semibold text-foreground">❌ What Doesn't Work</h3>
             <div className="space-y-3">
               {commonMistakes.map((mistake, index) => (
                 <div key={index} className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-sm font-semibold">✗</span>
                   <div>
                     <p className="font-medium">{mistake.title}</p>
-                    <p className="text-gray-600 text-sm">{mistake.description}</p>
+                    <p className="text-muted-foreground text-sm">{mistake.description}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-900">✅ What Works</h3>
+            <h3 className="text-xl font-semibold text-foreground">✅ What Works</h3>
             <div className="space-y-3">
               {commonMistakes.map((mistake, index) => (
                 <div key={index} className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
+                  <span className="flex-shrink-0 w-6 h-6 bg-momentum/10 text-momentum rounded-full flex items-center justify-center text-sm font-semibold">✓</span>
                   <div>
                     <p className="font-medium">{mistake.solution}</p>
                   </div>
@@ -355,15 +357,15 @@ const TimeBlocking = () => {
 
       {/* How GoalPlanner Helps */}
       <section className="space-y-6" id="how-goalplanner-helps">
-        <h2 className="text-3xl font-bold text-gray-900">How GoalPlanner Enhances Time Blocking</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">How GoalPlanner Enhances Time Blocking</h2>
+        <p className="text-lg text-muted-foreground">
           GoalPlanner provides specific features that make time blocking more effective and easier to maintain.
         </p>
-        <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-8 border border-blue-100">
+        <div className="bg-gradient-to-r from-primary/10 to-momentum/10 rounded-2xl p-8 border border-primary/20">
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-xl font-semibold text-blue-900 mb-4">🚀 Time Blocking Features</h3>
-              <ul className="space-y-2 text-blue-800">
+              <h3 className="text-xl font-semibold text-primary mb-4">🚀 Time Blocking Features</h3>
+              <ul className="space-y-2 text-primary/80">
                 <li>• <strong>Visual calendar blocks:</strong> Color-coded time blocks for at-a-glance scheduling</li>
                 <li>• <strong>Task categorization:</strong> Automatic grouping by work type and complexity</li>
                 <li>• <strong>Focus time protection:</strong> Dedicated deep work blocks with boundaries</li>
@@ -371,8 +373,8 @@ const TimeBlocking = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-green-900 mb-4">⚡ Productivity Integration</h3>
-              <ul className="space-y-2 text-green-800">
+              <h3 className="text-xl font-semibold text-momentum mb-4">⚡ Productivity Integration</h3>
+              <ul className="space-y-2 text-momentum/80">
                 <li>• <strong>Goal connection:</strong> Link time blocks directly to meaningful objectives</li>
                 <li>• <strong>Progress tracking:</strong> See how time blocking advances your goals</li>
                 <li>• <strong>Habit integration:</strong> Connect daily routines to time block success</li>
@@ -386,20 +388,20 @@ const TimeBlocking = () => {
       {/* CTA Section */}
       <section className="space-y-6" id="cta">
         <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-8 border border-blue-100 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to Master Your Schedule?</h2>
-          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+          <h2 className="text-2xl font-display font-bold text-foreground mb-4">Ready to Master Your Schedule?</h2>
+          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
             Start time blocking with GoalPlanner. Protect your focus, achieve more in less time, and build sustainable productivity systems.
           </p>
-          <Button asChild size="lg" className="rounded-full bg-blue-600 hover:bg-blue-700">
-            <Link to="/auth">Start Time Blocking Free</Link>
+          <Button size="lg" className="rounded-full bg-primary hover:bg-primary/90" onClick={() => openAuthModal({ intent: "signup" })}>
+            Start Time Blocking Free
           </Button>
         </div>
       </section>
 
       {/* Related Topics */}
       <section className="space-y-6" id="related-topics">
-        <h2 className="text-3xl font-bold text-gray-900">Master Time Management Skills</h2>
-        <p className="text-lg text-gray-600">
+        <h2 className="text-3xl font-display font-bold text-foreground">Master Time Management Skills</h2>
+        <p className="text-lg text-muted-foreground">
           Explore specific time management techniques and connect with productivity systems that support effective scheduling.
         </p>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -408,7 +410,7 @@ const TimeBlocking = () => {
               <CardTitle className="text-lg">⏰ Time Management</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Comprehensive time management strategies and techniques</p>
+              <p className="text-muted-foreground mb-4">Comprehensive time management strategies and techniques</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/time-management">Time Management →</Link>
               </Button>
@@ -419,7 +421,7 @@ const TimeBlocking = () => {
               <CardTitle className="text-lg">🍅 Pomodoro Technique</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">25-minute focused sprints with strategic breaks</p>
+              <p className="text-muted-foreground mb-4">25-minute focused sprints with strategic breaks</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/pomodoro-technique">Pomodoro →</Link>
               </Button>
@@ -430,7 +432,7 @@ const TimeBlocking = () => {
               <CardTitle className="text-lg">🎯 Focus & Clarity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Improve concentration and mental clarity for better focus</p>
+              <p className="text-muted-foreground mb-4">Improve concentration and mental clarity for better focus</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/focus-and-mental-clarity">Focus & Clarity →</Link>
               </Button>
@@ -441,7 +443,7 @@ const TimeBlocking = () => {
               <CardTitle className="text-lg">⚡ Productivity</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Build systems that support effective time management</p>
+              <p className="text-muted-foreground mb-4">Build systems that support effective time management</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/productivity">Productivity →</Link>
               </Button>
@@ -452,7 +454,7 @@ const TimeBlocking = () => {
               <CardTitle className="text-lg">🎯 Goal Planning</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Set meaningful goals that drive your time blocking strategy</p>
+              <p className="text-muted-foreground mb-4">Set meaningful goals that drive your time blocking strategy</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/goal-planner">Goal Planning →</Link>
               </Button>
@@ -463,7 +465,7 @@ const TimeBlocking = () => {
               <CardTitle className="text-lg">🔄 Daily Routines</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-600 mb-4">Build routines that support your time blocking system</p>
+              <p className="text-muted-foreground mb-4">Build routines that support your time blocking system</p>
               <Button asChild variant="outline" className="w-full">
                 <Link to="/daily-routine-planner">Daily Routines →</Link>
               </Button>
@@ -474,7 +476,7 @@ const TimeBlocking = () => {
 
       {/* FAQ Section */}
       <section className="space-y-6" id="faq">
-        <h2 className="text-3xl font-bold text-gray-900">Time Blocking FAQ</h2>
+        <h2 className="text-3xl font-display font-bold text-foreground">Time Blocking FAQ</h2>
         <Accordion type="single" collapsible className="w-full">
           {faqData.map((faq, index) => (
             <AccordionItem key={index} value={`item-${index}`}>
@@ -482,7 +484,7 @@ const TimeBlocking = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent>
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-muted-foreground">{faq.answer}</p>
               </AccordionContent>
             </AccordionItem>
           ))}
