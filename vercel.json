@@ -5,6 +5,17 @@
   "outputDirectory": "dist",
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.goalplanner.io"
+        }
+      ],
+      "destination": "https://goalplanner.io/:path*",
+      "permanent": true
+    },
+    {
       "source": "/getting-things-done",
       "destination": "/articles/how-to-get-things-done-system-2026",
       "permanent": true
