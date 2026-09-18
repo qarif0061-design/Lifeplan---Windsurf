@@ -137,7 +137,6 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Lose 5 kg in 8 weeks\n" +
       "- Run 5 km without stopping within 6 weeks\n" +
       "- Publish 12 high-quality articles in 3 months\n\n" +
-      "Keywords to keep in mind: SMART goals, goal clarity, measurable outcome, success criteria, goal tracking.\n\n" +
       "## 2) Choose the right timeframe (weeks vs months)\n" +
       "Timeframe drives behavior. A short timeframe increases urgency but can cause burnout. A long timeframe reduces urgency and can lead to procrastination.\n\n" +
       "A simple rule:\n" +
@@ -1234,6 +1233,17 @@ const ArticleDetails = () => {
                 headline: article.title,
                 url,
                 description: extractDescription(article.body),
+                mainEntityOfPage: url,
+                author: {
+                  "@type": "Organization",
+                  name: "Lifeplans",
+                  url: "https://goalplanner.io",
+                },
+                publisher: {
+                  "@type": "Organization",
+                  name: "Lifeplans",
+                  url: "https://goalplanner.io",
+                },
               };
               const faqJsonLd = pillar ? buildFaqJsonLd(pillar.faqs, url) : undefined;
               const jsonLd = faqJsonLd ? [articleJsonLd, faqJsonLd] : articleJsonLd;
@@ -1262,11 +1272,18 @@ const ArticleDetails = () => {
               <div className="rounded-[2rem] border border-border bg-card p-8 shadow-sm space-y-3">
                 <div className="text-sm font-semibold text-foreground">Related guides</div>
                 <div className="space-y-1">
-                  {pillar.relatedSlugs.slice(0, 6).map((s) => (
-                    <Link key={s} to={`/articles/${s}`} className="block text-primary hover:underline">
-                      {getPillarUrl(s)}
-                    </Link>
-                  ))}
+                  {pillar.relatedSlugs.slice(0, 6).map((s) => {
+                    const related = getPillarBySlug(s);
+                    return (
+                      <Link
+                        key={s}
+                        to={`/articles/${s}`}
+                        className="block text-primary hover:underline"
+                      >
+                        {related?.title ?? getPillarUrl(s)}
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             )}

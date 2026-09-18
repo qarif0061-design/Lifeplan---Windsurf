@@ -65,7 +65,7 @@ const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd, noIndex }: S
     upsertMeta("meta[property='og:url']", { property: "og:url", content: canonical });
     upsertMeta("meta[property='og:image']", { property: "og:image", content: ogImage });
 
-    upsertMeta("meta[name='twitter:card']", { name: "twitter:card", content: "summary" });
+    upsertMeta("meta[name='twitter:card']", { name: "twitter:card", content: "summary_large_image" });
     upsertMeta("meta[name='twitter:title']", { name: "twitter:title", content: title });
     upsertMeta("meta[name='twitter:description']", { name: "twitter:description", content: description });
     upsertMeta("meta[name='twitter:image']", { name: "twitter:image", content: ogImage });

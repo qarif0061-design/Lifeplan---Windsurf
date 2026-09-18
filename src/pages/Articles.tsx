@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -592,6 +593,18 @@ const Articles = () => {
 
   return (
     <Layout>
+      <Seo
+        title="Goal Setting Articles & Guides | Lifeplans"
+        description="Practical guides on goal setting, weekly planning, habits, productivity, and motivation — with templates you can copy into Lifeplans."
+        canonicalPath="/articles"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Articles",
+          url: "https://goalplanner.io/articles",
+          description: "All goal setting and planning guides on Lifeplans.",
+        }}
+      />
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>

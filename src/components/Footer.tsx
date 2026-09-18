@@ -18,6 +18,7 @@ const Footer = () => {
             <span>© {new Date().getFullYear()} Lifeplans</span>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+            <a href="/articles" className="text-muted-foreground hover:text-primary transition-colors">Articles</a>
             <a href="/about" className="text-muted-foreground hover:text-primary transition-colors">About</a>
             <a href="/career" className="text-muted-foreground hover:text-primary transition-colors">Careers</a>
             <a href="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</a>

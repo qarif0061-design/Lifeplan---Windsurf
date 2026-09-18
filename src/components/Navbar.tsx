@@ -72,6 +72,9 @@ const Navbar = () => {
               </>
             ) : (
               <>
+                <Button asChild variant="ghost" className="rounded-full hidden md:inline-flex">
+                  <Link to="/articles">Articles</Link>
+                </Button>
                 <Button
                   variant="ghost"
                   className="rounded-full hidden sm:inline-flex"
