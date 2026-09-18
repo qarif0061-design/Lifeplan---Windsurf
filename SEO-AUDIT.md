@@ -106,7 +106,7 @@ Severity: **HIGH** (data-confirmed).
 8. Set `twitter:card=summary_large_image` consistently in `Seo.tsx`.
 
 ### P2 — maximize existing real content
-9. **Consolidate keyword cannibalization**: map the 2,140 keywords → pillar coverage; produce `KEYWORD-MAP.csv`; 301 or noindex duplicates.
+9. **Consolidate keyword cannibalization**: map the 2,140 keywords → pillar coverage; produce `KEYWORD-MAP.csv`; 301 or noindex duplicates. **DONE**: `KEYWORD-MAP.csv` built (2,140 base keywords → primary pillar URL + matched slugs + 90-day SC impressions); 96.8% covered (2,071). The 69 uncovered cluster into 3 real gaps: (a) **vision board** theme (~17: what is a vision board, vision board ideas/template/app/maker/meaning), (b) competitor "**X alternative**" comparisons (~15: notion, trello, clickup, todoist, ticktick, habitica, microsoft to do, google keep, evernote, any.do, goodnotes, notability, penly...), (c) niche profession SMART-goal variants (electrical engineer, senior accountant, coffee shop, beauty salon, claims adjusters, cleaning services, corporate trainers, tech lead, travel agency, delivery drivers, conflict resolution...). List of profession variants still unmatched — candidates to fold into existing SMART-goal spans with an FAQ, not new URLs, unless SV grows.
 10. **Differentiate the ~30 `*-app` pages** with unique structure, FAQs, comparables, or downloadable assets; ensure each has its own `<Seo>` title/desc/canonical (check current coverage [verify]).
 11. Complete `Article` JSON-LD (datePublished/dateModified/author/publisher) and WebPage/FAQPage on all pillars (already present per `SEO-AUDIT-REPORT.md`; verify live [verify]).
 
