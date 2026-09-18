@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "@/firebase/config";
 
 type JsonLd = Record<string, unknown>;
 
@@ -35,8 +37,15 @@ const upsertLink = (rel: string, href: string) => {
 
 const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd, noIndex }: SeoProps) => {
   const location = useLocation();
+  const firstRender = useRef(true);
+  const lastPath = useRef(location.pathname);
 
   useEffect(() => {
+    const isFirst = firstRender.current;
+    firstRender.current = false;
+    const isNewRoute = lastPath.current !== location.pathname;
+    const previousPath = lastPath.current;
+    lastPath.current = location.pathname;
     const canonical = canonicalPath
       ? `${SITE_URL}${canonicalPath}`
       : `${SITE_URL}${location.pathname}`;
@@ -80,6 +89,15 @@ const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd, noIndex }: S
       if (!existing) document.head.appendChild(script);
     } else if (existing) {
       existing.remove();
+    }
+
+    if (analytics && !isFirst && isNewRoute) {
+      logEvent(analytics, "route_change", {
+        page_title: title,
+        page_location: canonical,
+        page_path: location.pathname,
+        previous_page_path: previousPath,
+      });
     }
   }, [title, description, canonicalPath, imageUrl, jsonLd, noIndex, location.pathname]);
 
