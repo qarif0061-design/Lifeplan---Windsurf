@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2, Star, MessageSquare, HelpCircle, Apple, Smartphone } from "lucide-react";
+import { Target, Zap, Shield, BarChart3, ArrowRight, CheckCircle2, HelpCircle, Apple, Smartphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -36,27 +36,6 @@ const Landing = () => {
       icon: BarChart3,
       color: "bg-emerald-100 text-emerald-600",
     },
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Jenkins",
-      role: "Product Designer",
-      content: "LifePlan changed how I approach my career goals. The strategy system is a game-changer.",
-      avatar: "https://i.pravatar.cc/150?u=sarah"
-    },
-    {
-      name: "Marcus Chen",
-      role: "Entrepreneur",
-      content: "The weekly planning keeps me focused on what actually moves the needle. Highly recommended.",
-      avatar: "https://i.pravatar.cc/150?u=marcus"
-    },
-    {
-      name: "Elena Rodriguez",
-      role: "Student",
-      content: "I love the daily check-ins. It's so satisfying to see my streaks grow every day!",
-      avatar: "https://i.pravatar.cc/150?u=elena"
-    }
   ];
 
   const faqs = [
@@ -335,36 +314,6 @@ const Landing = () => {
                 </div>
                 <h3 className="text-xl font-display font-bold text-foreground mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 text-primary font-bold uppercase tracking-widest text-sm mb-4">
-              <MessageSquare className="w-4 h-4" />
-              <span>Testimonials</span>
-            </div>
-            <h2 className="text-3xl font-display font-bold text-foreground">Loved by high achievers</h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((t, i) => (
-              <div key={i} className="bg-card p-8 rounded-[2.5rem] border border-border shadow-sm">
-                <div className="flex items-center gap-1 text-ember mb-6">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                </div>
-                <p className="text-foreground/85 mb-8 italic">"{t.content}"</p>
-                <div className="flex items-center gap-4">
-                  <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full" />
-                  <div>
-                    <p className="font-bold text-foreground">{t.name}</p>
-                    <p className="text-sm text-muted-foreground">{t.role}</p>
-                  </div>
-                </div>
               </div>
             ))}
           </div>

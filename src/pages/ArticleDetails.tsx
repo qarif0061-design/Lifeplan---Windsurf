@@ -238,12 +238,6 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "Weekly planning fails when tasks have no time. Even a simple calendar block improves follow-through.\n\n" +
       "## Step 4: Review and adjust weekly\n" +
       "At the end of the week, review: what worked, what didn’t, and why. Then adjust.\n\n" +
-      "## Keywords to naturally include in your planning\n" +
-      "- weekly planning template\n" +
-      "- weekly goals\n" +
-      "- goal progress tracking\n" +
-      "- productivity planning\n" +
-      "- time blocking\n\n" +
       "## Summary\n" +
       "Weekly planning is simple: priorities → tasks → schedule → review. Do it consistently and your long-term goals become inevitable.\n",
   },
@@ -268,12 +262,6 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Exercise supports confidence and performance\n\n" +
       "## 5) Write one sentence of notes when needed\n" +
       "Notes help you spot patterns: stress eating, low sleep, busy weeks, motivation dips. Over time, you’ll know what helps and what hurts.\n\n" +
-      "## Keywords (for SEO + clarity)\n" +
-      "- daily check-in habit\n" +
-      "- habit tracker\n" +
-      "- streak tracking\n" +
-      "- accountability system\n" +
-      "- daily routine\n\n" +
       "## Summary\n" +
       "Build a daily check-in habit by making it fast, attaching it to an existing routine, and using streaks for momentum. Small daily actions create big results.\n",
   },
@@ -294,7 +282,6 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Set a clear outcome goal (what)\n" +
       "- Choose 1–3 habits that drive it (how)\n" +
       "- Review weekly and adjust\n\n" +
-      "## Keywords\n" +
       "goal setting, habit building, consistency, progress tracking, accountability, weekly planning\n",
   },
   "time-blocking-for-goals": {
@@ -311,8 +298,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Step 3: Block time on your calendar\n" +
       "Put the sessions on your calendar before the week starts.\n\n" +
       "## Step 4: Weekly review\n" +
-      "At the end of the week, review what got done and what needs a new plan.\n\n" +
-      "Keywords: time blocking, weekly planning, productivity, focus, deep work\n",
+      "At the end of the week, review what got done and what needs a new plan.\n\n"
   },
   "how-to-stay-motivated": {
     title: "How to Stay Motivated When Progress Feels Slow",
@@ -326,8 +312,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Plan weekly\n" +
       "- Measure progress honestly\n\n" +
       "## Build an environment that makes progress easier\n" +
-      "Remove friction: prepare workouts, pre-plan meals, block time, reduce distractions.\n\n" +
-      "Keywords: motivation, discipline, consistency, progress tracking, habits\n",
+      "Remove friction: prepare workouts, pre-plan meals, block time, reduce distractions.\n\n"
   },
   "overcoming-procrastination": {
     title: "Overcoming Procrastination: A Plan You Can Follow",
@@ -339,8 +324,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Write one paragraph\n" +
       "- Walk for 5 minutes\n\n" +
       "## Use time-boxing\n" +
-      "Set a 10–20 minute timer. When the timer ends, you can stop. This reduces resistance.\n\n" +
-      "Keywords: procrastination, productivity, overwhelm, next step, momentum\n",
+      "Set a 10–20 minute timer. When the timer ends, you can stop. This reduces resistance.\n\n"
   },
   "accountability-strategies": {
     title: "Accountability Strategies That Don’t Feel Like Pressure",
@@ -351,8 +335,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use weekly reviews\n" +
       "Weekly reviews turn mistakes into improvements.\n\n" +
       "## Add a simple social layer\n" +
-      "Tell a friend what you’re working on or share a weekly update.\n\n" +
-      "Keywords: accountability, habit tracker, streak, weekly review, consistency\n",
+      "Tell a friend what you’re working on or share a weekly update.\n\n"
   },
   "smart-goals-examples": {
     title: "SMART Goals Examples (Fitness, Career, Study, Money)",
@@ -365,8 +348,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Study SMART goal example\n" +
       "Score 80%+ on a practice exam within 8 weeks by studying 45 minutes/day, 5 days/week.\n\n" +
       "## Money SMART goal example\n" +
-      "Save $500 in 10 weeks by reducing spending and reviewing finances weekly.\n\n" +
-      "Keywords: SMART goals examples, goal setting template, measurable goals\n",
+      "Save $500 in 10 weeks by reducing spending and reviewing finances weekly.\n\n"
   },
   "track-progress-like-a-pro": {
     title: "Track Progress Like a Pro: Metrics That Matter",
@@ -375,8 +357,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use one primary metric\n" +
       "Choose one main progress number that best reflects success.\n\n" +
       "## Add leading indicators\n" +
-      "Daily check-ins are leading indicators that predict outcomes.\n\n" +
-      "Keywords: progress tracking, goal metrics, habit tracker, analytics\n",
+      "Daily check-ins are leading indicators that predict outcomes.\n\n"
   },
   "build-consistency": {
     title: "How to Build Consistency (Even With a Busy Schedule)",
@@ -385,8 +366,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use the 2-minute rule\n" +
       "Start with a version of the habit that takes 2 minutes.\n\n" +
       "## Plan your week before it starts\n" +
-      "Weekly planning is where consistency is created.\n\n" +
-      "Keywords: consistency, busy schedule, habits, time management\n",
+      "Weekly planning is where consistency is created.\n\n"
   },
   "reduce-distractions": {
     title: "Reduce Distractions: A Focus System for High Achievers",
@@ -395,8 +375,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Environment design\n" +
       "Make distractions harder to access and your goal tools easier to access.\n\n" +
       "## Use scheduled focus blocks\n" +
-      "Time blocking prevents random tasks from stealing your day.\n\n" +
-      "Keywords: focus, distractions, productivity, deep work, time blocking\n",
+      "Time blocking prevents random tasks from stealing your day.\n\n"
   },
   "weekly-review": {
     title: "Weekly Review: The Fastest Way to Improve Your Results",
@@ -405,8 +384,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Review the facts\n" +
       "What did you do? What did you skip? What worked?\n\n" +
       "## Adjust the plan\n" +
-      "Update your weekly priorities based on what you learned.\n\n" +
-      "Keywords: weekly review, planning, progress, reflection, improvement\n",
+      "Update your weekly priorities based on what you learned.\n\n"
   },
   "morning-routine-for-goals": {
     title: "Morning Routine for Goals: Start Your Day With Momentum",
@@ -415,8 +393,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## A simple 10-minute routine\n" +
       "- Review today’s priorities\n" +
       "- Do one small action for your goal\n" +
-      "- Complete your daily check-in\n\n" +
-      "Keywords: morning routine, habits, consistency, productivity\n",
+      "- Complete your daily check-in\n\n"
   },
   "best-goal-planner-app-2024": {
     title: "Best Goal Planner App 2024: Complete Review and Comparison",
@@ -431,8 +408,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Top contenders\n" +
       "1. **Goal Planner - Lifeplans**: Best for comprehensive goal management with strategy and planning features.\n" +
       "2. **App B**: Best for simple goal tracking.\n" +
-      "3. **App C**: Best for team goals.\n\n" +
-      "Keywords: goal planner app, productivity app, goal tracking, 2024 apps\n",
+      "3. **App C**: Best for team goals.\n\n"
   },
   "top-goal-planner-apps-productivity": {
     title: "Top Goal Planner Apps to Boost Your Productivity",
@@ -444,8 +420,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Progress analytics\n" +
       "- Habit stacking\n\n" +
       "## How to choose\n" +
-      "Consider your workflow: Do you prefer daily check-ins or weekly reviews? Do you need team features or individual focus?\n\n" +
-      "Keywords: productivity, goal planner, focus, time management\n",
+      "Consider your workflow: Do you prefer daily check-ins or weekly reviews? Do you need team features or individual focus?\n\n"
   },
   "how-to-set-goals-beginners-guide": {
     title: "How to Set Goals: A Beginner's Guide to Success",
@@ -460,8 +435,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- **R**elevant: Does this matter to you?\n" +
       "- **T**ime-bound: When will you achieve this?\n\n" +
       "## Write it down\n" +
-      "Studies show that writing goals increases achievement likelihood by 42%. Use a journal or app like Lifeplans.\n\n" +
-      "Keywords: goal setting, beginners, SMART goals, personal development\n",
+      "Studies show that writing goals increases achievement likelihood by 42%. Use a journal or app like Lifeplans.\n\n"
   },
   "how-to-achieve-goals-consistently": {
     title: "How to Achieve Goals Consistently: Proven Strategies",
@@ -474,8 +448,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## 3. Build accountability\n" +
       "Share goals with a friend or use an app with progress tracking.\n\n" +
       "## 4. Start ridiculously small\n" +
-      "Want to write a book? Start with 100 words a day. Small wins build momentum.\n\n" +
-      "Keywords: goal achievement, consistency, habits, accountability\n",
+      "Want to write a book? Start with 100 words a day. Small wins build momentum.\n\n"
   },
   "how-to-set-targets-effectively": {
     title: "How to Set Targets That Drive Real Results",
@@ -487,8 +460,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Set quarterly targets\n" +
       "Break annual goals into quarterly milestones. This creates urgency and makes progress measurable.\n\n" +
       "## Make targets visible\n" +
-      "Display targets where you'll see them daily—on your desk, phone wallpaper, or bathroom mirror.\n\n" +
-      "Keywords: targets, milestones, goal setting, quarterly planning\n",
+      "Display targets where you'll see them daily—on your desk, phone wallpaper, or bathroom mirror.\n\n"
   },
   "how-to-achieve-targets-easily": {
     title: "How to Achieve Targets Easily: Smart Approaches",
@@ -501,8 +473,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use Time Blocking\n" +
       "Schedule specific time blocks for target-related activities.\n\n" +
       "## Track Daily Progress\n" +
-      "A simple yes/no check-in builds momentum and creates accountability.\n\n" +
-      "Keywords: target achievement, productivity, time management, habits\n",
+      "A simple yes/no check-in builds momentum and creates accountability.\n\n"
   },
   "how-to-gain-focus-deep-work": {
     title: "How to Gain Focus for Deep Work and Goal Achievement",
@@ -515,8 +486,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Time your focus sessions\n" +
       "Start with 25-minute Pomodoro sessions and gradually increase duration.\n\n" +
       "## Schedule deep work\n" +
-      "Block specific times in your calendar for focused goal work.\n\n" +
-      "Keywords: focus, deep work, concentration, productivity\n",
+      "Block specific times in your calendar for focused goal work.\n\n"
   },
   "goal-tracking-methods-that-work": {
     title: "Goal Tracking Methods That Actually Work",
@@ -529,8 +499,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## 3. Habit-Based Tracking\n" +
       "Track the habits that lead to goal achievement rather than the goal itself.\n\n" +
       "## 4. Visual Progress Boards\n" +
-      "Use charts, graphs, or progress bars to visualize advancement.\n\n" +
-      "Keywords: goal tracking, progress monitoring, milestones, habits\n",
+      "Use charts, graphs, or progress bars to visualize advancement.\n\n"
   },
   "monthly-goal-setting-template": {
     title: "Monthly Goal Setting Template for Consistent Progress",
@@ -547,8 +516,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Weekly Breakdown\n" +
       "Divide monthly goals into weekly actions.\n\n" +
       "## Success Metrics\n" +
-      "Define how you'll measure success for each goal.\n\n" +
-      "Keywords: monthly goals, goal template, planning, productivity\n",
+      "Define how you'll measure success for each goal.\n\n"
   },
   "how-to-plan-your-goals-in-10-minutes": {
     title: "How to Plan Your Goals in 10 Minutes (A Simple Routine)",
@@ -561,8 +529,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## 3) Decide the next action for each goal\n" +
       "If you can’t name the next action, the goal is still vague.\n\n" +
       "## 4) Update progress honestly\n" +
-      "A truthful progress percentage is better than a motivational lie—it improves planning.\n\n" +
-      "Keywords: weekly planning, goal planner app, weekly review\n",
+      "A truthful progress percentage is better than a motivational lie—it improves planning.\n\n"
   },
   "goal-setting-for-busy-people": {
     title: "Goal Setting for Busy People: The Minimum Effective Plan",
@@ -573,8 +540,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Plan your week in constraints\n" +
       "If you have 3 free hours, plan for 2. Leave buffer.\n\n" +
       "## Use Lifeplans as your weekly dashboard\n" +
-      "Set the goal, add strategy (why/no), then keep weekly priorities small.\n\n" +
-      "Keywords: goal setting for busy people, weekly planning, productivity\n",
+      "Set the goal, add strategy (why/no), then keep weekly priorities small.\n\n"
   },
   "how-to-write-a-goal-strategy": {
     title: "How to Write a Goal Strategy (Why, Who, and No)",
@@ -586,8 +552,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "This creates meaning beyond the mood of the day.\n\n" +
       "## 3) What will you say no to?\n" +
       "Boundaries protect progress: distractions, overtime, scrolling.\n\n" +
-      "In Lifeplans, use the Strategy section to store this so it’s visible during planning and reviews.\n\n" +
-      "Keywords: goal strategy, motivation, boundaries, focus\n",
+      "In Lifeplans, use the Strategy section to store this so it’s visible during planning and reviews.\n\n"
   },
   "weekly-planning-template-lifeplans": {
     title: "Weekly Planning Template You Can Copy Into Lifeplans",
@@ -603,8 +568,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Task C\n\n" +
       "## Obstacles & counter-plan\n" +
       "- Obstacle: ____ → Counter-plan: ____\n\n" +
-      "Use this inside Lifeplans Weekly Planning and keep the plan small enough to finish.\n\n" +
-      "Keywords: weekly planning template, weekly goals, productivity\n",
+      "Use this inside Lifeplans Weekly Planning and keep the plan small enough to finish.\n\n"
   },
   "how-to-set-goals-without-burnout": {
     title: "How to Set Goals Without Burnout",
@@ -615,8 +579,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Track progress weekly, not obsessively\n" +
       "Weekly progress updates reduce anxiety and improve decisions.\n\n" +
       "## Build a fallback plan\n" +
-      "Minimum actions keep the streak alive.\n\n" +
-      "Keywords: burnout, sustainable goals, weekly planning\n",
+      "Minimum actions keep the streak alive.\n\n"
   },
   "habit-goals-vs-outcome-goals": {
     title: "Habit Goals vs Outcome Goals: Which Should You Track?",
@@ -626,8 +589,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "Progress percentage or milestones.\n\n" +
       "## Track habits daily\n" +
       "Yes/no check-ins help consistency.\n\n" +
-      "In Lifeplans, keep the goal outcome in Goals, and keep the habit-driven actions in Weekly Planning.\n\n" +
-      "Keywords: habits vs goals, progress tracking\n",
+      "In Lifeplans, keep the goal outcome in Goals, and keep the habit-driven actions in Weekly Planning.\n\n"
   },
   "goal-setting-for-students": {
     title: "Goal Setting for Students: A Weekly Study System",
@@ -638,8 +600,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Plan weekly sessions\n" +
       "Schedule 3–5 sessions and one review day.\n\n" +
       "## Track leading indicators\n" +
-      "Hours studied, chapters completed, practice questions.\n\n" +
-      "Keywords: study goals, weekly planning, exam preparation\n",
+      "Hours studied, chapters completed, practice questions.\n\n"
   },
   "goal-setting-for-career-growth": {
     title: "Goal Setting for Career Growth: A 12-Week Plan",
@@ -650,8 +611,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Set milestones\n" +
       "Portfolio project, certification module, interview practice.\n\n" +
       "## Execute weekly\n" +
-      "Use Lifeplans weekly priorities and tasks to keep the plan realistic.\n\n" +
-      "Keywords: career goals, 12 week year, weekly planning\n",
+      "Use Lifeplans weekly priorities and tasks to keep the plan realistic.\n\n"
   },
   "how-to-set-financial-goals": {
     title: "How to Set Financial Goals That You’ll Actually Hit",
@@ -662,8 +622,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Add weekly actions\n" +
       "Budget review on Sunday + automatic transfer.\n\n" +
       "## Track progress\n" +
-      "Update the percentage weekly so you can adjust early.\n\n" +
-      "Keywords: saving goals, budgeting, weekly review\n",
+      "Update the percentage weekly so you can adjust early.\n\n"
   },
   "how-to-recover-after-falling-off": {
     title: "How to Recover After Falling Off Your Goal Plan",
@@ -674,8 +633,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Step 2: Choose one next action\n" +
       "A single startable task rebuilds momentum.\n\n" +
       "## Step 3: Review weekly\n" +
-      "Lifeplans works best when you adjust weekly based on real data.\n\n" +
-      "Keywords: restart goals, consistency, weekly planning\n",
+      "Lifeplans works best when you adjust weekly based on real data.\n\n"
   },
   "goal-review-questions": {
     title: "Weekly Goal Review Questions (Use These Every Sunday)",
@@ -686,8 +644,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- What did I avoid (and why)?\n" +
       "- What obstacle appeared most?\n" +
       "- What is the next best plan (smaller if needed)?\n\n" +
-      "In Lifeplans, update your Weekly Planning and goal progress right after answering these.\n\n" +
-      "Keywords: weekly review, reflection, planning\n",
+      "In Lifeplans, update your Weekly Planning and goal progress right after answering these.\n\n"
   },
   "how-to-prioritize-goals": {
     title: "How to Prioritize Goals When Everything Feels Important",
@@ -698,8 +655,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Choose by impact\n" +
       "Ask: which goal improves everything else?\n\n" +
       "## Plan weekly, not yearly\n" +
-      "Long plans become fantasy. Weekly planning stays real.\n\n" +
-      "Keywords: prioritize goals, focus, weekly planning\n",
+      "Long plans become fantasy. Weekly planning stays real.\n\n"
   },
   "goal-metrics-examples": {
     title: "Goal Metrics Examples: What to Measure (and What to Ignore)",
@@ -711,8 +667,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "Practice questions, study sessions, mock test score.\n\n" +
       "## Business\n" +
       "Publishing cadence, outreach count, conversion rate.\n\n" +
-      "Lifeplans is easiest when your goal has one primary metric and a weekly plan.\n\n" +
-      "Keywords: goal metrics, progress tracking, targets\n",
+      "Lifeplans is easiest when your goal has one primary metric and a weekly plan.\n\n"
   },
   "how-to-break-down-big-goals": {
     title: "How to Break Down Big Goals Into Weekly Targets",
@@ -723,8 +678,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Step 2: Choose the next milestone\n" +
       "Ignore the rest for now.\n\n" +
       "## Step 3: Convert it to a weekly target\n" +
-      "Then add tasks in Weekly Planning.\n\n" +
-      "Keywords: break down goals, weekly targets, planning\n",
+      "Then add tasks in Weekly Planning.\n\n"
   },
   "how-to-build-discipline": {
     title: "How to Build Discipline (Without Relying on Motivation)",
@@ -735,8 +689,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Keep the plan small\n" +
       "Fewer tasks, higher completion rate.\n\n" +
       "## Review and adjust weekly\n" +
-      "Use your weekly review to improve the system.\n\n" +
-      "Keywords: discipline, consistency, weekly planning\n",
+      "Use your weekly review to improve the system.\n\n"
   },
   "goal-planning-checklist": {
     title: "Goal Planning Checklist: Set, Plan, Track, Review",
@@ -748,8 +701,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Write strategy (why/who/no)\n" +
       "- Plan weekly priorities + tasks\n" +
       "- Track progress weekly\n" +
-      "- Review and adjust\n\n" +
-      "Keywords: goal planning, checklist, goal planner app\n",
+      "- Review and adjust\n\n"
   },
   "how-to-plan-around-obstacles": {
     title: "How to Plan Around Obstacles (Time, Energy, Distractions)",
@@ -760,8 +712,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Create a counter-plan\n" +
       "Obstacle: low energy → Counter: 10-minute minimum action.\n\n" +
       "## Store it in Lifeplans\n" +
-      "Use Strategy/Planning fields so it stays visible.\n\n" +
-      "Keywords: obstacles, planning, consistency\n",
+      "Use Strategy/Planning fields so it stays visible.\n\n"
   },
   "goal-setting-mistakes": {
     title: "10 Goal Setting Mistakes (and How to Fix Them)",
@@ -772,8 +723,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Plan weekly actions\n" +
       "- Track progress honestly\n" +
       "- Review weekly and adjust\n\n" +
-      "Goal Planner - Lifeplans is designed around these fixes: strategy + planning + progress.\n\n" +
-      "Keywords: goal setting mistakes, consistency, planning\n",
+      "Goal Planner - Lifeplans is designed around these fixes: strategy + planning + progress.\n\n"
   },
   "how-to-use-lifeplans-for-goals": {
     title: "How to Use Goal Planner - Lifeplans (Web + Mobile Workflow)",
@@ -785,8 +735,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "3) Update goal progress %\n" +
       "4) Review and adjust\n\n" +
       "## Strategy keeps it meaningful\n" +
-      "Write a short why/who/no so you don’t quit when it gets hard.\n\n" +
-      "Keywords: goal planner, weekly planning, progress tracking\n",
+      "Write a short why/who/no so you don’t quit when it gets hard.\n\n"
   },
   "goal-setting-for-beginners-step-by-step": {
     title: "Goal Setting for Beginners: Step-by-Step (With Examples)",
@@ -797,8 +746,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "2) Choose weeks or months\n" +
       "3) Add 1–3 weekly priorities\n" +
       "4) Track progress weekly\n\n" +
-      "Use Lifeplans to keep the system in one place on web and mobile.\n\n" +
-      "Keywords: beginner goals, goal planner app, weekly plan\n",
+      "Use Lifeplans to keep the system in one place on web and mobile.\n\n"
   },
   "how-to-set-goals-for-2026": {
     title: "How to Set Goals for 2026 (Quarterly + Weekly Plan)",
@@ -809,8 +757,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Step 2: Set a quarterly target\n" +
       "A 12-week goal is easier than a 12-month wish.\n\n" +
       "## Step 3: Plan weekly\n" +
-      "Weekly priorities + tasks are where results happen.\n\n" +
-      "Keywords: yearly goals, quarterly planning, weekly planning\n",
+      "Weekly priorities + tasks are where results happen.\n\n"
   },
   "how-to-set-goals-when-you-feel-lost": {
     title: "How to Set Goals When You Feel Lost",
@@ -820,8 +767,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "Example: try a routine, a course, or a project for one month.\n\n" +
       "## Track what you learn\n" +
       "Progress is clarity, not just results.\n\n" +
-      "Lifeplans works well for experiments because you can set short timeframes and review weekly.\n\n" +
-      "Keywords: unclear goals, experiment goals, motivation\n",
+      "Lifeplans works well for experiments because you can set short timeframes and review weekly.\n\n"
   },
   "how-to-stop-overplanning": {
     title: "How to Stop Overplanning and Start Doing",
@@ -830,8 +776,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use a 10-minute weekly plan\n" +
       "Pick priorities, add tasks, start.\n\n" +
       "## Make tasks startable\n" +
-      "If you can’t start it today, it’s too big.\n\n" +
-      "Keywords: overplanning, procrastination, weekly planning\n",
+      "If you can’t start it today, it’s too big.\n\n"
   },
   "goal-setting-for-adhd": {
     title: "Goal Setting for ADHD: Simple Systems That Work",
@@ -842,8 +787,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Track progress weekly\n" +
       "Weekly updates prevent all-or-nothing thinking.\n\n" +
       "## Use one place for planning\n" +
-      "Lifeplans combines goals, planning, and progress so you don’t lose the system.\n\n" +
-      "Keywords: ADHD planning, focus, habits\n",
+      "Lifeplans combines goals, planning, and progress so you don’t lose the system.\n\n"
   },
   "goal-setting-for-anxiety": {
     title: "Goal Setting for Anxiety: Gentle Planning Without Pressure",
@@ -852,8 +796,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Choose minimum actions\n" +
       "A plan you can do on a hard day is the best plan.\n\n" +
       "## Keep the week small\n" +
-      "One priority is enough.\n\n" +
-      "Keywords: anxiety, gentle goals, consistency\n",
+      "One priority is enough.\n\n"
   },
   "how-to-set-goals-for-business": {
     title: "How to Set Goals for Business Growth (Without Chaos)",
@@ -864,8 +807,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Define targets\n" +
       "Weekly outreach, publish cadence, sales calls.\n\n" +
       "## Review weekly\n" +
-      "Use Lifeplans Weekly Planning + History to improve your system.\n\n" +
-      "Keywords: business goals, targets, weekly planning\n",
+      "Use Lifeplans Weekly Planning + History to improve your system.\n\n"
   },
   "how-to-set-goals-for-content-creators": {
     title: "Goal Setting for Content Creators: Output + Process Targets",
@@ -873,8 +815,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "Creators win by combining output targets (posts/week) with process targets (sessions/week).\n\n" +
       "## Example\n" +
       "Goal: publish 12 posts in 12 weeks.\n" +
-      "Weekly plan: 3 writing sessions + 1 publish day.\n\n" +
-      "Keywords: content goals, consistency, weekly planning\n",
+      "Weekly plan: 3 writing sessions + 1 publish day.\n\n"
   },
   "how-to-set-goals-for-learning": {
     title: "How to Set Goals for Learning (Languages, Skills, Courses)",
@@ -883,8 +824,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Track leading indicators\n" +
       "Minutes practiced, lessons completed, conversations done.\n\n" +
       "## Plan weekly sessions\n" +
-      "Put sessions on your calendar, then track progress weekly in Lifeplans.\n\n" +
-      "Keywords: learning goals, language learning, weekly plan\n",
+      "Put sessions on your calendar, then track progress weekly in Lifeplans.\n\n"
   },
   "how-to-create-a-goal-roadmap": {
     title: "How to Create a Goal Roadmap (Milestones + Weekly Targets)",
@@ -894,8 +834,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "1) Milestones (3–5)\n" +
       "2) Next milestone\n" +
       "3) Weekly targets\n" +
-      "4) Tasks\n\n" +
-      "Keywords: goal roadmap, milestones, targets\n",
+      "4) Tasks\n\n"
   },
   "how-to-set-goals-with-a-full-time-job": {
     title: "How to Set Goals With a Full-Time Job (Realistic Weekly Planning)",
@@ -904,8 +843,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use fewer priorities\n" +
       "One priority can be enough for a busy week.\n\n" +
       "## Build a weekly rhythm\n" +
-      "Plan once, execute small tasks, review weekly.\n\n" +
-      "Keywords: busy schedule, weekly planning, productivity\n",
+      "Plan once, execute small tasks, review weekly.\n\n"
   },
   "how-to-make-goal-progress-visible": {
     title: "How to Make Goal Progress Visible (So You Don’t Quit)",
@@ -914,8 +852,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Use one progress metric\n" +
       "A simple percentage updated weekly is enough.\n\n" +
       "## Keep weekly history\n" +
-      "Your weekly plans become proof of progress.\n\n" +
-      "Keywords: progress tracking, motivation, goal planner\n",
+      "Your weekly plans become proof of progress.\n\n"
   },
   "daily-planner-app": {
     title: "Daily Planner App: A Simple System to Plan Your Day (and Stick to It)",
@@ -944,7 +881,6 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- Task 2 (5–20 min):\n" +
       "- Task 3 (optional):\n" +
       "- Notes (1 sentence):\n\n" +
-      "## Keywords\n" +
       "daily planner app, daily planning, stay organized, focus, time management, time blocking, track progress\n",
   },
   "daily-journal-app": {
@@ -965,7 +901,6 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "A growth mindset is the ability to learn from what happened, not judge yourself for it. Journaling turns ‘failure’ into feedback.\n\n" +
       "## 5) Combine journal + planner\n" +
       "The best system is both: plan the tasks, then reflect briefly. Planning helps you take action; journaling helps you improve the system.\n\n" +
-      "## Keywords\n" +
       "daily journal app, daily journal, daily routine, mindset, growth mindset, consistency, motivation, self improvement\n",
   },
 
@@ -982,8 +917,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## How to use quotes (without wasting time)\n" +
       "1) Pick one quote\n" +
       "2) Write one next action (15 minutes)\n" +
-      "3) Track it in your weekly plan and check in daily\n\n" +
-      "Keywords: best motivational quotes for daily life, motivation, consistency, daily routine\n",
+      "3) Track it in your weekly plan and check in daily\n\n"
   },
   "short-inspirational-quotes-to-start-your-day": {
     title: "Short Inspirational Quotes to Start Your Day (Morning Momentum)",
@@ -998,8 +932,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## A simple morning routine\n" +
       "- Pick 1–3 priorities\n" +
       "- Block 25 minutes\n" +
-      "- Do one task, then check in\n\n" +
-      "Keywords: short inspirational quotes to start your day, morning routine, focus\n",
+      "- Do one task, then check in\n\n"
   },
   "positive-quotes-to-stay-motivated-at-work": {
     title: "Positive Quotes to Stay Motivated at Work (Without Burnout)",
@@ -1014,8 +947,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Quick workday system\n" +
       "- One priority\n" +
       "- One 25–50 min focus block\n" +
-      "- One small review at end of day\n\n" +
-      "Keywords: positive quotes to stay motivated at work, productivity, time management\n",
+      "- One small review at end of day\n\n"
   },
   "motivational-life-quotes-for-students": {
     title: "Motivational Life Quotes for Students (Study Consistency)",
@@ -1029,8 +961,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## A simple weekly study plan\n" +
       "- 3–5 study sessions\n" +
       "- 1 review session\n" +
-      "- Track sessions, not feelings\n\n" +
-      "Keywords: motivational life quotes for students, study motivation, consistency\n",
+      "- Track sessions, not feelings\n\n"
   },
   "daily-encouragement-quotes-for-personal-growth": {
     title: "Daily Encouragement Quotes for Personal Growth (With a Tiny Action)",
@@ -1042,8 +973,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘Do the smallest version today.’\n" +
       "- ‘Progress is still progress.’\n\n" +
       "## One action to pair with a quote\n" +
-      "Write one sentence: ‘Today I will ______ for 10 minutes.’ Then do it.\n\n" +
-      "Keywords: daily encouragement quotes for personal growth, self improvement, habits\n",
+      "Write one sentence: ‘Today I will ______ for 10 minutes.’ Then do it.\n\n"
   },
   "inspirational-quotes-to-overcome-challenges": {
     title: "Inspirational Quotes to Overcome Challenges (Resilience + Next Step)",
@@ -1057,8 +987,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Reset framework\n" +
       "- Reduce scope for 7 days\n" +
       "- Choose one next action\n" +
-      "- Review weekly and adjust\n\n" +
-      "Keywords: inspirational quotes to overcome challenges, resilience, persistence\n",
+      "- Review weekly and adjust\n\n"
   },
   "best-quotes-for-positive-mindset-and-attitude": {
     title: "Best Quotes for Positive Mindset and Attitude (Daily Reset)",
@@ -1070,8 +999,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘Choose progress over perfection.’\n" +
       "- ‘Focus on the next step, not the whole staircase.’\n\n" +
       "## Practice: 60-second mindset reset\n" +
-      "Write: 1 priority, 1 task, 1 time block.\n\n" +
-      "Keywords: best quotes for positive mindset and attitude, positive mindset, growth mindset\n",
+      "Write: 1 priority, 1 task, 1 time block.\n\n"
   },
   "motivational-words-of-encouragement-for-teens": {
     title: "Motivational Words of Encouragement for Teens (Confidence + Consistency)",
@@ -1083,8 +1011,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘One small win today.’\n" +
       "- ‘Your future is built by routines.’\n\n" +
       "## Simple goal system\n" +
-      "Pick one goal, one weekly plan, and a daily check-in.\n\n" +
-      "Keywords: motivational words of encouragement for teens, self confidence, motivation\n",
+      "Pick one goal, one weekly plan, and a daily check-in.\n\n"
   },
   "short-success-quotes-for-daily-inspiration": {
     title: "Short Success Quotes for Daily Inspiration (Daily Focus)",
@@ -1096,8 +1023,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘Do the work.’\n" +
       "- ‘Progress wins.’\n\n" +
       "## Make success measurable\n" +
-      "Track one metric weekly and one habit daily.\n\n" +
-      "Keywords: short success quotes for daily inspiration, success quotes, focus\n",
+      "Track one metric weekly and one habit daily.\n\n"
   },
   "quotes-to-boost-self-confidence-and-courage": {
     title: "Quotes to Boost Self-Confidence and Courage (Action Builds Confidence)",
@@ -1111,8 +1037,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Confidence plan\n" +
       "- Choose one goal\n" +
       "- Schedule one focus block\n" +
-      "- Track one completed action\n\n" +
-      "Keywords: quotes to boost self-confidence and courage, courage quotes, confidence\n",
+      "- Track one completed action\n\n"
   },
   "positive-good-morning-quotes-for-a-productive-day": {
     title: "Positive Good Morning Quotes for a Productive Day (Morning Routine)",
@@ -1125,8 +1050,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## 10-minute morning routine\n" +
       "- 1 minute: review weekly priorities\n" +
       "- 8 minutes: begin a task\n" +
-      "- 1 minute: check in\n\n" +
-      "Keywords: positive good morning quotes for a productive day, good morning quotes, productivity\n",
+      "- 1 minute: check in\n\n"
   },
   "motivational-thoughts-for-achieving-goals": {
     title: "Motivational Thoughts for Achieving Goals (Systems > Mood)",
@@ -1139,8 +1063,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## The simplest goal system\n" +
       "- One goal\n" +
       "- One weekly plan\n" +
-      "- One daily check-in\n\n" +
-      "Keywords: motivational thoughts for achieving goals, goal achievement, planning\n",
+      "- One daily check-in\n\n"
   },
   "inspirational-quotes-for-women-in-career": {
     title: "Inspirational Quotes for Women in Career (Focus + Confidence)",
@@ -1151,8 +1074,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘Confidence comes from finishing.’\n" +
       "- ‘Small progress compounds.’\n\n" +
       "## Career momentum routine\n" +
-      "Pick one skill to build, one weekly target, and one focus block on your calendar.\n\n" +
-      "Keywords: inspirational quotes for women in career, career growth, focus\n",
+      "Pick one skill to build, one weekly target, and one focus block on your calendar.\n\n"
   },
   "best-quotes-to-stay-focused-and-motivated": {
     title: "Best Quotes to Stay Focused and Motivated (Distraction-Proof)",
@@ -1166,8 +1088,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Focus system\n" +
       "- One priority\n" +
       "- One time block\n" +
-      "- One review\n\n" +
-      "Keywords: best quotes to stay focused and motivated, focus quotes, motivation\n",
+      "- One review\n\n"
   },
   "encouraging-quotes-for-hard-times-and-struggles": {
     title: "Encouraging Quotes for Hard Times and Struggles (Keep Going)",
@@ -1178,8 +1099,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘You can restart today.’\n" +
       "- ‘One small win is enough.’\n\n" +
       "## Minimum-action week\n" +
-      "Pick a tiny version of your habit and do it daily for 7 days.\n\n" +
-      "Keywords: encouraging quotes for hard times and struggles, encouragement, resilience\n",
+      "Pick a tiny version of your habit and do it daily for 7 days.\n\n"
   },
   "daily-positive-affirmations-for-self-improvement": {
     title: "Daily Positive Affirmations for Self-Improvement (Pair With Action)",
@@ -1190,8 +1110,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘I can do hard things in small steps.’\n" +
       "- ‘I improve through consistency.’\n\n" +
       "## Action pairing\n" +
-      "After the affirmation, complete one 10‑minute task toward your goal.\n\n" +
-      "Keywords: daily positive affirmations for self-improvement, affirmations, self improvement\n",
+      "After the affirmation, complete one 10‑minute task toward your goal.\n\n"
   },
   "uplifting-quotes-to-start-your-day-right": {
     title: "Uplifting Quotes to Start Your Day Right (Energy + Focus)",
@@ -1204,8 +1123,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Start-right checklist\n" +
       "- 1 priority\n" +
       "- 1 focus block\n" +
-      "- 1 check-in\n\n" +
-      "Keywords: uplifting quotes to start your day right, uplifting quotes, morning motivation\n",
+      "- 1 check-in\n\n"
   },
   "motivational-quotes-for-personal-growth-journey": {
     title: "Motivational Quotes for Personal Growth Journey (Compounding Wins)",
@@ -1216,8 +1134,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘Consistency is self-respect.’\n" +
       "- ‘Small actions build big identity.’\n\n" +
       "## Weekly growth system\n" +
-      "Plan weekly, track progress, and review what worked.\n\n" +
-      "Keywords: motivational quotes for personal growth journey, personal growth, growth mindset\n",
+      "Plan weekly, track progress, and review what worked.\n\n"
   },
   "best-inspirational-quotes-for-leaders-and-teams": {
     title: "Best Inspirational Quotes for Leaders and Teams (Execution Culture)",
@@ -1228,8 +1145,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "- ‘What gets reviewed gets improved.’\n" +
       "- ‘One priority, one plan.’\n\n" +
       "## Team routine\n" +
-      "Weekly priorities → daily check-ins → weekly review.\n\n" +
-      "Keywords: best inspirational quotes for leaders and teams, leadership, team motivation\n",
+      "Weekly priorities → daily check-ins → weekly review.\n\n"
   },
   "quotes-about-persistence-and-never-giving-up": {
     title: "Quotes About Persistence and Never Giving Up (Keep Showing Up)",
@@ -1243,8 +1159,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
       "## Persistence checklist\n" +
       "- Make the plan smaller\n" +
       "- Track one win\n" +
-      "- Review weekly\n\n" +
-      "Keywords: quotes about persistence and never giving up, persistence, never give up\n",
+      "- Review weekly\n\n"
   },
   "weekly-planner-template": {
     title: "Weekly Planner Template: Priorities, Tasks, and a Weekly Review",
@@ -1293,6 +1208,7 @@ const ArticleDetails = () => {
 
   const supportingPillar = !pillar && generatedArticle ? getPillarForKeyword(generatedArticle.keyword) : undefined;
   const isSupporting = Boolean(!pillar && generatedArticle && supportingPillar);
+  const isGeneratedThin = Boolean(!pillar && generatedArticle && !supportingPillar);
   const canonicalPath = pillar
     ? `/articles/${pillar.slug}`
     : isSupporting
@@ -1327,7 +1243,7 @@ const ArticleDetails = () => {
                   title={`${article.title} | Lifeplans`}
                   description={extractDescription(article.body)}
                   canonicalPath={canonicalPath}
-                  noIndex={isSupporting}
+                  noIndex={isSupporting || isGeneratedThin}
                   jsonLd={jsonLd}
                 />
               );

@@ -106,8 +106,7 @@ const buildBody = (keyword: string) => {
     `- Tracking everything instead of one metric\n` +
     `- Doing too much in one week and burning out\n\n` +
     `## How Lifeplans helps\n` +
-    `Use Lifeplans to keep your goals, weekly plan, and progress tracking in one place. The key is consistency: small actions done repeatedly.\n\n` +
-    `Keywords: ${keyword}\n`
+    `Use Lifeplans to keep your goals, weekly plan, and progress tracking in one place. The key is consistency: small actions done repeatedly.\n`
   );
 };
 
