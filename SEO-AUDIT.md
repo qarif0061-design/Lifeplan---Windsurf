@@ -79,7 +79,14 @@ Search Console (93d, `sc-domain:goalplanner.io`) shows **both hosts ranking inde
 | `https://www.goalplanner.io/...` | 440 | 148 |
 | `https://goalplanner.io/...` | 228 | 103 |
 
-This splits link equity, CTR, and average position across two URL spaces and inflates the "not indexed" total. **Decision (made): canonical host = `https://goalplanner.io` (non-www).** Implemented: `vercel.json` now has a host-conditional permanent redirect `www.goalplanner.io/* → goalplanner.io/:path*` (first rule, before the article redirects). Sitemap, canonicals, and OG/Twitter tags all already emit `https://goalplanner.io`. After deploy + resubmit, run date shows ~668 rows toward ~330 with consolidated metrics. If the apex domain isn't deployed, the wildcard resolve in `vercel.json` will 301 before rewrites — verify once deployed.
+This splits link equity, CTR, and average position across two URL spaces and inflates the "not indexed" total. **Decision (made): canonical host = `https://goalplanner.io` (non-www).**
+
+**Deployed and verified live (2026-09-18):**
+- Vercel project `lifeplan-windsurf-79bn` (account `qarif0061-4961`) owns both domains. Old domain-level setting redirected apex → www (307).
+- Flipped via Vercel API: apex redirect removed, `www.goalplanner.io` now 301 → `goalplanner.io` (verified: apex 200, www 301).
+- `vercel.json` has a redundant host-conditional permanent redirect `www.goalplanner.io/* → goalplanner.io/:path*` as defense-in-depth.
+
+Sitemap, canonicals, and OG/Twitter tags all already emit `https://goalplanner.io`. Success gate: SC rows ~668 → ~330, www rows 440 → ~0.
 
 Severity: **HIGH** (data-confirmed).
 
@@ -90,7 +97,7 @@ Severity: **HIGH** (data-confirmed).
 2. **Prune the keyword-generated cluster**: `getGeneratedArticleBySlug` pages that don't map to a pillar → `noindex,follow`; strip "Keywords:" litter from all generated bodies; stop adding new keywords as pages.
 3. **Fix sitemap**: exclude redirect-source URLs, exclude robots-disallowed URLs, include all 1,064 pillar articles, fix the `${SITE}/weekly-planner` whitespace bug, add `lastmod` (from git/build time).
 4. **Reconcile robots.txt vs sitemap** for `/daily-planner`, `/daily-planner/history`, `/strategy`, `/social`.
-5. **Canonical host chosen: `https://goalplanner.io`** (non-www). `vercel.json` now 301s `www.goalplanner.io/*` → non-www (host-conditional, first rule). Resubmit sitemap in Search Console after deploy.
+5. **Canonical host chosen: `https://goalplanner.io`** (non-www). **DONE (2026-09-18)**: Vercel domain setting flipped (www→apex 301) on the owning account + `vercel.json` host-conditional 301 as defense. Verified live (apex 200, www 301). Sitemap resubmission pending Google's periodic re-fetch or manual resubmit.
 
 ### P1 — crawlability & indexation
 5. **Prerender the top pages** (homepage + pillar articles + `/articles` indexing page) so crawlers get real HTML without JS. Smallest viable: prerender at build time via `react-snap` or a `--prerender` list into `dist`, keeping SPA behavior for app routes.

@@ -67,7 +67,7 @@ Block/segment breakdown (clicks / impressions):
 
 Combined 668 rows vs. ~2,292 sitemap URLs → signals, authority, and CTR are being split across two host names.
 
-**Decision (2026-09-18): canonical host = `https://goalplanner.io` (non-www).** Implemented in `vercel.json` as a host-conditional permanent redirect (`www.goalplanner.io/:path*` → `https://goalplanner.io/:path*`, first rule). Sitemap, canonicals, and OG/Twitter tags already emit the apex host. After rollout, expect the 668 rows to consolidate toward ~330 and both CTR and avg position to improve.
+**Decision (2026-09-18): canonical host = `https://goalplanner.io` (non-www).** **Implemented & verified live:** Vercel project `lifeplan-windsurf-79bn` (account `qarif0061-4961`) had a domain-level apex→www redirect; flipped via API: apex now serves 200, `www.goalplanner.io` 301 → apex. `vercel.json` also carries a redundant host-conditional permanent redirect as defense-in-depth. Sitemap, canonicals, and OG/Twitter tags already emit the apex host. Expect the 668 rows to consolidate toward ~330 and both CTR and avg position to improve.
 
 ## Top queries by impressions (SC, 93 days)
 
