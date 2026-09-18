@@ -49,17 +49,26 @@ const buildUrlset = (urls) => {
   );
 };
 
-const readRobotsDisallowed = () => {
+const readRobotsRules = () => {
   const robotsPath = path.join(ROOT, "public", "robots.txt");
   const raw = fs.readFileSync(robotsPath, "utf8");
-  const disallowed = [];
-  const re = /^\s*Disallow:\s*(\S+)/gm;
+  const rules = [];
+  const re = /^\s*(Allow|Disallow):\s*([^\s#]*)/gm;
   let m;
   // eslint-disable-next-line no-cond-assign
   while ((m = re.exec(raw))) {
-    disallowed.push(m[1]);
+    const rule = m[2].replace(/\/+$/, "");
+    if (rule !== "" && rule !== "/") rules.push({ type: m[1], path: rule });
   }
-  return disallowed.filter((d) => d !== "/" && d.length > 1).map((d) => d.replace(/\/+$/, ""));
+  return rules;
+};
+
+const isRobotsBlocked = (pathname, rules) => {
+  const clean = pathname.replace(/\/+$/, "");
+  const matches = rules.filter((rule) => clean === rule.path || clean.startsWith(rule.path + "/") || clean.startsWith(rule.path));
+  if (matches.length === 0) return false;
+  matches.sort((a, b) => b.path.length - a.path.length);
+  return matches[0].type === "Disallow";
 };
 
 const readRedirectSources = () => {
@@ -72,13 +81,13 @@ const readRedirectSources = () => {
 };
 
 const main = () => {
-  const robotsDisallowed = readRobotsDisallowed();
+  const robotsRules = readRobotsRules();
   const redirectSources = readRedirectSources();
 
   const isIndexablePath = (pathname) => {
     const clean = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
     if (redirectSources.includes(clean.replace(/^\//, ""))) return false;
-    return !robotsDisallowed.some((d) => clean === d || clean.startsWith(`${d}/`));
+    return !isRobotsBlocked(clean, robotsRules);
   };
 
   const basePages = [
