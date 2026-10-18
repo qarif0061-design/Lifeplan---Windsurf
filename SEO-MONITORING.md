@@ -96,3 +96,21 @@ Use the gcloud ADC profile documented in the SEO audit's "Access" section.
 2. CTR ≥ 3% (from 1.5%) and avg position ≤ 20.
 3. Indexed pages grow toward 2,000+ while Not-indexed shrinks from 3,066.
 4. AI Assistant traffic continues to grow; organic users/month trend up.
+
+## Indexing audit (2026-09-18)
+
+Re-checked live. Findings:
+
+- **Sitemap is healthy**: `https://goalplanner.io/sitemap.xml` serves exactly **1,212 apex-host URLs** (0 `www.` entries, 0 non-https). Generated keyword pages (thin, `noindex`) are correctly excluded; only base pages + static articles + pillars are included (see `scripts/generate-sitemap.mjs`).
+- **SC sitemap row is STALE**: SC reports `submitted=2292 indexed=0` for `https://goalplanner.io/sitemap.xml`. That is the old pre-cleanup sitemap (2,292 URLs). The served file is 1,212. `indexed=0` is the SC index-recheck lag, not a real value. Action: re-submit the sitemap once write access is available (or click "Resubmit" in SC UI). This should converge SC's doc count to the live 1,212.
+- **Indexed vs not-indexed (SC Indexing report)**: 1,110 indexed / 3,066 not-indexed. Live sitemap is 1,212 URLs, so indexed coverage of the intentional indexable surface is **~91%**. The 3,066 "not indexed" are dominated by legacy/removed URLs (old keyword-dump pages that are now `noindex` or deleted, www duplicates now 301'd, pre-cleanup slugs) — the count will trend down as Google recrawls.
+- **Raw shell limitation (confirmed live)**: every route (`/articles/*`, `/pricing`, `/about`, `/productivity`, …) returns the identical 3.9 KB `index.html` SPA shell with the homepage `<title>`, homepage `canonical`, and homepage OG tags, until client JS runs. `Seo.tsx` corrects all tags client-side (Googlebot's JS-rendering path is fine — that's why 1,110 pages index), but **non-JS crawlers and social/link scrapers (LinkedIn, X, WhatsApp, Discord) see every URL as the homepage** — wrong title, wrong preview, homepage canonical. This is the single biggest indexability risk remaining. Fix path: build-time prerender of per-route HTML shells (title/canonical/description/OG/JSON-LD) so every served route exposes its own document identity without JS.
+- **Missing-from-SC sitemap URLs**: 768 of 1,212 sitemap URLs have zero SC impressions in 93 days (749 `/articles/*`, 19 top-level e.g. `/pricing`, `/terms`, `/about`, `/productivity`, `/weekly-planning`, `/goal-setting`, `/vision-board`). These are indexed-but-no-impressions (authority/ranking gap), not indexing failures — they also include recently removed/rebuilt pages. Prioritize internal linking + prerender meta for the top-level pages.
+- **Live checks**: www → apex 301 verified (followed to `https://goalplanner.io/...` 200). Article canonical/title correct only after JS (see raw-shell note).
+
+### Indexing-action checklist (next snapshot gates)
+
+- [ ] Prerender per-route shell HTML at build (title/canonical/description/OG + JSON-LD) so non-JS requests expose real document identity.
+- [ ] Re-submit sitemap in SC UI (or obtain `webmasters` write scope and POST `/sitemaps`) so submitted count reflects 1,212.
+- [ ] Confirm SC "Not indexed" bucket falls as legacy/removed URLs recrawl; watch for the 19 top-level pages earning impressions.
+- [ ] Keep canonical host apex-only; monitor www rows → 0.

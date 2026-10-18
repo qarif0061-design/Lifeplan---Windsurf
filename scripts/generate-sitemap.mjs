@@ -19,6 +19,19 @@ const readStaticArticleSlugs = () => {
   return Array.from(new Set(slugs)).sort();
 };
 
+const readRoleSlugs = () => {
+  const rolePath = path.join(ROOT, "src", "pages", "roleArticlesData.ts");
+  const raw = fs.readFileSync(rolePath, "utf8");
+  const slugs = [];
+  const re = /\bslug:\s*"([a-z0-9-]+)"/g;
+  let m;
+  // eslint-disable-next-line no-cond-assign
+  while ((m = re.exec(raw))) {
+    slugs.push(m[1]);
+  }
+  return Array.from(new Set(slugs)).sort();
+};
+
 const readPillarSlugs = () => {
   const pillarsPath = path.join(ROOT, "src", "seo", "pillars.ts");
   const raw = fs.readFileSync(pillarsPath, "utf8");
@@ -165,7 +178,8 @@ const main = () => {
 
   const staticSlugs = readStaticArticleSlugs();
   const pillarSlugs = readPillarSlugs();
-  const articleSlugs = Array.from(new Set([...staticSlugs, ...pillarSlugs])).sort();
+  const roleSlugs = readRoleSlugs();
+  const articleSlugs = Array.from(new Set([...staticSlugs, ...pillarSlugs, ...roleSlugs])).sort();
   const articleUrls = articleSlugs.map((s) => `${SITE}/articles/${s}`);
 
   const xml = buildUrlset([...basePages, ...articleUrls]);

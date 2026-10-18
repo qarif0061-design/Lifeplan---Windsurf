@@ -5,6 +5,7 @@ import Seo from "@/components/Seo";
 import { getGeneratedArticleBySlug } from "@/seo/articles";
 import { getPillarBySlug, getPillarForKeyword, getPillarUrl } from "@/seo/pillars";
 import { SEO_ARTICLES } from "./seoArticles";
+import { ROLE_ARTICLES } from "./roleArticles";
 
 const URL_RE = /(https?:\/\/[^\s)\]]+)/g;
 
@@ -1197,6 +1198,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
 };
 
 Object.assign(CONTENT, SEO_ARTICLES);
+Object.assign(CONTENT, ROLE_ARTICLES);
 
 const ArticleDetails = () => {
   const { slug } = useParams();

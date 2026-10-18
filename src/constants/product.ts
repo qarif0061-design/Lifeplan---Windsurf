@@ -30,6 +30,10 @@ export interface PricingTier {
   revenueCatPackageType: 'MONTHLY' | 'ANNUAL' | 'LIFETIME';
   /** True for a one-time, non-recurring purchase (no renewal, no cancellation). */
   isOneTime: boolean;
+  /** Apple App Store Connect product identifier for this tier (mobile/iOS). */
+  iosProductId: string;
+  /** Google Play Console product identifier for this tier (mobile/Android). */
+  androidProductId: string;
 }
 
 export const PRICING_TIERS: readonly PricingTier[] = [
@@ -40,6 +44,8 @@ export const PRICING_TIERS: readonly PricingTier[] = [
     period: '/month',
     revenueCatPackageType: 'MONTHLY',
     isOneTime: false,
+    iosProductId: 'lifeplan_499_1m',
+    androidProductId: 'monthyly_499',
   },
   {
     id: 'annual',
@@ -49,6 +55,8 @@ export const PRICING_TIERS: readonly PricingTier[] = [
     badge: 'Best Value',
     revenueCatPackageType: 'ANNUAL',
     isOneTime: false,
+    iosProductId: 'lifeplan_4999_1y',
+    androidProductId: 'yearly_4999',
   },
   {
     id: 'lifetime',
@@ -58,6 +66,8 @@ export const PRICING_TIERS: readonly PricingTier[] = [
     badge: 'Pay Once',
     revenueCatPackageType: 'LIFETIME',
     isOneTime: true,
+    iosProductId: 'lifeplans_7999_permanent',
+    androidProductId: 'permanent_lifeplans',
   },
 ] as const;
 
@@ -65,6 +75,17 @@ export const DEFAULT_PRICING_TIER: PricingTierId = 'annual';
 
 export const getPricingTier = (id: PricingTierId): PricingTier =>
   PRICING_TIERS.find((t) => t.id === id) ?? PRICING_TIERS[0];
+
+// ─── WEBSITE CHECKOUT URLs ─────────────────────────────────────
+// LemonSqueezy checkout links, one per paid tier. Website-specific (RevenueCat
+// product IDs live in the mobile app and are resolved by package type — MONTHLY /
+// ANNUAL / LIFETIME — instead of a URL). Add each new product/variant's checkout
+// URL here so the paywall stays driven by this single source of truth.
+export const LEMONSQUEEZY_CHECKOUT_URLS: Partial<Record<PricingTierId, string>> = {
+  monthly: "https://goalplanner.lemonsqueezy.com/checkout/buy/3238ac26-b73d-418a-9dca-ac2b19e19e30",
+  annual: "https://goalplanner.lemonsqueezy.com/checkout/buy/eac8789a-88f9-48af-83a7-9478da85619a",
+  lifetime: "https://goalplanner.lemonsqueezy.com/checkout/buy/8bde4ae7-c242-475b-b4b5-55b64a92cf3f",
+};
 
 // Legacy aliases — a handful of older screens/content still read these directly.
 // They now resolve to the monthly tier so nothing breaks; prefer PRICING_TIERS in new code.
@@ -108,9 +129,9 @@ export type CheckpointKind = 'boolean' | 'number';
 export type PlanStatus = 'active' | 'completed' | 'reviewed';
 
 // ─── SHARING ─────────────────────────────────────────────────
-export type ShareType = 'daily' | 'weekly' | 'goal' | 'month' | 'year' | 'achievement';
+export type ShareType = 'daily' | 'weekly' | 'goal' | 'month' | 'year' | 'achievement' | 'story';
 
-export const SHARE_TYPES: readonly ShareType[] = ['daily', 'weekly', 'goal', 'month', 'year', 'achievement'];
+export const SHARE_TYPES: readonly ShareType[] = ['daily', 'weekly', 'goal', 'month', 'year', 'achievement', 'story'];
 
 export const SHARE_IMAGE_WIDTH = 800;
 export const SHARE_IMAGE_HEIGHT_DEFAULT = 500;

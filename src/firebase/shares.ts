@@ -53,6 +53,16 @@ export interface ShareData {
 
   currentStreak?: number;
 
+  // Goal Progress Story shares
+  storyChapter?: string;
+  storyStartTitle?: string;
+  storyMilestones?: { label: string; completed: boolean }[];
+  storyActions?: string[];
+  storyAchievement?: string;
+  storyResult?: string;
+  goalStartedAt?: string;
+  goalCompletedAt?: string;
+
   // Snapshot of the source goal's structure, captured at share-creation time so
   // "Copy this goal" can clone it without needing read access to the (private)
   // original goals/{goalId} doc.
@@ -90,6 +100,40 @@ export const buildGoalShareData = (
   // Firestore rejects `undefined` field values, so only attach these when present.
   ...(goalStructure?.category ? { goalCategory: goalStructure.category } : {}),
   ...(goalStructure?.checkpoints ? { goalCheckpoints: goalStructure.checkpoints } : {}),
+});
+
+/**
+ * Build share data for a Goal Progress Story card (website).
+ * Mirrors mobile `buildGoalStoryData` in services/sharing.ts.
+ */
+export const buildGoalStoryData = (
+  goalName: string,
+  progress: number,
+  completed: number,
+  total: number,
+  opts: {
+    chapter?: string;
+    startTitle?: string;
+    milestones?: { label: string; completed: boolean }[];
+    actions?: string[];
+    achievement?: string;
+    result?: string;
+    startedAt?: string;
+    completedAt?: string;
+  } = {},
+): ShareData => ({
+  goalName,
+  goalProgress: progress,
+  completedActions: completed,
+  totalActions: total,
+  ...(opts.chapter ? { storyChapter: opts.chapter } : {}),
+  ...(opts.startTitle ? { storyStartTitle: opts.startTitle } : {}),
+  ...(opts.milestones?.length ? { storyMilestones: opts.milestones } : {}),
+  ...(opts.actions?.length ? { storyActions: opts.actions } : {}),
+  ...(opts.achievement ? { storyAchievement: opts.achievement } : {}),
+  ...(opts.result ? { storyResult: opts.result } : {}),
+  ...(opts.startedAt ? { goalStartedAt: opts.startedAt } : {}),
+  ...(opts.completedAt ? { goalCompletedAt: opts.completedAt } : {}),
 });
 
 // ─── HELPERS ──────────────────────────────────────────────────

@@ -4,17 +4,8 @@ import { useUser } from "@/contexts/UserContext";
 import { useAuthModal } from "@/contexts/AuthModalContext";
 import HelpDialog from "@/components/HelpDialog";
 import Layout from "@/components/Layout";
-import { FREE_GOAL_LIMIT, PRICING_TIERS, PREMIUM_FEATURES, type PricingTierId } from "@/constants/product";
+import { FREE_GOAL_LIMIT, PRICING_TIERS, PREMIUM_FEATURES, LEMONSQUEEZY_CHECKOUT_URLS, type PricingTierId } from "@/constants/product";
 import { showError } from "@/utils/toast";
-
-// LemonSqueezy checkout links, one per paid tier. Website-specific (RevenueCat product
-// IDs live in the mobile app instead) — not moved into constants/product.ts because
-// that file is shared with mobile, which has no use for a LemonSqueezy URL.
-// Annual and Lifetime aren't wired yet: create those two products/variants in the
-// LemonSqueezy dashboard, then drop their checkout URLs in here.
-const CHECKOUT_LINKS: Partial<Record<PricingTierId, string>> = {
-  monthly: "https://goalplanner.lemonsqueezy.com/checkout/buy/1941520?enabled=1242156",
-};
 
 const Pricing = () => {
   const { isPremium, user } = useUser();
@@ -33,7 +24,7 @@ const Pricing = () => {
       return;
     }
     if (isPremium) return;
-    const link = CHECKOUT_LINKS[tierId];
+    const link = LEMONSQUEEZY_CHECKOUT_URLS[tierId];
     if (!link) {
       showError("This plan isn't available on the website yet — try Monthly, or get it in the mobile app.");
       return;

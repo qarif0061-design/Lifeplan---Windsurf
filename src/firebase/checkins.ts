@@ -26,6 +26,31 @@ export type UpsertDailyCheckInInput = Omit<DailyCheckIn, "id" | "createdAt" | "u
 
 const checkinsCollection = collection(db, "checkins");
 
+type StoredCheckIn = Omit<DailyCheckIn, "id" | "date" | "hydration" | "healthyEating" | "exercise"> & {
+  date?: string;
+  dateKey?: string;
+  hydration?: boolean | { done?: boolean };
+  healthyEating?: boolean | { done?: boolean };
+  exercise?: boolean | { done?: boolean };
+};
+
+const completed = (value: StoredCheckIn["hydration"]): boolean =>
+  typeof value === "boolean" ? value : value?.done === true;
+
+// Mobile stores each habit as { done, notes? }; older website documents used booleans.
+// Keep the web-facing model simple while accepting both representations during rollout.
+const fromStoredCheckIn = (id: string, data: StoredCheckIn): DailyCheckIn => ({
+  id,
+  userId: data.userId,
+  date: data.date ?? data.dateKey ?? id.slice(data.userId.length + 1),
+  hydration: completed(data.hydration),
+  healthyEating: completed(data.healthyEating),
+  exercise: completed(data.exercise),
+  notes: data.notes,
+  createdAt: data.createdAt,
+  updatedAt: data.updatedAt,
+});
+
 const omitUndefined = <T extends Record<string, unknown>>(obj: T): Partial<T> => {
   const out: Partial<T> = {};
   for (const [k, v] of Object.entries(obj)) {
@@ -41,12 +66,15 @@ export const upsertDailyCheckIn = async (input: UpsertDailyCheckInInput): Promis
   const id = `${input.userId}_${input.date}`;
   const ref = doc(db, "checkins", id);
 
-  const payload: Omit<DailyCheckIn, "id"> = {
+  const payload = {
     userId: input.userId,
     date: input.date,
-    hydration: input.hydration,
-    healthyEating: input.healthyEating,
-    exercise: input.exercise,
+    // This is the canonical cross-platform shape. The web normalizes it back to
+    // booleans for its existing UI, while mobile can retain per-habit notes.
+    dateKey: input.date,
+    hydration: { done: input.hydration },
+    healthyEating: { done: input.healthyEating },
+    exercise: { done: input.exercise },
     notes: input.notes,
     createdAt: now,
     updatedAt: now,
@@ -62,10 +90,7 @@ export const subscribeCheckInsByUser = (
 ): (() => void) => {
   const q = query(checkinsCollection, where("userId", "==", userId), orderBy("date", "desc"));
   return onSnapshot(q, (snapshot) => {
-    const checkIns: DailyCheckIn[] = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...(d.data() as Omit<DailyCheckIn, "id">),
-    }));
+    const checkIns = snapshot.docs.map((d) => fromStoredCheckIn(d.id, d.data() as StoredCheckIn));
     callback(checkIns);
   });
 };

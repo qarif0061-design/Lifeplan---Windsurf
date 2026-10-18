@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import { UserProvider } from "@/contexts/UserContext";
 import { AuthModalProvider } from "@/contexts/AuthModalContext";
 import AuthModal from "@/components/AuthModal";
+import CookieConsent from "@/components/CookieConsent";
 import RememberMeRedirect from "@/components/RememberMeRedirect";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -211,6 +212,7 @@ function App() {
           </Routes>
           <Toaster />
           <AuthModal />
+          <CookieConsent />
         </RememberMeRedirect>
         </AuthModalProvider>
       </Router>

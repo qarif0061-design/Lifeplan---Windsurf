@@ -23,8 +23,9 @@ import {
 import { useUser } from "@/contexts/UserContext";
 import { createGoal, deleteGoal, getGoalById, updateGoal } from "@/firebase/goals";
 import { updateFeaturedGoalId } from "@/firebase/users";
-import { generateShareCard, shareImage, type CardData } from "@/utils/shareCard";
-import { createShare as saveShareRecord, buildGoalShareData } from "@/firebase/shares";
+import { generateShareCard, generateStoryShareCard, shareImage, type CardData } from "@/utils/shareCard";
+import { createShare as saveShareRecord, buildGoalShareData, buildGoalStoryData } from "@/firebase/shares";
+import { buildGoalStory } from "@/utils/goalStory";
 import type { Goal, GoalCheckpoint, GoalTodo, Priority } from "@/types";
 import { showError, showSuccess } from "@/utils/toast";
 import { calculateProgress } from "@/utils/progress";
@@ -837,6 +838,55 @@ const GoalDetails = () => {
     } catch {}
   };
 
+  const shareGoalStoryCard = async () => {
+    if (!goal || !user) return;
+    try {
+      const cps = goal.checkpoints ?? [];
+      const completed = cps.filter((c) => c.completed).length;
+      const total = cps.length;
+      const story = buildGoalStory(
+        {
+          name: goal.name,
+          description: goal.description,
+          progress: goal.progress,
+          startDate: goal.startDate,
+          endDate: goal.endDate,
+          whyMatters: goal.strategy?.whyMatters,
+          completedActions: cps.map((c) => ({ title: c.title || "", completed: !!c.completed })),
+          milestones: cps.map((c) => ({ label: c.title || "", completed: !!c.completed })),
+        },
+        {
+          startedAt: goal.startDate,
+          completedAt: goal.status === "completed" ? goal.updatedAt : undefined,
+        },
+      );
+      const blob = await generateStoryShareCard({
+        goalName: goal.name,
+        chapter: story.chapter,
+        startTitle: story.startTitle,
+        progress: goal.progress,
+        completedActions: completed,
+        totalActions: total,
+        milestones: story.milestones,
+        actions: story.actions,
+        achievement: story.achievement,
+        result: story.result,
+        startedAt: story.startedAt,
+        completedAt: story.completedAt,
+        userName: user.displayName || user.email,
+      });
+      await shareImage(blob, `goal-story-${goal.id}.png`);
+      const shareData = buildGoalStoryData(goal.name, goal.progress, completed, total, story);
+      await saveShareRecord(
+        user.uid,
+        'story',
+        `${goal.name} — My Goal Story`,
+        shareData,
+        story.achievement,
+      );
+    } catch {}
+  };
+
   const handleDuplicateGoal = async () => {
     if (!goal) return;
     try {
@@ -1134,8 +1184,12 @@ const GoalDetails = () => {
                   <Copy className="w-4 h-4 mr-2" /> Duplicate
                 </Button>
 
-                <Button variant="outline" className="rounded-full" onClick={shareGoalCard}>
-                  <Share2 className="w-4 h-4 mr-2" /> Share
+                <Button variant="outline" className="rounded-full" onClick={shareGoalStoryCard} title="Share progress as a Goal Story">
+                  <Share2 className="w-4 h-4 mr-2" /> Share Story
+                </Button>
+
+                <Button variant="outline" className="rounded-full" onClick={shareGoalCard} title="Share a progress card">
+                  <Share2 className="w-4 h-4 mr-2" /> Share Card
                 </Button>
 
                 <Button

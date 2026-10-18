@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { PILLARS } from "@/seo/pillars";
+import { ROLE_ARTICLES } from "./roleArticles";
 
 type Article = {
   slug: string;
@@ -566,9 +567,20 @@ const PILLAR_LISTING: Article[] = PILLARS.map((p) => ({
   topics: p.topics,
 }));
 
+const ROLE_LISTING: Article[] = Object.entries(ROLE_ARTICLES).map(([slug, a]) => {
+  const firstBlock = a.body.split("\n\n")[0] ?? "";
+  const excerpt = firstBlock.length > 140 ? `${firstBlock.slice(0, 137)}...` : firstBlock;
+  return {
+    slug,
+    title: a.title,
+    excerpt,
+    topics: ["goal_planning", "targets"],
+  };
+});
+
 const ARTICLES: Article[] = (() => {
   const bySlug = new Map<string, Article>();
-  [...STATIC_ARTICLES, ...PILLAR_LISTING].forEach((a) => {
+  [...STATIC_ARTICLES, ...PILLAR_LISTING, ...ROLE_LISTING].forEach((a) => {
     if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
   });
   return Array.from(bySlug.values());

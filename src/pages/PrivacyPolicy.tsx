@@ -117,6 +117,24 @@ const PrivacyPolicy = () => {
               <li>Display relevant advertisements</li>
               <li>Improve user experience</li>
             </ul>
+            <p className="mt-4">
+              Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this
+              website or other websites. Google's use of advertising cookies enables it and its partners to serve ads
+              to you based on your visit to this site and/or other sites on the Internet. You may opt out of
+              personalized advertising by visiting{" "}
+              <a
+                href="https://adssettings.google.com"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary underline"
+              >
+                Google Ads Settings
+              </a>
+              . Users in the European Economic Area, the UK, and Switzerland are shown a consent request before any
+              non-essential cookies or personalized ads are set, in line with Google's EU User Consent Policy. You can
+              change your consent choice at any time via that banner or by clearing your browser's site data for this
+              domain.
+            </p>
           </section>
 
           <section>
