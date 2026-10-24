@@ -4,6 +4,18 @@ import Seo from "@/components/Seo";
 import NotFound from "./NotFound";
 import { resolveArticle, getArticleTitle, ARTICLE_AUTHOR, ARTICLE_DATES, SITE_URL } from "@/seo/articleIndex";
 import { prepareBody, renderMarkdown, summarize } from "@/seo/markdown";
+import { SMART_GOALS_HUB_SLUGS } from "@/seo/smartGoalsHub";
+
+const SMART_HUB_ANCHORS = [
+  "SMART goals guide",
+  "complete guide to SMART goals",
+  "what SMART goals are",
+  "SMART goals: meaning, examples and template",
+  "how to write SMART goals",
+];
+const isSmartGoalArticle = (slug: string) => SMART_GOALS_HUB_SLUGS.has(slug) || /(^|-)smart(er|t)?(-|$)/.test(slug);
+const smartHubAnchor = (slug: string) =>
+  SMART_HUB_ANCHORS[[...slug].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7) % SMART_HUB_ANCHORS.length];
 
 const formatDate = (iso: string) =>
   new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -81,6 +93,13 @@ const ArticleDetails = () => {
             {" · "}Updated <time dateTime={ARTICLE_DATES.updated}>{formatDate(ARTICLE_DATES.updated)}</time>
           </p>
         </header>
+
+        {isSmartGoalArticle(article.slug) && (
+          <aside className="rounded-2xl border border-primary/20 bg-primary/5 px-5 py-3 text-sm text-foreground/80">
+            Part of our <Link to="/smart-goals" className="font-medium underline hover:text-primary">{smartHubAnchor(article.slug)}</Link>
+            {" "}- the letters explained, a free template and 20 examples.
+          </aside>
+        )}
 
         {article.kind === "generated" && article.supportingPillar && (
           <SupportingCard pillarSlug={article.supportingPillar.slug} pillarTitle={article.supportingPillar.title} />

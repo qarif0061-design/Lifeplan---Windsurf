@@ -88,11 +88,6 @@
       "permanent": true
     },
     {
-      "source": "/smart-goals",
-      "destination": "/articles/smart-goals-template-and-examples-2026",
-      "permanent": true
-    },
-    {
       "source": "/motivation",
       "destination": "/articles/best-motivational-quotes-2026",
       "permanent": true
@@ -1869,7 +1864,7 @@
     },
     {
       "source": "/articles/smart-goals",
-      "destination": "/articles/smart-goals-template-and-examples-2026",
+      "destination": "/smart-goals",
       "permanent": true
     },
     {
