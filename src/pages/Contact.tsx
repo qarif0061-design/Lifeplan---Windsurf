@@ -6,7 +6,7 @@ const Contact = () => {
     <PublicPageLayout>
       <Seo
         title="Contact Goal Planner Lifeplans | Support & Inquiries | GoalPlanner.io"
-        description="Contact Goal Planner – Lifeplans for support, feedback, and inquiries. Email us at shumailasahervu@gmail.com. Response within 24-48 hours."
+        description="Contact Goal Planner – Lifeplans for support, feedback, and inquiries. Email us at info@goalplanner.io. Response within 24-48 hours."
         canonicalPath="/contact"
         jsonLd={{
           "@context": "https://schema.org",
@@ -33,8 +33,8 @@ const Contact = () => {
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">Email Support</h3>
                 <p className="text-muted-foreground">For general inquiries, technical support, or feedback:</p>
-                <a href="mailto:shumailasahervu@gmail.com" className="text-primary hover:text-primary/80 font-medium">
-                  shumailasahervu@gmail.com
+                <a href="mailto:info@goalplanner.io" className="text-primary hover:text-primary/80 font-medium">
+                  info@goalplanner.io
                 </a>
               </div>
               
@@ -126,7 +126,7 @@ const Contact = () => {
             
             <div className="bg-card border border-border rounded-lg p-6">
               <h3 className="text-lg font-semibold text-foreground mb-3">Do you offer refunds?</h3>
-              <p className="text-muted-foreground">We offer a 14-day money-back guarantee for new subscriptions. Please review our Refund Policy for complete details.</p>
+              <p className="text-muted-foreground">If you were billed in error or a technical problem stopped you from using Premium features, email info@goalplanner.io and we will review your request. See our Refund Policy for the full details.</p>
             </div>
           </div>
         </section>

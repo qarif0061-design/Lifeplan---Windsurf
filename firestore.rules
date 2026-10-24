@@ -180,7 +180,15 @@ service cloud.firestore {
         );
       }
 
-      allow read: if isInviter() || isPartner();
+      // Read is granted to the inviter, the partner (once claimed), or anyone whom a
+      // pending invite is addressed to (partnerEmail == the caller's verified email,
+      // regardless of partnerId) so that single-field `partnerEmail` queries used to
+      // claim invites are provably in-scope for the rules engine.
+      allow read: if signedIn() && (
+        resource.data.inviterId == request.auth.uid ||
+        resource.data.partnerId == request.auth.uid ||
+        resource.data.partnerEmail == request.auth.token.email.lower()
+      );
       allow create: if signedIn() && request.resource.data.inviterId == request.auth.uid;
       allow update: if isInviter() || isPartner();
       allow delete: if isInviter();
@@ -229,6 +237,17 @@ service cloud.firestore {
         allow update: if signedIn() && request.auth.uid == uid;
         allow delete: if signedIn() && request.auth.uid == uid;
       }
+    }
+
+    // Collection-group access for `participants` subcollections. The mobile app
+    // queries `collectionGroup('participants')` to find the challenges a user has
+    // joined; without a recursive-wildcard match the rules engine denies ANY or all
+    // collection-group crossing (blanket "Missing or insufficient permissions").
+    match /{path=**}/participants/{uid} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.auth.uid == uid && request.resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && request.auth.uid == uid;
+      allow delete: if signedIn() && request.auth.uid == uid;
     }
 
     // Analytics — write-only telemetry via logEvent(). Never client-readable.

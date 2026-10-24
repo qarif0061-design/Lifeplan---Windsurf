@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { PILLARS } from "@/seo/pillars";
+import { ROLE_ARTICLES } from "./roleArticles";
 
 type Article = {
   slug: string;
@@ -122,7 +123,7 @@ const STATIC_ARTICLES: Article[] = [
   {
     slug: "smart-goals-complete-guide",
     title: "SMART Goals: The Complete Guide (2026)",
-    excerpt: "Master SMART goals: what they are, why they work, 50+ examples, and how to use them with GoalPath for real results.",
+    excerpt: "Master SMART goals: what they are, why they work, 50+ examples, and how to use them with Lifeplans for real results.",
     topics: ["goal_planning", "targets"],
   },
   {
@@ -134,7 +135,7 @@ const STATIC_ARTICLES: Article[] = [
   {
     slug: "best-goal-tracking-apps-2026",
     title: "Best Goal Tracking Apps in 2026 (Ranked)",
-    excerpt: "Compare the top goal tracking apps of 2026. Features, pricing, and why GoalPath is the #1 choice for serious achievers.",
+    excerpt: "Compare the top goal tracking apps of 2026. Features, pricing, and why Lifeplans is the #1 choice for serious achievers.",
     topics: ["goal_planning", "productivity"],
   },
   {
@@ -152,7 +153,7 @@ const STATIC_ARTICLES: Article[] = [
   {
     slug: "how-to-track-goals-online",
     title: "How to Track Your Goals Online (Free Tools + Apps)",
-    excerpt: "Discover the best free tools and apps for online goal tracking, plus how GoalPath simplifies the entire process.",
+    excerpt: "Discover the best free tools and apps for online goal tracking, plus how Lifeplans simplifies the entire process.",
     topics: ["targets", "productivity"],
   },
   {
@@ -566,9 +567,20 @@ const PILLAR_LISTING: Article[] = PILLARS.map((p) => ({
   topics: p.topics,
 }));
 
+const ROLE_LISTING: Article[] = Object.entries(ROLE_ARTICLES).map(([slug, a]) => {
+  const firstBlock = a.body.split("\n\n")[0] ?? "";
+  const excerpt = firstBlock.length > 140 ? `${firstBlock.slice(0, 137)}...` : firstBlock;
+  return {
+    slug,
+    title: a.title,
+    excerpt,
+    topics: ["goal_planning", "targets"],
+  };
+});
+
 const ARTICLES: Article[] = (() => {
   const bySlug = new Map<string, Article>();
-  [...STATIC_ARTICLES, ...PILLAR_LISTING].forEach((a) => {
+  [...STATIC_ARTICLES, ...PILLAR_LISTING, ...ROLE_LISTING].forEach((a) => {
     if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
   });
   return Array.from(bySlug.values());

@@ -145,7 +145,7 @@ const OnlineGoalPlanner = () => {
             <h2 className="text-3xl font-bold text-foreground text-center mb-12">Frequently Asked Questions</h2>
             <div className="space-y-6">
               <div className="bg-card p-6 rounded-2xl shadow-sm border border-border">
-                <h3 className="text-lg font-semibold text-foreground mb-2">Is GoalPath really free?</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Is Lifeplans really free?</h3>
                 <p className="text-muted-foreground">
                   Yes — create up to 3 goals free forever. Premium unlocks unlimited goals, AI planning, and advanced analytics.
                 </p>
@@ -153,13 +153,13 @@ const OnlineGoalPlanner = () => {
               <div className="bg-card p-6 rounded-2xl shadow-sm border border-border">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Do I need to download an app?</h3>
                 <p className="text-muted-foreground">
-                  No — GoalPath works fully in your browser. Apps are also available on iOS and Android if you prefer mobile.
+                  No — Lifeplans works fully in your browser. Apps are also available on iOS and Android if you prefer mobile.
                 </p>
               </div>
               <div className="bg-card p-6 rounded-2xl shadow-sm border border-border">
                 <h3 className="text-lg font-semibold text-foreground mb-2">How is this different from a to-do list?</h3>
                 <p className="text-muted-foreground">
-                  GoalPath combines goal strategy, AI weekly planning, daily scheduling, and progress tracking in one place. It's built for achieving goals, not just listing tasks.
+                  Lifeplans combines goal strategy, AI weekly planning, daily scheduling, and progress tracking in one place. It's built for achieving goals, not just listing tasks.
                 </p>
               </div>
               <div className="bg-card p-6 rounded-2xl shadow-sm border border-border">

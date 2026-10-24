@@ -11,7 +11,7 @@ const THEME = {
 };
 
 export interface CardData {
-  type: "streak" | "goal" | "plan" | "daily" | "monthly" | "yearly" | "achievement";
+  type: "streak" | "goal" | "plan" | "daily" | "monthly" | "yearly" | "achievement" | "story";
   title: string;
   subtitle?: string;
   value?: string;
@@ -568,6 +568,167 @@ export async function generateAchievementShareCard(opts: {
   ctx.fillText("goalplanner.io", W - 40, H - 40);
 
   return new Promise((resolve) => { canvas.toBlob((b) => resolve(b!), "image/png"); });
+}
+
+/**
+ * Generate a Goal Progress Story share card (tall, portrait).
+ * Shows the goal, starting point, milestones checklist, completed actions,
+ * achievement, final result narrative, and LifePlans branding.
+ */
+export async function generateStoryShareCard(opts: {
+  goalName: string;
+  chapter?: string;
+  startTitle?: string;
+  progress: number;
+  completedActions: number;
+  totalActions: number;
+  milestones?: { label: string; completed: boolean }[];
+  actions?: string[];
+  achievement?: string;
+  result?: string;
+  startedAt?: string;
+  completedAt?: string;
+  userName?: string;
+}): Promise<Blob> {
+  const W = 800;
+  const H = 1100;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d")!;
+
+  // Deep gradient background
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, "#111827");
+  grad.addColorStop(0.6, "#1e293b");
+  grad.addColorStop(1, "#0f172a");
+  ctx.fillStyle = grad;
+  drawRoundedRect(ctx, 0, 0, W, H, 24);
+  ctx.fill();
+
+  // Decorative circles
+  ctx.fillStyle = "rgba(99,102,241,0.12)";
+  ctx.beginPath(); ctx.arc(W - 80, -40, 220, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "rgba(16,185,129,0.10)";
+  ctx.beginPath(); ctx.arc(-80, H - 120, 200, 0, Math.PI * 2); ctx.fill();
+
+  // Brand
+  ctx.fillStyle = THEME.white;
+  ctx.font = "bold 28px 'SF Pro Display', -apple-system, sans-serif";
+  ctx.fillText("LifePlans", 40, 60);
+  ctx.font = "48px sans-serif";
+  ctx.fillText("📖", W - 90, 70);
+
+  // Chapter eyebrow
+  ctx.fillStyle = "rgba(255,255,255,0.6)";
+  ctx.font = "bold 24px 'SF Pro Display', -apple-system, sans-serif";
+  ctx.fillText(opts.chapter || "MY GOAL STORY", 40, 140);
+
+  // Goal name
+  ctx.fillStyle = THEME.white;
+  ctx.font = "bold 44px 'SF Pro Display', -apple-system, sans-serif";
+  const nameLines = wrapText(ctx, opts.goalName, W - 120);
+  let yPos = 195;
+  for (const line of nameLines) {
+    ctx.fillText(line, 40, yPos);
+    yPos += 52;
+  }
+
+  // Starting point
+  if (opts.startTitle) {
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.font = "22px 'SF Pro Display', -apple-system, sans-serif";
+    ctx.fillText("FROM: " + opts.startTitle, 40, yPos + 10);
+    yPos += 50;
+  }
+
+  // Progress bar + actions
+  drawProgressBar(ctx, 40, yPos + 20, W - 80, 18, opts.progress);
+  ctx.fillStyle = THEME.white;
+  ctx.font = "bold 22px 'SF Pro Display', -apple-system, sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText(`${opts.progress}%`, W - 40, yPos + 16);
+  ctx.textAlign = "left";
+  yPos += 70;
+
+  ctx.fillStyle = "rgba(255,255,255,0.75)";
+  ctx.font = "20px 'SF Pro Display', -apple-system, sans-serif";
+  ctx.fillText(
+    `${opts.completedActions} / ${opts.totalActions} actions completed`,
+    40,
+    yPos
+  );
+  yPos += 60;
+
+  // Milestones checklist
+  const milestones = opts.milestones || [];
+  if (milestones.length) {
+    ctx.fillStyle = "rgba(255,255,255,0.5)";
+    ctx.font = "bold 20px 'SF Pro Display', -apple-system, sans-serif";
+    ctx.fillText("MILESTONES", 40, yPos);
+    yPos += 44;
+    for (const m of milestones) {
+      ctx.fillStyle = m.completed ? "#34d399" : "rgba(255,255,255,0.45)";
+      ctx.font = "bold 24px 'SF Pro Display', -apple-system, sans-serif";
+      ctx.fillText(m.completed ? "✓" : "○", 40, yPos);
+      ctx.fillStyle = m.completed ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.55)";
+      ctx.font = "22px 'SF Pro Display', -apple-system, sans-serif";
+      const mLines = wrapText(ctx, m.label, W - 160);
+      for (const line of mLines) {
+        ctx.fillText(line, 72, yPos);
+        yPos += 32;
+      }
+      yPos += 12;
+    }
+    yPos += 20;
+  }
+
+  // Achievement
+  if (opts.achievement) {
+    ctx.fillStyle = "#fbbf24";
+    ctx.font = "bold 26px 'SF Pro Display', -apple-system, sans-serif";
+    ctx.fillText("🏆 " + opts.achievement, 40, yPos);
+    yPos += 50;
+  }
+
+  // Final result narrative
+  if (opts.result) {
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.font = "italic 24px 'SF Pro Display', -apple-system, sans-serif";
+    const rLines = wrapText(ctx, `“${opts.result}”`, W - 120);
+    for (const line of rLines) {
+      ctx.fillText(line, 40, yPos);
+      yPos += 34;
+    }
+  }
+
+  // Date range
+  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  ctx.font = "18px 'SF Pro Display', -apple-system, sans-serif";
+  const rangeLabel =
+    opts.startedAt && opts.completedAt
+      ? `${opts.startedAt} → ${opts.completedAt}`
+      : opts.startedAt
+        ? `Started ${opts.startedAt}`
+        : "";
+  if (rangeLabel) ctx.fillText(rangeLabel, 40, H - 70);
+
+  if (opts.userName) {
+    ctx.fillStyle = "rgba(255,255,255,0.7)";
+    ctx.font = "18px 'SF Pro Display', -apple-system, sans-serif";
+    ctx.fillText(`— ${opts.userName}`, 40, H - 40);
+  }
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.font = "14px 'SF Pro Display', -apple-system, sans-serif";
+  ctx.textAlign = "right";
+  ctx.fillText("goalplanner.io", W - 40, H - 40);
+  ctx.textAlign = "left";
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob!);
+    }, "image/png");
+  });
 }
 
 export async function shareImage(blob: Blob, filename: string) {

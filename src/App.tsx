@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Disclaimer from "./pages/Disclaimer";
 import { Toaster } from "sonner";
 import { UserProvider } from "@/contexts/UserContext";
 import { AuthModalProvider } from "@/contexts/AuthModalContext";
 import AuthModal from "@/components/AuthModal";
+import CookieConsent from "@/components/CookieConsent";
 import RememberMeRedirect from "@/components/RememberMeRedirect";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -101,10 +103,10 @@ import Accountability from "./pages/Accountability";
 import Challenges from "./pages/Challenges";
 import ChallengeJoin from "./pages/ChallengeJoin";
 
-function App() {
+export function AppShell() {
   return (
     <UserProvider>
-      <Router>
+      <>
         <AuthModalProvider>
         <RememberMeRedirect>
           <Routes>
@@ -140,6 +142,7 @@ function App() {
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/refund" element={<RefundPolicy />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/billing/success" element={<BillingSuccess />} />
             <Route path="/goals/:id" element={<GoalDetails />} />
@@ -211,10 +214,19 @@ function App() {
           </Routes>
           <Toaster />
           <AuthModal />
+          <CookieConsent />
         </RememberMeRedirect>
         </AuthModalProvider>
-      </Router>
+      </>
     </UserProvider>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppShell />
+    </Router>
   );
 }
 

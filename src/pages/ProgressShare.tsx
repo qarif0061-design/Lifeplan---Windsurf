@@ -4,10 +4,13 @@ import {
   ArrowRight,
   CalendarCheck,
   CalendarDays,
+  Check,
+  Circle,
   Copy,
   Flame,
   Loader2,
   Search,
+  Sparkles,
   Target,
   Trophy,
 } from "lucide-react";
@@ -43,6 +46,7 @@ const TYPE_META: Record<string, { label: string; icon: typeof Target }> = {
   year: { label: "Yearly Review", icon: CalendarDays },
   streak: { label: "Streak", icon: Flame },
   achievement: { label: "Achievement", icon: Trophy },
+  story: { label: "Goal Story", icon: Sparkles },
 };
 
 interface Metric {
@@ -80,6 +84,16 @@ const buildMetrics = (type: string, data: ShareData): Metric[] => {
   } else if (type === "streak") {
     const streakValue = data.currentStreak ?? data.streak;
     add("Current Streak", streakValue !== undefined ? `${streakValue}` : undefined);
+  } else if (type === "story") {
+    add("Progress", data.goalProgress !== undefined ? `${data.goalProgress}%` : undefined);
+    add("Actions Done", data.completedActions);
+    add("Actions Total", data.totalActions);
+    if (data.storyMilestones?.length) {
+      add(
+        "Milestones",
+        `${data.storyMilestones.filter((m) => m.completed).length}/${data.storyMilestones.length}`,
+      );
+    }
   }
 
   return metrics;
@@ -276,6 +290,77 @@ const ProgressShare = () => {
                   </div>
                 )}
 
+                {type === "story" && (
+                  <div className="space-y-4">
+                    {data.storyStartTitle && (
+                      <div className="rounded-2xl border border-border bg-secondary/40 px-4 py-3">
+                        <p className="text-xs font-bold uppercase tracking-widest text-primary">Starting Point</p>
+                        <p className="mt-1 font-semibold text-foreground">{data.storyStartTitle}</p>
+                      </div>
+                    )}
+
+                    {data.storyMilestones && data.storyMilestones.length > 0 && (
+                      <div className="rounded-2xl border border-border bg-secondary/40 px-4 py-3">
+                        <p className="text-xs font-bold uppercase tracking-widest text-primary">Milestones</p>
+                        <ul className="mt-2 space-y-2">
+                          {data.storyMilestones.map((m, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              {m.completed ? (
+                                <Check className="mt-0.5 h-4 w-4 shrink-0 text-momentum" />
+                              ) : (
+                                <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
+                              )}
+                              <span
+                                className={
+                                  m.completed
+                                    ? "text-sm font-medium text-foreground"
+                                    : "text-sm text-muted-foreground"
+                                }
+                              >
+                                {m.label}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {data.storyActions && data.storyActions.length > 0 && (
+                      <div className="rounded-2xl border border-border bg-secondary/40 px-4 py-3">
+                        <p className="text-xs font-bold uppercase tracking-widest text-primary">Completed Actions</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {data.storyActions.map((a, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-foreground">
+                              <span className="text-momentum">✓</span>
+                              {a}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {data.storyAchievement && (
+                      <div className="rounded-2xl border border-ember/20 bg-ember/10 px-4 py-3 text-center">
+                        <p className="text-sm font-bold text-ember">🏆 {data.storyAchievement}</p>
+                      </div>
+                    )}
+
+                    {data.storyResult && (
+                      <div className="rounded-2xl border border-border bg-card px-4 py-3 text-center">
+                        <p className="text-sm italic text-foreground">“{data.storyResult}”</p>
+                      </div>
+                    )}
+
+                    {(data.goalStartedAt || data.goalCompletedAt) && (
+                      <p className="text-center text-xs text-muted-foreground">
+                        {data.goalStartedAt}
+                        {data.goalStartedAt && data.goalCompletedAt ? " → " : " "}
+                        {data.goalCompletedAt}
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {metrics.length > 0 && (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {metrics.map((metric) => (
@@ -303,7 +388,7 @@ const ProgressShare = () => {
               </CardContent>
 
               <CardFooter className="flex-col gap-3 pb-8">
-                {type === "goal" && (
+                {(type === "goal" || type === "story") && (
                   <Button
                     size="lg"
                     variant="outline"

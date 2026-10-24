@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -441,6 +442,11 @@ const Questions = () => {
 
   return (
     <Layout>
+      <Seo
+        title="Goal Setting Questions and Answers | Goal Planner - Lifeplans"
+        description="Answers to common questions about SMART goals, weekly planning, habits and staying consistent, plus how to use the Lifeplans goal planner."
+        canonicalPath="/questions"
+      />
       <div className="max-w-5xl mx-auto space-y-8 animate-in fade-in duration-500">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
