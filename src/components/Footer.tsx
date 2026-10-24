@@ -25,6 +25,7 @@ const Footer = () => {
             <a href="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</a>
             <a href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a>
             <a href="/refund" className="text-muted-foreground hover:text-primary transition-colors">Refund Policy</a>
+            <a href="/disclaimer" className="text-muted-foreground hover:text-primary transition-colors">Disclaimer</a>
             {links.map((l) => (
               <a
                 key={l.label}
