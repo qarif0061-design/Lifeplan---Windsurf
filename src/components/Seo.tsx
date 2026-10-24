@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { HeadContext } from "@/seo/headContext";
 import { useLocation } from "react-router-dom";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "@/firebase/config";
@@ -37,6 +38,17 @@ const upsertLink = (rel: string, href: string) => {
 
 const Seo = ({ title, description, canonicalPath, imageUrl, jsonLd, noIndex }: SeoProps) => {
   const location = useLocation();
+  const serverHead = useContext(HeadContext);
+  if (serverHead) {
+    serverHead.title = title;
+    serverHead.description = description;
+    serverHead.canonical = canonicalPath
+      ? `${SITE_URL}${canonicalPath}`
+      : `${SITE_URL}${location.pathname === "/" ? "/" : location.pathname.replace(/\/+$/, "")}`;
+    serverHead.noIndex = Boolean(noIndex);
+    serverHead.jsonLd = jsonLd;
+    serverHead.imageUrl = imageUrl;
+  }
   const firstRender = useRef(true);
   const lastPath = useRef(location.pathname);
 

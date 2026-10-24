@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Search, Home, Target } from "lucide-react";
+import { useContext } from "react";
+import Seo from "@/components/Seo";
+import { HeadContext } from "@/seo/headContext";
 
 const NotFound = () => {
   const navigate = useNavigate();
+  const serverHead = useContext(HeadContext);
+  if (serverHead) serverHead.notFound = true;
 
   return (
+    <>
+    <Seo title="Page not found | Goal Planner - Lifeplans" description="The page you are looking for does not exist on goalplanner.io." noIndex />
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
         <div className="flex justify-center mb-6">
@@ -41,6 +48,7 @@ const NotFound = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
