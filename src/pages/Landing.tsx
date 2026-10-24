@@ -193,6 +193,9 @@ const Landing = () => {
                 <Button asChild variant="outline" className="rounded-full">
                   <Link to="/articles/how-to-set-goals-that-stick">Read guide</Link>
                 </Button>
+                <Button asChild variant="outline" className="rounded-full">
+                  <Link to="/smart-goals">SMART goals guide</Link>
+                </Button>
               </div>
             </div>
 

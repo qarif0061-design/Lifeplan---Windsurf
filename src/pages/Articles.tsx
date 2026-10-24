@@ -622,6 +622,7 @@ const Articles = () => {
           <div>
             <h1 className="text-3xl font-bold text-foreground">Articles</h1>
             <p className="text-muted-foreground">Guides and insights to help you plan better and achieve more.</p>
+            <p className="text-sm text-muted-foreground mt-1">New to goal setting? Start with our <Link to="/smart-goals" className="underline hover:text-primary">complete guide to SMART goals</Link>.</p>
           </div>
           <div className="relative w-full md:w-[320px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/70" />
