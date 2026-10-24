@@ -48,21 +48,13 @@ const buildFaqBlock = (faqs: FaqItem[]) => {
   return `\n\n## FAQ\n\n${lines}\n`;
 };
 
-const buildInternalLinks = (slugs: readonly string[]) => {
-  if (!slugs.length) return "";
-  const lines = slugs
-    .slice(0, 6)
-    .map((s) => `- ${SITE}/articles/${s}`)
-    .join("\n");
-  return `\n\n## Related guides\n\n${lines}\n`;
-};
-
 const buildPillarBody = (
   primary: string,
   related: readonly string[],
   relatedSlugs: readonly string[]
 ) => {
-  const rel = related.slice(0, 10);
+  void related;
+  void relatedSlugs;
 
   return (
     `This guide is built around **${primary}**. It’s a complete, practical system you can use in 2026 whether you’re a student, professional, or working from home.\n\n` +
@@ -84,10 +76,8 @@ const buildPillarBody = (
     `- Students: study blocks + exam revision list\n` +
     `- Busy people: 3 priorities + one deep-work block\n` +
     `- Work from home: boundaries + scheduled breaks\n\n` +
-    `## Keywords covered\n` +
-    rel.map((k) => `- ${k}`).join("\n") +
-    `\n\n` +
-    buildInternalLinks(relatedSlugs) +
+    // Related guides are rendered as titled links by ArticleDetails (from relatedSlugs);
+    // the old "Keywords covered" list and bare-URL link block were removed (AdSense: low-value signals).
     buildCta()
   );
 };
@@ -1052,7 +1042,480 @@ const PILLAR_DEFS = [
     topics: ["goal_planning" as const, "targets" as const],
     patterns: [/smart goals for mental health/],
     relatedSlugs: ["smart-wellness-goals", "smart-health-goals-examples", "smart-goals-template-and-examples-2026"],
-  }
+  },
+  // Restored 2026-10-24: these pages receive Google clicks (seo-data/protected-pages.csv); keep slug/title unchanged.
+{
+    slug: "examples-of-smart-goals-for-receptionist",
+    primaryKeyword: "examples of smart goals for receptionist",
+    title: "Examples of SMART Goals for Receptionist (2026) – Front Desk Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for receptionist/],
+    relatedSlugs: ["smart-goals-examples-for-work", "smart-performance-goals-examples", "smart-goals-for-administrators-examples"],
+  },
+{
+    slug: "smarter-goals-michael-hyatt",
+    primaryKeyword: "smarter goals michael hyatt",
+    title: "Smarter Goals Michael Hyatt (2026) – Advanced Framework",
+    topics: ["goal_planning" as const, "strategy" as const],
+    patterns: [/smarter goals michael hyatt/],
+    relatedSlugs: ["michael-hyatt-smarter-goals", "smart-goal-setting", "smart-framework"],
+  },
+{
+    slug: "smart-goals-for-food-service-workers",
+    primaryKeyword: "smart goals for food service workers",
+    title: "SMART Goals for Food Service Workers (2026) – Restaurant Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for food service workers/],
+    relatedSlugs: ["smart-goals-for-restaurants-examples", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "smart-goals-for-retail-store-manager",
+    primaryKeyword: "smart goals for retail store manager",
+    title: "SMART Goals for Retail Store Manager (2026) – Sales and Customer Service",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for retail store manager/],
+    relatedSlugs: ["smart-goals-examples-for-work", "smart-performance-goals-examples", "smart-business-goals"],
+  },
+{
+    slug: "smart-goals-for-receptionist-examples",
+    primaryKeyword: "smart goals for receptionist examples",
+    title: "SMART Goals for Receptionist Examples (2026) – Front Desk Success",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for receptionist examples/],
+    relatedSlugs: ["smart-goals-examples-for-receptionist", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "procurement-smart-goals-examples",
+    primaryKeyword: "procurement smart goals examples",
+    title: "Procurement SMART Goals Examples (2026) – Supply Chain and Purchasing",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/procurement smart goals examples/],
+    relatedSlugs: ["smart-goals-examples-for-work", "smart-goals-for-operations-managers", "smart-performance-goals-examples"],
+  },
+{
+    slug: "examples-list-of-smart-goals-for-administrative-assistants",
+    primaryKeyword: "examples list of smart goals for administrative assistants",
+    title: "Examples List of SMART Goals for Administrative Assistants (2026)",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples list of smart goals for administrative assistants/],
+    relatedSlugs: ["list-of-smart-goals-for-administrative-assistants", "smart-goals-for-administrators-examples", "smart-goals-examples-for-work"],
+  },
+{
+    slug: "brand-awareness-smart-goals-examples",
+    primaryKeyword: "brand awareness smart goals examples",
+    title: "Brand Awareness SMART Goals Examples (2026) – Marketing Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/brand awareness smart goals examples/],
+    relatedSlugs: ["smart-marketing-goals-examples", "smart-marketing-objectives-examples", "smart-business-goals"],
+  },
+{
+    slug: "costco-smart-goals",
+    primaryKeyword: "costco smart goals",
+    title: "Costco SMART Goals (2026) – Retail Excellence Targets",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/costco smart goals/],
+    relatedSlugs: ["smart-business-goals", "smart-goals-examples-for-business", "smart-retail-goals"],
+  },
+{
+    slug: "smart-goals-to-improve-communication-skills",
+    primaryKeyword: "smart goals to improve communication skills",
+    title: "SMART Goals to Improve Communication Skills (2026) – Interpersonal Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals to improve communication skills/],
+    relatedSlugs: ["measurable-communication-goals-examples", "smart-goals-examples", "smart-goals-for-personal-development"],
+  },
+{
+    slug: "list-of-smart-goals-for-administrative-assistants",
+    primaryKeyword: "list of smart goals for administrative assistants",
+    title: "List of SMART Goals for Administrative Assistants (2026) – Office Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/list of smart goals for administrative assistants/],
+    relatedSlugs: ["smart-goals-for-administrators-examples", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "examples-of-smart-goals-for-research",
+    primaryKeyword: "examples of smart goals for research",
+    title: "Examples of SMART Goals for Research (2026) – Scientific Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for research/],
+    relatedSlugs: ["examples-of-smart-goals-for-clinical-research-coordinator", "smart-goals-examples-for-work", "smart-academic-goals"],
+  },
+{
+    slug: "executive-assistant-smart-goals-examples",
+    primaryKeyword: "executive assistant smart goals examples",
+    title: "Executive Assistant SMART Goals Examples (2026) – Support Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/executive assistant smart goals examples/],
+    relatedSlugs: ["examples-of-smart-goals-for-executive-assistants", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "5-year-smart-goals-examples",
+    primaryKeyword: "5 year smart goals examples",
+    title: "5 Year SMART Goals Examples (2026) – Long-term Planning",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/5 year smart goals examples/],
+    relatedSlugs: ["smart-goals-examples", "smart-personal-goals", "smart-career-goals-examples"],
+  },
+{
+    slug: "examples-of-smart-goals-for-healthcare-professionals",
+    primaryKeyword: "examples of smart goals for healthcare professionals",
+    title: "Examples of SMART Goals for Healthcare Professionals (2026) – Medical Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for healthcare professionals/],
+    relatedSlugs: ["examples-of-smart-goals-in-healthcare", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "spiritual-smart-goals-examples",
+    primaryKeyword: "spiritual smart goals examples",
+    title: "Spiritual SMART Goals Examples (2026) – Personal Growth and Mindfulness",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/spiritual smart goals examples/],
+    relatedSlugs: ["smart-goals-examples", "smart-goals-for-personal-development", "smart-goal-setting"],
+  },
+{
+    slug: "examples-of-good-and-bad-smart-goals-for-students",
+    primaryKeyword: "examples of good and bad smart goals for students",
+    title: "Examples of Good and Bad SMART Goals for Students (2026) – Learning Guide",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of good and bad smart goals for students/],
+    relatedSlugs: ["smart-goals-examples-for-students", "smart-academic-goals", "smart-goal-setting"],
+  },
+{
+    slug: "examples-of-smart-goals-for-effective-communication",
+    primaryKeyword: "examples of smart goals for effective communication",
+    title: "Examples of SMART Goals for Effective Communication (2026) – Interpersonal Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for effective communication/],
+    relatedSlugs: ["measurable-communication-goals-examples", "smart-goals-examples", "smart-goals-for-personal-development"],
+  },
+{
+    slug: "examples-of-smart-goals-for-a-farm",
+    primaryKeyword: "examples of smart goals for a farm",
+    title: "Examples of SMART Goals for a Farm (2026) – Agricultural Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for a farm/],
+    relatedSlugs: ["smart-business-goals", "smart-goals-examples-for-business", "smart-performance-goals-examples"],
+  },
+{
+    slug: "examples-of-smart-goals-for-technicians",
+    primaryKeyword: "examples of smart goals for technicians",
+    title: "Examples of SMART Goals for Technicians (2026) – Technical Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for technicians/],
+    relatedSlugs: ["smart-goals-examples-for-work", "smart-performance-goals-examples", "smart-career-goals-examples"],
+  },
+{
+    slug: "concrete-goals-examples",
+    primaryKeyword: "concrete goals examples",
+    title: "Concrete Goals Examples (2026) – Specific and Clear Targets",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/concrete goals examples/],
+    relatedSlugs: ["smart-goals-examples", "specific-goals-examples", "smart-goal-setting"],
+  },
+{
+    slug: "examples-of-smart-goals-for-self-confidence",
+    primaryKeyword: "examples of smart goals for self confidence",
+    title: "Examples of SMART Goals for Self Confidence (2026) – Personal Growth",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for self confidence/],
+    relatedSlugs: ["self-esteem-smart-goals-examples", "smart-goals-examples", "smart-goals-for-personal-development"],
+  },
+{
+    slug: "doran-1981-smart-goals",
+    primaryKeyword: "doran 1981 smart goals",
+    title: "Doran 1981 SMART Goals (2026) – Original Framework and History",
+    topics: ["goal_planning" as const, "strategy" as const],
+    patterns: [/doran 1981 smart goals/],
+    relatedSlugs: ["creator-of-smart-goals", "smart-framework", "smart-goal-setting"],
+  },
+{
+    slug: "smart-goals-for-teens",
+    primaryKeyword: "smart goals for teens",
+    title: "SMART Goals for Teens (2026) – Youth and Adolescent Goal Setting",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for teens/],
+    relatedSlugs: ["smart-goals-for-students", "smart-goals-examples", "smart-goal-setting"],
+  },
+{
+    slug: "smart-objectives-of-amazon",
+    primaryKeyword: "smart objectives of amazon",
+    title: "SMART Objectives of Amazon (2026) – Amazon Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart objectives of amazon/],
+    relatedSlugs: ["amazon-smart-goals", "smart-business-goals", "smart-marketing-goals-examples"],
+  },
+{
+    slug: "smart-goals-for-receptionist",
+    primaryKeyword: "smart goals for receptionist",
+    title: "SMART Goals for Receptionist (2026) – Front Desk Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for receptionist/],
+    relatedSlugs: ["smart-goals-examples-for-receptionist", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "smart-goals-for-project-engineers",
+    primaryKeyword: "smart goals for project engineers",
+    title: "SMART Goals for Project Engineers (2026) – Engineering Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for project engineers/],
+    relatedSlugs: ["smart-project-management-examples", "smart-goals-examples-for-work", "smart-career-goals-examples"],
+  },
+{
+    slug: "smart-goals-for-internship-examples",
+    primaryKeyword: "smart goals for internship examples",
+    title: "SMART Goals for Internship Examples (2026) – Learning and Development",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for internship examples/],
+    relatedSlugs: ["smart-goals-examples", "smart-goals-for-students", "smart-career-goals-examples"],
+  },
+{
+    slug: "examples-of-smart-goals-for-hr-coordinator",
+    primaryKeyword: "examples of smart goals for hr coordinator",
+    title: "Examples of SMART Goals for HR Coordinator (2026) – Human Resources Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for hr coordinator/],
+    relatedSlugs: ["hr-smart-goals", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "emotional-smart-goals-examples",
+    primaryKeyword: "emotional smart goals examples",
+    title: "Emotional SMART Goals Examples (2026) – Emotional Wellness",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/emotional smart goals examples/],
+    relatedSlugs: ["smart-goals-examples", "smart-goals-for-mental-health-examples", "smart-goals-for-personal-development"],
+  },
+{
+    slug: "smart-goals-for-lawyers-examples",
+    primaryKeyword: "smart goals for lawyers examples",
+    title: "SMART Goals for Lawyers Examples (2026) – Legal Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for lawyers examples/],
+    relatedSlugs: ["smart-goals-examples-for-work", "smart-career-goals-examples", "smart-performance-goals-examples"],
+  },
+{
+    slug: "smart-pr-objectives-examples",
+    primaryKeyword: "smart pr objectives examples",
+    title: "SMART PR Objectives Examples (2026) – Public Relations Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart pr objectives examples/],
+    relatedSlugs: ["smart-objectives-pr", "smart-marketing-goals-examples", "smart-business-goals"],
+  },
+{
+    slug: "c-smart-objectives",
+    primaryKeyword: "c smart objectives",
+    title: "C SMART Objectives (2026) – Challenging and Clear Targets",
+    topics: ["goal_planning" as const, "strategy" as const],
+    patterns: [/c smart objectives/],
+    relatedSlugs: ["smart-objectives", "smart-framework", "smart-goal-setting"],
+  },
+{
+    slug: "smart-objective-for-clothing-business",
+    primaryKeyword: "smart objective for clothing business",
+    title: "SMART Objective for Clothing Business (2026) – Fashion Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart objective for clothing business/],
+    relatedSlugs: ["smart-objectives-examples", "smart-business-goals", "smart-marketing-goals-examples"],
+  },
+{
+    slug: "examples-of-smart-goals-for-administrative-assistants",
+    primaryKeyword: "examples of smart goals for administrative assistants",
+    title: "Examples of SMART Goals for Administrative Assistants (2026) – Office Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for administrative assistants/],
+    relatedSlugs: ["smart-goals-for-administrators-examples", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "academic-smart-goals-examples-for-students",
+    primaryKeyword: "academic smart goals examples for students",
+    title: "Academic SMART Goals Examples for Students (2026) – Educational Success",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/academic smart goals examples for students/],
+    relatedSlugs: ["smart-academic-goals", "smart-goals-examples-for-students", "smart-goals-for-students"],
+  },
+{
+    slug: "smart-marketing-objectives-examples-for-a-new-product",
+    primaryKeyword: "smart marketing objectives examples for a new product",
+    title: "SMART Marketing Objectives Examples for a New Product (2026) – Launch Goals",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart marketing objectives examples for a new product/],
+    relatedSlugs: ["smart-marketing-objectives-examples", "smart-marketing-goals-examples", "smart-goals-examples-for-business"],
+  },
+{
+    slug: "examples-of-smart-goals-for-medical-students",
+    primaryKeyword: "examples of smart goals for medical students",
+    title: "Examples of SMART Goals for Medical Students (2026) – Medical Education",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for medical students/],
+    relatedSlugs: ["smart-goals-examples-for-students", "smart-academic-goals", "smart-career-goals-examples"],
+  },
+{
+    slug: "diversity-equity-and-inclusion-smart-goals-examples",
+    primaryKeyword: "diversity equity and inclusion smart goals examples",
+    title: "Diversity Equity and Inclusion SMART Goals Examples (2026) – DEI Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/diversity equity and inclusion smart goals examples/],
+    relatedSlugs: ["diversity-and-inclusion-smart-goals-examples", "dei-smart-goals", "smart-goals-examples-for-work"],
+  },
+{
+    slug: "smart-goals-for-restaurants",
+    primaryKeyword: "smart goals for restaurants",
+    title: "SMART Goals for Restaurants (2026) – Food Service Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for restaurants/],
+    relatedSlugs: ["smart-goals-for-restaurants-examples", "smart-business-goals", "smart-marketing-goals-examples"],
+  },
+{
+    slug: "action-oriented-smart-goals",
+    primaryKeyword: "action oriented smart goals",
+    title: "Action Oriented SMART Goals (2026) – Implementation-Focused Targets",
+    topics: ["goal_planning" as const, "strategy" as const],
+    patterns: [/action oriented smart goals/],
+    relatedSlugs: ["smart-action-plan", "smart-goal-setting", "smart-goals-examples"],
+  },
+{
+    slug: "smart-goals-for-mentoring-examples",
+    primaryKeyword: "smart goals for mentoring examples",
+    title: "SMART Goals for Mentoring Examples (2026) – Mentorship Success",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for mentoring examples/],
+    relatedSlugs: ["smart-goals-for-mentoring", "mentee-smart-goals-examples", "smart-goals-examples"],
+  },
+{
+    slug: "examples-of-smart-goals-for-quality-improvement",
+    primaryKeyword: "examples of smart goals for quality improvement",
+    title: "Examples of SMART Goals for Quality Improvement (2026) – Process Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of smart goals for quality improvement/],
+    relatedSlugs: ["process-improvement-smart-goals-examples", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "smart-goals-table-example",
+    primaryKeyword: "smart goals table example",
+    title: "SMART Goals Table Example (2026) – Structure Template",
+    topics: ["goal_planning" as const, "strategy" as const],
+    patterns: [/smart goals table example/],
+    relatedSlugs: ["smart-goal-table", "smart-goal-setting", "smart-framework"],
+  },
+{
+    slug: "smart-objectives-to-increase-brand-awareness-examples",
+    primaryKeyword: "smart objectives to increase brand awareness examples",
+    title: "SMART Objectives to Increase Brand Awareness Examples (2026) – Brand Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart objectives to increase brand awareness examples/],
+    relatedSlugs: ["brand-awareness-smart-objectives-examples", "smart-marketing-objectives-examples", "smart-business-goals"],
+  },
+{
+    slug: "smart-quality-objectives-examples",
+    primaryKeyword: "smart quality objectives examples",
+    title: "SMART Quality Objectives Examples (2026) – Quality Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart quality objectives examples/],
+    relatedSlugs: ["smart-objectives-examples", "smart-goals-examples-for-work", "smart-performance-goals-examples"],
+  },
+{
+    slug: "tangible-goals-examples",
+    primaryKeyword: "tangible goals examples",
+    title: "Tangible Goals Examples (2026) – Concrete Success",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/tangible goals examples/],
+    relatedSlugs: ["smart-goals-examples", "smart-framework", "smart-goal-setting"],
+  },
+{
+    slug: "examples-of-academic-smart-goals",
+    primaryKeyword: "examples of academic smart goals",
+    title: "Examples of Academic SMART Goals (2026) – Educational Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/examples of academic smart goals/],
+    relatedSlugs: ["smart-academic-goals", "academic-smart-goal-examples", "smart-goals-for-students"],
+  },
+{
+    slug: "brand-awareness-smart-objectives-examples",
+    primaryKeyword: "brand awareness smart objectives examples",
+    title: "Brand Awareness SMART Objectives Examples (2026) – Marketing Targets",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/brand awareness smart objectives examples/],
+    relatedSlugs: ["smart-marketing-objectives-examples", "smart-marketing-goals-examples", "smart-business-goals"],
+  },
+{
+    slug: "smart-sustainable-measurable-attainable",
+    primaryKeyword: "smart sustainable measurable attainable",
+    title: "SMART Sustainable Measurable Attainable (2026) – Sustainable Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart sustainable measurable attainable/],
+    relatedSlugs: ["smart-criteria", "smart-framework", "smart-goal-setting"],
+  },
+{
+    slug: "smart-goals-for-operations-managers",
+    primaryKeyword: "smart goals for operations managers",
+    title: "SMART Goals for Operations Managers (2026) – Efficiency and Process",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for operations managers/],
+    relatedSlugs: ["smart-goals-for-managers", "smart-goals-examples-for-work", "procurement-smart-goals-examples"],
+  },
+{
+    slug: "smart-goals-for-content-marketing-examples",
+    primaryKeyword: "smart goals for content marketing examples",
+    title: "SMART Goals for Content Marketing Examples (2026) – Content Strategy",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for content marketing examples/],
+    relatedSlugs: ["smart-marketing-goals-examples", "content-marketing-smart-goals", "smart-goals-examples-for-business"],
+  },
+{
+    slug: "smart-goals-sustainability",
+    primaryKeyword: "smart goals sustainability",
+    title: "SMART Goals Sustainability (2026) – Environmental Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals sustainability/],
+    relatedSlugs: ["smart-business-goals", "smart-goals-examples", "smart-goal-setting"],
+  },
+{
+    slug: "smart-objectives-examples-project-management",
+    primaryKeyword: "smart objectives examples project management",
+    title: "SMART Objectives Examples Project Management (2026) – Project Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart objectives examples project management/],
+    relatedSlugs: ["smart-project-management-examples", "smart-objectives-examples", "smart-goals-examples-for-work"],
+  },
+{
+    slug: "theres-a-smart-way-to-write-managements-goals-and-objectives",
+    primaryKeyword: "there's a smart way to write managements goals and objectives",
+    title: "There's a SMART Way to Write Managements Goals and Objectives (2026) – Management Excellence",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/there's a smart way to write managements goals and objectives/],
+    relatedSlugs: ["smart-goals-examples", "smart-objectives", "smart-goal-setting"],
+  },
+{
+    slug: "creating-smart-goals",
+    primaryKeyword: "creating smart goals",
+    title: "Creating SMART Goals (2026): Step-by-Step Guide With Examples",
+    topics: ["goal_planning" as const, "strategy" as const],
+    patterns: [/creating smart goals/],
+    relatedSlugs: ["smart-goal-setting", "smart-goals-examples", "smart-goal-format"],
+  },
+{
+    slug: "smart-goal-formula-example",
+    primaryKeyword: "smart goal formula example",
+    title: "SMART Goal Formula Example (2026) – Practical Application",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goal formula example/],
+    relatedSlugs: ["smart-goal-formula", "smart-goals-examples", "smart-goal-setting"],
+  },
+{
+    slug: "smart-learning-objective",
+    primaryKeyword: "smart learning objective",
+    title: "SMART Learning Objective (2026) – Educational Target",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart learning objective/],
+    relatedSlugs: ["smart-lesson-objectives-examples", "smart-academic-goals", "smart-objectives-examples"],
+  },
+{
+    slug: "smart-goals-for-training-and-development",
+    primaryKeyword: "smart goals for training and development",
+    title: "SMART Goals for Training and Development (2026) – Skill Building Programs",
+    topics: ["goal_planning" as const, "targets" as const],
+    patterns: [/smart goals for training and development/],
+    relatedSlugs: ["training-and-development-smart-goals-examples", "smart-goals-examples-for-work", "development-goals-examples"],
+  },
 ] as const;
 
 const buildFaqs = (primary: string): FaqItem[] => [
@@ -1085,7 +1548,6 @@ export const PILLARS: PillarArticle[] = PILLAR_DEFS.map((d) => {
 
   const faqs = buildFaqs(d.primaryKeyword);
   const body =
-    `# ${d.title}\n\n` +
     buildPillarBody(d.primaryKeyword, relatedKeywords, d.relatedSlugs) +
     buildFaqBlock(faqs);
 

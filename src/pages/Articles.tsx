@@ -123,7 +123,7 @@ const STATIC_ARTICLES: Article[] = [
   {
     slug: "smart-goals-complete-guide",
     title: "SMART Goals: The Complete Guide (2026)",
-    excerpt: "Master SMART goals: what they are, why they work, 50+ examples, and how to use them with GoalPath for real results.",
+    excerpt: "Master SMART goals: what they are, why they work, 50+ examples, and how to use them with Lifeplans for real results.",
     topics: ["goal_planning", "targets"],
   },
   {
@@ -135,7 +135,7 @@ const STATIC_ARTICLES: Article[] = [
   {
     slug: "best-goal-tracking-apps-2026",
     title: "Best Goal Tracking Apps in 2026 (Ranked)",
-    excerpt: "Compare the top goal tracking apps of 2026. Features, pricing, and why GoalPath is the #1 choice for serious achievers.",
+    excerpt: "Compare the top goal tracking apps of 2026. Features, pricing, and why Lifeplans is the #1 choice for serious achievers.",
     topics: ["goal_planning", "productivity"],
   },
   {
@@ -153,7 +153,7 @@ const STATIC_ARTICLES: Article[] = [
   {
     slug: "how-to-track-goals-online",
     title: "How to Track Your Goals Online (Free Tools + Apps)",
-    excerpt: "Discover the best free tools and apps for online goal tracking, plus how GoalPath simplifies the entire process.",
+    excerpt: "Discover the best free tools and apps for online goal tracking, plus how Lifeplans simplifies the entire process.",
     topics: ["targets", "productivity"],
   },
   {

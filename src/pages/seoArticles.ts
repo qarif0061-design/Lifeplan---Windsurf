@@ -3,7 +3,7 @@ export const SEO_ARTICLES = {
     title: "SMART Goals: The Complete Guide (2026)",
     body:
       "SMART goals are Specific, Measurable, Achievable, Relevant, and Time-bound. This framework transforms vague ambitions into actionable targets you can actually achieve.\n\n" +
-      "In this complete guide, you'll learn what SMART goals are, why they work, see 50+ examples across fitness, career, study, and personal growth, and discover how to use GoalPath to implement them effectively.\n\n" +
+      "In this complete guide, you'll learn what SMART goals are, why they work, see 50+ examples across fitness, career, study, and personal growth, and discover how to use Lifeplans to implement them effectively.\n\n" +
       "## What are SMART goals?\n\n" +
       "SMART is an acronym that stands for:\n\n" +
       "- **S**pecific: Clearly define what you want to accomplish\n" +
@@ -71,15 +71,15 @@ export const SEO_ARTICLES = {
       "- Connect with 5 friends weekly for 3 months to strengthen relationships\n" +
       "- Declutter home by donating 100 items within 30 days\n" +
       "- Practice deep breathing exercises 5 minutes daily for stress management\n\n" +
-      "## How to use GoalPath for SMART goals\n\n" +
-      "GoalPath makes SMART goal setting simple and actionable:\n\n" +
+      "## How to use Lifeplans for SMART goals\n\n" +
+      "Lifeplans makes SMART goal setting simple and actionable:\n\n" +
       "1. **Create the goal**: Set your specific outcome with a clear deadline\n" +
       "2. **Add your strategy**: Write why it matters, who benefits, and what you'll say no to\n" +
       "3. **Set weekly priorities**: Break your SMART goal into 1-3 weekly priorities\n" +
       "4. **Add tasks**: Create specific, startable tasks for each priority\n" +
       "5. **Track progress**: Update your progress percentage weekly\n" +
       "6. **Daily check-ins**: Track habits like hydration, exercise, and focus\n\n" +
-      "GoalPath's weekly planning system ensures your SMART goals don't stay dreams—they become weekly actions you can actually complete.\n\n" +
+      "Lifeplans's weekly planning system ensures your SMART goals don't stay dreams—they become weekly actions you can actually complete.\n\n" +
       "## Common SMART goal mistakes\n\n" +
       "- Setting too many goals at once (start with 1-3)\n" +
       "- Making goals unrealistic without considering your schedule\n" +
@@ -103,9 +103,9 @@ export const SEO_ARTICLES = {
       "A: Start with a specific outcome, add a measurable metric, ensure it's achievable, make it relevant to your broader objectives, and set a clear deadline. Example: 'Read 12 books this year by reading 30 minutes daily.'\n\n" +
       "Q: Why are SMART goals important?\n" +
       "A: SMART goals are important because they provide clarity, enable progress tracking, increase motivation through measurable progress, and significantly improve the likelihood of achievement compared to vague goals.\n\n" +
-      "Download GoalPath free to start setting and achieving your SMART goals today. Available on iOS and Android.\n\n" +
+      "Download Lifeplans free to start setting and achieving your SMART goals today. Available on iOS and Android.\n\n" +
       "## Related Resources\n\n" +
-      "- [Download GoalPath](/download) - Start achieving your SMART goals with our AI-powered app\n" +
+      "- [Download Lifeplans](/download) - Start achieving your SMART goals with our AI-powered app\n" +
       "- [SMART Goals for Project Managers](/articles/smart-goals-project-managers) - 50 specific examples for project management\n" +
       "- [Short Term SMART Goals for Students](/articles/short-term-smart-goals-students) - 100 student-focused examples\n" +
       "- [Return to Homepage](/) - Explore more goal planning resources\n\n",
@@ -114,7 +114,7 @@ export const SEO_ARTICLES = {
     title: "SMART Goals for Project Managers (50 Examples)",
     body:
       "Project managers face unique challenges: juggling multiple stakeholders, managing limited resources, and delivering on tight deadlines. SMART goals provide the structure needed to turn project objectives into measurable achievements.\n\n" +
-      "This guide provides 50 SMART goal examples specifically for project management, covering project delivery, team performance, stakeholder management, and career development. Use these with GoalPath to track your project objectives weekly.\n\n" +
+      "This guide provides 50 SMART goal examples specifically for project management, covering project delivery, team performance, stakeholder management, and career development. Use these with Lifeplans to track your project objectives weekly.\n\n" +
       "## What are SMART goals for project management?\n\n" +
       "In project management, SMART goals help you:\n\n" +
       "- Define clear project deliverables\n" +
@@ -178,8 +178,8 @@ export const SEO_ARTICLES = {
       "- Build a network of 50 industry professionals within 12 months\n" +
       "- Master project management software within 3 months through structured training\n" +
       "- Complete leadership development program within 6 months\n\n" +
-      "## How to use GoalPath for project management goals\n\n" +
-      "GoalPath helps project managers:\n\n" +
+      "## How to use Lifeplans for project management goals\n\n" +
+      "Lifeplans helps project managers:\n\n" +
       "1. **Set project goals**: Create SMART goals for each project with clear deadlines\n" +
       "2. **Break into milestones**: Use weekly planning to create project milestones\n" +
       "3. **Assign tasks**: Create actionable tasks for each project phase\n" +
@@ -207,9 +207,9 @@ export const SEO_ARTICLES = {
       "A: Project management SMART goals are objectives that follow the SMART framework to ensure projects are completed on time, within budget, and to quality standards.\n\n" +
       "Q: How do you set SMART goals for a project team?\n" +
       "A: Involve the team in goal setting, ensure goals align with project objectives, set measurable KPIs, establish realistic timelines, and track progress weekly.\n\n" +
-      "Download GoalPath free to manage your project goals effectively. Available on iOS and Android.\n\n" +
+      "Download Lifeplans free to manage your project goals effectively. Available on iOS and Android.\n\n" +
       "## Related Resources\n\n" +
-      "- [Download GoalPath](/download) - Track your project goals with our goal management app\n" +
+      "- [Download Lifeplans](/download) - Track your project goals with our goal management app\n" +
       "- [SMART Goals: The Complete Guide](/articles/smart-goals-complete-guide) - Master the SMART framework with 50+ examples\n" +
       "- [Best Goal Tracking Apps in 2026](/articles/best-goal-tracking-apps-2026) - Compare top goal tracking tools\n" +
       "- [Return to Homepage](/) - Explore more goal planning resources\n\n",
@@ -218,7 +218,7 @@ export const SEO_ARTICLES = {
     title: "Best Goal Tracking Apps in 2026 (Ranked)",
     body:
       "Choosing the right goal tracking app can make the difference between achieving your goals and abandoning them. In 2026, the best apps combine powerful features with intuitive design to help you stay consistent.\n\n" +
-      "This guide ranks the top goal tracking apps of 2026 based on features, pricing, user experience, and effectiveness. We'll show you why GoalPath stands out as the #1 choice for serious goal achievers.\n\n" +
+      "This guide ranks the top goal tracking apps of 2026 based on features, pricing, user experience, and effectiveness. We'll show you why Lifeplans stands out as the #1 choice for serious goal achievers.\n\n" +
       "## What makes a great goal tracking app?\n\n" +
       "The best goal tracking apps include:\n\n" +
       "- Clear goal setting with SMART framework support\n" +
@@ -229,9 +229,9 @@ export const SEO_ARTICLES = {
       "- Reminders and notifications\n" +
       "- Strategy and motivation features\n" +
       "- Affordable pricing\n\n" +
-      "## #1 GoalPath - Best Overall\n\n" +
-      "**Why GoalPath is #1:**\n\n" +
-      "GoalPath combines comprehensive goal management with AI-powered weekly planning, making it the most complete solution for achieving goals in 2026.\n\n" +
+      "## #1 Lifeplans - Best Overall\n\n" +
+      "**Why Lifeplans is #1:**\n\n" +
+      "Lifeplans combines comprehensive goal management with AI-powered weekly planning, making it the most complete solution for achieving goals in 2026.\n\n" +
       "**Key Features:**\n" +
       "- SMART goal setting with templates\n" +
       "- Strategy system (why, who, no)\n" +
@@ -274,15 +274,15 @@ export const SEO_ARTICLES = {
       "- No premium tier\n\n" +
       "**Best for:** Users who want free tracking without advanced features\n\n" +
       "**Pricing:** Completely free\n\n" +
-      "## How GoalPath compares\n\n" +
-      "While other apps focus on simple tracking, GoalPath provides a complete system:\n\n" +
-      "- **Strategy**: Other apps track goals; GoalPath helps you plan the 'how'\n" +
+      "## How Lifeplans compares\n\n" +
+      "While other apps focus on simple tracking, Lifeplans provides a complete system:\n\n" +
+      "- **Strategy**: Other apps track goals; Lifeplans helps you plan the 'how'\n" +
       "- **Weekly Planning**: Break goals into weekly priorities and tasks\n" +
       "- **AI Assistance**: Get smart suggestions for your weekly plan\n" +
       "- **Daily Check-ins**: Track habits that drive goal achievement\n" +
       "- **Cross-Platform**: Seamless sync across web, iOS, and Android\n\n" +
       "## How to choose the right app\n\n" +
-      "Choose GoalPath if you:\n" +
+      "Choose Lifeplans if you:\n" +
       "- Want comprehensive goal management\n" +
       "- Need weekly planning to break goals into actions\n" +
       "- Want strategy and motivation features\n" +
@@ -300,20 +300,20 @@ export const SEO_ARTICLES = {
       "- Relying only on the app without personal commitment\n\n" +
       "## FAQ\n\n" +
       "Q: What is the best goal tracking app?\n" +
-      "A: GoalPath is the best overall goal tracking app in 2026 because it combines comprehensive goal management with AI-powered weekly planning, daily check-ins, and cross-platform sync.\n\n" +
+      "A: Lifeplans is the best overall goal tracking app in 2026 because it combines comprehensive goal management with AI-powered weekly planning, daily check-ins, and cross-platform sync.\n\n" +
       "Q: What are the best goal planning apps?\n" +
-      "A: The best goal planning apps include GoalPath for comprehensive planning, along with simpler options like [Competitor] for basic tracking and [Competitor] for habit-focused users.\n\n" +
+      "A: The best goal planning apps include Lifeplans for comprehensive planning, along with simpler options like [Competitor] for basic tracking and [Competitor] for habit-focused users.\n\n" +
       "Q: What is the best goal planner app?\n" +
-      "A: GoalPath is the best goal planner app because it offers SMART goal setting, strategy planning, weekly breakdown, and progress tracking in one integrated system.\n\n" +
+      "A: Lifeplans is the best goal planner app because it offers SMART goal setting, strategy planning, weekly breakdown, and progress tracking in one integrated system.\n\n" +
       "Q: What are goal tracking apps?\n" +
       "A: Goal tracking apps are digital tools that help you set goals, track progress, and stay motivated through features like reminders, progress visualization, and habit tracking.\n\n" +
       "Q: What is the best goal management app?\n" +
-      "A: GoalPath is the best goal management app because it provides a complete system including goal setting, strategy, planning, tracking, and accountability features.\n\n" +
+      "A: Lifeplans is the best goal management app because it provides a complete system including goal setting, strategy, planning, tracking, and accountability features.\n\n" +
       "Q: How do goal tracking apps work?\n" +
       "A: Goal tracking apps work by letting you set goals with deadlines, track progress through updates, receive reminders, and visualize your advancement through charts and metrics.\n\n" +
-      "Download GoalPath free today to start achieving your goals with the #1 goal tracking app of 2026. Available on iOS and Android.\n\n" +
+      "Download Lifeplans free today to start achieving your goals with the #1 goal tracking app of 2026. Available on iOS and Android.\n\n" +
       "## Related Resources\n\n" +
-      "- [Download GoalPath](/download) - Get the #1 goal tracking app with AI-powered planning\n" +
+      "- [Download Lifeplans](/download) - Get the #1 goal tracking app with AI-powered planning\n" +
       "- [SMART Goals: The Complete Guide](/articles/smart-goals-complete-guide) - Learn how to set effective goals\n" +
       "- [How to Track Your Goals Online](/articles/how-to-track-goals-online) - Discover free tracking tools\n" +
       "- [Return to Homepage](/) - Explore more goal planning resources\n\n",
@@ -322,7 +322,7 @@ export const SEO_ARTICLES = {
     title: "SMART Marketing Goals: 40 Examples That Work",
     body:
       "Marketing teams need clear, measurable objectives to demonstrate ROI and guide strategy. SMART marketing goals transform vague marketing ambitions into actionable targets that drive real business results.\n\n" +
-      "This guide provides 40 SMART marketing goal examples across campaigns, content, lead generation, brand awareness, and performance metrics. Use these with GoalPath to track your marketing objectives weekly.\n\n" +
+      "This guide provides 40 SMART marketing goal examples across campaigns, content, lead generation, brand awareness, and performance metrics. Use these with Lifeplans to track your marketing objectives weekly.\n\n" +
       "## What are SMART marketing goals?\n\n" +
       "SMART marketing goals follow the framework: Specific, Measurable, Achievable, Relevant, and Time-bound. They help marketing teams:\n\n" +
       "- Set clear campaign objectives\n" +
@@ -386,8 +386,8 @@ export const SEO_ARTICLES = {
       "- Achieve 30% return customer rate within 12 months through loyalty programs\n" +
       "- Reduce cost per lead by 25% within 6 months through channel optimization\n" +
       "- Achieve 50% marketing-qualified lead conversion within 6 months\n\n" +
-      "## How to use GoalPath for marketing goals\n\n" +
-      "GoalPath helps marketing teams:\n\n" +
+      "## How to use Lifeplans for marketing goals\n\n" +
+      "Lifeplans helps marketing teams:\n\n" +
       "1. **Set campaign goals**: Create SMART goals for each marketing initiative\n" +
       "2. **Break into quarterly objectives**: Use weekly planning for campaign milestones\n" +
       "3. **Assign tasks**: Create actionable marketing tasks for each objective\n" +
@@ -415,9 +415,9 @@ export const SEO_ARTICLES = {
       "A: Marketing goals examples include lead generation targets, revenue objectives, brand awareness metrics, content publishing schedules, and performance improvement targets.\n\n" +
       "Q: How do you set marketing goals for a team?\n" +
       "A: Involve the team in goal setting, ensure goals align with business objectives, set measurable KPIs, establish realistic timelines, and track progress weekly.\n\n" +
-      "Download GoalPath free to track your marketing goals effectively. Available on iOS and Android.\n\n" +
+      "Download Lifeplans free to track your marketing goals effectively. Available on iOS and Android.\n\n" +
       "## Related Resources\n\n" +
-      "- [Download GoalPath](/download) - Track your marketing goals with our goal management app\n" +
+      "- [Download Lifeplans](/download) - Track your marketing goals with our goal management app\n" +
       "- [SMART Goals: The Complete Guide](/articles/smart-goals-complete-guide) - Master the SMART framework\n" +
       "- [Best Goal Tracking Apps in 2026](/articles/best-goal-tracking-apps-2026) - Compare top tracking tools\n" +
       "- [Return to Homepage](/) - Explore more goal planning resources\n\n",
@@ -426,7 +426,7 @@ export const SEO_ARTICLES = {
     title: "Short Term SMART Goals: 100 Examples for Students",
     body:
       "Students face unique challenges: balancing academics, extracurriculars, social life, and personal development. Short-term SMART goals (1-12 weeks) provide achievable targets that build momentum and confidence.\n\n" +
-      "This guide provides 100 short-term SMART goal examples specifically for students, covering study habits, academic performance, time management, personal growth, and well-being. Use these with GoalPath to build consistent success.\n\n" +
+      "This guide provides 100 short-term SMART goal examples specifically for students, covering study habits, academic performance, time management, personal growth, and well-being. Use these with Lifeplans to build consistent success.\n\n" +
       "## What are short-term SMART goals for students?\n\n" +
       "Short-term SMART goals for students follow the framework: Specific, Measurable, Achievable, Relevant, and Time-bound, with timelines ranging from 1 week to 12 weeks. They help students:\n\n" +
       "- Build study habits gradually\n" +
@@ -534,8 +534,8 @@ export const SEO_ARTICLES = {
       "- Create flashcards for key concepts within 1 week before exam\n" +
       "- Take practice test under timed conditions within 2 weeks before exam\n" +
       "- Review past exam papers within 3 weeks before test\n\n" +
-      "## How to use GoalPath for student goals\n\n" +
-      "GoalPath helps students:\n\n" +
+      "## How to use Lifeplans for student goals\n\n" +
+      "Lifeplans helps students:\n\n" +
       "1. **Set academic goals**: Create SMART goals for grades, exams, and assignments\n" +
       "2. **Plan study schedule**: Use weekly planning to organize study time\n" +
       "3. **Track assignments**: Create tasks for homework and projects\n" +
@@ -563,9 +563,9 @@ export const SEO_ARTICLES = {
       "A: Examples: 'Wake up at 7 AM daily for 21 days,' 'Exercise 3 times weekly for 6 weeks,' 'Read 5 assigned books within 6 weeks,' and 'Complete all lab reports on time for 6 weeks.'\n\n" +
       "Q: How do students set goals effectively?\n" +
       "A: Students set effective goals by making them specific (what exactly), measurable (how to track), achievable (realistic given schedule), relevant (why it matters), and time-bound (clear deadline).\n\n" +
-      "Download GoalPath free to achieve your student goals. Available on iOS and Android.\n\n" +
+      "Download Lifeplans free to achieve your student goals. Available on iOS and Android.\n\n" +
       "## Related Resources\n\n" +
-      "- [Download GoalPath](/download) - Track your student goals with our goal management app\n" +
+      "- [Download Lifeplans](/download) - Track your student goals with our goal management app\n" +
       "- [SMART Goals: The Complete Guide](/articles/smart-goals-complete-guide) - Master the SMART framework\n" +
       "- [Best Goal Tracking Apps in 2026](/articles/best-goal-tracking-apps-2026) - Compare top tracking tools\n" +
       "- [Return to Homepage](/) - Explore more goal planning resources\n\n",
@@ -574,7 +574,7 @@ export const SEO_ARTICLES = {
     title: "How to Track Your Goals Online (Free Tools + Apps)",
     body:
       "Tracking your goals online makes progress visible, creates accountability, and significantly increases your likelihood of success. In 2026, there are numerous free tools and apps that help you monitor progress without spending money.\n\n" +
-      "This guide explores the best free online goal tracking tools, explains how to use them effectively, and shows you why GoalPath provides the most comprehensive solution for serious goal achievers.\n\n" +
+      "This guide explores the best free online goal tracking tools, explains how to use them effectively, and shows you why Lifeplans provides the most comprehensive solution for serious goal achievers.\n\n" +
       "## Why track goals online?\n\n" +
       "Online goal tracking provides several advantages:\n\n" +
       "- **Accessibility**: Access your goals from anywhere (web, mobile, tablet)\n" +
@@ -635,8 +635,8 @@ export const SEO_ARTICLES = {
       "- Mobile access\n\n" +
       "**How to use:** Schedule goal-related activities as recurring events. Use different colors for different goal categories.\n\n" +
       "**Limitations:** No progress tracking, only scheduling\n\n" +
-      "## How GoalPath Simplifies Online Goal Tracking\n\n" +
-      "While free tools are useful, GoalPath provides a comprehensive solution that combines the best features:\n\n" +
+      "## How Lifeplans Simplifies Online Goal Tracking\n\n" +
+      "While free tools are useful, Lifeplans provides a comprehensive solution that combines the best features:\n\n" +
       "**All-in-One System:**\n" +
       "- Goal setting with SMART framework\n" +
       "- Strategy planning (why, who, no)\n" +
@@ -655,7 +655,7 @@ export const SEO_ARTICLES = {
       "### Step 1: Choose Your Tool\n" +
       "- For simple tracking: Google Sheets\n" +
       "- For visual tracking: Trello\n" +
-      "- For comprehensive tracking: GoalPath\n" +
+      "- For comprehensive tracking: Lifeplans\n" +
       "- For habit building: Habitica\n" +
       "- For scheduling: Google Calendar\n\n" +
       "### Step 2: Define Your Goals\n" +
@@ -691,20 +691,20 @@ export const SEO_ARTICLES = {
       "- Not adjusting goals when circumstances change\n\n" +
       "## FAQ\n\n" +
       "Q: How do I track my goals online for free?\n" +
-      "A: You can track goals online for free using tools like Google Sheets for custom tracking, Trello for visual boards, Notion for databases, Habitica for gamified tracking, or GoalPath which offers a free tier with comprehensive features.\n\n" +
+      "A: You can track goals online for free using tools like Google Sheets for custom tracking, Trello for visual boards, Notion for databases, Habitica for gamified tracking, or Lifeplans which offers a free tier with comprehensive features.\n\n" +
       "Q: What is the best free goal tracker?\n" +
-      "A: The best free goal tracker depends on your needs: Google Sheets for customization, Trello for visual tracking, Notion for all-in-one workspace, or GoalPath for comprehensive goal management with AI features.\n\n" +
+      "A: The best free goal tracker depends on your needs: Google Sheets for customization, Trello for visual tracking, Notion for all-in-one workspace, or Lifeplans for comprehensive goal management with AI features.\n\n" +
       "Q: What are the best free tools for tracking goals?\n" +
       "A: The best free tools include Google Sheets (custom tracking), Trello (visual boards), Notion (databases), Habitica (gamification), and Google Calendar (scheduling).\n\n" +
       "Q: How do I track my personal goals online?\n" +
       "A: Track personal goals online by choosing a tool, writing SMART goals, setting up a tracking system with metrics and deadlines, updating progress weekly, and reviewing regularly to adjust plans.\n\n" +
       "Q: What is the best app to track goals?\n" +
-      "A: GoalPath is the best app to track goals because it combines goal setting, strategy planning, weekly breakdown, daily check-ins, and progress tracking in one comprehensive system with cross-platform sync.\n\n" +
+      "A: Lifeplans is the best app to track goals because it combines goal setting, strategy planning, weekly breakdown, daily check-ins, and progress tracking in one comprehensive system with cross-platform sync.\n\n" +
       "Q: How do I track goals on my phone?\n" +
-      "A: Track goals on your phone by using apps with mobile versions like GoalPath (iOS/Android), Google Sheets, Trello, or Notion, ensuring the app syncs across devices for consistent tracking.\n\n" +
-      "Download GoalPath free for the most comprehensive online goal tracking experience. Available on iOS and Android.\n\n" +
+      "A: Track goals on your phone by using apps with mobile versions like Lifeplans (iOS/Android), Google Sheets, Trello, or Notion, ensuring the app syncs across devices for consistent tracking.\n\n" +
+      "Download Lifeplans free for the most comprehensive online goal tracking experience. Available on iOS and Android.\n\n" +
       "## Related Resources\n\n" +
-      "- [Download GoalPath](/download) - Get the most comprehensive goal tracking app\n" +
+      "- [Download Lifeplans](/download) - Get the most comprehensive goal tracking app\n" +
       "- [Best Goal Tracking Apps in 2026](/articles/best-goal-tracking-apps-2026) - Compare top tracking tools\n" +
       "- [SMART Goals: The Complete Guide](/articles/smart-goals-complete-guide) - Learn how to set effective goals\n" +
       "- [Return to Homepage](/) - Explore more goal planning resources\n\n",
