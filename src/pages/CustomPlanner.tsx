@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -487,6 +488,12 @@ const CustomPlannerPage = () => {
   if (!user) {
     return (
       <Layout>
+        <Seo
+          title="Custom Planner | Goal Planner - Lifeplans"
+          description="Build your own custom planner in Lifeplans. Sign in to create and edit planners."
+          canonicalPath="/custom-planner"
+          noIndex
+        />
         <div className="text-center py-12 text-muted-foreground">Please sign in to use the Custom Planner.</div>
       </Layout>
     );

@@ -1,12 +1,18 @@
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 
 const PrivacyPolicy = () => {
   return (
     <Layout>
+      <Seo
+        title="Privacy Policy | Goal Planner - Lifeplans"
+        description="How Goal Planner – Lifeplans collects, uses and protects your data, which third-party services we use (Firebase, Google AdSense, Google Analytics, Lemon Squeezy) and your choices."
+        canonicalPath="/privacy"
+      />
       <div className="max-w-4xl mx-auto space-y-8 p-6">
         <h1 className="text-4xl font-bold text-foreground">Privacy Policy</h1>
         <p className="text-lg text-muted-foreground">
-          Last updated: March 29, 2026
+          Last updated: October 24, 2026
         </p>
         <p className="text-muted-foreground">
           This Privacy Policy explains how Goal Planner – Lifeplans ("we", "us", "our") collects, uses, and protects information when you use the Goal Planner – Lifeplans web application and related services.
@@ -85,14 +91,24 @@ const PrivacyPolicy = () => {
                 <h3 className="text-xl font-semibold text-foreground">Google Services</h3>
                 <p>We use Google services including:</p>
                 <ul className="list-disc ml-6 space-y-2">
-                  <li>Firebase for authentication and data storage</li>
+                  <li>Firebase (Authentication, Cloud Firestore, Cloud Functions) for accounts and data storage</li>
+                  <li>Google Analytics (via Firebase) for website and app analytics</li>
                   <li>Google AdSense for displaying advertisements</li>
-                  <li>Google Analytics for website analytics</li>
+                  <li>Google Ads (conversion measurement tag) to measure the results of our own advertising</li>
+                  <li>Google Fonts to load the fonts used on this website</li>
                 </ul>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-foreground">Payment Processors</h3>
-                <p>Payments are processed by third-party payment providers. We do not store your full payment card details.</p>
+                <p>Web subscriptions are processed by Lemon Squeezy, which acts as merchant of record. In-app purchases on iOS and Android are handled by the Apple App Store and Google Play (through RevenueCat). We do not store your full payment card details.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-foreground">Hosting</h3>
+                <p>The website is hosted on Vercel, which processes standard server logs (such as IP address and request time) to deliver and secure the site.</p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-foreground">Advertising partners</h3>
+                <p>Google AdSense is the only advertising network used on this website. We do not use pop-up or pop-under ad networks.</p>
               </div>
             </div>
           </section>
@@ -168,7 +184,7 @@ const PrivacyPolicy = () => {
             <h2 className="text-2xl font-bold text-foreground mb-4">11. Contact Us</h2>
             <p>If you have questions about this Privacy Policy, please contact us at:</p>
             <div className="bg-secondary/40 p-4 rounded-lg">
-              <p>Email: shumailasahervu@gmail.com</p>
+              <p>Email: info@goalplanner.io</p>
               <p>Website: https://goalplanner.io</p>
             </div>
           </section>

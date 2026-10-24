@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,12 @@ const Templates = () => {
 
   return (
     <Layout>
+      <Seo
+        title="Plan Templates | Goal Planner - Lifeplans"
+        description="Browse ready-made goal and weekly plan templates shared by Lifeplans users and copy one into your planner in a click."
+        canonicalPath="/templates"
+        noIndex
+      />
       <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in duration-500">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-display font-bold text-foreground">Plan Templates</h1>

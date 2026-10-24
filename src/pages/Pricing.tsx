@@ -4,6 +4,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useAuthModal } from "@/contexts/AuthModalContext";
 import HelpDialog from "@/components/HelpDialog";
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 import { FREE_GOAL_LIMIT, PRICING_TIERS, PREMIUM_FEATURES, LEMONSQUEEZY_CHECKOUT_URLS, type PricingTierId } from "@/constants/product";
 import { showError } from "@/utils/toast";
 
@@ -49,6 +50,11 @@ const Pricing = () => {
 
   return (
     <Layout>
+      <Seo
+        title="Pricing – Free and Premium Plans | Goal Planner - Lifeplans"
+        description="Compare Lifeplans plans: start free with core goal planning, or upgrade to Premium for AI weekly plans, unlimited goals and advanced progress insights."
+        canonicalPath="/pricing"
+      />
       <div className="pb-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">

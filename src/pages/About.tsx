@@ -81,11 +81,25 @@ const About = () => {
             </p>
           </div>
 
+          <div id="editorial-team" className="space-y-2 scroll-mt-24">
+            <h2 className="text-xl font-bold text-foreground">Lifeplans Editorial Team</h2>
+            <p>
+              Articles on goalplanner.io are written and reviewed by the Lifeplans Editorial Team, the same small team that
+              builds the Lifeplans goal planner app. We write about goal setting, SMART goals, weekly planning, habits and
+              productivity, and we test the methods we describe inside our own app.
+            </p>
+            <p>
+              Every article shows when it was published and last updated. Our guides are general information, not
+              professional, medical, financial or legal advice (see our <a href="/disclaimer" className="text-primary hover:underline">disclaimer</a>).
+              If you spot an error, email <a href="mailto:info@goalplanner.io" className="text-primary hover:underline">info@goalplanner.io</a> and we will correct it.
+            </p>
+          </div>
+
           <div className="space-y-2">
             <h2 className="text-xl font-bold text-foreground">Get in touch</h2>
             <p>
               Have questions, feedback, or suggestions? We'd love to hear from you. Reach out through our{' '}
-              <a href="/contact" className="text-primary hover:underline">contact page</a> or email us directly.
+              <a href="/contact" className="text-primary hover:underline">contact page</a> or email us at info@goalplanner.io.
               We read every message and use feedback to improve Lifeplans for everyone.
             </p>
           </div>

@@ -1,8 +1,14 @@
 import Layout from "@/components/Layout";
+import Seo from "@/components/Seo";
 
 const Terms = () => {
   return (
     <Layout>
+      <Seo
+        title="Terms of Service | Goal Planner - Lifeplans"
+        description="The terms that govern your use of Goal Planner – Lifeplans: accounts, subscriptions, acceptable use, content ownership, disclaimers and how to contact us."
+        canonicalPath="/terms"
+      />
       <div className="max-w-4xl mx-auto space-y-8 p-6">
         <h1 className="text-4xl font-display font-bold text-foreground">Terms of Service</h1>
         <p className="text-lg text-muted-foreground">
@@ -143,7 +149,7 @@ const Terms = () => {
             <h2 className="text-2xl font-display font-bold text-foreground mb-4">17. Contact Information</h2>
             <p>If you have questions about these Terms, please contact us at:</p>
             <div className="bg-secondary/40 p-4 rounded-lg">
-              <p>Email: shumailasahervu@gmail.com</p>
+              <p>Email: info@goalplanner.io</p>
               <p>Website: https://goalplanner.io</p>
             </div>
           </section>
