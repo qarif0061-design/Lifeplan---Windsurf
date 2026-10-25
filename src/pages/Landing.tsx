@@ -98,9 +98,9 @@ const Landing = () => {
               <span>Your goal system on web + mobile</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-display font-extrabold text-foreground tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-              Every goal is a path.
+              Free Goal Planner App for SMART Goals.
               <br />
-              <span className="text-primary">Walk it one checkpoint at a time.</span>
+              <span className="text-primary">Walk every goal one checkpoint at a time.</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
               Lifeplans turns a goal into checkpoints, checkpoints into weekly priorities, and priorities into today's tasks — so progress is something you can see, not just hope for.
