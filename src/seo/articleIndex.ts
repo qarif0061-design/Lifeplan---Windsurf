@@ -1,6 +1,7 @@
 import { getGeneratedArticleBySlug } from "./articles";
 import { PILLARS, getPillarBySlug, getPillarForKeyword, type FaqItem, type PillarArticle } from "./pillars";
 import { CONTENT } from "@/pages/articleContent";
+import { BLOG_POSTS, getBlogPost } from "./blogPosts";
 import noindexPaths from "./noindex-paths.json";
 
 export const SITE_URL = "https://goalplanner.io";
@@ -49,6 +50,18 @@ export const resolveArticle = (slug: string | undefined): ResolvedArticle | unde
       noIndex: isNoindexPath(`/articles/${slug}`),
     };
   }
+  const post = getBlogPost(slug);
+  if (post) {
+    return {
+      slug,
+      title: post.title,
+      body: post.body,
+      kind: "static",
+      relatedSlugs: [],
+      canonicalPath: `/articles/${slug}`,
+      noIndex: isNoindexPath(`/articles/${slug}`),
+    };
+  }
   const stat = CONTENT[slug];
   if (stat) {
     return {
@@ -80,13 +93,18 @@ export const resolveArticle = (slug: string | undefined): ResolvedArticle | unde
 
 /** Title of any known article, for internal link anchor text. */
 export const getArticleTitle = (slug: string): string | undefined =>
-  getPillarBySlug(slug)?.title ?? CONTENT[slug]?.title;
+  getPillarBySlug(slug)?.title ?? getBlogPost(slug)?.title ?? CONTENT[slug]?.title;
 
 /** All articles that get a prerendered HTML page (pillars + hand-written + role articles). */
 export const listArticleEntries = (): { slug: string; title: string; noIndex: boolean }[] => {
   const seen = new Set<string>();
   const out: { slug: string; title: string; noIndex: boolean }[] = [];
   for (const p of PILLARS) {
+    if (seen.has(p.slug)) continue;
+    seen.add(p.slug);
+    out.push({ slug: p.slug, title: p.title, noIndex: isNoindexPath(`/articles/${p.slug}`) });
+  }
+  for (const p of BLOG_POSTS) {
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
     out.push({ slug: p.slug, title: p.title, noIndex: isNoindexPath(`/articles/${p.slug}`) });
