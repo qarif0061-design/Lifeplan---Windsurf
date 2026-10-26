@@ -95,7 +95,7 @@ const Contact = () => {
                     </a>
                   </li>
                   <li>
-                    <a href="/time-management" className="text-primary hover:text-primary/80">
+                    <a href="/articles/time-management-tips-and-strategies-2026" className="text-primary hover:text-primary/80">
                       Time Management Strategies
                     </a>
                   </li>

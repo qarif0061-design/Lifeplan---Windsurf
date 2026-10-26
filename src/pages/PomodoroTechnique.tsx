@@ -391,7 +391,7 @@ const PomodoroTechnique = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Achieve flow state and maximize focus for complex tasks</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/deep-work">Deep Work →</Link>
+                <Link to="/focus-and-mental-clarity">Deep Work →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -413,7 +413,7 @@ const PomodoroTechnique = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Focus strategies specifically designed for neurodivergent minds</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/adhd-productivity">ADHD Strategies →</Link>
+                <Link to="/adhd-planner">ADHD Strategies →</Link>
               </Button>
             </CardContent>
           </Card>

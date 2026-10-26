@@ -386,7 +386,7 @@ const Procrastination = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Strategies specifically for ADHD-related procrastination</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/adhd-productivity">ADHD Strategies →</Link>
+                <Link to="/adhd-planner">ADHD Strategies →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -408,7 +408,7 @@ const Procrastination = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Overcome workplace procrastination and delays</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/productivity-at-work">Work Productivity →</Link>
+                <Link to="/work-planner">Work Productivity →</Link>
               </Button>
             </CardContent>
           </Card>

@@ -142,14 +142,14 @@ const MotivationQuotesSeo = () => {
               <h3 className="text-lg font-bold text-foreground">Life planning</h3>
               <p className="mt-2 text-foreground/80">Plan your life week by week and track progress.</p>
               <Button asChild variant="outline" className="mt-4 rounded-full">
-                <Link to="/life-planning">Open life planning</Link>
+                <Link to="/goal-planner">Open life planning</Link>
               </Button>
             </div>
             <div className="rounded-[2rem] border border-border bg-card p-7 shadow-sm">
               <h3 className="text-lg font-bold text-foreground">Time management</h3>
               <p className="mt-2 text-foreground/80">Time blocking and planning tools.</p>
               <Button asChild variant="outline" className="mt-4 rounded-full">
-                <Link to="/time-management">Open time management</Link>
+                <Link to="/articles/time-management-tips-and-strategies-2026">Open time management</Link>
               </Button>
             </div>
           </div>

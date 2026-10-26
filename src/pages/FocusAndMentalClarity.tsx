@@ -445,7 +445,7 @@ const FocusAndMentalClarity = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Protect time for focused work</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/time-management">Time Management →</Link>
+                <Link to="/articles/time-management-tips-and-strategies-2026">Time Management →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -467,7 +467,7 @@ const FocusAndMentalClarity = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Focus strategies for neurodivergent minds</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/adhd-productivity">ADHD Strategies →</Link>
+                <Link to="/adhd-planner">ADHD Strategies →</Link>
               </Button>
             </CardContent>
           </Card>

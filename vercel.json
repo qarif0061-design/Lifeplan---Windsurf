@@ -19,12 +19,12 @@
     },
     {
       "source": "/articles/daily-productivity-routine-for-success-step-by-step",
-      "destination": "/articles/daily-productivity-routine",
+      "destination": "/articles/how-to-build-a-consistent-daily-routine",
       "permanent": true
     },
     {
       "source": "/articles/best-planner-setup-for-daily-tasks",
-      "destination": "/articles/daily-planner-guide-2026",
+      "destination": "/articles/daily-planner-template",
       "permanent": true
     },
     {
@@ -59,7 +59,7 @@
     },
     {
       "source": "/articles/yearly-goal-setting-template-excel",
-      "destination": "/articles/monthly-goal-setting-template",
+      "destination": "/articles/smart-goals-template-and-examples-2026",
       "permanent": true
     },
     {
@@ -74,12 +74,12 @@
     },
     {
       "source": "/getting-things-done",
-      "destination": "/articles/how-to-get-things-done-system-2026",
+      "destination": "/productivity",
       "permanent": true
     },
     {
       "source": "/life-planning",
-      "destination": "/articles/how-to-set-goals-and-actually-achieve-them",
+      "destination": "/goal-planner",
       "permanent": true
     },
     {
@@ -89,7 +89,7 @@
     },
     {
       "source": "/motivation",
-      "destination": "/articles/best-motivational-quotes-2026",
+      "destination": "/self-improvement",
       "permanent": true
     },
     {
@@ -4414,7 +4414,7 @@
     },
     {
       "source": "/articles/trackable-goals",
-      "destination": "/articles/smart-objectives-examples",
+      "destination": "/goal-tracking-software",
       "permanent": true
     },
     {

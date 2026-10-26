@@ -569,7 +569,7 @@ const GoalPlanner = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Monitor progress and stay motivated with tracking systems</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/goal-tracking">Goal Tracking →</Link>
+                <Link to="/goal-tracking-software">Goal Tracking →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -580,7 +580,7 @@ const GoalPlanner = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Create a comprehensive vision for your life and future</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/life-planning">Life Planning →</Link>
+                <Link to="/goal-planner">Life Planning →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -602,7 +602,7 @@ const GoalPlanner = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Protect time for working on important goals</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/time-management">Time Management →</Link>
+                <Link to="/articles/time-management-tips-and-strategies-2026">Time Management →</Link>
               </Button>
             </CardContent>
           </Card>

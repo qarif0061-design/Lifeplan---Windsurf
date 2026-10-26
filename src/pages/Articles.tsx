@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 import { PILLARS } from "@/seo/pillars";
 import { ROLE_ARTICLES } from "./roleArticles";
 import { BLOG_POSTS } from "@/seo/blogPosts";
+import { isNoindexPath } from "@/seo/articleIndex";
 
 type Article = {
   slug: string;
@@ -589,6 +590,8 @@ const ROLE_LISTING: Article[] = Object.entries(ROLE_ARTICLES).map(([slug, a]) =>
 const ARTICLES: Article[] = (() => {
   const bySlug = new Map<string, Article>();
   [...BLOG_LISTING, ...STATIC_ARTICLES, ...PILLAR_LISTING, ...ROLE_LISTING].forEach((a) => {
+    // Only list indexable articles in the hub so crawl budget and link equity go to real articles.
+    if (isNoindexPath(`/articles/${a.slug}`)) return;
     if (!bySlug.has(a.slug)) bySlug.set(a.slug, a);
   });
   return Array.from(bySlug.values());

@@ -436,7 +436,7 @@ const StudentPlanner = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Master scheduling and prioritization</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/time-management">Time Management →</Link>
+                <Link to="/articles/time-management-tips-and-strategies-2026">Time Management →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -469,7 +469,7 @@ const StudentPlanner = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Strategies for focus and executive function</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/adhd-productivity">ADHD Strategies →</Link>
+                <Link to="/adhd-planner">ADHD Strategies →</Link>
               </Button>
             </CardContent>
           </Card>

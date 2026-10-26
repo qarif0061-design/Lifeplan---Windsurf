@@ -411,7 +411,7 @@ const ToDoList = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Ready-to-use daily to-do list templates</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/daily-to-do-list-template">Daily Templates →</Link>
+                <Link to="/articles/daily-planner-template">Daily Templates →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -422,7 +422,7 @@ const ToDoList = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">To-do lists specifically for students</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/to-do-list-for-students">Student Lists →</Link>
+                <Link to="/student-planner">Student Lists →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -433,7 +433,7 @@ const ToDoList = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Beautiful and inspiring to-do list designs</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/aesthetic-to-do-list">Aesthetic Lists →</Link>
+                <Link to="/daily-digital-planner">Aesthetic Lists →</Link>
               </Button>
             </CardContent>
           </Card>
@@ -444,7 +444,7 @@ const ToDoList = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Simple, clean to-do list approaches</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/minimalist-to-do-list">Minimalist Lists →</Link>
+                <Link to="/structured-daily-planner-app">Minimalist Lists →</Link>
               </Button>
             </CardContent>
           </Card>

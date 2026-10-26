@@ -354,7 +354,7 @@ const EisenhowerMatrix = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Comprehensive time management strategies and techniques</p>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/time-management">Time Management →</Link>
+                <Link to="/articles/time-management-tips-and-strategies-2026">Time Management →</Link>
               </Button>
             </CardContent>
           </Card>
