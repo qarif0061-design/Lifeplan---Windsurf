@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { getArticleTitle } from "./articleIndex";
 
+/** Affiliate/retail links get rel="sponsored nofollow" (Amazon Associates policy + Google guidelines). */
+const AFFILIATE_RE = /^https?:\/\/(?:[a-z0-9-]+\.)*(?:amazon\.[a-z.]+|amzn\.to)\//i;
+
 const SITE_RE = /^https?:\/\/(?:www\.)?goalplanner\.io/i;
 
 const PAGE_LABELS: Record<string, string> = {
@@ -128,7 +131,13 @@ const renderLink = (href: string, label: string, key: string) => {
     );
   }
   return (
-    <a key={key} href={href} className="text-primary underline" target="_blank" rel="noopener noreferrer">
+    <a
+      key={key}
+      href={href}
+      className="text-primary underline"
+      target="_blank"
+      rel={AFFILIATE_RE.test(href) ? "sponsored nofollow noopener noreferrer" : "noopener noreferrer"}
+    >
       {label}
     </a>
   );
