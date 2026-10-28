@@ -176,9 +176,53 @@ export const renderMarkdown = (body: string): React.ReactElement[] => {
     list = null;
   };
 
+  let table: string[][] | null = null;
+  const flushTable = (k: string) => {
+    if (!table) return;
+    const [head, ...body] = table;
+    out.push(
+      <div key={`tw-${k}`} className="overflow-x-auto my-4">
+        <table className="w-full text-sm border-collapse text-foreground/80">
+          <thead>
+            <tr>
+              {head.map((c, j) => (
+                <th key={j} className="border border-border px-3 py-2 text-left font-bold text-foreground">
+                  {renderInline(c, `th-${k}-${j}`)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {body.map((r, ri) => (
+              <tr key={ri}>
+                {r.map((c, j) => (
+                  <td key={j} className="border border-border px-3 py-2 align-top">
+                    {renderInline(c, `td-${k}-${ri}-${j}`)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>,
+    );
+    table = null;
+  };
+
   lines.forEach((raw, i) => {
     const line = raw.trimEnd();
     const k = String(i);
+    const t = line.trim();
+    if (t.startsWith("|") && t.endsWith("|") && t.length > 1) {
+      flushPara(k);
+      flushList(k);
+      const cells = t.slice(1, -1).split("|").map((c) => c.trim());
+      if (cells.every((c) => /^:?-{2,}:?$/.test(c))) return;
+      if (!table) table = [];
+      table.push(cells);
+      return;
+    }
+    flushTable(k);
     const ul = line.match(/^\s*[-*•]\s+(.*)$/);
     const ol = line.match(/^\s*\d+[.)]\s+(.*)$/);
     if (ul || ol) {
@@ -225,5 +269,6 @@ export const renderMarkdown = (body: string): React.ReactElement[] => {
   });
   flushPara("end");
   flushList("end");
+  flushTable("end");
   return out;
 };
