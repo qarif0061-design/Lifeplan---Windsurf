@@ -22,7 +22,7 @@ const AdhdPlannerSeo = () => {
   return (
     <PublicPageLayout>
       <Seo
-        title="ADHD Planner: Goal Setting & Planning for Neurodivergent Minds | GoalPlanner"
+        title="ADHD Planner: Free Goal Setting & Daily Planning for ADHD Minds | GoalPlanner"
         description="Discover ADHD-friendly planning strategies, goal setting tips for adults with ADHD, and tools that work with your brain. Simple, effective systems for neurodivergent thinkers."
         canonicalPath="/adhd-planner"
         jsonLd={{

@@ -3,6 +3,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { useState } from "react";
 import TopHeader from "./TopHeader";
+import BoostLinks from "./BoostLinks";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -18,6 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <div className="rounded-[2.5rem] bg-card/70 backdrop-blur-xl supports-[backdrop-filter]:bg-card/60 border border-border/60 shadow-sm transition-all duration-300">
                 <div className="p-6 sm:p-8">
                   {children}
+                  <BoostLinks />
                 </div>
               </div>
             </div>
