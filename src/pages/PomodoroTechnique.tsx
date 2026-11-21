@@ -149,7 +149,7 @@ const PomodoroTechnique = () => {
   return (
     <PublicPageLayout>
       <Seo
-        title="Pomodoro Technique Guide 2026 | Focus Timer Method | GoalPlanner"
+        title="Pomodoro Technique Guide 2026: How It Works, Steps & Tips | GoalPlanner"
         description="Master the Pomodoro Technique with proven strategies. Learn 25-minute focus sessions, break strategies, and productivity tips. Start free."
         canonicalPath="/pomodoro-technique"
         jsonLd={{

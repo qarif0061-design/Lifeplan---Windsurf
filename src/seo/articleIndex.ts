@@ -20,6 +20,24 @@ export const ARTICLE_DATES = {
 
 const NOINDEX = new Set<string>(noindexPaths as string[]);
 
+
+/**
+ * Improved <title>/H1 for articles that already rank in Google top 5 (approved by the owner, Nov 2026).
+ * URLs and bodies are unchanged; each title keeps the page's main ranking query.
+ */
+const TITLE_OVERRIDES: Record<string, string> = {
+  "smart-sustainable-measurable-attainable": "SMART Sustainable Measurable Attainable Goals: Meaning & Examples (2026)",
+  "smart-learning-objective": "SMART Learning Objective: Examples & Simple Template (2026)",
+  "smart-goals-for-training-and-development": "SMART Goals for Training and Development: 2026 Examples",
+  "smart-goals-for-adults": "SMART Goals for Adults: Examples & Tips (2026)",
+  "measurable-career-goals": "Measurable Career Goals: Examples & How to Track Them",
+  "smart-goals-for-a-company": "SMART Goals for a Company: Company-Wide Examples",
+  "smart-goals-examples-for-team-building": "SMART Goals Examples for Team Building (2026)",
+  "smarter-goals-michael-hyatt": "SMARTER Goals by Michael Hyatt: Framework & Examples (2026)",
+};
+const withTitle = <T extends { title: string }>(slug: string, a: T): T =>
+  TITLE_OVERRIDES[slug] ? { ...a, title: TITLE_OVERRIDES[slug] } : a;
+
 export const isNoindexPath = (path: string) => NOINDEX.has(path.replace(/\/+$/, "") || "/");
 
 export type ResolvedArticle = {
@@ -37,6 +55,11 @@ export type ResolvedArticle = {
 
 export const resolveArticle = (slug: string | undefined): ResolvedArticle | undefined => {
   if (!slug) return undefined;
+  const r = resolveArticleRaw(slug);
+  return r ? withTitle(slug, r) : undefined;
+};
+
+const resolveArticleRaw = (slug: string): ResolvedArticle | undefined => {
   const pillar = getPillarBySlug(slug);
   if (pillar) {
     return {
@@ -93,6 +116,7 @@ export const resolveArticle = (slug: string | undefined): ResolvedArticle | unde
 
 /** Title of any known article, for internal link anchor text. */
 export const getArticleTitle = (slug: string): string | undefined =>
+  TITLE_OVERRIDES[slug] ??
   getPillarBySlug(slug)?.title ?? getBlogPost(slug)?.title ?? CONTENT[slug]?.title;
 
 /** All articles that get a prerendered HTML page (pillars + hand-written + role articles). */
@@ -102,17 +126,17 @@ export const listArticleEntries = (): { slug: string; title: string; noIndex: bo
   for (const p of PILLARS) {
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
-    out.push({ slug: p.slug, title: p.title, noIndex: isNoindexPath(`/articles/${p.slug}`) });
+    out.push({ slug: p.slug, title: TITLE_OVERRIDES[p.slug] ?? p.title, noIndex: isNoindexPath(`/articles/${p.slug}`) });
   }
   for (const p of BLOG_POSTS) {
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
-    out.push({ slug: p.slug, title: p.title, noIndex: isNoindexPath(`/articles/${p.slug}`) });
+    out.push({ slug: p.slug, title: TITLE_OVERRIDES[p.slug] ?? p.title, noIndex: isNoindexPath(`/articles/${p.slug}`) });
   }
   for (const [slug, a] of Object.entries(CONTENT)) {
     if (seen.has(slug)) continue;
     seen.add(slug);
-    out.push({ slug, title: a.title, noIndex: isNoindexPath(`/articles/${slug}`) });
+    out.push({ slug, title: TITLE_OVERRIDES[slug] ?? a.title, noIndex: isNoindexPath(`/articles/${slug}`) });
   }
   return out;
 };
