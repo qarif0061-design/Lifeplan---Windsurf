@@ -17,7 +17,7 @@ export default function AdsterraDisplaySlots() {
     ensure("adsterra-banner-invoke", BANNER_SRC);
   }, []);
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6 space-y-4">
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 space-y-4">
       <div id={NATIVE_ID} />
       <div id={BANNER_CONTAINER} className="flex justify-center overflow-hidden" style={{ minHeight: 60 }} />
     </div>
