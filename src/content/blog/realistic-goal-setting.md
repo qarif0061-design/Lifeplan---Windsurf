@@ -6,7 +6,7 @@ topics: goal_planning, personal_growth, productivity
 ---
 Most goals don't fail because people are lazy. They fail because the goal was never built for the life it had to fit into. **Realistic goal setting** means choosing goals that stretch you but still match your real time, energy, money and starting point, so you keep going after the first excited week. This guide gives you a simple test for checking whether a goal is realistic, before-and-after examples, and a way to adjust goals that turn out to be too big.
 
-If you already know the SMART method, realistic goal setting is the "A" (achievable) and the older "R" (realistic) put into practice. If you don't, the [SMART goals examples for personal life](/articles/smart-goals-examples-for-personal-life) guide is a good place to start.
+If you already know the SMART method, realistic goal setting is the "A" (achievable) and the older "R" (realistic) put into practice. If you don't, the [SMART goals examples for personal life](/articles/smart-goals-examples-for-personal-life) guide is a good place to start. You can also use [how to set realistic goals and achieve them](/articles/how-to-set-realistic-goals-and-achieve-them) and the main [SMART goals examples](/articles/smart-goals-examples) hub.
 
 ## What realistic goal setting actually means
 A realistic goal is not a small goal. It is a goal where the plan and the resources line up. "Run a marathon" can be realistic for someone with six months, a few free evenings a week and no injuries. "Run a marathon next month" is unrealistic for almost anyone starting from zero, however motivated they are.
